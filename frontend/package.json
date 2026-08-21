@@ -1,0 +1,27 @@
+{
+  "name": "baseball-analysis-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "check:encoding": "python ../backend/scripts/check_utf8.py",
+    "typecheck": "npm run check:encoding && nuxt typecheck"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.28.0",
+    "@pinia/nuxt": "^0.11.0",
+    "@vueuse/core": "^14.4.0",
+    "echarts": "^5.5.1",
+    "nuxt": "^3.12.0",
+    "pinia": "^3.0.4",
+    "reka-ui": "^2.10.1",
+    "vue": "^3.4.0",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0",
+    "vue-tsc": "^2.2.12"
+  }
+}

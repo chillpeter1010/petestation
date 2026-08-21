@@ -1,0 +1,206 @@
+:root {
+  --brand-orange: #ff9900;
+  --brand-orange-dark: #d47c00;
+  --brand-black: #0b0b0b;
+  --color-primary: #ff9900;
+  --color-on-primary: #ffffff;
+  --color-secondary: #f59e0b;
+  --color-accent: #ff9900;
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-foreground: #172554;
+  --color-text: #111827;
+  --color-muted: #e9eef6;
+  --color-muted-text: #5b677a;
+  --color-border: #dbeafe;
+  --color-border-strong: #b7c7e6;
+  --color-destructive: #dc2626;
+  --color-ring: #ff9900;
+  --color-plot-bg: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 24px rgba(30, 64, 175, 0.08);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --app-content-max: 1600px;
+  --app-gutter: clamp(18px, 4vw, 64px);
+  font-family: "Fira Sans", "Segoe UI", Arial, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --color-primary: #ff9900;
+  --color-on-primary: #ffffff;
+  --color-secondary: #fbbf24;
+  --color-accent: #f59e0b;
+  --color-background: #08111f;
+  --color-surface: #101927;
+  --color-foreground: #e6eefc;
+  --color-text: #dbeafe;
+  --color-muted: #182235;
+  --color-muted-text: #9fb0c8;
+  --color-border: #26364f;
+  --color-border-strong: #3b4b67;
+  --color-destructive: #f87171;
+  --color-ring: #ff9900;
+  --color-plot-bg: #0c1422;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.34);
+  --shadow-md: 0 14px 30px rgba(0, 0, 0, 0.32);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 153, 0, 0.12), rgba(248, 250, 252, 0) 280px),
+    var(--color-background);
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] body {
+  background:
+    linear-gradient(180deg, rgba(255, 153, 0, 0.12), rgba(8, 17, 31, 0) 300px),
+    var(--color-background);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+select option {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+select option:checked {
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(255, 153, 0, 0.26);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(255, 153, 0, 0.28);
+}
+
+.global-home-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.18));
+}
+
+.global-home-link strong {
+  margin-left: 3px;
+  border-radius: 5px;
+  padding: 1px 7px 3px;
+  color: #111111;
+  background: var(--brand-orange);
+}
+
+:root:not([data-theme="dark"]) .global-home-link {
+  color: #111111;
+}
+
+.app-page-shell {
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.global-home-offset {
+  padding-top: 62px;
+}
+
+@media (min-width: 1100px) {
+  .app-page-shell > :first-child {
+    width: min(calc(100% - (2 * var(--app-gutter))), var(--app-content-max));
+    max-width: calc(100vw - (2 * var(--app-gutter)));
+    min-width: 0;
+    margin-inline: auto;
+  }
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 29px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  padding: 5px 8px 5px 6px;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  font-size: 80%;
+}
+
+.theme-toggle-track {
+  width: 27px;
+  height: 16px;
+  border-radius: 999px;
+  padding: 2px;
+  background: var(--color-muted);
+  border: 1px solid var(--color-border);
+}
+
+.theme-toggle-thumb {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  transition: transform 140ms ease;
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(11px);
+}
+
+@media (max-width: 760px) {
+  .global-home-link {
+    position: static;
+    margin: 10px auto 0 12px;
+  }
+
+  .theme-toggle {
+    position: static;
+    margin: 10px 12px 0 auto;
+  }
+
+  .global-home-offset {
+    padding-top: 10px;
+  }
+}
