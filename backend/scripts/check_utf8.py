@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOTS = (ROOT / "frontend", ROOT / "backend")
 TEXT_SUFFIXES = {".css", ".html", ".js", ".json", ".md", ".py", ".ts", ".vue", ".yaml", ".yml"}
-SKIP_PARTS = {".nuxt", ".pytest_cache", "__pycache__", "node_modules"}
+SKIP_PARTS = {".nuxt", ".pytest_cache", ".venv", "__pycache__", "node_modules"}
 COMMON_MOJIBAKE = ("\u00c3", "\u00c2", "\u00e2\u20ac", "\u00f0\u0178")
 
 

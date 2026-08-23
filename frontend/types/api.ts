@@ -169,6 +169,50 @@ export interface StuffAttackLeaderboardRow extends StuffAttackMetricSet {
   axis_metrics: Record<string, number | null>
   axis_samples: Record<string, number>
   sample_status: string
+  avg_bat_speed: number | null
+  season_bat_speed: number | null
+  bat_speed_delta: number | null
+  fast_swing_pct: number | null
+  avg_swing_length: number | null
+  avg_attack_angle: number | null
+  avg_attack_direction: number | null
+  avg_swing_path_tilt: number | null
+}
+
+export interface SwingTimingPitchProfile {
+  pitch_type: string
+  pitch_label: string
+  n_swings: number
+  miss_distance: number | null
+  whiff_pct: number | null
+  competitive_pct: number | null
+  flawed_pct: number | null
+  perfect_pct: number | null
+  centered_pct: number | null
+  on_time_pct: number | null
+  lined_up_pct: number | null
+  avg_bat_speed: number | null
+  season_bat_speed: number | null
+  bat_speed_delta: number | null
+  fast_swing_pct: number | null
+  avg_swing_length: number | null
+  avg_attack_angle: number | null
+  avg_attack_direction: number | null
+  avg_swing_path_tilt: number | null
+}
+
+export interface SwingTimingPlayerDetailResponse {
+  year: number
+  batter_id: number
+  name: string
+  team: string
+  pitcher_team: string
+  data_mode: 'summary' | 'matchup_event'
+  tracking_start: string
+  player: SwingTimingLeaderboardRow | null
+  league: SwingTimingLeaderboardRow | null
+  pitch_matrix: SwingTimingPitchProfile[]
+  warnings: string[]
 }
 
 export interface StuffAttackAxisOption {
@@ -212,6 +256,77 @@ export interface StuffAttackResponse {
     axis_options: StuffAttackAxisOption[]
   }
   warnings: string[]
+}
+
+export interface SwingTimingLeaderboardRow {
+  batter_id: number
+  name: string
+  team: string
+  teams: string[]
+  age: number | null
+  plate_appearances: number | null
+  batter_side: string
+  pitch_types: string[]
+  n_swings: number
+  miss_distance: number | null
+  flawed_pct: number | null
+  perfect_pct: number | null
+  whiff_pct: number | null
+  competitive_pct: number | null
+  tied_up_pct: number | null
+  avg_tied_up_distance: number | null
+  centered_pct: number | null
+  flail_pct: number | null
+  avg_flail_distance: number | null
+  late_pct: number | null
+  avg_late_ms: number | null
+  on_time_pct: number | null
+  early_pct: number | null
+  avg_early_ms: number | null
+  over_pct: number | null
+  avg_over_distance: number | null
+  lined_up_pct: number | null
+  under_pct: number | null
+  avg_under_distance: number | null
+  sample_status: string
+  avg_bat_speed: number | null
+  season_bat_speed: number | null
+  bat_speed_delta: number | null
+  fast_swing_pct: number | null
+  avg_swing_length: number | null
+  avg_attack_angle: number | null
+  avg_attack_direction: number | null
+  avg_swing_path_tilt: number | null
+}
+
+export interface SwingTimingResponse {
+  year: number
+  data_updated_at: string | null
+  source_url: string | null
+  pitch_group: string
+  pitch_type: string
+  pitcher_hand: 'All' | 'L' | 'R'
+  batter_side: 'All' | 'L' | 'R'
+  batter_team: string
+  pitcher_team: string
+  minimum_swings: number
+  minimum_plate_appearances: number
+  matched_swings: number
+  matched_hitters: number
+  qualified_hitters: number
+  league: SwingTimingLeaderboardRow | null
+  leaderboard: SwingTimingLeaderboardRow[]
+  filters: {
+    available_years: number[]
+    pitch_groups: Array<{ value: string; label: string }>
+    pitch_type_groups: Array<{ key: string; label: string; options: Array<{ value: string; label: string }> }>
+    pitcher_hands: Array<{ value: string; label: string }>
+    batter_sides: Array<{ value: string; label: string }>
+    batter_teams: Array<{ value: string; label: string }>
+    pitcher_teams: Array<{ value: string; label: string }>
+  }
+  warnings: string[]
+  data_mode: 'summary' | 'matchup_event'
 }
 
 export interface TeamIdentity {
@@ -437,6 +552,69 @@ export interface TeamDashboardResponse {
   season_record: TeamSeasonRecord | null
   next_game: TeamNextGame | null
   starter_games: TeamStarterGame[]
+}
+
+export interface TeamHittingProfile {
+  swings: number
+  miss_distance: number | null
+  flawed_pct: number | null
+  perfect_pct: number | null
+  whiff_pct: number | null
+  contact_pct: number | null
+  competitive_pct: number | null
+  tied_up_pct: number | null
+  centered_pct: number | null
+  flail_pct: number | null
+  late_pct: number | null
+  on_time_pct: number | null
+  early_pct: number | null
+  over_pct: number | null
+  lined_up_pct: number | null
+  under_pct: number | null
+  run_value_per_100_swings: number | null
+}
+
+export interface TeamHitterIntelligenceRow extends TeamHittingProfile {
+  batter_id: number
+  name: string
+  hand: string
+  age: number | null
+  plate_appearances: number | null
+  avg_bat_speed: number | null
+  platoon_edge: number | null
+  sample_status: string
+}
+
+export interface TeamPitchFamilyHitter {
+  batter_id: number
+  name: string
+  swings: number
+  miss_distance: number | null
+  perfect_pct: number | null
+  on_time_pct: number | null
+  whiff_pct: number | null
+  run_value_per_100_swings: number | null
+}
+
+export interface TeamPitchFamilyProfile {
+  family: string
+  label: string
+  team: TeamHittingProfile
+  league: TeamHittingProfile
+  hitters: TeamPitchFamilyHitter[]
+}
+
+export interface TeamHittingIntelligenceResponse {
+  meta: ResponseMeta
+  team_id: string
+  tracking_start: string
+  lineup_basis: string
+  hitters: TeamHitterIntelligenceRow[]
+  lineup: TeamHitterIntelligenceRow[]
+  team_profile: TeamHittingProfile
+  league_profile: TeamHittingProfile
+  pitch_families: TeamPitchFamilyProfile[]
+  warnings: string[]
 }
 
 export interface HomeVideoRecommendation {

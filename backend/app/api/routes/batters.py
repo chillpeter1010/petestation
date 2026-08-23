@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Query
 
+from app.api.schemas.batter_swing_timing import SwingTimingPlayerDetailResponse, SwingTimingResponse
 from app.api.schemas.batter_stuff_attack import StuffAttackResponse
 from app.api.schemas.common import AnalysisResponse, BatterLeaderboardRow, BatterOption
+from app.services.batter_swing_timing_service import get_batter_swing_timing, get_batter_swing_timing_player
 from app.services.batter_stuff_attack_service import get_batter_stuff_attack
 from app.services.batter_service import (
     get_batter_personal_discipline,
@@ -41,6 +43,47 @@ def read_batter_stuff_attack(
         stuff_bin=stuff_bin,
         minimum_pitches=minimum_pitches,
         batter_id=batter_id,
+    )
+
+
+@router.get("/lab/swing-timing", response_model=SwingTimingResponse)
+def read_batter_swing_timing(
+    year: int = Query(2026),
+    pitch_group: str = Query("all"),
+    pitch_type: str = Query("All"),
+    pitcher_hand: str = Query("All"),
+    batter_side: str = Query("All"),
+    batter_team: str = Query("All"),
+    pitcher_team: str = Query("All"),
+    minimum_swings: int = Query(50, ge=0),
+    minimum_plate_appearances: int = Query(100, ge=5, le=700),
+) -> SwingTimingResponse:
+    return get_batter_swing_timing(
+        year=year,
+        pitch_group=pitch_group,
+        pitch_type=pitch_type,
+        pitcher_hand=pitcher_hand,
+        batter_side=batter_side,
+        batter_team=batter_team,
+        pitcher_team=pitcher_team,
+        minimum_swings=minimum_swings,
+        minimum_plate_appearances=minimum_plate_appearances,
+    )
+
+
+@router.get("/lab/swing-timing/player", response_model=SwingTimingPlayerDetailResponse)
+def read_batter_swing_timing_player(
+    year: int = Query(2026),
+    batter_id: int = Query(...),
+    pitch_group: str = Query("all"),
+    pitch_type: str = Query("All"),
+    pitcher_hand: str = Query("All"),
+    batter_side: str = Query("All"),
+    pitcher_team: str = Query("All"),
+) -> SwingTimingPlayerDetailResponse:
+    return get_batter_swing_timing_player(
+        year=year, batter_id=batter_id, pitch_group=pitch_group, pitch_type=pitch_type,
+        pitcher_hand=pitcher_hand, batter_side=batter_side, pitcher_team=pitcher_team,
     )
 
 

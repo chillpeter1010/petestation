@@ -1,7 +1,7 @@
 # Batter Swing Timing / Miss Distance Roadmap
 
-更新日期：2026-08-16  
-狀態：規劃完成，尚未開始實作
+更新日期：2026-08-22
+狀態：V1、V2.1–V2.6、V3 已完成；exact distributions 與月度趨勢待實作
 
 ## 一、已確認的 Statcast 定義
 
@@ -57,6 +57,10 @@
 
 ## V1 — Savant-compatible Batter Timing Leaderboard
 
+完成日期：2026-08-22
+
+實際交付：年度／球種群組／單一球種／投手左右手／打者左右打／打者球隊／投手球隊／最低揮棒數／賽季 PA 門檻篩選、核心排行榜、Horizontal／Timing／Vertical 三維切換、球員列展開摘要、中文 Rules 與打者個人頁連結。PA 拉條為 5–700、每格 5、預設 100。Pitcher Team 採本機逐球精確篩選；選擇球隊後切到 `matchup_event` 模式，不偽造該資料線缺少的 X／Y／Z timing 欄位。排行榜支援實際數據／PR 切換與可關閉的紅藍 heatmap；PR 以當前篩選後全體合格打者計算，並統一為越高越好，Swings 則保留為不染色的實際樣本數。表頭支援中文定義提示與升冪／降冪排序；首批渲染 200 位並可逐批展開。後端改用向量化加權聚合與依來源檔修改時間失效的選擇快取。V1 使用 Savant summary cache 呈現真實彙總值，不偽造逐次揮棒或 KDE 分布。
+
 目標：先建立定義正確、可驗證、可使用的打者版排行榜，不假造平滑分布。
 
 ### 頁面與功能
@@ -75,7 +79,7 @@
 ### 資料與 API
 
 - 建立 batter 專用年度 CSV/cache 與 meta，不覆蓋既有 pitcher timing 檔。
-- 建議 API：`GET /api/batters/swing-timing`。
+- API：`GET /api/batters/lab/swing-timing`。
 - 回傳來源、資料日期、filters、qualification、rows 與 league averages。
 - 百分比統一在 API contract 指明是 `0–1` 或 `0–100`，前端不得猜測。
 
@@ -87,6 +91,20 @@
 - UTF-8 檢查、targeted backend tests、frontend typecheck 通過。
 
 ## V2 — Exact Visuals + Batter Personal Integration
+
+### 目前完成範圍（V2.1–V2.6，2026-08-22）
+
+- V2.1：Pitcher Team 精確逐球對戰模式，支援 30 隊並保留打者球隊、球種、左右手與樣本門檻。
+- V2.2：三維 alignment summary，以球員比例條和聯盟 marker 呈現；明確標為 summary，不假造 KDE。
+- V2.3：球種矩陣，並列 Miss、Flawed、Perfect、Centered、On Time、Lined Up 與 Whiff。
+- V2.4：Bat-Speed Gear Change，以符合當前條件的 competitive swing 平均棒速減去打者整季 competitive swing 平均棒速。
+- V2.5：Batter Personal Overview 新增精簡 Timing Fingerprint，並列 On Time、Centered、Lined Up、Perfect 與 Miss Distance，顯示球員值、聯盟值與差距。
+- V2.6：Batter Personal 新增完整 Swing Timing tab，支援球種群組、單一球種與投手左右手，並共用三維 summary、球種矩陣與 Gear Change 元件；可攜帶年度、球員與篩選條件往返 Lab。
+- 球員詳細資料採點開列後才載入，避免增加排行榜第一次載入成本。
+- Personal Overview 的 timing request 不阻塞原有首頁資料；完整 Timing tab 僅在使用者切入時載入。
+- 尚未完成：月度趨勢，以及 Savant exact bins／逐揮棒 X／Y／Z payload。
+
+資料年份：2023 下半季至 2026 都可使用 Savant summary 與 Bat Tracking；2023 為半季。現有本機逐球 cache 的 `miss_distance` 只有 2026，2023–2025 的精確投手球隊模式會顯示缺值提示，但棒速、揮棒長度、attack metrics、whiff 與 competitive rate 仍可計算。
 
 目標：把 Timing 從排行榜提升為可解讀的球員技能輪廓，並回接打者個人頁。
 
@@ -126,6 +144,20 @@
 
 ## V3 — Team Hitting Intelligence + Event-level Integration
 
+完成日期：2026-08-22
+
+### 目前完成範圍
+
+- 新增獨立 compact API：`GET /api/teams/{team_id}/hitting-intelligence`，不把全聯盟完整 timing payload 併入既有 team dashboard。
+- 球隊頁新增獨立 Hitting intelligence 導覽與區塊，原有 Rotation、Bullpen、Pitch arsenal 等投手內容保留。
+- `Team Timing Map`：On Time × Perfect Contact 頭像散點，聯盟平均虛線，外圈以樣本穩定度呈現；球員可深連到 Batter Personal。
+- `Team Miss Profile`：Horizontal、Timing、Vertical 三個方向的球隊組成與 MLB 平均 marker。
+- `Pitch-family Matchup Matrix`：Fastball／Breaking Ball／Offspeed，支援 Perfect、On Time、Whiff、Miss Distance、RV/100 切換與相對聯盟的紅藍配色。
+- `Lineup Skill Strip`：依賽季 PA 排列前九人，顯示 competitive swing 平均棒速、Swing Contact、On Time 與 Platoon contact edge；明確標示不是官方或預測先發打序。
+- competitive swing 棒速依最快 90%，加回棒速至少 60 mph 且擊球初速至少 90 mph 的 Statcast 定義計算；RV/100 使用同批有 bat tracking 的實際揮棒，未做環境校正。
+- 修正 team dashboard 單欄 grid 的 min-content 溢出，V3 矩陣不再把頁面撐出容器。
+- 2026 AZ 實際頁面已完成 DOM、桌面版視覺、矩陣切換與深連結驗證；targeted backend tests、UTF-8 與 Nuxt typecheck 通過。
+
 目標：讓球隊首頁同時具有投手與打者決策內容，並把研究轉成可快速閱讀的 roster 視覺化。
 
 ### 回接球隊首頁
@@ -163,7 +195,7 @@
 | Platoon matchup | 根據預計對手先發投手 L/R，估計各打者 platoon edge | 需確認 probable starter、active roster、傷兵與當日可用狀態 | Pending |
 | 打序預測 | 依近期實際打序、platoon、打擊能力、守位需求與休息規則產生 1–9 棒機率／排序 | 應輸出機率與候選方案，不宣稱是官方打序 | Pending |
 | 打序最佳化 | 在守位覆蓋與可用球員限制下，依預期得分排序 lineup 情境 | 需先有可靠 lineup predictor 與 run expectancy simulation | Pending |
-| 球隊首頁 Hitting 區 | 將 Timing Map、Matchup Matrix、Lineup Skill Strip 接到 team dashboard | 應使用 compact API，避免首頁 payload 過重 | Pending |
+| 球隊首頁 Hitting 區 | 將 Timing Map、Matchup Matrix、Lineup Skill Strip 接到 team dashboard | 已使用獨立 compact API，避免阻塞既有 team dashboard | Completed |
 
 ## 五、建議實作順序
 

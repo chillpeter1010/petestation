@@ -25,6 +25,7 @@
       <TeamSeasonContext :record="dashboard.season_record" :next-game="dashboard.next_game" />
 
       <nav class="team-dashboard__quick-nav" aria-label="Team dashboard sections">
+        <a href="#hitting"><ChartNoAxesCombined :size="15" /> Hitting intelligence</a>
         <a href="#rotation"><RotateCw :size="15" /> Rotation</a>
         <a href="#bullpen"><Gauge :size="15" /> Bullpen</a>
         <a href="#impact"><Clapperboard :size="15" /> Pitch arsenal</a>
@@ -34,6 +35,16 @@
         <a href="#payroll"><Banknote :size="15" /> Payroll</a>
         <a href="#roster"><Users :size="15" /> Roster</a>
       </nav>
+
+      <div id="hitting">
+        <TeamHittingIntelligence
+          :payload="hittingIntelligence || null"
+          :pending="hittingPending"
+          :error="Boolean(hittingError)"
+          :team-id="teamId"
+          :year="year"
+        />
+      </div>
 
       <div id="rotation">
         <TeamStarterMatchup
@@ -81,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { Activity, Banknote, CalendarDays, Clapperboard, Gauge, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
+import { Activity, Banknote, CalendarDays, ChartNoAxesCombined, Clapperboard, Gauge, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
 
 definePageMeta({ key: route => route.fullPath })
 
@@ -94,6 +105,12 @@ const starterVideoSelection = ref<{ teamId: string; pitcherId: number; pitcherNa
 const { data: dashboard, pending, error } = await useLazyAsyncData(
   () => `team-dashboard-${teamId.value}-${year}`,
   () => api.teamDashboard({ year, teamId: teamId.value }),
+  { watch: [teamId] }
+)
+
+const { data: hittingIntelligence, pending: hittingPending, error: hittingError } = await useLazyAsyncData(
+  () => `team-hitting-intelligence-${teamId.value}-${year}`,
+  () => api.teamHittingIntelligence({ year, teamId: teamId.value }),
   { watch: [teamId] }
 )
 
@@ -121,6 +138,7 @@ const teamTheme = computed(() => ({
   max-width: none;
   min-width: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   margin: 0 auto;
 }
@@ -170,6 +188,7 @@ const teamTheme = computed(() => ({
 
 .team-dashboard__primary-grid > div,
 #rotation,
+#hitting,
 #bullpen,
 #outings,
 #impact,
@@ -178,6 +197,10 @@ const teamTheme = computed(() => ({
 #transactions,
 #payroll {
   scroll-margin-top: 76px;
+}
+
+#hitting {
+  min-width: 0;
 }
 
 .team-dashboard-error {

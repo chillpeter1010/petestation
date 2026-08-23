@@ -3,6 +3,8 @@ import type {
   BatterLeaderboardRow,
   BatterOption,
   StuffAttackResponse,
+  SwingTimingPlayerDetailResponse,
+  SwingTimingResponse,
   ComparisonOptionsResponse,
   ComparisonOverviewResponse,
   HomeRecommendationsResponse,
@@ -17,6 +19,7 @@ import type {
   PitchingOverviewResponse,
   PitchingPitcherResponse,
   TeamDashboardResponse,
+  TeamHittingIntelligenceResponse,
   TeamPayrollResponse,
   TeamPitchVideoResponse,
   TeamTransactionsResponse,
@@ -52,6 +55,10 @@ export function useApi() {
       }),
     teamDashboard: (params: { year: number; teamId: string }) =>
       $fetch<TeamDashboardResponse>(`${apiBase}/teams/${params.teamId}/dashboard`, {
+        query: { year: params.year }
+      }),
+    teamHittingIntelligence: (params: { year: number; teamId: string }) =>
+      $fetch<TeamHittingIntelligenceResponse>(`${apiBase}/teams/${params.teamId}/hitting-intelligence`, {
         query: { year: params.year }
       }),
     teamTransactions: (params: { year: number; teamId: string; days?: number; limit?: number; refresh?: boolean }) =>
@@ -108,6 +115,32 @@ export function useApi() {
           stuff_bin: params.stuffBin,
           minimum_pitches: params.minimumPitches,
           batter_id: params.batterId || undefined
+        }
+      }),
+    batterSwingTiming: (params: { year: number; pitchGroup: string; pitchType?: string; pitcherHand?: 'All' | 'L' | 'R'; batterSide?: 'All' | 'L' | 'R'; batterTeam?: string; pitcherTeam?: string; minimumSwings: number; minimumPlateAppearances: number }) =>
+      $fetch<SwingTimingResponse>(`${apiBase}/batters/lab/swing-timing`, {
+        query: {
+          year: params.year,
+          pitch_group: params.pitchGroup,
+          pitch_type: params.pitchType || 'All',
+          pitcher_hand: params.pitcherHand || 'All',
+          batter_side: params.batterSide || 'All',
+          batter_team: params.batterTeam || 'All',
+          pitcher_team: params.pitcherTeam || 'All',
+          minimum_swings: params.minimumSwings,
+          minimum_plate_appearances: params.minimumPlateAppearances
+        }
+      }),
+    batterSwingTimingPlayer: (params: { year: number; batterId: number; pitchGroup: string; pitchType?: string; pitcherHand?: 'All' | 'L' | 'R'; batterSide?: 'All' | 'L' | 'R'; pitcherTeam?: string }) =>
+      $fetch<SwingTimingPlayerDetailResponse>(`${apiBase}/batters/lab/swing-timing/player`, {
+        query: {
+          year: params.year,
+          batter_id: params.batterId,
+          pitch_group: params.pitchGroup,
+          pitch_type: params.pitchType || 'All',
+          pitcher_hand: params.pitcherHand || 'All',
+          batter_side: params.batterSide || 'All',
+          pitcher_team: params.pitcherTeam || 'All'
         }
       }),
     batterPersonalOverview: (params: { year: number; batterId: number }) =>

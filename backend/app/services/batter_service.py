@@ -10,6 +10,8 @@ from app.api.schemas.common import AnalysisResponse, MetricItem, ResponseMeta, T
 from app.core.config import settings
 from app.repositories.pitch_repository import get_season_duckdb_path, resolve_pitch_table
 from app.services.discipline_service import add_discipline_flags, build_discipline_panel_groups
+from app.services.pitch_location_score_service import load_pitch_location_scores
+from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
 
 ZONE_X = (-0.83, 0.83)
 ZONE_Z = (1.5, 3.5)
@@ -228,6 +230,17 @@ def _normalize_batter_pitch_rows(raw: pd.DataFrame) -> pd.DataFrame:
     for column in ["plate_x", "plate_z", "release_speed", "launch_speed", "launch_angle"]:
         frame[column] = pd.to_numeric(frame[column], errors="coerce")
 
+    cached_stuff = load_pitch_stuff_scores(frame)
+    cached_location = load_pitch_location_scores(frame)
+    frame["pitch_stuff_plus"] = pd.to_numeric(frame["pitch_stuff_plus"], errors="coerce").fillna(cached_stuff).round(1)
+    frame["location_plus_pitch"] = pd.to_numeric(frame["location_plus_pitch"], errors="coerce").fillna(cached_location).round(1)
+    missing_video = frame["video_url"].fillna("").astype(str).str.strip().isin(["", "None", "nan", "NaN"])
+    valid_play = ~frame["play_id"].fillna("").astype(str).str.strip().isin(["", "None", "nan", "NaN"])
+    frame.loc[missing_video & valid_play, "video_url"] = (
+        "https://baseballsavant.mlb.com/sporty-videos?playId="
+        + frame.loc[missing_video & valid_play, "play_id"].astype(str)
+    )
+
     frame["description"] = frame["description"].fillna("").astype(str).str.strip().str.lower()
     frame["events"] = frame["events"].fillna("").astype(str).str.strip().str.lower()
     frame["pitch_type"] = frame["pitch_type"].fillna("UNK").astype(str).replace({"": "UNK"})
@@ -299,6 +312,10 @@ def _pitch_row_columns() -> list[str]:
         "launch_speed",
         "launch_angle",
         "bb_type",
+        "play_id",
+        "video_url",
+        "pitch_stuff_plus",
+        "location_plus_pitch",
         "is_zone",
         "is_swing",
         "is_whiff",
@@ -528,13 +545,18 @@ def _build_batter_location_points(rows: pd.DataFrame) -> TablePayload:
         "count",
         "release_speed",
         "launch_speed",
+        "play_id",
+        "video_url",
+        "pitch_stuff_plus",
+        "location_plus_pitch",
         "selected_key",
     ]
     if rows.empty:
         return _table(columns, [])
     points = rows.dropna(subset=["plate_x", "plate_z"]).copy()
     points["selected_key"] = points.apply(lambda row: f"{row.get('game_pk')}-{row.get('at_bat_number')}-{row.get('pitch_number')}", axis=1)
-    payload = points[columns].to_dict("records")
+    payload_frame = points[columns].astype(object).where(pd.notna(points[columns]), None)
+    payload = payload_frame.to_dict("records")
     return _table(columns, payload)
 
 
@@ -731,8 +753,8 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                 LEFT JOIN (
                     SELECT player_id, arg_max(player_name, game_pk) AS player_name
                     FROM game_player_lookup
-                    WHERE lower(trim(role)) = 'batter'
-                      AND lower(trim(player_name)) NOT IN ('', 'unknown', 'unknown batter')
+                    WHERE lower(trim(CAST(role AS VARCHAR))) = 'batter'
+                      AND lower(trim(CAST(player_name AS VARCHAR))) NOT IN ('', 'unknown', 'unknown batter')
                     GROUP BY player_id
                 ) official_batter ON try_cast(official_batter.player_id AS BIGINT) = stats.player_id
             """

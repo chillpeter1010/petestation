@@ -128,6 +128,32 @@ def test_batter_name_falls_back_to_official_game_lookup(tmp_path, monkeypatch):
     assert batter_service.list_batter_leaderboard(2026)[0]["name"] == "Official Rookie"
 
 
+def test_batter_location_points_keep_video_and_plus_scores(monkeypatch):
+    raw = pd.DataFrame(
+        [
+            {
+                **_test_batter_pitch(1, 1, "", "ball", None, None, None, None, None, 0.0, 0.0),
+                "pitcher": 99,
+                "pitch_name": "4-Seam Fastball",
+                "pitch_type": "FF",
+                "plate_x": 0.2,
+                "plate_z": 2.8,
+                "play_id": "test-play-id",
+                "video_url": "",
+            }
+        ]
+    )
+    monkeypatch.setattr(batter_service, "load_pitch_stuff_scores", lambda frame: pd.Series([112.4], index=frame.index))
+    monkeypatch.setattr(batter_service, "load_pitch_location_scores", lambda frame: pd.Series([96.8], index=frame.index))
+
+    normalized = batter_service._normalize_batter_pitch_rows(raw)
+    point = batter_service._build_batter_location_points(normalized).rows[0]
+
+    assert point["video_url"].endswith("playId=test-play-id")
+    assert point["pitch_stuff_plus"] == 112.4
+    assert point["location_plus_pitch"] == 96.8
+
+
 def _test_batter_pitch(
     game_pk: int,
     at_bat_number: int,

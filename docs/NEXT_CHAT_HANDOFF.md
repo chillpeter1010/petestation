@@ -240,7 +240,43 @@ reported_plus = 100 + reliability × (raw_plus - 100)
 
 `/batters/lab/stuff-attack` 的第一版已完成，包含多球種群組篩選、投手左右手、Stuff+ band、可選 X/Y 指標、球員頭像散點圖、按需回歸與 Rules 說明。不要依照本節舊文字重做 Stuff Attack MVP。
 
-下一階段規劃是 Batter Swing Timing / Miss Distance，權威規劃文件：`docs/BATTER_SWING_TIMING_ROADMAP.md`。該文件包含 Statcast 定義、V1–V3、Batter Personal／Team page 回接方式，以及棒次、守位、platoon 與打序預測 backlog。
+Batter Swing Timing / Miss Distance V1 已於 2026-08-22 完成。權威規劃文件：`docs/BATTER_SWING_TIMING_ROADMAP.md`；該文件包含 Statcast 定義、V2–V3、Batter Personal／Team page 回接方式，以及棒次、守位、platoon 與打序預測 backlog。
+
+### Swing Timing V1 已完成範圍
+
+- 新頁面 `/batters/lab/swing-timing`，並已接入 Batter Lab hub。
+- 新 API `/api/batters/lab/swing-timing`，讀取獨立的 batter timing summary cache，不覆蓋 pitcher timing 檔。
+- 支援年度、球種群組、單一球種、投手左右手、打者左右打與最低揮棒數。
+- 核心 leaderboard 與 Horizontal／Timing／Vertical 三維欄位切換。
+- 球員列可展開三維 summary bars，並連回 Batter Personal；沒有逐次 bins 時不畫偽造 KDE。
+- 2023–2026、All/L/R cache 已建立；targeted backend tests 與 Nuxt typecheck 已通過。
+
+### Swing Timing V2.1–V2.6 已完成範圍（2026-08-22）
+
+- Pitcher Team 已啟用，使用本機 DuckDB 精確逐球 matchup；不會假裝 Savant batter summary 能按對手球隊切分。
+- `All pitcher teams` 為 Savant summary mode；選定球隊則為 `matchup_event`，頁面會明確標示模式與不可用欄位。
+- 球員列採 lazy load 呼叫 `/api/batters/lab/swing-timing/player`。
+- V2.2：球員與聯盟的 Horizontal／Timing／Vertical summary comparison。
+- V2.3：球種弱點矩陣。
+- V2.4：條件 competitive swing 棒速相對球員整季基準的 Gear Change。
+- V2.5：Batter Personal Overview 已嵌入精簡 Timing Fingerprint，顯示球員值、聯盟值與差距；timing 請求不阻塞原 Overview。
+- V2.6：Batter Personal 已新增完整 Swing Timing tab，重用三維 summary、球種矩陣與 Gear Change，並支援球種群組、單一球種、投手左右手以及保留條件的 Lab 深連結。
+- Batter Personal 的 location pitch points 已保留 `play_id`／`video_url`，點球可開啟 Savant 影片；同時接入逐球 `pitch_stuff_plus` 與 `location_plus_pitch`。目前 2026 兩項 Plus cache 完整，舊年份沒有本機分數 cache 時顯示缺值，不可假造。
+- Timing leaderboard 使用固定 `colgroup` 控制欄寬與換行；個人頁 Pitch Matrix 字體與外層表格一致，Gear Change 由三欄改為四欄，卡片寬度約為原本 75%。
+- 2023 下半季至 2026 可做 summary 與 Bat Tracking；現有逐球 `miss_distance` 只有 2026。2023–2025 的 matchup mode 仍可做棒速、Whiff、Competitive Rate、Swing Length 與 attack metrics。
+- 尚未完成的是月度趨勢與 exact Savant distribution payload；只有 summary 時仍不可宣稱為完整分布。
+
+### V3 Team Hitting Intelligence 已完成範圍（2026-08-22）
+
+- Team page 已新增獨立 Hitting intelligence 區塊與 sticky-nav 入口，既有投手內容保留。
+- 新 compact API：`/api/teams/{team_id}/hitting-intelligence`；由球隊頁另行 lazy fetch，不擴大原本 team dashboard payload。
+- `Team Timing Map`：On Time × Perfect Contact 頭像散點、聯盟平均線、樣本外圈與 Batter Personal 深連結。
+- `Team Miss Profile`：Horizontal／Timing／Vertical 球隊組成與 MLB 基準。
+- `Pitch-family Matchup Matrix`：Fastball／Breaking／Offspeed，支援 Perfect、On Time、Whiff、Miss、RV/100 切換與相對聯盟配色。
+- `Lineup Skill Strip`：PA 前九名的 competitive swing 平均棒速、Swing Contact、On Time、Platoon edge；只是 PA-based nine，不是官方或模型預測打序。
+- 球棒速度使用 Statcast competitive swing 定義；RV/100 是有 bat tracking 揮棒的描述性 run value，未做 park／pitch quality 等調整。
+- 球隊頁 grid 已改為 `minmax(0, 1fr)`，避免矩陣或卡片把整頁撐寬。
+- `backend/tests/test_team_hitting_intelligence_service.py`、UTF-8 檢查與 Nuxt typecheck 已通過；2026 AZ 球隊頁的實際渲染、矩陣切換和個人頁連結已由瀏覽器驗證。
 
 ### Stuff Attack 已完成範圍
 
@@ -281,8 +317,7 @@ reported_plus = 100 + reliability × (raw_plus - 100)
 不要先大範圍掃描或啟動瀏覽器。直接：
 
 1. 讀取本文件與 `docs/BATTER_SWING_TIMING_ROADMAP.md`。
-2. 若使用者同意開始 V1，先建立 batter timing 年度 cache／meta，不覆蓋 pitcher timing 檔。
-3. 明確定義 percentage scale、denominator、qualification 與 X/Y/Z sign convention。
-4. 建立 `/api/batters/swing-timing` schema、service 與 targeted tests。
-5. 再建立 `/batters/lab/swing-timing` 排行榜；沒有完整 bins 時不可偽造平滑分布。
-6. 最後只跑 UTF-8、targeted backend tests 與 frontend typecheck。
+2. 不要重做 Swing Timing V1、V2.1–V2.6 或 V3；下一步優先確認 exact visual payload，或開始 Team Batting／Lineup backlog。
+3. 若做 exact distributions，先取得並驗證 Savant bins／逐次視覺 payload；只有 summary 時維持目前比例條。
+4. 若開始 Team Batting／Lineup backlog，優先盤點逐場 batting order、守位／DH、active roster 與 probable starter 資料，再做 platoon lineup prediction。
+5. 最後跑 UTF-8、targeted backend tests 與 frontend typecheck。

@@ -190,7 +190,7 @@ Detailed plan: `docs/BATTER_SWING_TIMING_ROADMAP.md`.
 
 | Slice | Scope | Status |
 | --- | --- | --- |
-| V1 Swing Timing leaderboard | Batter Savant summary cache/API, definition-correct leaderboard, X/Y/Z dimension views, Rules | Pending |
+| V1 Swing Timing leaderboard | Batter Savant summary cache/API, definition-correct leaderboard, X/Y/Z dimension views, Rules | Done |
 | V2 Timing visuals + Batter Personal | Exact distributions when source bins exist; otherwise honest summary visuals, timing fingerprint, pitch matrix, bat-speed gear change | Pending |
 | V3 Team Hitting Intelligence | Team Timing Map, pitch-family matchup matrix, lineup skill strip, compact team hitting API | Pending |
 | Batting-order impact | Player/team performance by lineup slot with minimum samples and non-causal labeling | Pending |

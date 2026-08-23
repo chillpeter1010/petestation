@@ -228,3 +228,66 @@ class TeamDashboardResponse(BaseModel):
     season_record: TeamSeasonRecord | None = None
     next_game: TeamNextGame | None = None
     starter_games: list[TeamStarterGame] = Field(default_factory=list)
+
+
+class TeamHittingProfile(BaseModel):
+    swings: int = 0
+    miss_distance: float | None = None
+    flawed_pct: float | None = None
+    perfect_pct: float | None = None
+    whiff_pct: float | None = None
+    contact_pct: float | None = None
+    competitive_pct: float | None = None
+    tied_up_pct: float | None = None
+    centered_pct: float | None = None
+    flail_pct: float | None = None
+    late_pct: float | None = None
+    on_time_pct: float | None = None
+    early_pct: float | None = None
+    over_pct: float | None = None
+    lined_up_pct: float | None = None
+    under_pct: float | None = None
+    run_value_per_100_swings: float | None = None
+
+
+class TeamHitterIntelligenceRow(TeamHittingProfile):
+    batter_id: int
+    name: str
+    hand: str = "-"
+    age: int | None = None
+    plate_appearances: int | None = None
+    avg_bat_speed: float | None = None
+    platoon_edge: float | None = None
+    sample_status: str = "Developing"
+
+
+class TeamPitchFamilyHitter(BaseModel):
+    batter_id: int
+    name: str
+    swings: int = 0
+    miss_distance: float | None = None
+    perfect_pct: float | None = None
+    on_time_pct: float | None = None
+    whiff_pct: float | None = None
+    run_value_per_100_swings: float | None = None
+
+
+class TeamPitchFamilyProfile(BaseModel):
+    family: str
+    label: str
+    team: TeamHittingProfile
+    league: TeamHittingProfile
+    hitters: list[TeamPitchFamilyHitter] = Field(default_factory=list)
+
+
+class TeamHittingIntelligenceResponse(BaseModel):
+    meta: ResponseMeta
+    team_id: str
+    tracking_start: str = "2023 All-Star break"
+    lineup_basis: str = "Top nine hitters by season plate appearances; not an official lineup prediction."
+    hitters: list[TeamHitterIntelligenceRow] = Field(default_factory=list)
+    lineup: list[TeamHitterIntelligenceRow] = Field(default_factory=list)
+    team_profile: TeamHittingProfile
+    league_profile: TeamHittingProfile
+    pitch_families: list[TeamPitchFamilyProfile] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)

@@ -6,6 +6,8 @@
       </article>
     </section>
 
+    <BatterTimingFingerprint :timing="timing" :loading="timingLoading" />
+
     <BatterTrendChart class="wide" :rows="gameLog.rows" />
 
     <section class="panel pitch-panel">
@@ -32,9 +34,9 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalysisResponse, TablePayload } from '~/types/api'
+import type { AnalysisResponse, SwingTimingPlayerDetailResponse, TablePayload } from '~/types/api'
 
-const props = defineProps<{ overview: AnalysisResponse | null }>()
+const props = withDefaults(defineProps<{ overview: AnalysisResponse | null; timing?: SwingTimingPlayerDetailResponse | null; timingLoading?: boolean }>(), { timing: null, timingLoading: false })
 const empty: TablePayload = { columns: [], rows: [] }
 const dashboard = computed(() => props.overview?.tables?.dashboard || empty)
 const gameLog = computed(() => props.overview?.tables?.season_game_log || empty)

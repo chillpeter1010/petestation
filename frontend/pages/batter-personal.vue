@@ -18,14 +18,15 @@
 
     <nav class="tabs" aria-label="Batter personal sections">
       <button type="button" :class="{ active: activeTab === 'overview' }" @click="activeTab = 'overview'"><LayoutDashboard :size="17" aria-hidden="true" />Overview</button>
+      <button type="button" :class="{ active: activeTab === 'timing' }" @click="activeTab = 'timing'"><Timer :size="17" aria-hidden="true" />Swing Timing</button>
       <button type="button" :class="{ active: activeTab === 'discipline' }" @click="activeTab = 'discipline'"><ScanSearch :size="17" aria-hidden="true" />Discipline & zones</button>
     </nav>
 
     <div v-if="pending" class="loading-grid" aria-label="Loading batter page"><span v-for="item in 5" :key="item" /></div>
     <p v-else-if="!selectedBatterId" class="state-card">Select a batter to load the page.</p>
-    <BatterOverviewTab v-else-if="activeTab === 'overview'" :overview="overview" />
+    <BatterOverviewTab v-else-if="activeTab === 'overview'" :overview="overview" :timing="timing" :timing-loading="timingPending" />
 
-    <template v-else>
+    <template v-else-if="activeTab === 'discipline'">
       <section class="discipline-filters">
         <label><span>Stand</span><select v-model="stand"><option v-for="option in standOptions" :key="option" :value="option">{{ option }}</option></select></label>
         <label><span>Count</span><select v-model="count"><option v-for="option in countOptions" :key="option" :value="option">{{ option }}</option></select></label>
@@ -47,7 +48,13 @@
             <div><span>Pitch map</span><h2>Location profile</h2><p>Batter-side view for the active filters.</p></div>
             <span>{{ locationPoints.length.toLocaleString() }} pitches</span>
           </header>
-          <StrikeZoneScatter class="batter-location-chart" :points="locationPoints" title="Batter Location" />
+          <StrikeZoneScatter
+            class="batter-location-chart"
+            :points="locationPoints"
+            :selected-key="selectedPitchKey"
+            title="Batter Location"
+            @select-point="openPitchVideo"
+          />
         </article>
         <DisciplinePanelBoard
           :heatmap-blend="0"
@@ -85,12 +92,54 @@
         <DataTable class="discipline-table" title="Batted Ball" :table="disciplineTable('batted_ball')" :max-rows="40" />
       </section>
     </template>
+
+    <section v-else class="timing-section">
+      <header class="section-heading">
+        <div><span>V2.6 · Player timing</span><h2>Swing Timing profile</h2></div>
+        <NuxtLink :to="timingLabLink">Open full Timing Lab</NuxtLink>
+      </header>
+      <div class="timing-filters">
+        <label><span>Pitch group</span><select v-model="timingPitchGroup"><option v-for="option in timingPitchGroups" :key="option.value" :value="option.value">{{ option.label }}</option></select></label>
+        <label><span>Pitch type</span><select v-model="timingPitchType"><option value="All">All in group</option><option v-for="option in visibleTimingPitchTypes" :key="option.value" :value="option.value">{{ option.label }}</option></select></label>
+        <label><span>Pitcher hand</span><select v-model="timingPitcherHand"><option value="All">All pitchers</option><option value="L">LHP</option><option value="R">RHP</option></select></label>
+      </div>
+      <p v-if="timingPending" class="state-card">Loading Swing Timing profile…</p>
+      <p v-else-if="timingError" class="state-card timing-error">Unable to load Swing Timing for this batter.</p>
+      <template v-else-if="timing">
+        <p v-for="warning in timing.warnings" :key="warning" class="state-card">{{ warning }}</p>
+        <SwingTimingDimensionChart v-if="timing.player && timing.league && timing.data_mode === 'summary'" :player="timing.player" :league="timing.league" />
+        <BatterPitchTimingMatrix :rows="timing.pitch_matrix" />
+        <BatSpeedGearChange :rows="timing.pitch_matrix" />
+      </template>
+    </section>
+
+    <Teleport to="body">
+      <div v-if="videoModalOpen" class="video-modal-backdrop" @click.self="videoModalOpen = false">
+        <section class="video-modal" role="dialog" aria-modal="true" aria-label="Selected batter pitch video">
+          <header>
+            <div><h2>Selected Pitch Video</h2><p>{{ selectedPitchLabel }}</p></div>
+            <button type="button" aria-label="Close video" @click="videoModalOpen = false">×</button>
+          </header>
+          <iframe v-if="selectedPitchVideoUrl" :src="selectedPitchVideoUrl" title="Selected batter pitch video" />
+          <p v-else class="video-unavailable">This pitch does not have a cached video link.</p>
+          <footer>
+            <dl>
+              <div><dt>Stuff+</dt><dd>{{ plusValue(selectedPitch?.pitch_stuff_plus) }}</dd></div>
+              <div><dt>Location+</dt><dd>{{ plusValue(selectedPitch?.location_plus_pitch) }}</dd></div>
+              <div><dt>Velocity</dt><dd>{{ numberValue(selectedPitch?.release_speed, ' mph') }}</dd></div>
+              <div><dt>Count</dt><dd>{{ selectedPitch ? String(selectedPitch.count || `${selectedPitch.balls ?? '—'}-${selectedPitch.strikes ?? '—'}`) : '—' }}</dd></div>
+            </dl>
+            <a v-if="selectedPitchVideoUrl" :href="selectedPitchVideoUrl" target="_blank" rel="noreferrer">Open in Baseball Savant</a>
+          </footer>
+        </section>
+      </div>
+    </Teleport>
   </main>
 </template>
 
 <script setup lang="ts">
-import { LayoutDashboard, ScanSearch, SlidersHorizontal } from '@lucide/vue'
-import type { AnalysisResponse, BatterOption, TablePayload } from '~/types/api'
+import { LayoutDashboard, ScanSearch, SlidersHorizontal, Timer } from '@lucide/vue'
+import type { AnalysisResponse, BatterOption, SwingTimingPlayerDetailResponse, TablePayload } from '~/types/api'
 import type {
   DisciplinePanel,
   DisciplinePanelMetric,
@@ -110,8 +159,14 @@ const selectedBatterId = ref<number | null>(toNumber(route.query.batter_id, 0) |
 const batterOptions = ref<BatterOption[]>([])
 const overview = ref<AnalysisResponse | null>(null)
 const discipline = ref<AnalysisResponse | null>(null)
+const timing = ref<SwingTimingPlayerDetailResponse | null>(null)
 const pending = ref(false)
-const activeTab = ref<'overview' | 'discipline'>('overview')
+const timingPending = ref(false)
+const timingError = ref(false)
+const selectedPitch = ref<Record<string, unknown> | null>(null)
+const videoModalOpen = ref(false)
+const activeTab = ref<'overview' | 'timing' | 'discipline'>('overview')
+let timingRequestId = 0
 
 const stand = ref('All')
 const count = ref('All')
@@ -119,6 +174,16 @@ const pitch = ref('All')
 const pitchResult = ref('All')
 const startDate = ref('')
 const endDate = ref('')
+const timingPitchGroup = ref(queryString(route.query.timing_pitch_group, 'all'))
+const timingPitchType = ref(queryString(route.query.timing_pitch_type, 'All'))
+const timingPitcherHand = ref<'All' | 'L' | 'R'>(['L', 'R'].includes(queryString(route.query.timing_pitcher_hand, 'All')) ? queryString(route.query.timing_pitcher_hand, 'All') as 'L' | 'R' : 'All')
+const timingPitchTypeGroups = [
+  { key: 'fastball', label: 'Fastball', options: [{ value: 'FF', label: 'Four-Seam Fastball' }, { value: 'SI', label: 'Sinker' }, { value: 'FC', label: 'Cutter' }] },
+  { key: 'breaking', label: 'Breaking Ball', options: [{ value: 'SL', label: 'Slider' }, { value: 'ST', label: 'Sweeper' }, { value: 'CU', label: 'Curveball' }, { value: 'KC', label: 'Knuckle Curve' }, { value: 'SV', label: 'Slurve' }] },
+  { key: 'offspeed', label: 'Offspeed', options: [{ value: 'CH', label: 'Changeup' }, { value: 'FS', label: 'Splitter' }, { value: 'FO', label: 'Forkball' }] },
+  { key: 'other', label: 'Other', options: [{ value: 'KN', label: 'Knuckleball' }, { value: 'EP', label: 'Eephus' }, { value: 'CS', label: 'Slow Curve' }] }
+]
+const timingPitchGroups = [{ value: 'all', label: 'All pitch types' }, ...timingPitchTypeGroups.map(group => ({ value: group.key, label: group.label }))]
 
 const selectedBatter = computed(
   () => batterOptions.value.find((batter) => batter.value === selectedBatterId.value) || null
@@ -151,12 +216,30 @@ const countOptions = computed(() => disciplineFilters.value.count || ['All'])
 const pitchOptions = computed(() => disciplineFilters.value.pitch || ['All'])
 const pitchResultOptions = computed(() => disciplineFilters.value.pitch_result || ['All'])
 const locationPoints = computed(() => disciplineTable('location_points').rows)
+const selectedPitchKey = computed(() => selectedPitch.value ? pitchPointKey(selectedPitch.value) : null)
+const selectedPitchVideoUrl = computed(() => {
+  const pitchRow = selectedPitch.value
+  if (!pitchRow) return ''
+  const videoUrl = String(pitchRow.video_url || '').trim()
+  if (videoUrl && !['None', 'nan', 'NaN'].includes(videoUrl)) return videoUrl
+  const playId = String(pitchRow.play_id || '').trim()
+  return playId && !['None', 'nan', 'NaN'].includes(playId)
+    ? `https://baseballsavant.mlb.com/sporty-videos?playId=${encodeURIComponent(playId)}`
+    : ''
+})
+const selectedPitchLabel = computed(() => {
+  const pitchRow = selectedPitch.value
+  if (!pitchRow) return ''
+  return [String(pitchRow.game_date || '').slice(0, 10), String(pitchRow.pitch_name || 'Pitch'), String(pitchRow.description || pitchRow.events || '')].filter(Boolean).join(' · ')
+})
 const resultPanels = computed(() => panelsFromGroup('result', 'pitch_result'))
 const paResultPanels = computed(() => panelsFromGroup('result', 'pa_result'))
 const battedBallPanels = computed(() => panelsFromGroup('result', 'batted_ball'))
 const countSituationPanels = computed(() => panelsFromGroup('discipline', 'count_situation'))
 const countSwingPanels = computed(() => panelsFromGroup('discipline', 'count_swing'))
 const exactCountPanels = computed(() => panelsFromGroup('situation', 'exact_count'))
+const visibleTimingPitchTypes = computed(() => timingPitchGroup.value === 'all' ? timingPitchTypeGroups.flatMap(group => group.options) : timingPitchTypeGroups.find(group => group.key === timingPitchGroup.value)?.options || [])
+const timingLabLink = computed(() => ({ path: '/batters/lab/swing-timing', query: { year: year.value, batter_id: selectedBatterId.value || undefined, find: selectedName.value, timing_pitch_group: timingPitchGroup.value, timing_pitch_type: timingPitchType.value, timing_pitcher_hand: timingPitcherHand.value } }))
 
 watch([year, team], loadBatters, { immediate: true })
 watch(selectedBatterId, async () => {
@@ -165,9 +248,18 @@ watch(selectedBatterId, async () => {
 })
 watch(activeTab, (tab) => {
   if (tab === 'discipline' && !discipline.value) loadDiscipline()
+  if (tab === 'timing' && !timing.value && !timingPending.value) loadTiming()
 })
 watch([stand, count, pitch, pitchResult, startDate, endDate], () => {
   if (activeTab.value === 'discipline') loadDiscipline()
+})
+watch(timingPitchGroup, () => {
+  const allowed = new Set(visibleTimingPitchTypes.value.map(option => option.value))
+  if (timingPitchType.value !== 'All' && !allowed.has(timingPitchType.value)) timingPitchType.value = 'All'
+})
+watch([timingPitchGroup, timingPitchType, timingPitcherHand], () => {
+  syncRoute()
+  if (selectedBatterId.value) loadTiming()
 })
 
 async function loadBatters() {
@@ -189,10 +281,13 @@ async function loadPayloads() {
   if (!selectedBatterId.value) {
     overview.value = null
     discipline.value = null
+    timing.value = null
     return
   }
   discipline.value = null
+  timing.value = null
   await loadOverview()
+  void loadTiming()
   if (activeTab.value === 'discipline') await loadDiscipline()
 }
 
@@ -216,6 +311,27 @@ async function loadDiscipline() {
     startDate: startDate.value,
     endDate: endDate.value
   })
+}
+
+async function loadTiming() {
+  if (!selectedBatterId.value) return
+  const requestId = ++timingRequestId
+  timingPending.value = true
+  timingError.value = false
+  try {
+    const result = await api.batterSwingTimingPlayer({
+      year: year.value,
+      batterId: selectedBatterId.value,
+      pitchGroup: timingPitchGroup.value,
+      pitchType: timingPitchType.value,
+      pitcherHand: timingPitcherHand.value
+    })
+    if (requestId === timingRequestId) timing.value = result
+  } catch {
+    if (requestId === timingRequestId) { timing.value = null; timingError.value = true }
+  } finally {
+    if (requestId === timingRequestId) timingPending.value = false
+  }
 }
 
 function disciplineTable(key: string): TablePayload {
@@ -285,13 +401,37 @@ function clearDates() {
   endDate.value = ''
 }
 
+function openPitchVideo(point: Record<string, unknown>) {
+  selectedPitch.value = point
+  videoModalOpen.value = true
+}
+
+function pitchPointKey(point: Record<string, unknown>) {
+  return [point.game_pk, point.at_bat_number, point.pitch_number, point.plate_x, point.plate_z, point.pitch_name]
+    .map(value => String(value ?? ''))
+    .join('|')
+}
+
+function plusValue(value: unknown) {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric.toFixed(1) : '—'
+}
+
+function numberValue(value: unknown, suffix = '') {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? `${numeric.toFixed(1)}${suffix}` : '—'
+}
+
 function syncRoute() {
   router.replace({
     query: {
       ...route.query,
       year: String(year.value),
       team: team.value,
-      batter_id: selectedBatterId.value ? String(selectedBatterId.value) : undefined
+      batter_id: selectedBatterId.value ? String(selectedBatterId.value) : undefined,
+      timing_pitch_group: timingPitchGroup.value,
+      timing_pitch_type: timingPitchType.value,
+      timing_pitcher_hand: timingPitcherHand.value
     }
   })
 }
@@ -376,7 +516,8 @@ input {
   box-shadow: var(--shadow-sm);
 }
 .discipline-visual-section,
-.discipline-table-section {
+.discipline-table-section,
+.timing-section {
   display: grid;
   gap: 16px;
   border: 1px solid var(--color-border);
@@ -385,6 +526,7 @@ input {
   background: color-mix(in srgb, var(--color-surface) 94%, transparent);
   box-shadow: var(--shadow-sm);
 }
+.timing-section { align-content: start; }.timing-section .section-heading a { border-radius: 999px; padding: 10px 14px; color: #111; background: var(--color-primary); font-size: 14px; font-weight: 850; text-decoration: none; }.timing-filters { display: grid; grid-template-columns: repeat(3,minmax(180px,1fr)); gap: 12px; }.timing-error { color: var(--color-destructive); }.timing-section :deep(.dimension-chart),.timing-section :deep(.matrix),.timing-section :deep(.gear) { margin-top: 0; }.timing-section :deep(.matrix th),.timing-section :deep(.matrix td) { padding: 11px 10px; font-size: 14px; }.timing-section :deep(.matrix td:first-child small) { font-size: 12px; }
 .discipline-table-section {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -462,6 +604,7 @@ input {
   font-weight: 800;
 }
 .state-card { margin: 0; border: 1px solid var(--color-border); border-radius: 14px; padding: 24px; background: var(--color-surface); }
+.video-modal-backdrop { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: 24px; background: rgb(2 6 23 / 78%); backdrop-filter: blur(5px); }.video-modal { display: grid; grid-template-rows: auto minmax(360px,70vh) auto; width: min(980px,96vw); max-height: 94vh; overflow: hidden; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); box-shadow: 0 24px 70px rgb(0 0 0 / 50%); }.video-modal header,.video-modal footer { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 18px; }.video-modal header { border-bottom: 1px solid var(--color-border); }.video-modal h2 { margin: 0; color: var(--color-foreground); font-size: 22px; }.video-modal header p { margin: 3px 0 0; color: var(--color-muted-text); }.video-modal button { border: 1px solid var(--color-border); border-radius: 8px; width: 38px; height: 38px; color: var(--color-foreground); background: var(--color-background); cursor: pointer; font-size: 24px; }.video-modal iframe { width: 100%; height: 100%; border: 0; background: #000; }.video-unavailable { display: grid; place-items: center; margin: 0; color: var(--color-muted-text); }.video-modal footer { align-items: end; border-top: 1px solid var(--color-border); }.video-modal footer dl { display: flex; flex-wrap: wrap; gap: 18px; margin: 0; }.video-modal footer dl div { display: grid; gap: 2px; }.video-modal footer dt { color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }.video-modal footer dd { margin: 0; color: var(--color-foreground); font: 750 16px "Fira Code",monospace; }.video-modal footer a { border-radius: 999px; padding: 9px 13px; color: #111; background: var(--color-primary); font-weight: 850; text-decoration: none; }
 .loading-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .loading-grid span { height: 110px; border-radius: 14px; background: linear-gradient(90deg, var(--color-surface), var(--color-muted), var(--color-surface)); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
 @keyframes shimmer { to { background-position: -200% 0; } }
@@ -474,6 +617,6 @@ input {
   }
   .discipline-table--wide { grid-column: auto; }
 }
-@media (max-width: 700px) { .batter-personal-page { padding-top: 24px; } .selector-panel { grid-template-columns: 1fr; } .loading-grid { grid-template-columns: 1fr 1fr; } .section-heading { align-items: flex-start; flex-direction: column; } .discipline-visual-section, .discipline-table-section { padding: 12px; } .batter-location-chart { width: 100%; min-width: 0; } }
+@media (max-width: 700px) { .batter-personal-page { padding-top: 24px; } .selector-panel { grid-template-columns: 1fr; } .loading-grid { grid-template-columns: 1fr 1fr; } .section-heading { align-items: flex-start; flex-direction: column; }.timing-filters { grid-template-columns: 1fr; } .discipline-visual-section, .discipline-table-section, .timing-section { padding: 12px; } .batter-location-chart { width: 100%; min-width: 0; } }
 @media (prefers-reduced-motion: reduce) { .loading-grid span { animation: none; } }
 </style>

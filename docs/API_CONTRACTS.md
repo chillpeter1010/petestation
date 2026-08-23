@@ -60,6 +60,36 @@ Response:
 - `GET /api/personal/videos`
 - `GET /api/personal/timing`
 
+### Batter Lab
+
+- `GET /api/batters/lab/swing-timing`
+
+#### `GET /api/batters/lab/swing-timing`
+
+Query:
+
+| Param | Type | Notes |
+| --- | --- | --- |
+| `year` | integer | Available cached season; currently `2023`–`2026` |
+| `pitch_group` | string | `all`, `fastball`, `breaking`, `offspeed`, `other` |
+| `pitch_type` | string | Optional Statcast pitch code such as `FF`, `SL`, `CH` |
+| `pitcher_hand` | string | `All`, `L`, `R` |
+| `batter_side` | string | `All`, `L`, `R` |
+| `batter_team` | string | Batter's season team code or `All` |
+| `pitcher_team` | string | `All` 使用 Savant summary；球隊代碼使用本機精確逐球 matchup mode |
+| `minimum_swings` | integer | Qualification threshold after filters |
+| `minimum_plate_appearances` | integer | Season PA qualification threshold; `5`–`700`, normalized to steps of `5` |
+
+Returns `league`, `leaderboard`, `data_mode`, filter options and sample metadata. All percentage fields use the `0–100` scale. Distances remain in inches and timing offsets in milliseconds. Rate fields are aggregated by swings; average miss distance is weighted by estimated whiffs, and conditional directional distances are weighted by their corresponding category counts.
+
+The request path only reads local Savant summary caches under `data/MissDistance`; refreshing those caches is an explicit offline operation and does not occur during page requests.
+
+`batter_team` is exact in summary mode. Selecting `pitcher_team` switches to exact local pitch-level matchups (`data_mode=matchup_event`). This mode returns exact tracked swings, Whiff, Competitive Rate, Bat Speed, Swing Length and attack metrics; X/Y/Z alignment and Flawed/Perfect remain null because those event-level fields are absent locally. Current pitch-level `miss_distance` coverage is 2026 only.
+
+#### `GET /api/batters/lab/swing-timing/player`
+
+Lazy-loaded V2 player detail endpoint. Accepts the same pitch, hand, side and pitcher-team filters plus `batter_id`. Returns player/league summary, pitch-type matrix and Bat-Speed Gear Change fields. The Lab calls it only when a leaderboard row is expanded.
+
 #### `GET /api/personal/overview`
 
 Query:

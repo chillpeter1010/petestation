@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query
 
 from app.api.schemas.common import AnalysisResponse
-from app.api.schemas.teams import TeamDashboardResponse, TeamPayrollResponse, TeamPitchVideoResponse, TeamTransactionsResponse
+from app.api.schemas.teams import TeamDashboardResponse, TeamHittingIntelligenceResponse, TeamPayrollResponse, TeamPitchVideoResponse, TeamTransactionsResponse
 from app.services.team_dashboard_service import (
     MLB_TEAM_IDS,
     TEAM_CONFIG,
@@ -12,6 +12,7 @@ from app.services.team_dashboard_service import (
 from app.services.video_service import fetch_sporty_video_metadata
 from app.services.transaction_service import get_team_transactions
 from app.services.payroll import get_team_payroll
+from app.services.team_hitting_intelligence_service import get_team_hitting_intelligence
 
 router = APIRouter()
 
@@ -33,6 +34,14 @@ def read_team_direct_video(play_id: str) -> dict[str, object]:
 def read_team_dashboard(team_id: str, year: int = Query(2026)) -> TeamDashboardResponse:
     try:
         return get_team_dashboard(year=year, team_id=team_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.get("/{team_id}/hitting-intelligence", response_model=TeamHittingIntelligenceResponse)
+def read_team_hitting_intelligence(team_id: str, year: int = Query(2026)) -> TeamHittingIntelligenceResponse:
+    try:
+        return get_team_hitting_intelligence(year=year, team_id=team_id)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
