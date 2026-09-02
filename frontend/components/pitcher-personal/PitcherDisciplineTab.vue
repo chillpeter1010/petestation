@@ -1,29 +1,19 @@
 <template>
   <section class="panel-grid">
-    <section class="stuff-filters wide-panel">
-      <label>
-        Stand
-        <CheckboxDropdown v-model="stand" :options="standOptions" />
-      </label>
-      <label>
-        Count
-        <CheckboxDropdown v-model="count" :options="countOptions" />
-      </label>
-      <label>
-        Pitch
-        <CheckboxDropdown v-model="pitch" :options="pitchOptions" />
-      </label>
-      <label>
-        Paired Catcher
-        <CheckboxDropdown v-model="catcher" :options="catcherOptions" />
-      </label>
-      <label class="range-filter">
-        Heatmap Blend
-        <input v-model.number="heatmapBlend" type="range" min="0" max="1" step="0.1">
-        <span>{{ Math.round(heatmapBlend * 100) }}%</span>
-      </label>
-      <span class="filter-status">{{ loading ? 'Updating Discipline' : `${filteredTotal || 0} filtered pitches` }}</span>
-    </section>
+    <DisciplineFiltersBar
+      v-model:stand="stand"
+      v-model:count="count"
+      v-model:pitch="pitch"
+      v-model:secondary="catcher"
+      v-model:heatmap-blend="heatmapBlend"
+      :stand-options="standOptions"
+      :count-options="countOptions"
+      :pitch-options="pitchOptions"
+      secondary-label="Paired catcher"
+      :secondary-options="catcherOptions"
+      :loading="loading"
+      :filtered-total="filteredTotal"
+    />
     <SummaryCards :metrics="snapshotMetrics" />
     <DataTable title="Summary" :table="discipline?.tables.discipline_summary" />
     <DataTable title="Stand Split" :table="discipline?.tables.stand_split" />

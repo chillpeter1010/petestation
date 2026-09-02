@@ -98,9 +98,10 @@ defineProps<{
 h1 {
   margin: 18px 0 16px;
   color: #f8fafc;
-  font-size: clamp(44px, 6vw, 78px);
-  line-height: 0.94;
-  letter-spacing: -0.055em;
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 750;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
 }
 
 h1 em { color: #ff9900; font-style: normal; }

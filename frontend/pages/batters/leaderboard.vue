@@ -76,7 +76,7 @@ function formatRate(value: number) { return value.toFixed(3) }
 .workspace { display: grid; gap: 16px; margin-top: 24px; }
 .workspace__heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 10px 2px; }
 .workspace__heading span { display: inline-flex; align-items: center; gap: 7px; color: var(--color-primary); font-size: 11px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
-.workspace__heading h2 { margin: 5px 0 0; color: var(--color-foreground); font-size: clamp(25px, 3vw, 36px); letter-spacing: -.03em; }
+.workspace__heading h2 { margin: 5px 0 0; color: var(--color-foreground); font-size: clamp(25px, 3vw, 36px); letter-spacing: -.01em; }
 .workspace__heading p { max-width: 480px; margin: 0; color: var(--color-muted-text); font-size: 13px; text-align: right; }
 .filter-bar { display: grid; grid-template-columns: 140px 180px 170px minmax(240px, 1fr); gap: 12px; border: 1px solid var(--color-border); border-radius: 15px; padding: 14px; background: color-mix(in srgb, var(--color-surface) 95%, transparent); box-shadow: var(--shadow-sm); }
 label { display: grid; gap: 6px; }

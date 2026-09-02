@@ -69,8 +69,10 @@ p {
 
 h1 {
   margin-top: 8px;
-  font-size: clamp(36px, 6vw, 80px);
-  line-height: 0.95;
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 750;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
 }
 
 p {

@@ -137,6 +137,19 @@ def test_apply_stuff_filters_filters_count_pitch_and_result():
     assert filtered.iloc[0]["pitch_name"] == "Sinker"
 
 
+def test_apply_stuff_filters_treats_all_as_no_filter():
+    frame = pd.DataFrame(
+        [
+            {"stand": "R", "balls": 0, "strikes": 0, "pitch_name": "Sinker", "description": "called_strike", "catcher_name": "A"},
+            {"stand": "L", "balls": 1, "strikes": 0, "pitch_name": "Slider", "description": "ball", "catcher_name": "B"},
+        ]
+    )
+
+    filtered = apply_stuff_filters(frame, stand="All", count="All", pitch="All", pitch_result="All", catcher="All")
+
+    assert filtered.shape[0] == frame.shape[0]
+
+
 def test_apply_stuff_filters_accepts_four_seam_aliases():
     frame = pd.DataFrame(
         [

@@ -135,6 +135,10 @@ export interface BatterLeaderboardRow {
   xwoba: number | null
   avg_ev: number | null
   max_ev: number | null
+  avg_bat_speed: number | null
+  batting_run_value: number | null
+  sweet_spot_rate: number | null
+  chase_rate: number | null
   hard_hit_rate: number | null
   barrel_rate: number | null
   whiff_rate: number | null

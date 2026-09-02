@@ -139,6 +139,7 @@ def get_batter_personal_overview(year: int, batter_id: int) -> AnalysisResponse:
         charts={
             "selected_batter": _selected_batter_payload(year, batter_id, selected),
             "filters": _batter_filter_options(pitch_rows),
+            "percentile_profile": _build_batter_percentile_profile(year, batter_id),
         },
         tables=tables,
     )
@@ -227,7 +228,17 @@ def _normalize_batter_pitch_rows(raw: pd.DataFrame) -> pd.DataFrame:
     frame["game_date"] = pd.to_datetime(frame["game_date"], errors="coerce").dt.strftime("%Y-%m-%d")
     for column in ["game_pk", "at_bat_number", "pitch_number", "pitcher", "batter", "balls", "strikes"]:
         frame[column] = pd.to_numeric(frame[column], errors="coerce")
-    for column in ["plate_x", "plate_z", "release_speed", "launch_speed", "launch_angle"]:
+    for column in [
+        "plate_x",
+        "plate_z",
+        "release_speed",
+        "launch_speed",
+        "launch_angle",
+        "bat_speed",
+        "delta_home_win_exp",
+        "woba_value",
+        "woba_denom",
+    ]:
         frame[column] = pd.to_numeric(frame[column], errors="coerce")
 
     cached_stuff = load_pitch_stuff_scores(frame)
@@ -311,6 +322,10 @@ def _pitch_row_columns() -> list[str]:
         "release_speed",
         "launch_speed",
         "launch_angle",
+        "bat_speed",
+        "delta_home_win_exp",
+        "woba_value",
+        "woba_denom",
         "bb_type",
         "play_id",
         "video_url",
@@ -341,24 +356,39 @@ def _apply_batter_filters(
     if rows.empty:
         return rows
     filtered = rows.copy()
-    if stand and stand != "All":
-        filtered = filtered[filtered["stand"] == stand]
-    if count and count != "All":
-        filtered = filtered[filtered["count"] == count]
-    if pitch and pitch != "All":
-        filtered = filtered[(filtered["pitch_name"] == pitch) | (filtered["pitch_type"] == pitch)]
-    if pitch_result and pitch_result != "All":
-        if pitch_result == "Swing":
-            filtered = filtered[filtered["is_swing"]]
-        elif pitch_result == "In Play":
-            filtered = filtered[filtered["is_in_play"]]
-        else:
-            filtered = filtered[filtered["description"] == pitch_result.lower().replace(" ", "_")]
+    stand_values = _filter_values(stand)
+    count_values = _filter_values(count)
+    pitch_values = _filter_values(pitch)
+    result_values = _filter_values(pitch_result)
+    if stand_values:
+        filtered = filtered[filtered["stand"].isin(stand_values)]
+    if count_values:
+        filtered = filtered[filtered["count"].isin(count_values)]
+    if pitch_values:
+        filtered = filtered[filtered["pitch_name"].isin(pitch_values) | filtered["pitch_type"].isin(pitch_values)]
+    if result_values:
+        result_mask = pd.Series(False, index=filtered.index)
+        for result_value in result_values:
+            if result_value == "Swing":
+                result_mask |= filtered["is_swing"]
+            elif result_value == "Whiff":
+                result_mask |= filtered["is_whiff"]
+            elif result_value == "In Play":
+                result_mask |= filtered["is_in_play"]
+            else:
+                result_mask |= filtered["description"].eq(result_value.lower().replace(" ", "_"))
+        filtered = filtered[result_mask]
     if start_date:
         filtered = filtered[filtered["game_date"] >= start_date]
     if end_date:
         filtered = filtered[filtered["game_date"] <= end_date]
     return filtered
+
+
+def _filter_values(value: str | None) -> list[str]:
+    if not value or value == "All":
+        return []
+    return [item.strip() for item in str(value).split(",") if item.strip() and item.strip() != "All"]
 
 
 def _batter_filter_options(rows: pd.DataFrame) -> dict[str, list[str]]:
@@ -433,8 +463,55 @@ def _selected_batter_payload(year: int, batter_id: int, selected: dict[str, Any]
     }
 
 
+def _build_batter_percentile_profile(year: int, batter_id: int) -> list[dict[str, Any]]:
+    leaderboard = list_batter_leaderboard(year)
+    selected = next((row for row in leaderboard if row.get("player_id") == batter_id), None)
+    if not selected:
+        return []
+
+    qualified = [row for row in leaderboard if (_nullable_int(row.get("plate_appearances")) or 0) >= 50]
+    specs = [
+        ("batting_run_value", "Batting Run Value", "runs", True),
+        ("xwoba", "xwOBA", "rate", True),
+        ("xba", "xBA", "rate", True),
+        ("xslg", "xSLG", "rate", True),
+        ("avg_ev", "Avg Exit Velo", "mph", True),
+        ("barrel_rate", "Barrel%", "percent", True),
+        ("hard_hit_rate", "Hard-Hit%", "percent", True),
+        ("sweet_spot_rate", "LA Sweet-Spot%", "percent", True),
+        ("avg_bat_speed", "Bat Speed", "mph", True),
+        ("chase_rate", "Chase%", "percent", False),
+        ("whiff_rate", "Whiff%", "percent", False),
+        ("strikeout_rate", "K%", "percent", False),
+        ("walk_rate", "BB%", "percent", True),
+    ]
+    profile: list[dict[str, Any]] = []
+    for key, label, unit, higher_is_better in specs:
+        value = _nullable_float(selected.get(key))
+        population = [
+            numeric
+            for row in qualified
+            if (numeric := _nullable_float(row.get(key))) is not None
+        ]
+        percentile = None
+        if value is not None and population:
+            favorable = sum(candidate <= value for candidate in population) if higher_is_better else sum(candidate >= value for candidate in population)
+            percentile = round(max(1.0, min(100.0, favorable / len(population) * 100)), 0)
+        profile.append(
+            {
+                "key": key,
+                "label": label,
+                "value": value,
+                "unit": unit,
+                "percentile": percentile,
+                "sample": len(population),
+            }
+        )
+    return profile
+
+
 def _build_batter_game_log(rows: pd.DataFrame) -> TablePayload:
-    columns = ["Date", "Opponent", "Pitches", "PA", "AB", "H", "HR", "BB", "SO", "AVG", "Max EV", "HH"]
+    columns = ["Date", "Opponent", "Pitches", "PA", "AB", "H", "HR", "BB", "SO", "AVG", "wOBA", "Game WPA", "Max EV", "HH"]
     if rows.empty:
         return _table(columns, [])
     grouped = []
@@ -445,6 +522,12 @@ def _build_batter_game_log(rows: pd.DataFrame) -> TablePayload:
         home_team = _mode_string(group["home_team"])
         away_team = _mode_string(group["away_team"])
         opponent = away_team if offense_team == home_team else home_team
+        home_wpa = pd.to_numeric(group["delta_home_win_exp"], errors="coerce")
+        game_wpa = home_wpa.sum(min_count=1)
+        if offense_team != home_team:
+            game_wpa = -game_wpa
+        woba_denom = pd.to_numeric(group["woba_denom"], errors="coerce").sum(min_count=1)
+        woba_value = pd.to_numeric(group["woba_value"], errors="coerce").sum(min_count=1)
         grouped.append(
             {
                 "Date": group["game_date"].iloc[0],
@@ -457,6 +540,8 @@ def _build_batter_game_log(rows: pd.DataFrame) -> TablePayload:
                 "BB": int(group["is_walk"].sum()),
                 "SO": int(group["is_strikeout"].sum()),
                 "AVG": _format_rate(hits / at_bats if at_bats else None),
+                "wOBA": _round(woba_value / woba_denom, 3) if pd.notna(woba_denom) and woba_denom > 0 else None,
+                "Game WPA": _round(game_wpa, 3) if pd.notna(game_wpa) else None,
                 "Max EV": _round(group["launch_speed"].max(), 1),
                 "HH": int(group["is_hard_hit"].sum()),
             }
@@ -545,6 +630,8 @@ def _build_batter_location_points(rows: pd.DataFrame) -> TablePayload:
         "count",
         "release_speed",
         "launch_speed",
+        "bat_speed",
+        "is_swing",
         "play_id",
         "video_url",
         "pitch_stuff_plus",
@@ -778,7 +865,11 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                     lower(coalesce(CAST(p.events AS VARCHAR), '')) AS events,
                     lower(coalesce(CAST(p.description AS VARCHAR), '')) AS description,
                     try_cast({source('launch_speed')} AS DOUBLE) AS launch_speed,
+                    try_cast({source('launch_angle')} AS DOUBLE) AS launch_angle,
                     try_cast({source('launch_speed_angle')} AS DOUBLE) AS launch_speed_angle,
+                    try_cast({source('bat_speed')} AS DOUBLE) AS bat_speed,
+                    try_cast({source('zone')} AS DOUBLE) AS zone,
+                    try_cast({source('delta_run_exp')} AS DOUBLE) AS delta_run_exp,
                     try_cast({source('estimated_ba_using_speedangle')} AS DOUBLE) AS estimated_ba,
                     try_cast({source('estimated_slg_using_speedangle')} AS DOUBLE) AS estimated_slg,
                     try_cast({source('estimated_woba_using_speedangle')} AS DOUBLE) AS estimated_woba,
@@ -794,6 +885,17 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                     count(*) AS pitches,
                     avg(launch_speed) FILTER (WHERE description = 'hit_into_play' AND launch_speed IS NOT NULL) AS avg_ev,
                     max(launch_speed) FILTER (WHERE description = 'hit_into_play') AS max_ev,
+                    avg(bat_speed) FILTER (WHERE bat_speed IS NOT NULL) AS avg_bat_speed,
+                    sum(delta_run_exp) FILTER (WHERE delta_run_exp IS NOT NULL) AS batting_run_value,
+                    count(*) FILTER (WHERE description = 'hit_into_play' AND launch_angle BETWEEN 8 AND 32) * 1.0
+                        / nullif(count(*) FILTER (WHERE description = 'hit_into_play' AND launch_angle IS NOT NULL), 0) AS sweet_spot_rate,
+                    count(*) FILTER (
+                        WHERE zone NOT BETWEEN 1 AND 9
+                          AND description IN (
+                            'swinging_strike', 'swinging_strike_blocked', 'foul', 'foul_tip',
+                            'hit_into_play', 'foul_bunt', 'missed_bunt', 'bunt_foul_tip', 'swinging_pitchout'
+                          )
+                    ) * 1.0 / nullif(count(*) FILTER (WHERE zone NOT BETWEEN 1 AND 9), 0) AS chase_rate,
                     count(*) FILTER (WHERE description = 'hit_into_play' AND launch_speed >= 95) * 1.0
                         / nullif(count(*) FILTER (WHERE description = 'hit_into_play' AND launch_speed IS NOT NULL), 0) AS hard_hit_rate,
                     count(*) FILTER (WHERE launch_speed_angle = 6) * 1.0
@@ -870,6 +972,10 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                     pa.xwoba,
                     pitch.avg_ev,
                     pitch.max_ev,
+                    pitch.avg_bat_speed,
+                    pitch.batting_run_value,
+                    pitch.sweet_spot_rate,
+                    pitch.chase_rate,
                     pitch.hard_hit_rate,
                     pitch.barrel_rate,
                     pitch.whiff_rate,
@@ -902,6 +1008,10 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                 stats.xwoba,
                 stats.avg_ev,
                 stats.max_ev,
+                stats.avg_bat_speed,
+                stats.batting_run_value,
+                stats.sweet_spot_rate,
+                stats.chase_rate,
                 stats.hard_hit_rate,
                 stats.barrel_rate,
                 stats.whiff_rate,
@@ -1097,6 +1207,10 @@ def _row_to_payload(row: dict[str, Any]) -> dict[str, Any]:
         "xwoba": _nullable_float(row.get("xwoba")),
         "avg_ev": _nullable_float(row.get("avg_ev")),
         "max_ev": _nullable_float(row.get("max_ev")),
+        "avg_bat_speed": _nullable_float(row.get("avg_bat_speed")),
+        "batting_run_value": _nullable_float(row.get("batting_run_value")),
+        "sweet_spot_rate": _nullable_float(row.get("sweet_spot_rate")),
+        "chase_rate": _nullable_float(row.get("chase_rate")),
         "hard_hit_rate": _nullable_float(row.get("hard_hit_rate")),
         "barrel_rate": _nullable_float(row.get("barrel_rate")),
         "whiff_rate": _nullable_float(row.get("whiff_rate")),
@@ -1130,6 +1244,10 @@ def _numeric_columns() -> list[str]:
         "xwoba",
         "avg_ev",
         "max_ev",
+        "avg_bat_speed",
+        "batting_run_value",
+        "sweet_spot_rate",
+        "chase_rate",
         "hard_hit_rate",
         "barrel_rate",
         "whiff_rate",

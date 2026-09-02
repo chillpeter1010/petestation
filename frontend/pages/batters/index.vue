@@ -47,7 +47,7 @@ function playerLink(batter: BatterOption) { return { path: '/batter-personal', q
 .hub-hero, .search-panel, .portal-card { border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .hub-hero { display: flex; align-items: end; justify-content: space-between; gap: 32px; border-radius: 20px; padding: clamp(24px, 4vw, 46px); background: radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 23%, transparent), transparent 34%), var(--color-surface); }
 .hub-hero span, .search-panel header span, .portal-card > span { color: var(--color-primary); font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
-.hub-hero h1 { margin: 10px 0 0; color: var(--color-foreground); font-size: clamp(38px, 6vw, 70px); line-height: .95; letter-spacing: -.055em; }
+.hub-hero h1 { margin: 10px 0 0; color: var(--color-foreground); font-size: clamp(38px, 5vw, 62px); font-weight: 750; line-height: 1.06; letter-spacing: -.012em; }
 .hub-hero p, .portal-card p { max-width: 680px; color: var(--color-muted-text); line-height: 1.65; }
 .hero-stat { min-width: 148px; border-left: 1px solid var(--color-border); padding-left: 24px; }
 .hero-stat strong { display: block; color: var(--color-foreground); font-size: 42px; }

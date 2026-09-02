@@ -63,7 +63,7 @@ defineProps<{
 .player-hero__identity, .player-hero__actions { position: relative; z-index: 1; }
 .player-hero__identity { display: flex; align-items: center; gap: 28px; min-width: 0; }
 .eyebrow { display: inline-flex; align-items: center; gap: 7px; color: #ffad33; font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
-h1 { margin: 8px 0 5px; font-size: clamp(38px, 5.5vw, 68px); line-height: 1; letter-spacing: -.045em; }
+h1 { margin: 9px 0 6px; font-size: clamp(36px, 4.5vw, 58px); font-weight: 750; line-height: 1.08; letter-spacing: -.012em; }
 .player-hero__identity p { margin: 0; color: #a7b6cb; }
 dl { display: flex; flex-wrap: wrap; gap: 9px; margin: 22px 0 0; }
 dl div { min-width: 105px; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; padding: 9px 12px; background: rgba(7,10,15,.36); }

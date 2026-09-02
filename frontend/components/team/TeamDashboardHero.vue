@@ -152,9 +152,10 @@ function formatDate(value: string | null) {
 .team-hero h1 {
   margin: 6px 0;
   color: #ffffff;
-  font-size: clamp(34px, 5vw, 62px);
-  line-height: 1;
-  letter-spacing: -0.045em;
+  font-size: clamp(34px, 4.5vw, 56px);
+  font-weight: 750;
+  line-height: 1.08;
+  letter-spacing: -0.012em;
 }
 
 .team-hero p {

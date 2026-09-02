@@ -5,12 +5,8 @@
         <h2>Discipline</h2>
         <p>Reusable discipline panels for each selected period.</p>
       </div>
-      <label>
-        Heatmap Blend
-        <input v-model.number="heatmapBlend" type="range" min="0" max="1" step="0.1">
-        <span>{{ Math.round(heatmapBlend * 100) }}%</span>
-      </label>
     </header>
+    <HeatmapBlendControl v-model="heatmapBlend" title="Period pitch location" />
     <div class="discipline-grid">
       <section class="period-side">
         <h3>Period A</h3>
@@ -169,15 +165,6 @@ function panelSets(payload: PeriodDisciplinePayload) {
   font-size: 13px;
 }
 
-label {
-  display: grid;
-  min-width: 240px;
-  gap: 6px;
-  color: var(--color-foreground);
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-}
 
 label span {
   color: var(--color-muted-text);

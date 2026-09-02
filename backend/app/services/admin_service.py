@@ -163,7 +163,7 @@ def sync_legacy_pitcher_refresh_outputs(year: int) -> dict[str, object]:
     }
 
 
-def run_pitcher_data_refresh(year: int = 2026) -> dict[str, object]:
+def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False) -> dict[str, object]:
     with _DUCKDB_WRITE_LOCK:
         initial_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir)
         repair = None
@@ -190,9 +190,15 @@ def run_pitcher_data_refresh(year: int = 2026) -> dict[str, object]:
         result["location_plus"] = _run_duckdb_write_child(
             {"job": "location_scores", "year": int(year)}
         )
-        result["pitch_stuff_plus"] = _run_duckdb_write_child(
-            {"job": "pitch_stuff_scores", "year": int(year)}
-        )
+        if include_pitch_stuff:
+            result["pitch_stuff_plus"] = _run_duckdb_write_child(
+                {"job": "pitch_stuff_scores", "year": int(year)}
+            )
+        else:
+            result["pitch_stuff_plus"] = {
+                "status": "deferred",
+                "reason": "Per-pitch Stuff+ backfill runs separately so it cannot block the daily data refresh.",
+            }
         return result
 
 
@@ -280,8 +286,12 @@ def _run_duckdb_write_child(payload: dict[str, object]) -> dict[str, object]:
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
     )
-    lines = [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+    stdout = completed.stdout or ""
+    stderr = completed.stderr or ""
+    lines = [line.strip() for line in stdout.splitlines() if line.strip()]
     parsed: dict[str, Any] | None = None
     if lines:
         try:
@@ -292,10 +302,10 @@ def _run_duckdb_write_child(payload: dict[str, object]) -> dict[str, object]:
     if completed.returncode != 0:
         if parsed and parsed.get("error"):
             raise RuntimeError(str(parsed["error"]))
-        detail = completed.stderr.strip() or completed.stdout.strip() or f"exit code {completed.returncode}"
+        detail = stderr.strip() or stdout.strip() or f"exit code {completed.returncode}"
         raise RuntimeError(detail)
     if not parsed or not parsed.get("ok"):
-        detail = completed.stderr.strip() or completed.stdout.strip() or "child job returned no JSON result"
+        detail = stderr.strip() or stdout.strip() or "child job returned no JSON result"
         raise RuntimeError(detail)
     return dict(parsed["result"])
 

@@ -42,7 +42,10 @@
     />
 
     <footer class="site-home__footer">
-      <NuxtLink class="site-home__maintenance-entry" to="/admin/updates">Per aspera ad astra</NuxtLink>
+      <div class="site-home__footer-notes">
+        <NuxtLink class="site-home__maintenance-entry" to="/admin/updates">Per aspera ad astra</NuxtLink>
+        <StatcastFieldNote />
+      </div>
       <span>Petehub · Baseball Analysis Platform</span>
     </footer>
   </main>
@@ -51,6 +54,7 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
 import type { HomeRecommendationsResponse } from '~/types/api'
+import StatcastFieldNote from '~/components/home/StatcastFieldNote.vue'
 
 interface SearchDestination {
   id: string
@@ -148,6 +152,12 @@ function refreshVideos() {
   margin-inline: auto;
 }
 
+.site-home__footer-notes {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(18px, 3vw, 34px);
+}
+
 .site-home__top {
   display: flex;
   align-items: flex-start;
@@ -233,8 +243,8 @@ function refreshVideos() {
   font-family: Baskerville, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   font-size: clamp(36px, 4.8vw, 64px);
   font-weight: 600;
-  line-height: .91;
-  letter-spacing: -.052em;
+  line-height: 1.04;
+  letter-spacing: -.012em;
   text-wrap: balance;
 }
 

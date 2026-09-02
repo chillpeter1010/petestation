@@ -28,6 +28,7 @@
   --space-xl: 32px;
   --app-content-max: 1600px;
   --app-gutter: clamp(18px, 4vw, 64px);
+  --font-display: "Segoe UI Variable Display", "Segoe UI", Arial, sans-serif;
   font-family: "Fira Sans", "Segoe UI", Arial, sans-serif;
 }
 
@@ -67,6 +68,13 @@ body {
     linear-gradient(180deg, rgba(255, 153, 0, 0.12), rgba(248, 250, 252, 0) 280px),
     var(--color-background);
   color: var(--color-text);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
 }
 
 :root[data-theme="dark"] body {

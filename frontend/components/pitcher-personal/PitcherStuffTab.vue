@@ -46,16 +46,7 @@
     </div>
     <div class="location-workspace wide-panel">
       <div class="location-left">
-        <section class="panel-section location-controls">
-          <header>
-            <h2>Pitch Location</h2>
-          </header>
-          <label class="range-control">
-            Heatmap Blend
-            <input v-model.number="heatmapBlend" type="range" min="0" max="1" step="0.1">
-            <span>{{ Math.round(heatmapBlend * 100) }}%</span>
-          </label>
-        </section>
+        <HeatmapBlendControl v-model="heatmapBlend" />
         <StrikeZoneScatter
           class="location-main"
           :points="pitchLocationPoints"

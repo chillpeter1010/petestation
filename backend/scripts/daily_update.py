@@ -31,6 +31,11 @@ def write_state(path: Path, payload: dict[str, object]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the complete Petehub daily data pipeline.")
     parser.add_argument("--year", type=int, default=datetime.now().year)
+    parser.add_argument(
+        "--include-pitch-stuff",
+        action="store_true",
+        help="Also run the expensive per-pitch Stuff+ backfill.",
+    )
     args = parser.parse_args()
 
     log_dir = settings.data_dir / "admin_job_logs"
@@ -62,7 +67,13 @@ def main() -> int:
     failed = False
     try:
         game_steps = [
-            ("pitch_data", lambda: run_pitcher_data_refresh(year=args.year)),
+            (
+                "pitch_data",
+                lambda: run_pitcher_data_refresh(
+                    year=args.year,
+                    include_pitch_stuff=args.include_pitch_stuff,
+                ),
+            ),
             ("video_lookup", lambda: run_video_lookup_backfill(year=args.year)),
             ("pitcher_game_lines", lambda: run_pitcher_game_line_backfill(year=args.year)),
         ]

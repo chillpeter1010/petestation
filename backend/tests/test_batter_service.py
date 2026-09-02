@@ -140,6 +140,7 @@ def test_batter_location_points_keep_video_and_plus_scores(monkeypatch):
                 "plate_z": 2.8,
                 "play_id": "test-play-id",
                 "video_url": "",
+                "bat_speed": 74.2,
             }
         ]
     )
@@ -152,6 +153,56 @@ def test_batter_location_points_keep_video_and_plus_scores(monkeypatch):
     assert point["video_url"].endswith("playId=test-play-id")
     assert point["pitch_stuff_plus"] == 112.4
     assert point["location_plus_pitch"] == 96.8
+    assert point["bat_speed"] == 74.2
+    assert point["is_swing"] is False
+
+
+def test_batter_filters_accept_checkbox_csv_values():
+    rows = pd.DataFrame(
+        [
+            {"stand": "L", "count": "0-0", "pitch_name": "Slider", "pitch_type": "SL", "description": "ball", "is_swing": False, "is_whiff": False, "is_in_play": False, "game_date": "2026-04-01"},
+            {"stand": "R", "count": "1-0", "pitch_name": "Changeup", "pitch_type": "CH", "description": "swinging_strike", "is_swing": True, "is_whiff": True, "is_in_play": False, "game_date": "2026-04-02"},
+            {"stand": "R", "count": "2-0", "pitch_name": "Curveball", "pitch_type": "CU", "description": "hit_into_play", "is_swing": True, "is_whiff": False, "is_in_play": True, "game_date": "2026-04-03"},
+        ]
+    )
+
+    filtered = batter_service._apply_batter_filters(
+        rows,
+        stand="L,R",
+        count="0-0,1-0",
+        pitch="Slider,Changeup",
+        pitch_result="Swing,ball",
+        start_date=None,
+        end_date=None,
+    )
+
+    assert filtered["pitch_type"].tolist() == ["SL", "CH"]
+
+
+def test_batter_game_log_exposes_batter_wpa_and_woba(monkeypatch):
+    raw = pd.DataFrame(
+        [
+            {
+                **_test_batter_pitch(1, 1, "single", "hit_into_play", 96.0, 4, 0.8, 1.2, 0.9, 0.9, 1.0),
+                "home_team": "AZ",
+                "away_team": "LAD",
+                "delta_home_win_exp": 0.04,
+            },
+            {
+                **_test_batter_pitch(1, 2, "walk", "ball", None, None, None, None, None, 0.7, 1.0),
+                "home_team": "AZ",
+                "away_team": "LAD",
+                "delta_home_win_exp": 0.01,
+            },
+        ]
+    )
+    monkeypatch.setattr(batter_service, "load_pitch_stuff_scores", lambda frame: pd.Series(index=frame.index, dtype=float))
+    monkeypatch.setattr(batter_service, "load_pitch_location_scores", lambda frame: pd.Series(index=frame.index, dtype=float))
+
+    row = batter_service._build_batter_game_log(batter_service._normalize_batter_pitch_rows(raw)).rows[0]
+
+    assert row["Game WPA"] == 0.05
+    assert row["wOBA"] == 0.8
 
 
 def _test_batter_pitch(

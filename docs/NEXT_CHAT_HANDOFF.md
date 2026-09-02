@@ -1,6 +1,6 @@
 # Petehub 專案新對話交接文件
 
-更新日期：2026-08-16  
+更新日期：2026-09-02
 專案根目錄：`C:\intern\project_transfer`
 
 > 新對話開始時，請先完整閱讀本文件，將它視為目前專案的主要前情。不要重新驗證「最近已完成並確認」的項目。
@@ -31,6 +31,9 @@
 - 工作樹可能已有使用者修改，不可覆蓋或回復不相關內容。
 - 搜尋優先用 `rg` / `rg --files`，編輯優先用 `apply_patch`。
 - 使用者說「開起來」通常代表啟動網站並打開首頁；可先檢查 `open-homepage.cmd`。
+- 進入任何現有頁面修改前，先檢查實際 DOM／元件結構與資料回傳，不可只看截圖猜配置。
+- 新增或修改 dashboard panel 時使用直角邊框；不要再新增圓角 panel／圓角外框。資料點、百分位軌道等視覺編碼不受此限制。
+- `StrikeZoneScatter.vue`、`HeatmapBlendControl.vue` 與 discipline filters 已被投手／打者頁共用；修改前必須確認兩邊，不可刪除或讓任一側好球帶變成空圖。
 
 ### 最近一次效率問題
 
@@ -288,6 +291,120 @@ Batter Swing Timing / Miss Distance V1 已於 2026-08-22 完成。權威規劃�
 
 後續 Stuff Attack 擴充應服從 `docs/BATTER_SWING_TIMING_ROADMAP.md` 的資料線界線：目前只有逐球 Bat Speed 與 Miss Distance 能精確和 Stuff+ 交叉；不可把 Savant 已彙總的 X/Y/Z timing 假裝成逐球資料。
 
+### Batter Personal 最新完成狀態（2026-09-02）
+
+- 打者個人頁的 Overview、Swing Timing、Discipline & zones 本輪已告一段落，不要在下一對話重做版面。
+- Discipline 只保留一個 `Swing map`；舊的 `Pitch map / Location profile / Batter-side view for the active filters.` 重複區塊已移除。
+- Discipline 版型已依投手區配置：左側為共用 `HeatmapBlendControl` 與好球帶，右側為 summary cards 與垂直 filters。
+- `Swing map` 可切換 `Bat speed`／`Choice`，共用 `StrikeZoneScatter`，球點可保留選取與影片連結。
+- Overview 已完成左右對調：KPI、Timing Fingerprint 與 WPA／5-day wOBA 圖在左側，Percentile Rankings 在右側；兩欄底部對齊。
+- Batter Personal 本輪涉及的 panel、tabs、filters、modal 與主要容器已改為直角邊框。
+- 修正 discipline API 將 `All` 誤當成實際 CSV filter 的問題；測試投手 API 可回傳 1,675 個 pitch location points，不再是空白好球帶。
+- 最近驗證：Nuxt typecheck 通過、production build 通過、相關 backend tests 32 passed、`git diff --check` 通過。
+- 內建瀏覽器在最後一輪沒有可用 browser instance，因此沒有最後的像素級截圖驗證；程式、API 與 HTTP smoke check 已完成。
+
+### 下一個明確任務：Batter Period Comparison Slice 0–3
+
+使用者已要求下一輪直接完成 Slice 0–3。上一輪只建立工作計畫，**尚未開始撰寫 Batter Period Comparison 程式碼**，不要誤標為已完成。
+
+#### Slice 0 — 封存與基線
+
+- 先檢查目前 dirty worktree；近期修改橫跨 batter personal、共用好球帶、後台更新、catcher 與首頁，不可覆蓋或回復不相關內容。
+- 更新本 handoff／`BATTER_SWING_TIMING_ROADMAP.md` 的實際狀態。
+- 在確認 staged 檔案範圍後建立 Git checkpoint；不要盲目 `git add .`，也不要用 destructive reset／checkout。
+
+#### Slice 1 — Batter Period Comparison 骨架
+
+- 建立打者版 period comparison 頁面與入口。
+- 呈現方式盡量沿用現有投手 `/comparison/period`：同一打者、Period A／Period B、兩組日期、共用情境篩選、A/B/delta 的閱讀順序。
+- 不必強行抽成投打共用頁；可重用真正通用的 selector、好球帶、heatmap control 與格式化元件。
+- 新增獨立 batter API schema／service／route，避免把投手 comparison service 塞入大量 batter-only 分支。
+
+#### Slice 2 — 兩期間核心打擊指標
+
+- 第一批至少涵蓋樣本與產出：PA、AB、OPS、wOBA、xwOBA、AVG、OBP、SLG。
+- 擊球品質：Avg EV、Max EV、Barrel%、HardHit%、SweetSpot%（欄位存在才顯示）。
+- 選球／接觸：Swing%、Chase%、Contact%、Whiff%、K%、BB%、K-BB%。
+- 每項顯示 Period A、Period B、差值、樣本 denominator；百分點差要標為 `%`／`pp` 的正確語意，不可混用。
+- 日期與篩選變更後由後端重算，前端不下載整季資料自行聚合。
+
+#### Slice 3 — 雙好球帶 Heatmap
+
+- Period A／Period B 並排，各只呈現一個相同規格的好球帶。
+- 可透過按鈕切換 `Bat Speed` 與 `Choice`。
+- `Choice` 是各位置的 Swing frequency；藍色代表較少出棒、紅色代表較常出棒，不表示好壞。
+- `Bat Speed` 只使用有 bat tracking 的 competitive／tracked swings，低樣本區域保持淡色。
+- 使用共用 `HeatmapBlendControl` 控制散點到 heatmap 的混合程度，A/B 必須使用同一色階 domain 才能直接比較。
+- 盡量重用 `StrikeZoneScatter.vue`，但修改共用元件前必須同時 smoke check 投手與打者個人頁。
+
+### 後續待辦：Batter Research Slice 4–8
+
+Slice 4–8 仍是原定 roadmap 的一部分，只是不併入下一輪已指定的 Slice 0–3。完成 0–3 後應依序接續，不可遺漏。
+
+#### Slice 4 — Bat Tracking 期間比較
+
+- 在 Batter Period Comparison 加入 Avg Bat Speed、Fast Swing%、Competitive%、Swing Length、Squared-Up% 與 Blast%。
+- 所有數值必須同時顯示 Period A、Period B、差值與有效 tracked swings；沒有該欄位時顯示 unavailable，不以 0 取代缺值。
+- 棒速與 competitive swing 必須沿用 Statcast 定義；不能因日期篩選而偷偷改變球員整季 competitive threshold，除非來源明確就是動態重算。
+- 加入 pitch family、單一球種、投手左右手、打者左右打等 split，但優先重用 Slice 1 已建立的篩選契約。
+- 驗收重點：A/B denominator 一致可追溯、2023 半季限制有提示、無追蹤資料不參與平均。
+
+#### Slice 5 — Timing／Miss Distance 期間比較
+
+- 加入 Avg Miss Distance、Flawed Swing%、Perfect Contact%、Centered%、On Time%、Lined Up%，以及 Tied Up／Flail、Late／Early、Over／Under 組成。
+- 2026 可使用本機逐球 `miss_distance` 做任意日期比較；其他年份缺逐球 coverage 時必須標示 unavailable／summary-only。
+- X/Y/Z alignment 只有取得可按日期切割的 exact payload 才能做真正 Period A/B；現有 full-season summary 不可拆成任意期間。
+- UI 必須把「真正的期間差」與「球季 summary 參考值」分開呈現，不能放在同一 delta 欄造成誤解。
+- 驗收重點：分母、coverage、資料模式與方向定義清楚；不生成推測 KDE 或偽造逐揮棒分布。
+
+#### Slice 6 — Exact Visual Payload 與 Batting Stance
+
+- 先研究並保存 Savant Visual 使用的 bins／逐揮棒 X、Y、Z payload、平滑方式與正負號規則；來源不能驗證時維持現有 summary bars。
+- 若取得 exact payload，再建立三張可追溯分布：Tied Up–Centered–Flail、Late–On Time–Early、Over–Lined Up–Under。
+- 另行盤點 Batting Stance 所需資料：Depth in Box、Distance off Plate、Distance Between Feet、Stance Angle、左右腳位置、At Pitch Release、At Bat-Ball Intercept 與 Intercept Point。
+- 兩組腳印必須依資料語意標示為 stance／release／intercept，不可自行猜成擊球前後。
+- 站位頁先完成 source audit、欄位 coverage 與座標方向驗證，再製作動畫或腳印視覺；沒有可靠資料就停在資料盤點。
+- 驗收重點：每張視覺可追溯原始 payload；左右打鏡像、座標與英吋單位經測試確認。
+
+#### Slice 7 — Team Batting 描述性研究
+
+- 建立逐場 lineup／batting order／defensive position／DH／PH 資料層，先驗證 game-level coverage。
+- 棒次影響：依 1–9 棒比較 PA、AVG、OBP、SLG、wOBA、K%、BB%，並與球員本人基準比較。
+- 守位／角色影響：比較同一打者擔任 C、其他守位、DH、PH 時的打擊表現，例如平常捕手改打 DH。
+- Platoon matchup：依對手投手 L/R 顯示各打者的 observed split、樣本數與 reliability／shrinkage。
+- 球隊首頁只放 compact 視覺摘要，完整研究放在 Batter Lab／Team Batting 子頁；不可再把長表直接塞滿首頁。
+- 所有結果先定義為描述性關聯，不將棒次、守位或 DH 狀態解讀為因果。
+
+#### Slice 8 — 打序預測與最佳化
+
+- 前置資料：probable starter、active roster、傷兵／不可用狀態、近期實際打序、守位覆蓋、休息規則與 platoon 特徵。
+- 第一階段做 lineup prediction：輸出每位球員先發機率、1–9 棒位置機率與 2–3 組候選打序；不得宣稱為官方先發名單。
+- 第二階段才做 lineup optimization：在守位與可用球員限制下，以 run expectancy／模擬估計各候選打序的預期得分。
+- 預測模型與最佳化器分開評估；描述性 leaderboard 不可直接當作 batting order model。
+- 球隊頁呈現預測打序、platoon edge 與主要不確定性；正式打序公布後可比較預測誤差。
+- 驗收重點：時間切分驗證、避免使用賽後資訊、顯示機率與不確定性、守位限制永遠有效。
+
+### 完整 Slice 順序
+
+1. Slice 0：封存與基線。
+2. Slice 1：Batter Period Comparison 骨架。
+3. Slice 2：兩期間核心打擊指標。
+4. Slice 3：Bat Speed／Choice 雙好球帶 Heatmap。
+5. Slice 4：Bat Tracking 期間比較。
+6. Slice 5：Timing／Miss Distance 期間比較。
+7. Slice 6：Exact visuals 與 Batting Stance 資料／視覺。
+8. Slice 7：Team Batting 棒次、守位、角色與 Platoon 描述性研究。
+9. Slice 8：打序預測與最佳化。
+
+### Period Comparison 資料限制
+
+- Bat Tracking 自 2023 All-Star break 後才可用；2023 是半季資料。
+- 任意日期區間的逐球 `miss_distance` 目前本機只有 2026 可精確完成；這不在 Slice 0–3 的必交範圍。
+- Centered／On Time／Lined Up 等 X/Y/Z 目前主要來自 Savant summary，不能假裝能按任意日期精確切割。
+- Slice 0–3 不包含 exact Savant distributions、站位頁、棒次／守位研究或 lineup prediction。
+- 所有新 panel 使用直角邊框；桌面版需在 100% 瀏覽器縮放下看見主要比較內容，窄螢幕再改為單欄。
+- 驗收以 targeted backend tests、UTF-8 檢查、Nuxt typecheck、A/B API smoke check，以及投手／打者好球帶沒有回歸為準。
+
 ---
 
 ## 九、其他尚未完全收尾的區域
@@ -314,10 +431,11 @@ Batter Swing Timing / Miss Distance V1 已於 2026-08-22 完成。權威規劃�
 
 ## 十一、新對話第一輪建議行動
 
-不要先大範圍掃描或啟動瀏覽器。直接：
+不要先大範圍掃描或重做 Batter Personal。直接：
 
-1. 讀取本文件與 `docs/BATTER_SWING_TIMING_ROADMAP.md`。
-2. 不要重做 Swing Timing V1、V2.1–V2.6 或 V3；下一步優先確認 exact visual payload，或開始 Team Batting／Lineup backlog。
-3. 若做 exact distributions，先取得並驗證 Savant bins／逐次視覺 payload；只有 summary 時維持目前比例條。
-4. 若開始 Team Batting／Lineup backlog，優先盤點逐場 batting order、守位／DH、active roster 與 probable starter 資料，再做 platoon lineup prediction。
-5. 最後跑 UTF-8、targeted backend tests 與 frontend typecheck。
+1. 完整閱讀本文件與 `docs/BATTER_SWING_TIMING_ROADMAP.md`。
+2. 執行 `git status --short`，辨識目前未提交檔案；先完成上節 Slice 0 的安全 checkpoint。
+3. 精準閱讀 `frontend/pages/comparison/period.vue`、`backend/app/services/comparison_service.py`、現有 comparison schemas／routes，以及共用 `StrikeZoneScatter.vue`／`HeatmapBlendControl.vue`。
+4. 完成 Batter Period Comparison Slice 1–3；不要順手開始後續的 Slice 4–8。
+5. 修改共用好球帶後，必須各驗證一次 pitcher period/personal 與 batter personal，不可只驗證新頁。
+6. 最後只跑 UTF-8、targeted backend tests、frontend typecheck 與必要 smoke checks；不要再次用長時間瀏覽器等待拖慢交付。

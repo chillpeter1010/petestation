@@ -889,7 +889,11 @@ def build_movement_comparison_table(pitcher_df: pd.DataFrame, pitcher_hand: str,
 def filter_csv_values(value: str | None) -> list[str]:
     if not value:
         return []
-    return [item.strip() for item in str(value).split(",") if item.strip()]
+    return [
+        item.strip()
+        for item in str(value).split(",")
+        if item.strip() and item.strip().lower() != "all"
+    ]
 
 
 def catcher_filter_ids(values: set[str]) -> set[str]:

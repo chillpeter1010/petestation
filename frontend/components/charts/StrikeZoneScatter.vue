@@ -64,7 +64,7 @@
         </g>
         <polyline class="plate" :points="platePoints" />
 
-        <g>
+        <g v-if="showPoints">
           <circle
             v-for="(point, index) in plottedPoints"
             :key="index"
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   points: Array<Record<string, unknown>>
   totalPitches?: number | null
   title?: string
@@ -117,13 +117,19 @@ const props = defineProps<{
   compact?: boolean
   pointScale?: number
   plotScale?: number
-}>()
+  heatmapMode?: 'density' | 'bat-speed' | 'choice'
+  showPoints?: boolean
+}>(), {
+  showPoints: true
+})
 
 const emit = defineEmits<{
   'select-point': [point: Record<string, unknown>]
 }>()
 
 const compact = computed(() => Boolean(props.compact))
+const showPoints = computed(() => props.showPoints !== false)
+const heatmapMode = computed(() => props.heatmapMode || 'density')
 const pointScale = computed(() => {
   const scale = Number(props.pointScale || 1)
   return Number.isFinite(scale) ? Math.max(0.2, scale) : 1
@@ -238,6 +244,8 @@ const plottedPoints = computed(() => {
       video: videoFlag(point),
       stuffPlus: formatPlusScore(point.pitch_stuff_plus ?? point.stuff_plus),
       locationPlus: formatPlusScore(point.location_plus_pitch ?? point.location_plus),
+      batSpeed: nullableNumber(point.bat_speed),
+      swung: Boolean(point.is_swing),
       key: pitchPointKey(point),
       raw: point
     }]
@@ -273,7 +281,7 @@ const heatmapCells = computed(() => {
     && point.z >= activeYDomain[0]
     && point.z <= activeYDomain[1]
   ))
-  const densityCells: Array<{ xi: number; zi: number; density: number }> = []
+  const densityCells: Array<{ xi: number; zi: number; density: number; metric: number | null }> = []
   let maxDensity = 0
 
   for (let xi = 0; xi < xBins; xi += 1) {
@@ -281,16 +289,28 @@ const heatmapCells = computed(() => {
     for (let zi = 0; zi < zBins; zi += 1) {
       const zCenter = activeYDomain[0] + (zi + 0.5) * zStep
       let density = 0
+      let metricTotal = 0
+      let metricWeight = 0
       for (const point of usablePoints) {
         const dx = (xCenter - point.x) / sigmaX
         const dz = (zCenter - point.z) / sigmaZ
         const distanceSquared = dx * dx + dz * dz
         if (distanceSquared <= 9) {
-          density += Math.exp(-0.5 * distanceSquared)
+          const weight = Math.exp(-0.5 * distanceSquared)
+          density += weight
+          const metricValue = heatmapMode.value === 'bat-speed'
+            ? point.batSpeed
+            : heatmapMode.value === 'choice'
+              ? (point.swung ? 1 : 0)
+              : null
+          if (metricValue !== null) {
+            metricTotal += metricValue * weight
+            metricWeight += weight
+          }
         }
       }
-      if (density > 0) {
-        densityCells.push({ xi, zi, density })
+      if (density > 0 && (heatmapMode.value === 'density' || metricWeight > 0)) {
+        densityCells.push({ xi, zi, density, metric: metricWeight ? metricTotal / metricWeight : null })
         maxDensity = Math.max(maxDensity, density)
       }
     }
@@ -299,12 +319,20 @@ const heatmapCells = computed(() => {
   if (!maxDensity) {
     return []
   }
-  return densityCells.flatMap(({ xi, zi, density }) => {
+  const metricValues = densityCells.map((cell) => cell.metric).filter((value): value is number => value !== null)
+  const metricMin = metricValues.length ? Math.min(...metricValues) : 0
+  const metricMax = metricValues.length ? Math.max(...metricValues) : 1
+  return densityCells.flatMap(({ xi, zi, density, metric }) => {
     const normalized = density / maxDensity
     if (normalized < 0.045) {
       return []
     }
-    const colorValue = contourLevel(Math.min(1, Math.pow(normalized, 0.58)))
+    const rawColorValue = heatmapMode.value === 'density'
+      ? Math.min(1, Math.pow(normalized, 0.58))
+      : heatmapMode.value === 'choice'
+        ? Number(metric)
+        : (Number(metric) - metricMin) / (metricMax - metricMin || 1)
+    const colorValue = heatmapMode.value === 'density' ? contourLevel(rawColorValue) : Math.max(0, Math.min(1, rawColorValue))
     return {
       x: xi,
       z: zi,
@@ -315,7 +343,7 @@ const heatmapCells = computed(() => {
       color: heatColor(colorValue),
       stroke: heatStroke(colorValue),
       strokeOpacity: heatmapBlend.value * 0.34,
-      opacity: heatmapBlend.value * (0.42 + 0.58 * colorValue)
+      opacity: heatmapBlend.value * (0.35 + 0.65 * Math.min(1, Math.pow(normalized, 0.5)))
     }
   })
 })
@@ -417,6 +445,11 @@ function formatVelo(value: unknown) {
 function formatPlusScore(value: unknown) {
   const numberValue = Number(value)
   return Number.isFinite(numberValue) ? numberValue.toFixed(1) : '—'
+}
+
+function nullableNumber(value: unknown) {
+  const numberValue = Number(value)
+  return value === null || value === undefined || value === '' || !Number.isFinite(numberValue) ? null : numberValue
 }
 
 function hasVideo(point: Record<string, unknown>) {

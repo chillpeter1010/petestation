@@ -37,7 +37,10 @@ p {
 
 h1 {
   margin-top: 8px;
-  font-size: clamp(44px, 8vw, 96px);
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 750;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
 }
 
 p {

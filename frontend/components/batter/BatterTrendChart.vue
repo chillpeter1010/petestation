@@ -1,7 +1,7 @@
 <template>
   <section class="trend-card">
     <header>
-      <div><span>Recent form</span><h2>Game-by-game trend</h2></div>
+      <h2>{{ activeLabel }}</h2>
       <div class="metric-switch" aria-label="Trend metric">
         <button v-for="item in metrics" :key="item.key" type="button" :class="{ active: metric === item.key }" @click="metric = item.key">{{ item.label }}</button>
       </div>
@@ -18,6 +18,7 @@
           <text x="970" y="402" text-anchor="end">{{ lastDate }}</text>
         </g>
         <polygon class="area" :points="areaPoints" />
+        <line v-if="metric === 'cumulative_wpa'" class="zero-line" x1="70" x2="970" :y1="zeroY" :y2="zeroY" />
         <polyline class="trend-line" :points="polylinePoints" />
         <circle v-for="point in visibleDots" :key="point.key" :cx="point.x" :cy="point.y" r="4">
           <title>{{ point.date }} · {{ formatAxis(point.value) }}</title>
@@ -31,31 +32,45 @@
 <script setup lang="ts">
 const props = defineProps<{ rows: Record<string, unknown>[] }>()
 const metrics = [
-  { key: 'rolling_avg', label: '15-game AVG' },
-  { key: 'max_ev', label: 'Max EV' },
-  { key: 'home_runs', label: 'Home runs' }
+  { key: 'cumulative_wpa', label: 'Cumulative WPA' },
+  { key: 'rolling_woba', label: '5-day wOBA' }
 ] as const
-const metric = ref<(typeof metrics)[number]['key']>('rolling_avg')
+const metric = ref<(typeof metrics)[number]['key']>('cumulative_wpa')
 
 const activeLabel = computed(() => metrics.find(item => item.key === metric.value)?.label || '')
-const chronologicalRows = computed(() => props.rows.slice().reverse())
-const values = computed(() => chronologicalRows.value.map((row, index, rows) => {
-  if (metric.value === 'max_ev') return nullableNumeric(row['Max EV'])
-  if (metric.value === 'home_runs') return nullableNumeric(row.HR)
-  if (index < 14) return null
-  const sample = rows.slice(index - 14, index + 1)
-  const atBats = sample.reduce((sum, item) => sum + numeric(item.AB), 0)
-  const hits = sample.reduce((sum, item) => sum + numeric(item.H), 0)
-  return atBats > 0 ? hits / atBats : null
-}))
+const chronologicalRows = computed(() => props.rows.slice().sort((left, right) => String(left.Date).localeCompare(String(right.Date))))
+const values = computed(() => {
+  if (metric.value === 'cumulative_wpa') {
+    let cumulative = 0
+    return chronologicalRows.value.map((row) => {
+      const value = nullableNumeric(row['Game WPA'])
+      if (value === null) return null
+      cumulative += value
+      return cumulative
+    })
+  }
+  return chronologicalRows.value.map((row, index, rows) => {
+    const currentDate = parseDate(row.Date)
+    if (!currentDate) return null
+    const windowStart = new Date(currentDate)
+    windowStart.setUTCDate(windowStart.getUTCDate() - 4)
+    const sample = rows.slice(0, index + 1).filter((item) => {
+      const itemDate = parseDate(item.Date)
+      return itemDate && itemDate >= windowStart && itemDate <= currentDate
+    })
+    const weighted = sample.reduce((sum, item) => sum + numeric(item.wOBA) * numeric(item.PA), 0)
+    const plateAppearances = sample.reduce((sum, item) => sum + numeric(item.PA), 0)
+    return plateAppearances > 0 ? weighted / plateAppearances : null
+  })
+})
 const finiteValues = computed(() => values.value.filter((value): value is number => value !== null && Number.isFinite(value)))
 const bounds = computed(() => {
   if (!finiteValues.value.length) return { min: 0, max: 1 }
-  if (metric.value === 'rolling_avg') return { min: 0, max: Math.max(0.4, Math.max(...finiteValues.value) * 1.12) }
   const min = Math.min(...finiteValues.value)
   const max = Math.max(...finiteValues.value)
-  const padding = Math.max((max - min) * 0.12, metric.value === 'home_runs' ? 0.3 : 2)
-  return { min: Math.max(0, min - padding), max: max + padding }
+  if (metric.value === 'rolling_woba') return { min: Math.max(0, min - 0.025), max: Math.max(0.45, max + 0.025) }
+  const padding = Math.max((max - min) * 0.12, 0.015)
+  return { min: Math.min(0, min - padding), max: Math.max(0, max + padding) }
 })
 const chartPoints = computed(() => {
   const visibleValues = values.value.flatMap((value, index) => {
@@ -74,7 +89,12 @@ const polylinePoints = computed(() => chartPoints.value.map(point => `${point.x}
 const areaPoints = computed(() => {
   const points = chartPoints.value
   if (!points.length) return ''
-  return `${points[0].x},365 ${polylinePoints.value} ${points.at(-1)!.x},365`
+  const baseline = metric.value === 'cumulative_wpa' ? zeroY.value : 365
+  return `${points[0].x},${baseline} ${polylinePoints.value} ${points.at(-1)!.x},${baseline}`
+})
+const zeroY = computed(() => {
+  const range = bounds.value.max - bounds.value.min || 1
+  return 365 - ((0 - bounds.value.min) / range) * 300
 })
 const visibleDots = computed(() => {
   const step = Math.max(1, Math.ceil(chartPoints.value.length / 24))
@@ -86,24 +106,25 @@ const lastDate = computed(() => shortDate(chartPoints.value.at(-1)?.date || ''))
 
 function numeric(value: unknown) { const number = Number(value); return Number.isFinite(number) ? number : 0 }
 function nullableNumeric(value: unknown) { if (value === null || value === undefined || value === '-') return null; const number = Number(value); return Number.isFinite(number) ? number : null }
+function parseDate(value: unknown) { const date = new Date(`${String(value || '')}T00:00:00Z`); return Number.isNaN(date.getTime()) ? null : date }
 function shortDate(value: string) { const parts = value.split('-'); return parts.length === 3 ? `${parts[1]}/${parts[2]}` : value }
-function formatAxis(value: number) { if (metric.value === 'rolling_avg') return value.toFixed(3); if (metric.value === 'max_ev') return value.toFixed(1); return value.toFixed(0) }
+function formatAxis(value: number) { return metric.value === 'rolling_woba' ? value.toFixed(3) : `${value >= 0 ? '+' : ''}${(value * 100).toFixed(1)}%` }
 </script>
 
 <style scoped>
-.trend-card { min-width: 0; overflow: hidden; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); box-shadow: var(--shadow-sm); }
+.trend-card { display: flex; min-width: 0; overflow: hidden; flex-direction: column; border: 1px solid var(--color-border); border-radius: 0; background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .trend-card > header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 22px; border-bottom: 1px solid var(--color-border); }
-.trend-card header span { color: var(--color-primary); font-size: 16px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
-h2 { margin: 5px 0 0; color: var(--color-foreground); font-size: 28px; }
-.metric-switch { display: flex; gap: 5px; border-radius: 10px; padding: 5px; background: var(--color-muted); }
-.metric-switch button { min-height: 44px; border: 0; border-radius: 7px; padding: 8px 15px; color: var(--color-muted-text); background: transparent; cursor: pointer; font-size: 16px; font-weight: 800; }
+h2 { margin: 0; color: var(--color-foreground); font-size: 28px; }
+.metric-switch { display: flex; gap: 5px; border-radius: 0; padding: 5px; background: var(--color-muted); }
+.metric-switch button { min-height: 44px; border: 0; border-radius: 0; padding: 8px 15px; color: var(--color-muted-text); background: transparent; cursor: pointer; font-size: 16px; font-weight: 800; }
 .metric-switch button.active { color: #111; background: var(--color-primary); }
-.chart-wrap { height: 520px; overflow-x: auto; padding: 14px 18px 4px; }
-svg { display: block; width: 100%; min-width: 1000px; height: 100%; overflow: visible; }
+.chart-wrap { min-height: 320px; overflow-x: auto; flex: 1; padding: 14px 18px 4px; }
+svg { display: block; width: 100%; min-width: 0; height: 100%; overflow: hidden; }
 .grid-lines line { stroke: var(--color-border); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 .axis-labels text { fill: var(--color-muted-text); font: 600 15px "Fira Code", monospace; }
 .area { fill: rgba(255, 153, 0, .1); }
 .trend-line { fill: none; stroke: var(--color-primary); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.zero-line { stroke: color-mix(in srgb, var(--color-muted-text) 68%, transparent); stroke-width: 1.2; stroke-dasharray: 6 6; vector-effect: non-scaling-stroke; }
 circle { fill: var(--color-primary); stroke: var(--color-surface); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .empty { margin: 0; padding: 50px 22px; color: var(--color-muted-text); font-size: 17px; }
 @media (max-width: 700px) { .trend-card > header { align-items: flex-start; flex-direction: column; } .metric-switch { width: 100%; overflow-x: auto; } .metric-switch button { flex: 1 0 auto; } .chart-wrap { height: 430px; padding-inline: 4px; } }
