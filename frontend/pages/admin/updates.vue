@@ -8,7 +8,7 @@
       <div>
         <span class="eyebrow"><Settings2 :size="16" /> Maintenance console</span>
         <h1>Data operations</h1>
-        <p>Pitch data, videos, official game lines, transactions, injuries, and contract snapshots live here.</p>
+        <p>Pitch data, videos, official game lines, transactions, injuries, and contract snapshots live here. Automatic update: daily at 03:00 Asia/Taipei.</p>
       </div>
       <label>
         Season

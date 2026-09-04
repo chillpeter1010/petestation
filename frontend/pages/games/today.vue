@@ -209,9 +209,6 @@ function gameScore(game: GameRow) {
 }
 
 function scoreValue(value: unknown) {
-  if (value === null || value === undefined || value === '') {
-    return null
-  }
   const numberValue = Number(value)
   return Number.isFinite(numberValue) ? String(numberValue) : null
 }

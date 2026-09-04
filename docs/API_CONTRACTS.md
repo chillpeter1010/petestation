@@ -210,6 +210,22 @@ Returns Swing Timing / Miss Distance payloads when a yearly CSV exists under `da
 - `GET /api/models/movement`
 - `GET /api/models/spin-breakdown`
 
+### Batter Comparison
+
+- `GET /api/batter-comparison/period/options`
+- `GET /api/batter-comparison/period/date-range`
+- `GET /api/batter-comparison/period/overview`
+- `GET /api/batter-comparison/team-research`
+- `GET /api/batter-comparison/team-research/lineup-scenarios?year&team&opponent_hand=L|R`
+
+`period/overview` returns Period A／B values, `delta = B - A`, and separate denominators for production, discipline, Bat Tracking and Miss Distance metrics. Percentage deltas use percentage points (`pp`). Both zone maps share one heatmap color domain.
+
+Arbitrary-date X/Y/Z timing is not available locally. `timing_reference` therefore contains explicitly labeled full-season Savant summaries and never enters the period delta. `source_audit` records unavailable exact-distribution, Squared-Up／Blast and batting-stance fields rather than returning fabricated zeroes.
+
+`team-research` uses `data_mode=recent_observed_research`. Batting order is reconstructed from team PA sequence and defensive positions from fielder IDs. It returns descriptive order splits, observed pitcher-hand splits, recent starter/order probabilities and three empirical run-expectancy scenarios. Active roster, injuries, official DH／PH roles and probable starters are not available from the local tables and are listed in `coverage`／`limitations`.
+
+`team-research/lineup-scenarios` is the read-only Team Dashboard path for the three lineup cards: recent consensus, latest observed and run-expectancy candidate. It never reconstructs positions or runs simulations during an HTTP request. The data refresh pipeline computes both vs RHP and vs LHP results for every team, then atomically replaces `data/derived/batter_lineup_scenarios_<year>.json`. Responses expose `cache_status=current|stale|unavailable`; when newer pitch data exists or a rebuild fails, the endpoint continues serving the last completed entry with a warning.
+
 ## Standard Response Shape
 
 ```json

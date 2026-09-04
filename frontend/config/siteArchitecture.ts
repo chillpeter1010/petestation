@@ -56,6 +56,8 @@ export const siteGroups: SiteGroup[] = [
     description: 'Batter production, swing decisions and catcher sequence analysis.',
     nodes: [
       { label: 'Batter station', path: '/batters', status: 'Live' },
+      { label: 'Batter comparison', path: '/batters/comparison', status: 'Live' },
+      { label: 'Batter period comparison', path: '/batters/comparison/period', status: 'Live' },
       { label: 'Batter leaderboard', path: '/batters/leaderboard', status: 'Live' },
       { label: 'Batter lab', path: '/batters/lab', status: 'Lab' },
       { label: 'Stuff Attack', path: '/batters/lab/stuff-attack', status: 'Lab' },

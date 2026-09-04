@@ -59,6 +59,10 @@ def main() -> int:
             from app.services.pitch_stuff_cache_service import refresh_pitch_stuff_scores
 
             result = refresh_pitch_stuff_scores(data_dir=settings.data_dir, **payload)
+        elif job == "batter_lineup_scenarios":
+            from app.services.batter_team_research_service import refresh_batter_lineup_scenario_cache
+
+            result = refresh_batter_lineup_scenario_cache(data_dir=settings.data_dir, **payload)
         else:
             raise ValueError(f"Unknown admin child job: {job}")
         print(json.dumps({"ok": True, "result": result}, ensure_ascii=False, default=str))
@@ -199,6 +203,9 @@ def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False
                 "status": "deferred",
                 "reason": "Per-pitch Stuff+ backfill runs separately so it cannot block the daily data refresh.",
             }
+        result["batter_lineup_scenarios"] = _run_duckdb_write_child(
+            {"job": "batter_lineup_scenarios", "year": int(year)}
+        )
         return result
 
 

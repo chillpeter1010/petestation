@@ -2,6 +2,10 @@ import type {
   AnalysisResponse,
   BatterLeaderboardRow,
   BatterOption,
+  BatterLineupScenarioResponse,
+  BatterPeriodComparisonResponse,
+  BatterPeriodOptionsResponse,
+  BatterTeamResearchResponse,
   StuffAttackResponse,
   SwingTimingPlayerDetailResponse,
   SwingTimingResponse,
@@ -30,6 +34,8 @@ import type {
 export function useApi() {
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
+  const forwardedHeaders = import.meta.server ? useRequestHeaders(['cookie']) : undefined
+  const $fetch = globalThis.$fetch.create({ credentials: 'include', headers: forwardedHeaders })
 
   return {
     pitchingOverview: (params: { year: number; minimumPitches?: number; minimumInnings?: number }) =>
@@ -55,11 +61,13 @@ export function useApi() {
       }),
     teamDashboard: (params: { year: number; teamId: string }) =>
       $fetch<TeamDashboardResponse>(`${apiBase}/teams/${params.teamId}/dashboard`, {
-        query: { year: params.year }
+        query: { year: params.year, _ts: Date.now() },
+        cache: 'no-store'
       }),
     teamHittingIntelligence: (params: { year: number; teamId: string }) =>
       $fetch<TeamHittingIntelligenceResponse>(`${apiBase}/teams/${params.teamId}/hitting-intelligence`, {
-        query: { year: params.year }
+        query: { year: params.year, _ts: Date.now() },
+        cache: 'no-store'
       }),
     teamTransactions: (params: { year: number; teamId: string; days?: number; limit?: number; refresh?: boolean }) =>
       $fetch<TeamTransactionsResponse>(`${apiBase}/teams/${params.teamId}/transactions`, {
@@ -99,7 +107,8 @@ export function useApi() {
       }),
     batters: (params: { year: number; team?: string }) =>
       $fetch<BatterOption[]>(`${apiBase}/batters`, {
-        query: { year: params.year, team: params.team || 'All' }
+        query: { year: params.year, team: params.team || 'All', _ts: Date.now() },
+        cache: 'no-store'
       }),
     batterLeaderboard: (params: { year: number; team?: string }) =>
       $fetch<BatterLeaderboardRow[]>(`${apiBase}/batters/leaderboard`, {
@@ -140,12 +149,15 @@ export function useApi() {
           pitch_type: params.pitchType || 'All',
           pitcher_hand: params.pitcherHand || 'All',
           batter_side: params.batterSide || 'All',
-          pitcher_team: params.pitcherTeam || 'All'
-        }
+          pitcher_team: params.pitcherTeam || 'All',
+          _ts: Date.now()
+        },
+        cache: 'no-store'
       }),
     batterPersonalOverview: (params: { year: number; batterId: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/batters/personal/overview`, {
-        query: { year: params.year, batter_id: params.batterId }
+        query: { year: params.year, batter_id: params.batterId, _ts: Date.now() },
+        cache: 'no-store'
       }),
     batterPersonalDiscipline: (params: {
       year: number
@@ -166,8 +178,10 @@ export function useApi() {
           pitch: params.pitch || 'All',
           pitch_result: params.pitchResult || 'All',
           start_date: params.startDate || undefined,
-          end_date: params.endDate || undefined
-        }
+          end_date: params.endDate || undefined,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
       }),
     catcherOptions: (year: number) =>
       $fetch<OptionItem[]>(`${apiBase}/catchers/options`, { query: { year } }),
@@ -211,19 +225,23 @@ export function useApi() {
       }),
     personalOverview: (params: { year: number; role: string; pitcherId: number }) =>
       $fetch<PersonalOverviewResponse>(`${apiBase}/personal/overview`, {
-        query: { year: params.year, role: params.role, pitcher_id: params.pitcherId }
+        query: { year: params.year, role: params.role, pitcher_id: params.pitcherId, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalPitches: (params: { year: number; pitcherId: number; limit?: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/pitches`, {
-        query: { year: params.year, pitcher_id: params.pitcherId, limit: params.limit || 250 }
+        query: { year: params.year, pitcher_id: params.pitcherId, limit: params.limit || 250, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalOutings: (params: { year: number; pitcherId: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/outings`, {
-        query: { year: params.year, pitcher_id: params.pitcherId }
+        query: { year: params.year, pitcher_id: params.pitcherId, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalOutingReport: (params: { year: number; pitcherId: number; gamePk: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/outing-report`, {
-        query: { year: params.year, pitcher_id: params.pitcherId, game_pk: params.gamePk }
+        query: { year: params.year, pitcher_id: params.pitcherId, game_pk: params.gamePk, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalMovement: (params: { year: number; pitcherId: number; stand?: string; count?: string; pitch?: string; pitchResult?: string; inPlayResult?: string; paResult?: string; catcher?: string; includePitchStuff?: boolean }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/movement`, {
@@ -237,12 +255,15 @@ export function useApi() {
           in_play_result: params.inPlayResult,
           pa_result: params.paResult,
           catcher: params.catcher,
-          include_pitch_stuff: params.includePitchStuff
-        }
+          include_pitch_stuff: params.includePitchStuff,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
       }),
     personalDiscipline: (params: { year: number; pitcherId: number; stand?: string; count?: string; pitch?: string; catcher?: string }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/discipline`, {
-        query: { year: params.year, pitcher_id: params.pitcherId, stand: params.stand, count: params.count, pitch: params.pitch, catcher: params.catcher }
+        query: { year: params.year, pitcher_id: params.pitcherId, stand: params.stand, count: params.count, pitch: params.pitch, catcher: params.catcher, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalSequence: (params: { year: number; pitcherId: number; startDate?: string; endDate?: string; currentPitch?: string; stand?: string; count?: string; pitch?: string; pitchResult?: string; catcher?: string; conditionCount?: string; conditionPitch?: string; detailCount?: string; followupPitch?: string }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/sequence`, {
@@ -260,12 +281,15 @@ export function useApi() {
           condition_count: params.conditionCount,
           condition_pitch: params.conditionPitch,
           detail_count: params.detailCount,
-          followup_pitch: params.followupPitch
-        }
+          followup_pitch: params.followupPitch,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
       }),
     personalRotation: (params: { year: number; pitcherId: number; gamePk?: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/rotation`, {
-        query: { year: params.year, pitcher_id: params.pitcherId, game_pk: params.gamePk }
+        query: { year: params.year, pitcher_id: params.pitcherId, game_pk: params.gamePk, _ts: Date.now() },
+        cache: 'no-store'
       }),
     personalVideos: (params: { year: number; pitcherId: number; limit?: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/videos`, {
@@ -273,7 +297,8 @@ export function useApi() {
       }),
     personalTiming: (params: { year: number; pitcherId: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/timing`, {
-        query: { year: params.year, pitcher_id: params.pitcherId }
+        query: { year: params.year, pitcher_id: params.pitcherId, _ts: Date.now() },
+        cache: 'no-store'
       }),
     stuffLeaderboard: (year: number) =>
       $fetch<AnalysisResponse>(`${apiBase}/stuff/leaderboard`, { query: { year } }),
@@ -294,8 +319,10 @@ export function useApi() {
           start_date: params.startDate || undefined,
           end_date: params.endDate || undefined,
           game_pk: params.gamePk || undefined,
-          model_mode: params.modelMode || 'pete'
-        }
+          model_mode: params.modelMode || 'pete',
+          _ts: Date.now()
+        },
+        cache: 'no-store'
       }),
     stuffCalculator: (body: StuffCalculatorInput) =>
       $fetch<StuffCalculatorResponse>(`${apiBase}/stuff/calculator`, {
@@ -483,6 +510,53 @@ export function useApi() {
           pitch: params.pitch,
           pitch_result: params.pitchResult
         }
+      }),
+    batterPeriodOptions: (year: number) =>
+      $fetch<BatterPeriodOptionsResponse>(`${apiBase}/batter-comparison/period/options`, { query: { year } }),
+    batterPeriodDateRange: (params: { year: number; batterId: number }) =>
+      $fetch<{ year: number; batter_id: number; start_date: string | null; end_date: string | null; pitches: number }>(`${apiBase}/batter-comparison/period/date-range`, {
+        query: { year: params.year, batter_id: params.batterId }
+      }),
+    batterPeriodOverview: (params: {
+      batterId: number
+      leftYear: number
+      rightYear: number
+      leftStart: string
+      leftEnd: string
+      rightStart: string
+      rightEnd: string
+      batterSide?: string
+      pitcherHand?: string
+      pitchFamily?: string
+      count?: string
+      pitch?: string
+      pitchResult?: string
+    }) => $fetch<BatterPeriodComparisonResponse>(`${apiBase}/batter-comparison/period/overview`, {
+      query: {
+        batter_id: params.batterId,
+        left_year: params.leftYear,
+        right_year: params.rightYear,
+        left_start: params.leftStart,
+        left_end: params.leftEnd,
+        right_start: params.rightStart,
+        right_end: params.rightEnd,
+        batter_side: params.batterSide,
+        pitcher_hand: params.pitcherHand,
+        pitch_family: params.pitchFamily,
+        count: params.count,
+        pitch: params.pitch,
+        pitch_result: params.pitchResult
+      }
+    }),
+    batterTeamResearch: (params: { year: number; team: string; opponentHand?: string }) =>
+      $fetch<BatterTeamResearchResponse>(`${apiBase}/batter-comparison/team-research`, {
+        query: { year: params.year, team: params.team, opponent_hand: params.opponentHand || 'All', _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    batterLineupScenarios: (params: { year: number; team: string; opponentHand: 'L' | 'R' }) =>
+      $fetch<BatterLineupScenarioResponse>(`${apiBase}/batter-comparison/team-research/lineup-scenarios`, {
+        query: { year: params.year, team: params.team, opponent_hand: params.opponentHand, _ts: Date.now() },
+        cache: 'no-store'
       }),
     comparisonDirectVideo: (playId: string) =>
       $fetch<{ play_id: string; video_url: string; direct_video_url: string | null; title: string | null }>(`${apiBase}/comparison/video-direct`, {

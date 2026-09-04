@@ -118,6 +118,7 @@ const props = withDefaults(defineProps<{
   pointScale?: number
   plotScale?: number
   heatmapMode?: 'density' | 'bat-speed' | 'choice'
+  heatmapMetricDomain?: [number, number] | null
   showPoints?: boolean
 }>(), {
   showPoints: true
@@ -320,8 +321,9 @@ const heatmapCells = computed(() => {
     return []
   }
   const metricValues = densityCells.map((cell) => cell.metric).filter((value): value is number => value !== null)
-  const metricMin = metricValues.length ? Math.min(...metricValues) : 0
-  const metricMax = metricValues.length ? Math.max(...metricValues) : 1
+  const sharedDomain = props.heatmapMetricDomain
+  const metricMin = sharedDomain?.length === 2 ? Number(sharedDomain[0]) : (metricValues.length ? Math.min(...metricValues) : 0)
+  const metricMax = sharedDomain?.length === 2 ? Number(sharedDomain[1]) : (metricValues.length ? Math.max(...metricValues) : 1)
   return densityCells.flatMap(({ xi, zi, density, metric }) => {
     const normalized = density / maxDensity
     if (normalized < 0.045) {

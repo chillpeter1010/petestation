@@ -31,6 +31,7 @@ def test_pitch_refresh_rebuilds_location_scores(monkeypatch) -> None:
         {"job": "pitcher_game_lines", "year": 2026},
         {"job": "location_scores", "year": 2026},
         {"job": "pitch_stuff_scores", "year": 2026},
+        {"job": "batter_lineup_scenarios", "year": 2026},
     ]
     assert result["location_plus"]["outing_rows"] == 1
 

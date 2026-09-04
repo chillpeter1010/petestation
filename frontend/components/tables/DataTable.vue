@@ -45,6 +45,7 @@
 
 <script setup lang="ts">
 import type { TablePayload } from '~/types/api'
+import { performanceColorStyle } from '~/utils/performanceColor'
 
 const props = withDefaults(defineProps<{
   title?: string
@@ -158,14 +159,7 @@ function cellStyle(row: Record<string, unknown>, column: { key: string; label: s
     return {}
   }
   if (isPercentileColumn(column, value)) {
-    const color = percentileColor(value)
-    if (!color) {
-      return {}
-    }
-    return {
-      background: color.background,
-      boxShadow: color.boxShadow
-    }
+    return performanceColorStyle((value - 50) / 49)
   }
   return {}
 }
@@ -178,34 +172,6 @@ function isPercentileColumn(column: { key: string; label: string }, value: numbe
   return /\bpr\b|percentile|pctile|pct_rank|percentile_rank/.test(text)
 }
 
-function percentileColor(value: number) {
-  const pr = Math.max(1, Math.min(99, value))
-  if (Math.abs(pr - 50) <= 1) {
-    return null
-  }
-
-  const stops = [
-    { value: 1, color: [19, 55, 103], alpha: 0.78 },
-    { value: 25, color: [126, 181, 220], alpha: 0.42 },
-    { value: 50, color: [0, 0, 0], alpha: 0 },
-    { value: 75, color: [238, 161, 155], alpha: 0.42 },
-    { value: 99, color: [178, 42, 45], alpha: 0.78 }
-  ]
-
-  const upperIndex = stops.findIndex((stop) => pr <= stop.value)
-  const upper = stops[Math.max(1, upperIndex)]
-  const lower = stops[Math.max(0, upperIndex - 1)]
-  const span = upper.value - lower.value || 1
-  const ratio = (pr - lower.value) / span
-  const color = lower.color.map((channel, index) => Math.round(channel + (upper.color[index] - channel) * ratio))
-  const alpha = lower.alpha + (upper.alpha - lower.alpha) * ratio
-  const rgb = color.join(', ')
-
-  return {
-    background: `rgba(${rgb}, ${alpha.toFixed(3)})`,
-    boxShadow: `inset 0 0 0 9999px rgba(${rgb}, ${Math.max(0, alpha - 0.18).toFixed(3)})`
-  }
-}
 </script>
 
 <style scoped>

@@ -9,6 +9,7 @@
       </span>
       <span>{{ themeLabel }}</span>
     </button>
+    <AuthUserMenu v-if="auth.user.value && !isAuthPage" />
     <div class="app-page-shell" :class="{ 'global-home-offset': showGlobalHomeLink }">
       <NuxtPage />
     </div>
@@ -20,9 +21,11 @@ type ThemeMode = 'light' | 'dark'
 
 const theme = useState<ThemeMode>('theme-mode', () => 'dark')
 const route = useRoute()
+const auth = useAuth()
 const themeLabel = computed(() => (theme.value === 'dark' ? 'Light' : 'Dark'))
 const isHomePage = computed(() => route.path === '/')
-const showGlobalHomeLink = computed(() => route.path !== '/' && route.path !== '/pitchers')
+const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
+const showGlobalHomeLink = computed(() => !isAuthPage.value && route.path !== '/' && route.path !== '/pitchers')
 
 useHead(() => ({
   htmlAttrs: {

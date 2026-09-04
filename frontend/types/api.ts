@@ -824,6 +824,93 @@ export interface ComparisonOverviewResponse {
   notes: string[]
 }
 
+export interface BatterPeriodMetric {
+  key: string
+  label: string
+  group: 'sample' | 'production' | 'contact' | 'discipline' | 'tracking' | 'timing'
+  unit: 'count' | 'rate' | 'mph' | 'ft' | 'in' | 'pct'
+  delta_unit: 'count' | 'rate' | 'mph' | 'ft' | 'in' | 'pp'
+  period_a: number | null
+  period_b: number | null
+  delta: number | null
+  denominator_label: string
+  period_a_denominator: number
+  period_b_denominator: number
+}
+
+export interface BatterPeriodOptionsResponse {
+  meta: ResponseMeta
+  years: number[]
+  batters: BatterOption[]
+}
+
+export interface BatterPeriodComparisonResponse {
+  meta: ResponseMeta
+  batter: BatterOption | null
+  periods: Record<'left' | 'right', { label: string; year: number; start_date: string; end_date: string; pitches: number }>
+  filters: Record<string, string[]>
+  metrics: BatterPeriodMetric[]
+  heatmaps: Record<'left' | 'right', Record<string, unknown>[]>
+  bat_speed_domain: [number, number] | null
+  timing_reference: Record<'left' | 'right', { mode: string; year: number; n_swings: number; metrics: Record<string, number | null>; note?: string }>
+  source_audit: Record<string, unknown>
+}
+
+export interface BatterTeamResearchResponse {
+  meta: ResponseMeta
+  team: string
+  opponent_hand: string
+  data_mode: string
+  coverage: Record<string, unknown>
+  order_splits: Array<Record<string, number | null>>
+  hitters: BatterTeamResearchHitter[]
+  position_coverage: Array<Record<string, unknown>>
+  lineup_prediction: { basis?: string; players?: Array<Record<string, unknown>> }
+  scenarios: Array<Record<string, unknown>>
+  limitations: string[]
+}
+
+export interface BatterTeamResearchHitter {
+  player_id: number
+  name: string
+  pa: number
+  avg: number | null
+  obp: number | null
+  slg: number | null
+  woba: number | null
+  k_pct: number | null
+  bb_pct: number | null
+  reliability: number
+  event_rates: Record<string, number>
+}
+
+export interface BatterLineupScenarioPlayer {
+  slot: number
+  player_id: number
+  name: string
+  position: string
+}
+
+export interface BatterLineupScenario {
+  label: string
+  lineup: BatterLineupScenarioPlayer[]
+  projected_runs_per_game: number | null
+  constraint_status: string
+}
+
+export interface BatterLineupScenarioResponse {
+  meta: ResponseMeta
+  team: string
+  opponent_hand: 'L' | 'R'
+  data_mode: 'precomputed_lineup_scenarios'
+  cache_status: 'current' | 'stale' | 'unavailable'
+  generated_at: string | null
+  model_version: string
+  lineup_prediction: { basis?: string; players?: Array<Record<string, unknown>> }
+  scenarios: BatterLineupScenario[]
+  limitations: string[]
+}
+
 export interface PitchingLeaderboardRow {
   rank: number; pitcher_id: number; pitcher_name: string; team: string; pitches: number; innings_pitched: number
   pitch_type_scores: Record<string, number>; pitching_plus: number; xrv_per_100: number

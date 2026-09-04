@@ -3,7 +3,7 @@
     <section class="hub-hero">
       <span>Comparison</span>
       <h1>Choose comparison mode.</h1>
-      <p>Personal compares two pitchers in one season. Period will compare one pitcher across custom time windows.</p>
+      <p>Choose a pitcher comparison workflow. Batter comparisons now live inside Batter Station.</p>
     </section>
 
     <section class="mode-grid" aria-label="Comparison modes">
@@ -20,6 +20,7 @@
         <p>Compare one pitcher across two custom date windows using the reusable percentile module.</p>
         <strong>Open</strong>
       </NuxtLink>
+
     </section>
   </main>
 </template>

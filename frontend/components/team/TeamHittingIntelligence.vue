@@ -9,7 +9,6 @@
     <template v-else>
       <TeamLineupSkillStrip :rows="payload.lineup" :team-id="teamId" :year="year" />
       <div class="two-column"><TeamTimingMap :rows="payload.hitters" :league="payload.league_profile" :team-id="teamId" :year="year" /><TeamMissProfile :team="payload.team_profile" :league="payload.league_profile" /></div>
-      <TeamPitchFamilyMatrix :families="payload.pitch_families" :lineup="payload.lineup" :team-id="teamId" :year="year" />
       <p class="method-note">Tracking begins at the 2023 All-Star break. Contact% = 100 − Whiff%. Platoon edge compares swing-contact rate in the hitter’s favorable pitcher-hand matchup with the opposite split; switch hitters show the absolute LHP/RHP gap.</p>
     </template>
   </section>

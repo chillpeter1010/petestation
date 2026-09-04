@@ -253,6 +253,16 @@ watch(selectedBatterId, async () => {
   syncRoute()
   await loadPayloads()
 })
+watch(
+  () => [route.query.year, route.query.team, route.query.batter_id] as const,
+  ([yearValue, teamValue, batterValue]) => {
+    const nextYear = Number(yearValue)
+    const nextBatterId = Number(batterValue)
+    if (Number.isFinite(nextYear) && nextYear !== year.value) year.value = nextYear
+    if (typeof teamValue === 'string' && teamValue !== team.value) team.value = teamValue
+    if (Number.isFinite(nextBatterId) && nextBatterId !== selectedBatterId.value) selectedBatterId.value = nextBatterId
+  }
+)
 watch(activeTab, (tab) => {
   if (tab === 'discipline' && !discipline.value) loadDiscipline()
   if (tab === 'timing' && !timing.value && !timingPending.value) loadTiming()
@@ -268,6 +278,8 @@ watch([timingPitchGroup, timingPitchType, timingPitcherHand], () => {
   syncRoute()
   if (selectedBatterId.value) loadTiming()
 })
+
+useAutoRefresh(loadPayloads)
 
 async function loadBatters() {
   pending.value = true

@@ -286,6 +286,7 @@ const disciplineHeatmapBlend = ref(0)
 const disciplineLoading = ref(false)
 const outingReportLoading = ref(false)
 let personalRequestVersion = 0
+const dataRefreshToken = ref(0)
 let outingReportRequestVersion = 0
 
 const standOptions = ['All', 'L', 'R']
@@ -583,7 +584,7 @@ const fatigueMetrics = computed(() => {
 const outingRows = computed(() => outings.value?.tables.outings?.rows || [])
 
 watch(
-  () => [filters.year, filters.role, filters.pitcherId] as const,
+  () => [filters.year, filters.role, filters.pitcherId, dataRefreshToken.value] as const,
   async () => {
     if (!filters.pitcherId) {
       clearResponses()
@@ -654,6 +655,10 @@ watch(
   },
   { immediate: true }
 )
+
+useAutoRefresh(() => {
+  dataRefreshToken.value += 1
+})
 
 watch(
   () => [

@@ -25,16 +25,42 @@
       <TeamSeasonContext :record="dashboard.season_record" :next-game="dashboard.next_game" />
 
       <nav class="team-dashboard__quick-nav" aria-label="Team dashboard sections">
-        <a href="#hitting"><ChartNoAxesCombined :size="15" /> Hitting intelligence</a>
         <a href="#rotation"><RotateCw :size="15" /> Rotation</a>
-        <a href="#bullpen"><Gauge :size="15" /> Bullpen</a>
         <a href="#impact"><Clapperboard :size="15" /> Pitch arsenal</a>
+        <a href="#bullpen"><Gauge :size="15" /> Bullpen</a>
+        <a href="#lineups"><ListOrdered :size="15" /> Lineups</a>
         <a href="#outings"><CalendarDays :size="15" /> Outings</a>
+        <a href="#hitting"><ChartNoAxesCombined :size="15" /> Hitting intelligence</a>
         <a href="#leaders"><Trophy :size="15" /> Leaders</a>
         <a href="#transactions"><Activity :size="15" /> Transactions</a>
         <a href="#payroll"><Banknote :size="15" /> Payroll</a>
         <a href="#roster"><Users :size="15" /> Roster</a>
       </nav>
+
+      <div id="rotation">
+        <TeamStarterMatchup
+          :games="dashboard.starter_games"
+          :team-id="teamId"
+          :year="year"
+          @video-selection="starterVideoSelection = $event"
+        />
+      </div>
+
+      <div id="impact">
+        <TeamPitchArsenalVideos :selection="starterVideoSelection" :year="year" />
+      </div>
+
+      <div id="bullpen">
+        <TeamBullpenPanel :rows="dashboard.bullpen" :team-id="teamId" :year="year" />
+      </div>
+
+      <div id="lineups">
+        <TeamLineupScenarios :team-id="teamId" :year="year" />
+      </div>
+
+      <div id="outings">
+        <TeamLatestOutings :rows="dashboard.latest_outings" :team-id="teamId" :year="year" />
+      </div>
 
       <div id="hitting">
         <TeamHittingIntelligence
@@ -46,31 +72,17 @@
         />
       </div>
 
-      <div id="rotation">
-        <TeamStarterMatchup
-          :games="dashboard.starter_games"
-          :team-id="teamId"
-          :year="year"
-          @video-selection="starterVideoSelection = $event"
-        />
-      </div>
-
-      <div id="bullpen">
-        <TeamBullpenPanel :rows="dashboard.bullpen" :team-id="teamId" :year="year" />
-      </div>
-
-      <div id="impact">
-        <TeamPitchArsenalVideos :selection="starterVideoSelection" :year="year" />
-      </div>
-
-      <div id="outings">
-        <TeamLatestOutings :rows="dashboard.latest_outings" :team-id="teamId" :year="year" />
-      </div>
-
       <div id="leaders">
         <TeamLeaderboardPanel
           :pitching="dashboard.pitching_leaders"
           :batting="dashboard.batting_leaders"
+          :team-id="teamId"
+          :year="year"
+        />
+        <TeamPitchFamilyMatrix
+          v-if="hittingIntelligence"
+          :families="hittingIntelligence.pitch_families"
+          :lineup="hittingIntelligence.lineup"
           :team-id="teamId"
           :year="year"
         />
@@ -92,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { Activity, Banknote, CalendarDays, ChartNoAxesCombined, Clapperboard, Gauge, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
+import { Activity, Banknote, CalendarDays, ChartNoAxesCombined, Clapperboard, Gauge, ListOrdered, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
 
 definePageMeta({ key: route => route.fullPath })
 
@@ -102,17 +114,21 @@ const year = 2026
 const teamId = computed(() => String(route.params.teamId || '').toUpperCase())
 const starterVideoSelection = ref<{ teamId: string; pitcherId: number; pitcherName: string; gamePk: number } | null>(null)
 
-const { data: dashboard, pending, error } = await useLazyAsyncData(
+const { data: dashboard, pending, error, refresh: refreshDashboard } = await useLazyAsyncData(
   () => `team-dashboard-${teamId.value}-${year}`,
   () => api.teamDashboard({ year, teamId: teamId.value }),
   { watch: [teamId] }
 )
 
-const { data: hittingIntelligence, pending: hittingPending, error: hittingError } = await useLazyAsyncData(
+const { data: hittingIntelligence, pending: hittingPending, error: hittingError, refresh: refreshHitting } = await useLazyAsyncData(
   () => `team-hitting-intelligence-${teamId.value}-${year}`,
   () => api.teamHittingIntelligence({ year, teamId: teamId.value }),
   { watch: [teamId] }
 )
+
+useAutoRefresh(async () => {
+  await Promise.all([refreshDashboard(), refreshHitting()])
+})
 
 const teamTheme = computed(() => ({
   '--team-primary': dashboard.value?.team.primary_color || '#ff9900',
@@ -190,6 +206,7 @@ const teamTheme = computed(() => ({
 #rotation,
 #hitting,
 #bullpen,
+#lineups,
 #outings,
 #impact,
 #leaders,
@@ -201,6 +218,11 @@ const teamTheme = computed(() => ({
 
 #hitting {
   min-width: 0;
+}
+
+#leaders {
+  display: grid;
+  gap: 18px;
 }
 
 .team-dashboard-error {

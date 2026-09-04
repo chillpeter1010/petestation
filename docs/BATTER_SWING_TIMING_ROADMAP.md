@@ -1,7 +1,7 @@
 # Batter Swing Timing / Miss Distance Roadmap
 
-更新日期：2026-08-22
-狀態：V1、V2.1–V2.6、V3 已完成；exact distributions 與月度趨勢待實作
+更新日期：2026-09-02
+狀態：V1、V2.1–V2.6、V3、Batter Comparison Slice 0–8 已完成至目前可驗證的本機資料邊界；exact X/Y/Z distributions 與真實 batting stance 仍因來源缺失維持 unavailable
 
 ## 一、已確認的 Statcast 定義
 
@@ -184,17 +184,33 @@
 - 所有 matchup／ranking 顯示資料日期、對手投手手別與可用球員範圍。
 - 預測與描述性統計分開標示，不把 lineup ranking 當成官方先發名單。
 
+## Batter Comparison Slice 0–8（已完成至本機資料邊界）
+
+完成日期：2026-09-03
+
+- Slice 0：以明確 staged 檔案清單建立 `daeb568` checkpoint，封存既有 Batter Personal 與同批修改。
+- Slice 1：建立 `/batters/comparison` → `/batters/comparison/period` 層級並由 `/batters` 進入；舊 `/comparison/batter-period` 相容導向新路徑。後端使用獨立 `/api/batter-comparison/period/*` schema、service 與 route。
+- Slice 2：支援 PA、AB、OPS、wOBA、xwOBA、AVG、OBP、SLG、Avg/Max EV、Barrel%、HardHit%、SweetSpot%、Swing%、Chase%、Contact%、Whiff%、K%、BB%、K-BB%，每項均回傳 A、B、B−A 與兩側 denominator；百分率差明確使用 pp。
+- Slice 3：Period A/B 共用 Bat Speed／Choice 切換、heatmap blend 與同一色階 domain。Choice 表示 swing frequency；Bat Speed 只納入依球員整季門檻判定的 competitive tracked swings，低樣本區保持淡色。
+- 共用 `StrikeZoneScatter` 只新增可選 shared metric domain；未傳入時保留原本單圖自動 domain 行為。
+- Slice 4：加入 Avg Bat Speed、Fast Swing%、Competitive%、Swing Length、Squared-Up% 與 Blast% 欄位，以及 pitch family／球種／投手左右手／打者左右打 split。Competitive threshold 固定使用球員整季基準；來源沒有 Squared-Up／Blast 時維持 unavailable。
+- Slice 5：2026 `miss_distance` 可做真正 A/B；2023–2025 顯示 unavailable。Flawed／Perfect／Centered／On Time／Lined Up 與三方向組成只以獨立 season summary reference 呈現，不進任意日期 delta。
+- Slice 6：完成 source audit。現有資料可呈現 intercept／attack geometry，但不可標成站位；exact X/Y/Z bins、腳印、stance depth、off-plate distance、stance angle 均因無可靠欄位維持 unavailable。
+- Slice 7：新增 `/batters/comparison/team`，從逐場 PA sequence 重建 1–9 棒、從 fielder IDs 重建觀察到的守位，提供棒次產出、投手手別 split、樣本與 reliability。無法區分 DH／PH 時明確標記 unknown。
+- Slice 8：新增 `/batters/comparison/lineup`，使用最近 20 場實際先發重建先發／棒次機率，提供 recent consensus、latest observed、run-expectancy candidate 三方案與 empirical PA-outcome simulation。沒有 active roster、傷兵與 probable starter 時不宣稱官方預測。
+- 不可回頭重做已完成的 Batter Personal 或 Slice 0–8；後續若要解除 unavailable，必須先取得可驗證的新來源。
+
 ## 四、待完成清單：Team Batting / Lineup Research
 
 以下項目先列入 backlog，不併入 Swing Timing V1：
 
 | 項目 | 預計內容 | 主要風險／前置需求 | 狀態 |
 | --- | --- | --- | --- |
-| 棒次影響 | 依 1–9 棒拆分 PA、AVG、OBP、SLG、wOBA、K%、BB%，並比較球員本人基準 | 棒次是教練選擇結果，不能直接解讀為因果；需最低 PA 與 shrinkage | Pending |
-| 守位／角色影響 | 比較同一打者擔任 C、其他守位、DH、PH 時的打擊表現，例如平常捕手改打 DH | 需可靠的逐場 lineup／position 資料；休息、對手與傷勢會混雜 | Pending |
-| Platoon matchup | 根據預計對手先發投手 L/R，估計各打者 platoon edge | 需確認 probable starter、active roster、傷兵與當日可用狀態 | Pending |
-| 打序預測 | 依近期實際打序、platoon、打擊能力、守位需求與休息規則產生 1–9 棒機率／排序 | 應輸出機率與候選方案，不宣稱是官方打序 | Pending |
-| 打序最佳化 | 在守位覆蓋與可用球員限制下，依預期得分排序 lineup 情境 | 需先有可靠 lineup predictor 與 run expectancy simulation | Pending |
+| 棒次影響 | 依 1–9 棒拆分 PA、AVG、OBP、SLG、wOBA、K%、BB%，並比較球員本人基準 | 棒次是教練選擇結果，不能直接解讀為因果 | Completed（descriptive） |
+| 守位／角色影響 | 重建觀察到的守位；無官方 lineup role 時不拆 DH／PH | fielder IDs 可驗證；DH／PH 缺來源 | Completed（source-gated） |
+| Platoon matchup | 依使用者選擇的對手投手 L/R 顯示 observed split 與 reliability | 無 probable starter、active roster、傷兵 | Completed（manual hand） |
+| 打序預測 | 最近 20 場先發與 1–9 棒位置機率、候選方案 | 不宣稱官方打序 | Completed（research mode） |
+| 打序最佳化 | empirical PA-outcome simulation 比較候選打序 | 只使用觀察到的守位 coverage | Completed（scenario mode） |
 | 球隊首頁 Hitting 區 | 將 Timing Map、Matchup Matrix、Lineup Skill Strip 接到 team dashboard | 已使用獨立 compact API，避免阻塞既有 team dashboard | Completed |
 
 ## 五、建議實作順序

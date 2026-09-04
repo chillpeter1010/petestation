@@ -1,6 +1,6 @@
 # Petehub 專案新對話交接文件
 
-更新日期：2026-09-02
+更新日期：2026-09-04
 專案根目錄：`C:\intern\project_transfer`
 
 > 新對話開始時，請先完整閱讀本文件，將它視為目前專案的主要前情。不要重新驗證「最近已完成並確認」的項目。
@@ -13,6 +13,21 @@
 回答使用繁體中文，先簡短說明要改哪些檔案，再直接執行；修改後只回報異動檔案與必要驗證結果。
 若會修改全域共用元件、共用 CSS、共用資料 schema 或模型契約，必須先明確提醒。
 ```
+
+---
+
+## 2026-09-04 私人網站與帳號系統
+
+- Petehub 已加入全站帳號保護；匿名只能使用 `/login`、`/register` 與 `/api/health`，其他頁面會轉往登入，其他資料 API 回 401。
+- 帳號儲存在不進 Git 的 `data/auth/petehub_auth.sqlite3`；密碼使用 salted scrypt hash，session 使用 HttpOnly、SameSite=Lax cookie，HTTPS tunnel 下會自動加 Secure。
+- 新註冊帳號固定為 `pending`，管理員須在 `/admin/accounts` 批准後才能登入；停用帳號會立即撤銷其所有 session。
+- 管理員建立／重設使用 `cd backend` 後執行 `python scripts/bootstrap_admin.py <username>`，密碼由互動提示輸入，不可寫入程式或文件。
+- 前端 API 預設改走同網域 `/api`，由 `frontend/server/api/[...path].ts` 代理到本機 FastAPI；遠端瀏覽器不會再誤連自己的 `127.0.0.1:8000`。
+- `start-private-site.ps1` 會啟動或沿用 FastAPI、Nuxt production server 與 Cloudflare Quick Tunnel，當前 URL 寫入 `.logs/private-site-url.txt`。
+- Windows 工作排程 `Petehub Private Site` 已安裝為登入後自動執行，2026-09-04 手動驗證結果碼為 0。電腦仍須保持開機並登入。
+- Quick Tunnel 網址為臨時隨機網址，重啟 tunnel 後可能改變。固定自訂網址仍需要使用者的 Cloudflare 帳號、有效網域與 Named Tunnel 授權；設定完成前不可宣稱已有永久網址。
+- 驗證：後端 `134 passed`、前端 UTF-8／Nuxt typecheck 通過、production build 通過；遠端管理員登入成功，cookie 的 HttpOnly／Secure／SameSite=Lax 均已驗證，匿名資料 API 回 401。
+- 詳細操作見 `docs/PRIVATE_SITE.md`。
 
 ---
 
@@ -303,9 +318,20 @@ Batter Swing Timing / Miss Distance V1 已於 2026-08-22 完成。權威規劃�
 - 最近驗證：Nuxt typecheck 通過、production build 通過、相關 backend tests 32 passed、`git diff --check` 通過。
 - 內建瀏覽器在最後一輪沒有可用 browser instance，因此沒有最後的像素級截圖驗證；程式、API 與 HTTP smoke check 已完成。
 
-### 下一個明確任務：Batter Period Comparison Slice 0–3
+### Batter Comparison Slice 0–8（已完成至本機資料邊界，2026-09-03）
 
-使用者已要求下一輪直接完成 Slice 0–3。上一輪只建立工作計畫，**尚未開始撰寫 Batter Period Comparison 程式碼**，不要誤標為已完成。
+Slice 0–8 已完成；不要在下一輪重做。既有 dirty worktree 已先以明確檔案清單建立 `daeb568` checkpoint，未使用 `git add .`。
+
+- 新建構層級：`/batters` → `/batters/comparison` → `/batters/comparison/period`、`team`、`lineup`；舊 `/comparison/batter-period` 會導向新 period 路徑。
+- 新 API：`/api/batter-comparison/period/options`、`date-range`、`overview`；使用獨立 schema、service 與 route，未把 batter-only 分支塞入投手 comparison service。
+- 指標：PA、AB、OPS、wOBA、xwOBA、AVG、OBP、SLG、Avg EV、Max EV、Barrel%、HardHit%、SweetSpot%、Swing%、Chase%、Contact%、Whiff%、K%、BB%、K-BB%。每列均顯示 A、B、B−A 與兩側 denominator；百分率 delta 使用 pp。
+- 雙好球帶：Period A/B 並排，共用 Bat Speed／Choice 切換、同一 heatmap blend 與同一色階 domain。Choice 是 swing frequency；Bat Speed 只使用 competitive tracked swings。
+- 共用 `StrikeZoneScatter.vue` 只新增 optional shared metric domain，舊呼叫不傳時維持原行為。
+- Slice 4：Bat Tracking A/B、固定整季 competitive threshold、pitch family 與既有情境 split；Squared-Up／Blast 缺來源時為 unavailable。
+- Slice 5：2026 Miss Distance 做真正 A/B；X/Y/Z 只顯示 full-season summary reference，不混入任意日期 delta。
+- Slice 6：exact distributions 與 batting stance 已完成 source audit；只有 intercept／attack geometry 可用，沒有腳印／stance 欄位時不生成視覺。
+- Slice 7：Team Batting 依 PA sequence 與 fielder IDs 重建棒次／守位，提供 1–9 棒產出、platoon split、樣本與 reliability；DH／PH 無法可靠區分時標 unknown。
+- Slice 8：最近 20 場先發／棒次機率與三組 lineup scenarios，使用 empirical PA-outcome simulation 比較 projected R/G；active roster、傷兵與 probable starter 缺來源，固定標為 research mode、不是官方預測。
 
 #### Slice 0 — 封存與基線
 
@@ -337,9 +363,9 @@ Batter Swing Timing / Miss Distance V1 已於 2026-08-22 完成。權威規劃�
 - 使用共用 `HeatmapBlendControl` 控制散點到 heatmap 的混合程度，A/B 必須使用同一色階 domain 才能直接比較。
 - 盡量重用 `StrikeZoneScatter.vue`，但修改共用元件前必須同時 smoke check 投手與打者個人頁。
 
-### 後續待辦：Batter Research Slice 4–8
+### Batter Research Slice 4–8 完成契約
 
-Slice 4–8 仍是原定 roadmap 的一部分，只是不併入下一輪已指定的 Slice 0–3。完成 0–3 後應依序接續，不可遺漏。
+以下規格已依目前可驗證資料完成；標示 unavailable／summary-only 的項目是正式的 source gate，不可在後續對話改成推測值。
 
 #### Slice 4 — Bat Tracking 期間比較
 
@@ -399,15 +425,29 @@ Slice 4–8 仍是原定 roadmap 的一部分，只是不併入下一輪已指�
 ### Period Comparison 資料限制
 
 - Bat Tracking 自 2023 All-Star break 後才可用；2023 是半季資料。
-- 任意日期區間的逐球 `miss_distance` 目前本機只有 2026 可精確完成；這不在 Slice 0–3 的必交範圍。
+- 任意日期區間的逐球 `miss_distance` 目前本機只有 2026 可精確完成；Slice 5 已依年份回傳真實值或 unavailable。
 - Centered／On Time／Lined Up 等 X/Y/Z 目前主要來自 Savant summary，不能假裝能按任意日期精確切割。
-- Slice 0–3 不包含 exact Savant distributions、站位頁、棒次／守位研究或 lineup prediction。
+- exact Savant distributions 與真實 batting stance 仍缺來源；Slice 6 以 source audit 封鎖偽造輸出。棒次／守位研究與 lineup scenarios 已在 Slice 7–8 的獨立頁面完成。
 - 所有新 panel 使用直角邊框；桌面版需在 100% 瀏覽器縮放下看見主要比較內容，窄螢幕再改為單欄。
 - 驗收以 targeted backend tests、UTF-8 檢查、Nuxt typecheck、A/B API smoke check，以及投手／打者好球帶沒有回歸為準。
 
 ---
 
 ## 九、其他尚未完全收尾的區域
+
+### 2026-09-03 Team Dashboard 後續調整
+
+- `/batters/comparison/team` 已移除容易誤認成球員名單的 Batting-order results 彙總表。
+- 三張打線情境卡位於 `/teams/:teamId`：Recent consensus、Latest observed、Run-expectancy candidate，可切換 vs RHP／vs LHP。它是 Team 頁的獨立區塊，不受 Team Hitting Intelligence API 的 loading/error 條件控制。頁面使用唯讀 `/api/batter-comparison/team-research/lineup-scenarios`，HTTP request 不重建守位、不執行模擬。
+- Team Hitting Intelligence（lineup skill strip、timing map、miss profile）保留在 `/teams/:teamId`；Performance Board 下方保留可展開 Pitch-family Matchup Matrix。上述 team-only 區塊不可接到 `/batters` 總頁。
+- `run_pitcher_data_refresh` 會在資料更新後，為全部球隊及左右投先算好打線情境，原子寫入 `data/derived/batter_lineup_scenarios_<year>.json`。API 以 `current|stale|unavailable` 回報快取狀態；資料較新或重建失敗時仍顯示上一份完成結果。
+- `useAutoRefresh` 只在頁面保持可見時依間隔更新；不得監聽 window focus 或 visibilitychange 後立即整批刷新，避免使用者切離再返回時重載所有 dashboard request。
+- Windows 工作排程 `Petehub Daily Data Update` 使用台灣本地時區，每天 03:00 執行根目錄 `daily-update.cmd`；安裝／更新腳本為 `install-daily-update.ps1`，並設定 StartWhenAvailable 與 IgnoreNew。
+- Team Dashboard 指定內容順序：Rotation game lab → Previous outing arsenal → Bullpen availability → 三組 precomputed lineups → Recent starts → Team Hitting Intelligence；其餘區塊維持後續原順序。
+- Pitch-family Matchup Matrix 已移到 Performance Board 下方，預設收合，點擊表頭才展開。
+- Performance Board 已擴充：投手增加 G、WHIP、K%、BB%；打者增加 PA、AVG、OBP、SLG，同時保留 OPS、wOBA、HR。
+- 績效型配色統一為「深紅 → 紅 → 淺紅 → 白 → 淺藍 → 藍 → 深藍」，好到壞依此排列；已套用 Matrix、共用 percentile table 與 Batter Percentile Profile。
+- Team、Pitcher Personal、Batter Personal 會在頁面重新取得焦點或恢復可見時背景更新，頁面持續開啟時每五分鐘更新；相關 API request 使用 `no-store`。Batter Personal 同時補上同頁 route query 變更的反向同步。
 
 - Pitching+ Lab：曾出現 404、空資料、版面超寬、outings trend 空白與 leaderboard 欄位問題；進一步修改前要先確認目前實際程式狀態。
 - 全域頁面寬度：使用者偏好 100% 瀏覽器縮放即可看見主要內容，不應靠把整頁做得更寬或讓右側被切掉。
@@ -431,11 +471,10 @@ Slice 4–8 仍是原定 roadmap 的一部分，只是不併入下一輪已指�
 
 ## 十一、新對話第一輪建議行動
 
-不要先大範圍掃描或重做 Batter Personal。直接：
+不要重做 Batter Personal 或 Batter Comparison Slice 0–8。直接：
 
 1. 完整閱讀本文件與 `docs/BATTER_SWING_TIMING_ROADMAP.md`。
-2. 執行 `git status --short`，辨識目前未提交檔案；先完成上節 Slice 0 的安全 checkpoint。
-3. 精準閱讀 `frontend/pages/comparison/period.vue`、`backend/app/services/comparison_service.py`、現有 comparison schemas／routes，以及共用 `StrikeZoneScatter.vue`／`HeatmapBlendControl.vue`。
-4. 完成 Batter Period Comparison Slice 1–3；不要順手開始後續的 Slice 4–8。
-5. 修改共用好球帶後，必須各驗證一次 pitcher period/personal 與 batter personal，不可只驗證新頁。
-6. 最後只跑 UTF-8、targeted backend tests、frontend typecheck 與必要 smoke checks；不要再次用長時間瀏覽器等待拖慢交付。
+2. 執行 `git status --short`，辨識目前未提交檔案，不可覆蓋或回復不相關內容。
+3. 以 `/batters/comparison`、`batter_period_comparison_service.py` 與 `batter_team_research_service.py` 為現況基線；只有取得新且可驗證的 exact timing／stance／roster 資料時才解除 source gate。
+4. 沿用既有期間、filter、A/B/delta、denominator 與 research-mode 契約；缺值不可用 0 取代，也不可把 scenario 當官方打序。
+5. 修改後只跑 UTF-8、targeted backend tests、frontend typecheck 與必要 smoke checks；不要再次用長時間瀏覽器等待拖慢交付。

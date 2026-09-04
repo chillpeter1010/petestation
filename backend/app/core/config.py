@@ -29,6 +29,12 @@ class Settings(BaseSettings):
     )
     data_dir: Path = Field(default_factory=resolve_default_data_dir)
     legacy_project_dir: Path | None = None
+    auth_cookie_secure: bool = False
+    auth_session_days: int = 14
+
+    @property
+    def auth_db_path(self) -> Path:
+        return self.data_dir / "auth" / "petehub_auth.sqlite3"
 
 
 settings = Settings()

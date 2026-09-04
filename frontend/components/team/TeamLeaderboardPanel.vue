@@ -16,32 +16,28 @@
 
       <TabsContent value="pitching">
         <div class="leader-table">
-          <div class="leader-table__head"><span>Player</span><span>IP</span><span>ERA</span><span>K</span></div>
+          <div class="leader-table__head leader-table__head--pitching"><span>Player</span><span>G</span><span>IP</span><span>ERA</span><span>WHIP</span><span>K</span><span>K%</span><span>BB%</span></div>
           <NuxtLink v-for="(row, index) in pitching" :key="row.player_id" :to="pitcherLink(row)">
             <span class="leader-table__player">
               <em>{{ index + 1 }}</em>
               <MlbPlayerHeadshot :player-id="row.player_id" :name="row.name" :size="34" :source-width="160" decorative shape="circle" />
               <strong>{{ row.name }}</strong>
             </span>
-            <span>{{ formatNumber(row.ip, 1) }}</span>
-            <span>{{ formatNumber(row.era, 2) }}</span>
-            <span>{{ row.strikeouts ?? '-' }}</span>
+            <span>{{ row.games }}</span><span>{{ formatNumber(row.ip, 1) }}</span><span>{{ formatNumber(row.era, 2) }}</span><span>{{ formatNumber(row.whip, 2) }}</span><span>{{ row.strikeouts ?? '-' }}</span><span>{{ formatPercent(row.strikeout_rate) }}</span><span>{{ formatPercent(row.walk_rate) }}</span>
           </NuxtLink>
         </div>
       </TabsContent>
 
       <TabsContent value="batting">
         <div class="leader-table">
-          <div class="leader-table__head"><span>Player</span><span>OPS</span><span>HR</span><span>wOBA</span></div>
+          <div class="leader-table__head leader-table__head--batting"><span>Player</span><span>PA</span><span>AVG</span><span>OBP</span><span>SLG</span><span>OPS</span><span>wOBA</span><span>HR</span></div>
           <NuxtLink v-for="(row, index) in batting" :key="row.player_id" :to="batterLink(row)">
             <span class="leader-table__player">
               <em>{{ index + 1 }}</em>
               <MlbPlayerHeadshot :player-id="row.player_id" :name="row.name" :size="34" :source-width="160" decorative shape="circle" />
               <strong>{{ row.name }}</strong>
             </span>
-            <span>{{ formatNumber(row.ops, 3) }}</span>
-            <span>{{ row.home_runs ?? '-' }}</span>
-            <span>{{ formatNumber(row.woba, 3) }}</span>
+            <span>{{ row.plate_appearances ?? '-' }}</span><span>{{ formatRate(row.avg) }}</span><span>{{ formatRate(row.obp) }}</span><span>{{ formatRate(row.slg) }}</span><span>{{ formatRate(row.ops) }}</span><span>{{ formatRate(row.woba) }}</span><span>{{ row.home_runs ?? '-' }}</span>
           </NuxtLink>
         </div>
       </TabsContent>
@@ -71,6 +67,14 @@ function batterLink(row: BatterLeaderboardRow) {
 
 function formatNumber(value: number | null, digits: number) {
   return value === null ? '-' : value.toFixed(digits)
+}
+
+function formatRate(value: number | null) {
+  return value === null ? '-' : value.toFixed(3).replace(/^0/, '')
+}
+
+function formatPercent(value: number | null) {
+  return value === null ? '-' : `${(Math.abs(value) <= 1 ? value * 100 : value).toFixed(1)}%`
 }
 </script>
 
@@ -146,12 +150,14 @@ function formatNumber(value: number | null, digits: number) {
 
 .leader-table {
   display: grid;
+  overflow-x: auto;
 }
 
 .leader-table__head,
 .leader-table > a {
   display: grid;
-  grid-template-columns: minmax(160px, 1fr) repeat(3, 62px);
+  min-width: 820px;
+  grid-template-columns: minmax(190px, 1fr) repeat(7, minmax(54px, 72px));
   align-items: center;
   gap: 8px;
   padding: 10px 8px;
@@ -208,15 +214,4 @@ function formatNumber(value: number | null, digits: number) {
   white-space: nowrap;
 }
 
-@media (max-width: 520px) {
-  .leader-table__head,
-  .leader-table > a {
-    grid-template-columns: minmax(120px, 1fr) repeat(2, 54px);
-  }
-
-  .leader-table__head span:last-child,
-  .leader-table > a > span:last-child {
-    display: none;
-  }
-}
 </style>

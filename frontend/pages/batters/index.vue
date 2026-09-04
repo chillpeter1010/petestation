@@ -20,8 +20,10 @@
 
     <section class="portal-grid" aria-label="Batter station destinations">
       <NuxtLink class="portal-card" to="/batters/leaderboard"><span>Production</span><h2>Leaderboards</h2><p>Rank hitters through production, contact quality, and plate discipline views.</p><strong>Open leaderboard</strong></NuxtLink>
+      <NuxtLink class="portal-card comparison" to="/batters/comparison"><span>Comparison</span><h2>Batter Comparison</h2><p>Compare periods, study team batting roles, and open lineup research scenarios.</p><strong>Open comparison</strong></NuxtLink>
       <NuxtLink class="portal-card lab" to="/batters/lab"><span>Research</span><h2>Batter Lab</h2><p>Study how hitters attack pitch quality, location, and specific arsenal shapes.</p><strong>Open lab</strong></NuxtLink>
     </section>
+
   </main>
 </template>
 
@@ -66,8 +68,9 @@ select, input { min-height: 44px; border: 1px solid var(--color-border); border-
 .results strong, .results small { display: block; }
 .results strong { color: var(--color-foreground); font-size: 13px; }
 .results small, .results a > span:last-child, .results p { color: var(--color-muted-text); font-size: 11px; }
-.portal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.portal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
 .portal-card { min-height: 230px; border-radius: 16px; padding: 22px; color: inherit; text-decoration: none; transition: border-color 160ms ease, transform 160ms ease; }
+.portal-card.comparison { border-radius: 0; }
 .portal-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
 .portal-card.lab { background: linear-gradient(145deg, color-mix(in srgb, var(--color-primary) 13%, transparent), transparent 58%), var(--color-surface); }
 .portal-card h2 { margin: 12px 0 0; color: var(--color-foreground); font-size: 26px; }
