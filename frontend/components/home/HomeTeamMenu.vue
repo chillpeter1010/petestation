@@ -1,6 +1,7 @@
 <template>
   <div
     class="home-team-menu"
+    :class="{ 'home-team-menu--petehub': isPetehub }"
     @mouseenter="isOpen = true"
     @mouseleave="isOpen = false"
     @focusout="handleFocusOut"
@@ -33,6 +34,7 @@
 
 <script setup lang="ts">
 const isOpen = ref(false)
+const { isPetehub } = useSiteBrand()
 
 const teams = [
   { code: 'ATH', name: 'Athletics' },
@@ -79,26 +81,60 @@ function handleFocusOut(event: FocusEvent) {
 .home-team-menu {
   position: relative;
   z-index: 20;
+  height: 41px;
+  display: flex;
+  align-items: center;
 }
 
 .home-team-menu > button {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  height: 41px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  padding: 0;
+  color: #d7d7d7;
+  background: transparent;
+  font-family: "Aptos", "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+
+.home-team-menu > button:hover,
+.home-team-menu > button:focus-visible,
+.home-team-menu > button[aria-expanded="true"] {
+  color: var(--home-orange);
+  border-color: var(--home-orange);
+  background: transparent;
+}
+
+.home-team-menu--petehub {
+  height: auto;
+}
+
+.home-team-menu--petehub > button {
+  height: auto;
   min-height: 41px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   padding: 9px 15px;
   color: var(--home-muted);
   background: rgba(255, 255, 255, 0.045);
+  font-family: inherit;
+  font-size: inherit;
   font-weight: 900;
-  cursor: pointer;
+  line-height: normal;
 }
 
-.home-team-menu > button:hover,
-.home-team-menu > button:focus-visible,
-.home-team-menu > button[aria-expanded="true"] {
-  color: #111111;
+.home-team-menu--petehub > button:hover,
+.home-team-menu--petehub > button:focus-visible,
+.home-team-menu--petehub > button[aria-expanded="true"] {
+  color: #111;
   border-color: var(--home-orange);
   background: var(--home-orange);
 }

@@ -1,5 +1,7 @@
 import pandas as pd
 
+from app.api.schemas.comparison import ComparisonMetric
+
 from app.services import personal_service
 from app.services.personal_service import build_pitch_type_matrix, find_pitcher_row, normalize_personal_name_frame
 
@@ -43,6 +45,27 @@ def test_find_pitcher_row_falls_back_to_name_key():
     assert len(row) == 1
 
 
+def test_build_overview_percentile_profile_reuses_period_comparison_metrics(monkeypatch):
+    pool = pd.DataFrame([{"player_id": 7}])
+    metric = ComparisonMetric(
+        key="whiff_pct",
+        label="Whiff %",
+        value=31.2,
+        formatted_value="31.2%",
+        percentile=84,
+        higher_is_better=True,
+    )
+
+    from app.services import comparison_service
+
+    monkeypatch.setattr(comparison_service, "load_comparison_pool", lambda year: pool)
+    monkeypatch.setattr(comparison_service, "build_metric_card", lambda row, year: [metric])
+
+    profile = personal_service.build_overview_percentile_profile(2026, 7)
+
+    assert profile == [metric.model_dump()]
+
+
 def test_build_overview_game_log_adds_pitch_mix_game_score_and_hard_hits(monkeypatch):
     game_lines = pd.DataFrame(
         [
@@ -81,3 +104,32 @@ def test_build_overview_game_log_adds_pitch_mix_game_score_and_hard_hits(monkeyp
     assert log.loc[0, "HR"] == 1
     assert log.loc[0, "HH"] == 2
     assert "4-Seam 67%" in log.loc[0, "Pitch Types"]
+
+
+def test_movement_scatter_keeps_video_and_pitch_identity_fields():
+    pitches = pd.DataFrame([{
+        "game_date": "2026-09-08",
+        "game_pk": 99,
+        "at_bat_number": 4,
+        "pitch_number": 2,
+        "pitch_name": "4-Seam Fastball",
+        "pitch_type": "FF",
+        "description": "swinging_strike",
+        "balls": 1,
+        "strikes": 1,
+        "plate_x": 0.2,
+        "plate_z": 2.8,
+        "pfx_x": -0.5,
+        "pfx_z": 1.25,
+        "release_speed": 97.1,
+        "play_id": "play-99",
+        "video_url": "https://example.test/video",
+    }])
+
+    rows = personal_service.build_movement_scatter_rows(pitches)
+
+    assert rows[0]["game_pk"] == 99
+    assert rows[0]["play_id"] == "play-99"
+    assert rows[0]["video_url"] == "https://example.test/video"
+    assert rows[0]["h_break"] == 6.0
+    assert rows[0]["v_break"] == 15.0

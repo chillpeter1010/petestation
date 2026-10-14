@@ -105,7 +105,7 @@ export const statcastFieldNotes: StatcastFieldNote[] = [
   { field: 'bat_score_diff', zh: '進攻方分差', detail: '打擊方分數減守備方分數。', group: '分數' },
   { field: 'home_win_exp', zh: '主隊勝率期望值', detail: '事件前主隊的勝率期望值。', group: '價值' },
   { field: 'bat_win_exp', zh: '進攻方勝率期望值', detail: '事件前打擊方的勝率期望值。', group: '價值' },
-  { field: 'delta_home_win_exp', zh: '主隊勝率期望值變化', detail: '打席前後主隊勝率期望值的變化。', group: '價值' },
+  { field: 'delta_home_win_exp', zh: '主隊勝率期望值變化', detail: '來源逐球欄位；不可直接跨逐球加總。本站累積 WPA 改用相鄰打席邊界的 home_win_exp 差。', group: '價值' },
   { field: 'delta_run_exp', zh: '得分期望值變化', detail: '單球前後得分期望值的變化。', group: '價值' },
 
   { field: 'if_fielding_alignment', zh: '內野守備佈陣', detail: '投球時的內野守備站位分類。', group: '守備' },

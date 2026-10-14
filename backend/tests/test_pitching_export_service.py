@@ -9,9 +9,13 @@ def test_pitching_overview_and_pitcher_exports_are_readable() -> None:
     assert 2026 in overview.available_years
     assert all(row.innings_pitched >= 5 for row in overview.rows)
     assert overview.rows[0].pitch_type_scores
+    assert overview.data_as_of
+    assert overview.cache_status in {"current", "stale"}
     assert sum(item.count for item in overview.distribution) == overview.total_pitchers
 
     detail = get_pitching_pitcher(year=2026, pitcher_id=overview.rows[0].pitcher_id)
     assert detail.pitcher.pitcher_id == overview.rows[0].pitcher_id
     assert detail.pitch_types
     assert detail.outings
+    assert detail.data_as_of == overview.data_as_of
+    assert detail.cache_status == overview.cache_status

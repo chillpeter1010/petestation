@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
-from app.api.schemas.common import AnalysisResponse, ResponseMeta
-from app.api.schemas.stuff import StuffCalculatorRequest, StuffCalculatorResponse
+from app.api.schemas.common import AnalysisResponse
+from app.api.schemas.stuff import PitchQualityLeaderboardResponse, StuffCalculatorRequest, StuffCalculatorResponse
+from app.services.stuff_leaderboard_service import get_stuff_leaderboard
 from app.services.stuff_service import calculate_stuff_pitch, get_stuff_features, get_stuff_score
 
 router = APIRouter()
@@ -17,10 +18,17 @@ def calculate_stuff(request: StuffCalculatorRequest) -> StuffCalculatorResponse:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
-@router.get("/leaderboard", response_model=AnalysisResponse)
-def get_stuff_leaderboard(year: int = 2026) -> AnalysisResponse:
-    # TODO: extract from pages/22_starter_stuff.py.
-    return AnalysisResponse(meta=ResponseMeta(year=year))
+@router.get("/leaderboard", response_model=PitchQualityLeaderboardResponse)
+def read_stuff_leaderboard(
+    year: int = 2026,
+    role: str = "All",
+    team: str = "All",
+    minimum_ip: float = 0,
+) -> PitchQualityLeaderboardResponse:
+    try:
+        return PitchQualityLeaderboardResponse(**get_stuff_leaderboard(year, role, team, minimum_ip))
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @router.get("/features", response_model=AnalysisResponse)

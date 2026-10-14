@@ -135,8 +135,14 @@ def _load_source(year: int, data_dir: Path) -> pd.DataFrame:
         ).fetchdf()
 
 
-def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -> dict[str, Any]:
-    """Backfill the current model's per-pitch scores and refresh changed pitchers only."""
+def refresh_pitch_stuff_scores(
+    year: int = 2026,
+    data_dir: Path | None = None,
+    max_pitchers: int | None = None,
+    shard_index: int | None = None,
+    shard_count: int | None = None,
+) -> dict[str, Any]:
+    """Incrementally fill missing pitch keys, with an optional daily work budget."""
 
     root = data_dir or settings.data_dir
     version = _artifact_version(root)
@@ -148,8 +154,17 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
     refreshed_pitchers = 0
     written_rows = 0
     skipped_pitchers = 0
-    state_path = root / "admin_job_logs" / f"pitch_stuff_backfill_{int(year)}.json"
+    deferred_pitchers = 0
+    if shard_index is not None and shard_count is not None:
+        if int(shard_count) < 1 or not 0 <= int(shard_index) < int(shard_count):
+            raise ValueError("shard_index must be between 0 and shard_count - 1")
+        state_name = f"pitch_stuff_backfill_{int(year)}_shard_{int(shard_index)}_of_{int(shard_count)}.json"
+    else:
+        state_name = f"pitch_stuff_backfill_{int(year)}.json"
+    state_path = root / "admin_job_logs" / state_name
     state_path.parent.mkdir(parents=True, exist_ok=True)
+
+    final_metrics: dict[str, Any] = {}
 
     def write_state(status: str) -> None:
         temporary = state_path.with_suffix(".tmp")
@@ -162,7 +177,9 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
                     "processed_pitchers": refreshed_pitchers + skipped_pitchers,
                     "refreshed_pitchers": refreshed_pitchers,
                     "skipped_pitchers": skipped_pitchers,
+                    "deferred_pitchers": deferred_pitchers,
                     "written_rows": written_rows,
+                    **final_metrics,
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                 },
                 ensure_ascii=False,
@@ -189,12 +206,46 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
 
         for pitcher, pitcher_rows in source.groupby("pitcher", sort=True):
             pitcher_id = int(pitcher)
+            if shard_index is not None and shard_count is not None and pitcher_id % int(shard_count) != int(shard_index):
+                continue
             if states.get(pitcher_id) == len(pitcher_rows):
                 skipped_pitchers += 1
                 if (refreshed_pitchers + skipped_pitchers) % 10 == 0:
                     write_state("running")
                 continue
-            scored = score_pitch_stuff_uncached(pitcher_rows, pitcher_rows)
+            if max_pitchers is not None and refreshed_pitchers >= int(max_pitchers):
+                deferred_pitchers += 1
+                continue
+
+            current_keys = _normalized_keys(pitcher_rows)
+            current_valid = current_keys.notna().all(axis=1)
+            cached = pd.read_sql_query(
+                """
+                SELECT game_pk, at_bat_number, pitch_number, pitcher
+                FROM pitch_stuff_scores
+                WHERE year = ? AND pitcher = ? AND model_version = ?
+                """,
+                connection,
+                params=[int(year), pitcher_id, version],
+            )
+            cached_index = (
+                pd.MultiIndex.from_frame(cached[KEY_COLUMNS])
+                if not cached.empty
+                else pd.MultiIndex.from_arrays([[] for _ in KEY_COLUMNS], names=KEY_COLUMNS)
+            )
+            source_index = pd.MultiIndex.from_frame(current_keys.loc[current_valid, KEY_COLUMNS])
+            full_rebuild = len(cached) > len(source_index) or not cached_index.difference(source_index).empty
+            if full_rebuild:
+                rows_to_score = pitcher_rows
+                connection.execute(
+                    "DELETE FROM pitch_stuff_scores WHERE year = ? AND pitcher = ? AND model_version = ?",
+                    (int(year), pitcher_id, version),
+                )
+            else:
+                missing = ~source_index.isin(cached_index)
+                rows_to_score = pitcher_rows.loc[current_keys.index[current_valid][missing]]
+
+            scored = score_pitch_stuff_uncached(rows_to_score, pitcher_rows)
             keys = _normalized_keys(scored)
             scores = pd.to_numeric(scored.get(SCORE_COLUMN), errors="coerce")
             valid = keys.notna().all(axis=1) & scores.notna()
@@ -205,13 +256,9 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
                 )
                 for row, score in zip(keys.loc[valid].itertuples(index=False), scores.loc[valid])
             ]
-            connection.execute(
-                "DELETE FROM pitch_stuff_scores WHERE year = ? AND pitcher = ? AND model_version = ?",
-                (int(year), pitcher_id, version),
-            )
             connection.executemany(
                 """
-                INSERT INTO pitch_stuff_scores
+                INSERT OR REPLACE INTO pitch_stuff_scores
                 (year, game_pk, at_bat_number, pitch_number, pitcher, model_version, pitch_stuff_plus, calculated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
@@ -223,7 +270,7 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
                 (year, pitcher, model_version, source_rows, scored_rows, calculated_at)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (int(year), pitcher_id, version, len(pitcher_rows), len(records), calculated_at),
+                (int(year), pitcher_id, version, len(pitcher_rows), len(source_index), calculated_at),
             )
             connection.commit()
             refreshed_pitchers += 1
@@ -235,19 +282,49 @@ def refresh_pitch_stuff_scores(year: int = 2026, data_dir: Path | None = None) -
             "SELECT COUNT(*), COUNT(DISTINCT pitcher) FROM pitch_stuff_scores WHERE year = ? AND model_version = ?",
             (int(year), version),
         ).fetchone()
+    from app.services.personal_service import STUFF_PITCH_TYPE_CODES
+
+    if "pitch_type" in source.columns or "pitch_name" in source.columns:
+        raw_pitch_types = source.get("pitch_type", pd.Series("", index=source.index, dtype="object"))
+        raw_pitch_names = source.get("pitch_name", pd.Series(pd.NA, index=source.index, dtype="object"))
+        raw_codes = raw_pitch_types.fillna("").astype(str).str.upper().str.strip()
+        fallback_codes = raw_pitch_names.map(STUFF_PITCH_TYPE_CODES)
+        scoreable = raw_codes.ne("") | fallback_codes.notna()
+    else:
+        # Small injected frames used by callers/tests predate pitch descriptors;
+        # production source loading always includes both columns.
+        scoreable = pd.Series(True, index=source.index)
+    valid_keys = _normalized_keys(source).notna().all(axis=1)
+    eligible_rows = int((scoreable & valid_keys).sum())
+    cached_rows = int(totals[0])
+    missing_eligible_rows = max(eligible_rows - cached_rows, 0)
+    final_status = "current" if deferred_pitchers == 0 and missing_eligible_rows == 0 else "partial"
+    final_metrics.update(
+        {
+            "eligible_rows": eligible_rows,
+            "cached_rows": cached_rows,
+            "missing_eligible_rows": missing_eligible_rows,
+            "coverage_pct": round(cached_rows * 100.0 / eligible_rows, 2) if eligible_rows else 100.0,
+        }
+    )
     result = {
         "year": int(year),
         "model_version": version,
         "source_rows": int(len(source)),
-        "cached_rows": int(totals[0]),
+        "eligible_rows": eligible_rows,
+        "cached_rows": cached_rows,
         "cached_pitchers": int(totals[1]),
+        "missing_eligible_rows": missing_eligible_rows,
+        "coverage_pct": final_metrics["coverage_pct"],
         "refreshed_pitchers": refreshed_pitchers,
         "skipped_pitchers": skipped_pitchers,
+        "deferred_pitchers": deferred_pitchers,
         "written_rows": written_rows,
+        "status": final_status,
         "cache_path": str(cache_path(root)),
         "state_path": str(state_path),
     }
-    write_state("completed")
+    write_state(final_status)
     return result
 
 

@@ -45,6 +45,12 @@
           stroke-width="1.4"
           vector-effect="non-scaling-stroke"
           class="pitch-dot"
+          :class="{ selected: selectedKey && selectedKey === point.key }"
+          tabindex="0"
+          role="button"
+          @click="emit('select-point', point.raw)"
+          @keydown.enter.prevent="emit('select-point', point.raw)"
+          @keydown.space.prevent="emit('select-point', point.raw)"
         >
           <title>{{ scatterTooltip(point) }}</title>
         </circle>
@@ -183,6 +189,7 @@ const props = withDefaults(defineProps<{
   pitcherHand?: string
   showPointOutline?: boolean
   showProfileInfo?: boolean
+  selectedKey?: string | null
 }>(), {
   showPointOutline: true,
   showProfileInfo: true,
@@ -193,6 +200,7 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   'update:mode': [mode: 'scatter' | 'average']
   'request-stuff-colors': []
+  'select-point': [point: Record<string, unknown>]
 }>()
 
 const plot = {
@@ -241,17 +249,25 @@ const defaultPitchColor = '#8b949e'
 const colorMode = ref<'pitch' | 'stuff'>('pitch')
 const stuffColorRequested = ref(false)
 
-const scatterPoints = computed(() => props.scatterRows.flatMap((row) => {
+const scatterPoints = computed(() => props.scatterRows.flatMap((row, index) => {
   const x = Number(row.h_break)
   const y = Number(row.v_break)
   if (!Number.isFinite(x) || !Number.isFinite(y)) {
     return []
   }
+  const key = `movement:${index}:${pitchPointKey(row)}`
   return [{
     x,
     y,
     pitch: String(row.pitch_name || row.Pitch || 'Unknown'),
-    stuffPlus: numberOrNull(row.pitch_stuff_plus)
+    stuffPlus: numberOrNull(row.pitch_stuff_plus),
+    locationPlus: numberOrNull(row.location_plus_pitch),
+    staminaPlus: numberOrNull(row.stamina_plus_trait),
+    expectedStuffPlus: numberOrNull(row.stamina_expected_stuff_plus),
+    expectedRetentionDelta: numberOrNull(row.stamina_expected_retention_delta),
+    staminaSample: String(row.stamina_sample_label || ''),
+    key,
+    raw: { ...row, _movement_point_key: key },
   }]
 }))
 
@@ -488,10 +504,19 @@ function mixColor(from: string, to: string, amount: number) {
   return `rgb(${mixed.join(', ')})`
 }
 
-function scatterTooltip(point: { pitch: string; x: number; y: number; stuffPlus: number | null }) {
+function scatterTooltip(point: { pitch: string; x: number; y: number; stuffPlus: number | null; locationPlus: number | null; staminaPlus: number | null; expectedStuffPlus: number | null; expectedRetentionDelta: number | null; staminaSample: string }) {
   const fields = [point.pitch, `HB ${point.x.toFixed(1)}`, `IVB ${point.y.toFixed(1)}`]
   if (point.stuffPlus !== null) fields.push(`Pitch Stuff+ ${point.stuffPlus.toFixed(1)}`)
+  if (point.locationPlus !== null) fields.push(`Location+ ${point.locationPlus.toFixed(1)}`)
+  if (point.staminaPlus !== null) fields.push(`Stamina+ trait ${point.staminaPlus.toFixed(1)}${point.staminaSample ? ` (${point.staminaSample})` : ''}`)
+  if (point.expectedRetentionDelta !== null) fields.push(`Expected retention ${point.expectedRetentionDelta >= 0 ? '+' : ''}${point.expectedRetentionDelta.toFixed(1)}`)
+  if (point.expectedStuffPlus !== null) fields.push(`Expected Stuff+ ${point.expectedStuffPlus.toFixed(1)}`)
   return fields.join(' | ')
+}
+
+function pitchPointKey(row: Record<string, unknown>) {
+  return [row.game_pk, row.at_bat_number, row.pitch_number, row.plate_x, row.plate_z, row.pitch_name]
+    .map(value => String(value ?? '')).join('|')
 }
 </script>
 
@@ -603,10 +628,29 @@ function scatterTooltip(point: { pitch: string; x: number; y: number; stuffPlus:
   vector-effect: non-scaling-stroke;
 }
 
+.scatter-svg .pitch-dot[role="button"] {
+  cursor: pointer;
+}
+
+.scatter-svg .pitch-dot[role="button"].selected,
+.scatter-svg .pitch-dot[role="button"]:focus-visible {
+  stroke: #fff !important;
+  stroke-width: 3 !important;
+  opacity: 1;
+  outline: none;
+}
+
 .movement-chart.stuff-color-mode .scatter-svg circle {
   opacity: 0.96;
   stroke: rgba(2, 6, 23, 0.78) !important;
   stroke-width: 1.15 !important;
+}
+
+.movement-chart.stuff-color-mode .scatter-svg .pitch-dot[role="button"].selected,
+.movement-chart.stuff-color-mode .scatter-svg .pitch-dot[role="button"]:focus-visible {
+  stroke: #fff !important;
+  stroke-width: 3 !important;
+  opacity: 1;
 }
 
 .stuff-legend {

@@ -4,18 +4,22 @@ from datetime import datetime
 from typing import Any, Callable
 from uuid import uuid4
 
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Query
 
 from app.services.admin_service import (
     get_admin_status,
+    get_historical_plus_backfill_status,
     get_pitcher_data_status,
     run_pitcher_game_line_backfill,
+    run_historical_plus_backfill,
     run_pitcher_data_refresh,
     run_roster_reference_refresh,
     run_video_lookup_backfill,
     write_job_log,
 )
 from app.services.game_line_service import get_pitcher_game_line_status
+from app.services.data_freshness_service import get_data_freshness_report, refresh_data_freshness_report
+from app.services.project_tracker_service import get_project_tracker
 from app.services.video_service import get_video_lookup_status
 
 
@@ -23,7 +27,7 @@ router = APIRouter()
 JOB_REGISTRY: dict[str, dict[str, Any]] = {}
 
 
-def _run_registered_job(job_id: str, name: str, fn: Callable[[], dict[str, object]]) -> None:
+def _run_registered_job(job_id: str, name: str, year: int, fn: Callable[[], dict[str, object]]) -> None:
     JOB_REGISTRY[job_id].update({"status": "running", "started_at": datetime.now().isoformat(timespec="seconds")})
     try:
         result = fn()
@@ -34,7 +38,6 @@ def _run_registered_job(job_id: str, name: str, fn: Callable[[], dict[str, objec
                 "result": result,
             }
         )
-        JOB_REGISTRY[job_id]["log_path"] = str(write_job_log(f"{name}_{job_id}", JOB_REGISTRY[job_id]))
     except Exception as exc:
         JOB_REGISTRY[job_id].update(
             {
@@ -43,18 +46,24 @@ def _run_registered_job(job_id: str, name: str, fn: Callable[[], dict[str, objec
                 "error": str(exc),
             }
         )
+    finally:
+        try:
+            JOB_REGISTRY[job_id]["data_freshness"] = refresh_data_freshness_report(year=year)
+        except Exception as exc:
+            JOB_REGISTRY[job_id]["data_freshness_error"] = str(exc)
         JOB_REGISTRY[job_id]["log_path"] = str(write_job_log(f"{name}_{job_id}", JOB_REGISTRY[job_id]))
 
 
-def _start_job(background_tasks: BackgroundTasks, name: str, fn: Callable[[], dict[str, object]]) -> dict[str, object]:
+def _start_job(background_tasks: BackgroundTasks, name: str, year: int, fn: Callable[[], dict[str, object]]) -> dict[str, object]:
     job_id = uuid4().hex
     JOB_REGISTRY[job_id] = {
         "job_id": job_id,
         "name": name,
+        "year": int(year),
         "status": "queued",
         "queued_at": datetime.now().isoformat(timespec="seconds"),
     }
-    background_tasks.add_task(_run_registered_job, job_id, name, fn)
+    background_tasks.add_task(_run_registered_job, job_id, name, int(year), fn)
     return JOB_REGISTRY[job_id]
 
 
@@ -63,6 +72,7 @@ def refresh_pitcher_data_job(background_tasks: BackgroundTasks, year: int = 2026
     return _start_job(
         background_tasks,
         "refresh_pitcher_data",
+        year,
         lambda: run_pitcher_data_refresh(year=year),
     )
 
@@ -79,6 +89,7 @@ def backfill_video_lookup_job(
     return _start_job(
         background_tasks,
         "backfill_video_lookup",
+        year,
         lambda: run_video_lookup_backfill(
             year=year,
             max_games=max_games,
@@ -99,6 +110,7 @@ def backfill_pitcher_game_lines_job(
     return _start_job(
         background_tasks,
         "backfill_pitcher_game_lines",
+        year,
         lambda: run_pitcher_game_line_backfill(year=year, max_games=max_games, batch_size=batch_size),
     )
 
@@ -108,8 +120,39 @@ def refresh_roster_data_job(background_tasks: BackgroundTasks, year: int = 2026)
     return _start_job(
         background_tasks,
         "refresh_roster_data",
+        year,
         lambda: run_roster_reference_refresh(year=year),
     )
+
+
+@router.post("/jobs/backfill-historical-plus")
+def backfill_historical_plus_job(
+    background_tasks: BackgroundTasks,
+    year: int = Query(ge=2021, le=2025),
+) -> dict[str, object]:
+    for job in JOB_REGISTRY.values():
+        if job.get("name") == "backfill_historical_plus" and job.get("status") in {"queued", "running"}:
+            return job
+    return _start_job(
+        background_tasks,
+        "backfill_historical_plus",
+        year,
+        lambda: run_historical_plus_backfill(start_year=year, end_year=year),
+    )
+
+
+@router.get("/jobs/historical-plus-status")
+def read_historical_plus_status() -> dict[str, object]:
+    payload = get_historical_plus_backfill_status()
+    active = next(
+        (
+            job
+            for job in JOB_REGISTRY.values()
+            if job.get("name") == "backfill_historical_plus" and job.get("status") in {"queued", "running"}
+        ),
+        None,
+    )
+    return {**payload, "active_job": active}
 
 
 @router.get("/jobs/{job_id}")
@@ -135,3 +178,18 @@ def read_pitcher_game_line_status(year: int = 2026) -> dict[str, object]:
 @router.get("/status")
 def read_admin_status(year: int = 2026) -> dict[str, object]:
     return get_admin_status(year=year)
+
+
+@router.get("/data-freshness")
+def read_data_freshness(year: int = 2026) -> dict[str, object]:
+    return get_data_freshness_report(year=year)
+
+
+@router.post("/data-freshness/refresh")
+def refresh_data_freshness(year: int = 2026) -> dict[str, object]:
+    return refresh_data_freshness_report(year=year)
+
+
+@router.get("/project-tracker")
+def read_project_tracker() -> dict[str, object]:
+    return get_project_tracker()

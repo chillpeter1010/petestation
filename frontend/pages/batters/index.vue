@@ -10,7 +10,13 @@
     </section>
 
     <section class="search-panel" aria-label="Batter search">
-      <header><div><span>Player search</span><h2>Open batter analysis</h2></div><label>Team<select v-model="team"><option value="All">All teams</option><option v-for="option in teams" :key="option" :value="option">{{ option }}</option></select></label></header>
+      <header>
+        <div><span>Player search</span><h2>Open batter analysis</h2></div>
+        <div class="player-controls">
+          <label>Team<select v-model="team"><option value="All">All teams</option><option v-for="option in teams" :key="option" :value="option">{{ option }}</option></select></label>
+          <label>Full roster<select v-model="selectedBatterId" @change="openSelectedBatter"><option value="">Choose player ({{ teamBatters.length }})</option><option v-for="batter in teamBatters" :key="batter.value" :value="String(batter.value)">{{ batter.name }} · {{ batter.plate_appearances }} PA</option></select></label>
+        </div>
+      </header>
       <label class="search-box"><Search :size="18" aria-hidden="true" /><input v-model.trim="query" type="search" placeholder="Search hitter or team" /></label>
       <div class="results">
         <NuxtLink v-for="batter in visibleBatters" :key="batter.value" :to="playerLink(batter)"><span><strong>{{ batter.name }}</strong><small>{{ batter.team }}</small></span><span>{{ batter.plate_appearances }} PA</span></NuxtLink>
@@ -35,13 +41,21 @@ const api = useApi()
 const year = 2026
 const query = ref('')
 const team = ref('All')
+const selectedBatterId = ref('')
 const { data: batters } = await useAsyncData('batter-station-options', () => api.batters({ year }), { default: () => [] })
 const teams = computed(() => Array.from(new Set(batters.value.map(row => row.team).filter(value => value && value !== '-'))).sort())
+const teamBatters = computed(() => batters.value.filter(row => team.value === 'All' || row.team === team.value))
 const visibleBatters = computed(() => {
   const needle = query.value.toLowerCase()
   return batters.value.filter(row => (team.value === 'All' || row.team === team.value) && (!needle || `${row.name} ${row.team}`.toLowerCase().includes(needle))).slice(0, 8)
 })
 function playerLink(batter: BatterOption) { return { path: '/batter-personal', query: { year, team: batter.team, batter_id: batter.value } } }
+const router = useRouter()
+watch(team, () => { selectedBatterId.value = '' })
+function openSelectedBatter() {
+  const batter = teamBatters.value.find(row => String(row.value) === selectedBatterId.value)
+  if (batter) router.push(playerLink(batter))
+}
 </script>
 
 <style scoped>
@@ -56,6 +70,8 @@ function playerLink(batter: BatterOption) { return { path: '/batter-personal', q
 .hero-stat span { color: var(--color-muted-text); }
 .search-panel { display: grid; gap: 14px; margin-top: 18px; border-radius: 16px; padding: 18px; }
 .search-panel header { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.player-controls { display: flex; align-items: end; gap: 10px; }
+.player-controls label:last-child select { min-width: min(320px, 48vw); }
 .search-panel h2 { margin: 4px 0 0; color: var(--color-foreground); }
 .search-panel label { display: grid; gap: 5px; color: var(--color-muted-text); font-size: 10px; font-weight: 900; text-transform: uppercase; }
 select, input { min-height: 44px; border: 1px solid var(--color-border); border-radius: 9px; padding: 0 12px; color: var(--color-text); background: var(--color-background); font-weight: 700; }
@@ -76,6 +92,6 @@ select, input { min-height: 44px; border: 1px solid var(--color-border); border-
 .portal-card h2 { margin: 12px 0 0; color: var(--color-foreground); font-size: 26px; }
 .portal-card strong { display: inline-flex; margin-top: 20px; border-radius: 999px; padding: 8px 13px; color: var(--color-on-primary); background: var(--color-primary); font-size: 12px; }
 @media (max-width: 900px) { .results { grid-template-columns: repeat(2, minmax(0, 1fr)); } .portal-grid { grid-template-columns: 1fr; } }
-@media (max-width: 620px) { .batter-hub { padding-top: 28px; } .hub-hero, .search-panel header { align-items: stretch; flex-direction: column; } .hero-stat { border-left: 0; border-top: 1px solid var(--color-border); padding: 18px 0 0; } .results { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .batter-hub { padding-top: 28px; } .hub-hero, .search-panel header, .player-controls { align-items: stretch; flex-direction: column; } .player-controls label:last-child select { min-width: 0; width: 100%; } .hero-stat { border-left: 0; border-top: 1px solid var(--color-border); padding: 18px 0 0; } .results { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .portal-card { transition: none; } }
 </style>

@@ -15,7 +15,9 @@
           allow-stuff-color
           :stuff-color-loading="loading"
           :pitcher-hand="pitcherHand"
+          :selected-key="selectedPitchKey"
           @request-stuff-colors="emit('load-pitch-stuff')"
+          @select-point="selectMovementPitch"
         />
         <StuffArsenalTable
           :payload="props.stuffScore"
@@ -186,6 +188,14 @@ function metricValue(key: string) {
   const value = metric?.value
   if (value === null || value === undefined || value === '') return '-'
   return typeof value === 'number' ? value.toFixed(1) : String(value)
+}
+
+function selectMovementPitch(point: Record<string, unknown>) {
+  selectedPitch.value = point
+  const videoUrl = String(point.video_url || '').trim()
+  const playId = String(point.play_id || '').trim()
+  const hasVideo = [videoUrl, playId].some(value => value && !['None', 'nan', 'NaN', 'null'].includes(value))
+  if (hasVideo) emit('open-video')
 }
 </script>
 

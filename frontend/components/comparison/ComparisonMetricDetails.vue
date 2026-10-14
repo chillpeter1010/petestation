@@ -8,6 +8,7 @@
       :right-title="rightTitle"
       :left-rows="leftRows"
       :right-rows="rightRows"
+      :value-mode="valueMode"
     />
   </section>
 </template>
@@ -25,11 +26,13 @@ withDefaults(defineProps<{
   rightTitle?: string
   leftRows: Record<string, unknown>[]
   rightRows: Record<string, unknown>[]
+  valueMode?: 'percentile' | 'display'
 }>(), {
   table: undefined,
   maxRows: 16,
   leftTitle: 'Left Edge',
-  rightTitle: 'Right Edge'
+  rightTitle: 'Right Edge',
+  valueMode: 'percentile'
 })
 </script>
 

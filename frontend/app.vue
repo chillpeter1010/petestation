@@ -1,16 +1,24 @@
 <template>
   <NuxtLayout>
-    <NuxtLink v-if="showGlobalHomeLink" class="global-home-link" to="/" aria-label="Petehub home">
-      <span>Pete</span><strong>hub</strong>
+    <NuxtLink
+      v-if="showGlobalHomeLink"
+      class="global-home-link"
+      :class="{ 'global-home-link--brand': showBrandHomeLink }"
+      to="/"
+      :aria-label="`${brandName} home`"
+    >
+      <template v-if="showBrandHomeLink"><span>Pete</span><strong>hub</strong></template>
+      <template v-else>
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m3 11 9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+          <path d="M9 20v-6h6v6" />
+        </svg>
+        <span>Home</span>
+      </template>
     </NuxtLink>
-    <button v-if="isHomePage" class="theme-toggle" type="button" :aria-label="themeLabel" @click="toggleTheme">
-      <span class="theme-toggle-track" aria-hidden="true">
-        <span class="theme-toggle-thumb" />
-      </span>
-      <span>{{ themeLabel }}</span>
-    </button>
     <AuthUserMenu v-if="auth.user.value && !isAuthPage" />
-    <div class="app-page-shell" :class="{ 'global-home-offset': showGlobalHomeLink }">
+    <div class="app-page-shell" :class="{ 'global-home-offset': reserveGlobalHomeSpace }">
       <NuxtPage />
     </div>
   </NuxtLayout>
@@ -22,10 +30,11 @@ type ThemeMode = 'light' | 'dark'
 const theme = useState<ThemeMode>('theme-mode', () => 'dark')
 const route = useRoute()
 const auth = useAuth()
-const themeLabel = computed(() => (theme.value === 'dark' ? 'Light' : 'Dark'))
-const isHomePage = computed(() => route.path === '/')
+const { isPetehub, brandName } = useSiteBrand()
 const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
 const showGlobalHomeLink = computed(() => !isAuthPage.value && route.path !== '/' && route.path !== '/pitchers')
+const showBrandHomeLink = computed(() => isPetehub.value)
+const reserveGlobalHomeSpace = computed(() => showGlobalHomeLink.value)
 
 useHead(() => ({
   htmlAttrs: {
@@ -36,10 +45,6 @@ useHead(() => ({
 function applyTheme(value: ThemeMode) {
   document.documentElement.dataset.theme = value
   localStorage.setItem('theme-mode', value)
-}
-
-function toggleTheme() {
-  theme.value = theme.value === 'dark' ? 'light' : 'dark'
 }
 
 watch(theme, (value) => {

@@ -40,6 +40,7 @@ from app.services.rotation_service import (
     select_fatigue_game_pk,
 )
 from app.services.video_service import fetch_json
+from app.services.wpa_service import calibrated_pitcher_wpa_sql, plate_appearance_wpa_ctes
 
 
 TEAM_CONFIG: dict[str, tuple[str, str, str]] = {
@@ -187,13 +188,26 @@ def load_team_impact_plays(year: int, team_code: str, limit_per_unit: int = 6) -
                 batter_name = "coalesce(batter_player.player_name, CAST(p.batter AS VARCHAR))"
             rows = conn.execute(
                 f"""
-                WITH team_pitches AS (
+                WITH {plate_appearance_wpa_ctes('pitches')},
+                team_pa_raw AS (
                     SELECT
                         p.*,
-                        CASE WHEN p.home_team = ? THEN p.delta_home_win_exp ELSE -p.delta_home_win_exp END AS team_wpa
+                        CASE WHEN p.home_team = ? THEN w.pa_home_wpa ELSE -w.pa_home_wpa END AS raw_team_wpa
                     FROM pitches p
+                    JOIN wpa_values w USING (game_pk, at_bat_number)
                     WHERE (p.home_team = ? OR p.away_team = ?)
-                      AND p.delta_home_win_exp IS NOT NULL
+                      AND w.pa_home_wpa IS NOT NULL
+                    QUALIFY row_number() OVER (
+                        PARTITION BY p.game_pk, p.at_bat_number ORDER BY p.pitch_number DESC
+                    ) = 1
+                ), team_pitches AS (
+                    SELECT
+                        p.*,
+                        CASE WHEN p.batter_team = ?
+                            THEN -({calibrated_pitcher_wpa_sql('-p.raw_team_wpa')})
+                            ELSE {calibrated_pitcher_wpa_sql('p.raw_team_wpa')}
+                        END AS team_wpa
+                    FROM team_pa_raw p
                 ), latest AS (
                     SELECT max(CAST(game_date AS DATE)) AS latest_date FROM team_pitches
                 ), ranked AS (
@@ -229,7 +243,7 @@ def load_team_impact_plays(year: int, team_code: str, limit_per_unit: int = 6) -
                 ORDER BY team_unit, team_wpa DESC, game_date DESC
                 """,
                 [
-                    team_code, team_code, team_code,
+                    team_code, team_code, team_code, team_code,
                     team_code, team_code, team_code, team_code,
                     max(0, limit_per_unit),
                 ],

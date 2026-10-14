@@ -21,6 +21,10 @@ class PitchingDistributionBin(BaseModel):
 
 class PitchingOverviewResponse(BaseModel):
     year: int
+    data_as_of: str | None = None
+    source_data_as_of: str | None = None
+    cache_status: str = "unknown"
+    warnings: list[str] = Field(default_factory=list)
     available_years: list[int] = Field(default_factory=list)
     generated_at: str | None = None
     model_version: str
@@ -55,6 +59,9 @@ class PitchingOutingRow(BaseModel):
 
 class PitchingPitcherResponse(BaseModel):
     year: int
+    data_as_of: str | None = None
+    cache_status: str = "unknown"
+    warnings: list[str] = Field(default_factory=list)
     pitcher: PitchingLeaderboardRow
     pitch_types: list[PitchingPitchTypeRow]
     outings: list[PitchingOutingRow]

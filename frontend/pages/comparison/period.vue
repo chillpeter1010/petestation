@@ -8,70 +8,21 @@
       back-label="Comparison Hub"
     />
 
-    <section class="selector-panel">
-      <label>
-        Player Year
-        <select v-model.number="directoryYear">
-          <option v-for="yearOption in yearOptions" :key="`directory-${yearOption}`" :value="yearOption">{{ yearOption }}</option>
-        </select>
-      </label>
-      <label>
-        Team
-        <select v-model="team">
-          <option value="All">All</option>
-          <option v-for="teamOption in teamOptions" :key="teamOption" :value="teamOption">{{ teamOption }}</option>
-        </select>
-      </label>
-      <label class="pitcher-select">
-        Pitcher
-        <select v-model.number="pitcherId">
-          <option :value="null" disabled>Select pitcher</option>
-          <option v-for="pitcher in pitcherOptions" :key="pitcher.player_id" :value="pitcher.player_id">
-            {{ pitcher.display_label }}
-          </option>
-        </select>
-      </label>
-    </section>
-
-    <section class="period-panel">
-      <div class="period-group">
-        <h2>Period A</h2>
-        <label>
-          Year
-          <select v-model.number="leftYear">
-            <option v-for="yearOption in yearOptions" :key="`left-${yearOption}`" :value="yearOption">{{ yearOption }}</option>
-          </select>
-        </label>
-        <label>
-          Start
-          <input v-model="leftStart" type="date">
-        </label>
-        <label>
-          End
-          <input v-model="leftEnd" type="date">
-        </label>
-      </div>
-      <div class="period-group">
-        <h2>Period B</h2>
-        <label>
-          Year
-          <select v-model.number="rightYear">
-            <option v-for="yearOption in yearOptions" :key="`right-${yearOption}`" :value="yearOption">{{ yearOption }}</option>
-          </select>
-        </label>
-        <label>
-          Start
-          <input v-model="rightStart" type="date">
-        </label>
-        <label>
-          End
-          <input v-model="rightEnd" type="date">
-        </label>
-      </div>
-      <button class="apply-period-button" type="button" :disabled="!canApplyPeriods || pending" @click="applyPeriods">
-        {{ pending ? 'Loading' : 'Apply Periods' }}
-      </button>
-    </section>
+    <ComparisonPeriodSetup
+      v-model:left-year="leftYear" v-model:right-year="rightYear"
+      v-model:left-start="leftStart" v-model:left-end="leftEnd"
+      v-model:right-start="rightStart" v-model:right-end="rightEnd"
+      :years="yearOptions" :can-apply="canApplyPeriods" :pending="pending" @apply="applyPeriods"
+    >
+      <template #directory>
+        <label>Player Year<select v-model.number="directoryYear"><option v-for="yearOption in yearOptions" :key="`directory-${yearOption}`" :value="yearOption">{{ yearOption }}</option></select></label>
+        <label>Team<select v-model="team"><option value="All">All</option><option v-for="teamOption in teamOptions" :key="teamOption" :value="teamOption">{{ teamOption }}</option></select></label>
+        <label>Pitcher<select v-model.number="pitcherId"><option :value="null" disabled>Select pitcher</option><option v-for="pitcher in pitcherOptions" :key="pitcher.player_id" :value="pitcher.player_id">{{ pitcher.display_label }}</option></select></label>
+      </template>
+      <template #between>
+        <ComparisonTransferPanel v-if="teamStints.length > 1" v-model:left-index="leftStintIndex" v-model:right-index="rightStintIndex" :stints="teamStints" :pending="pending" @compare="applyStintComparison" />
+      </template>
+    </ComparisonPeriodSetup>
 
     <ComparisonStatus :pending="pending" :error="errorMessage" label="Loading period comparison..." />
 
@@ -128,8 +79,7 @@
       :right="periodSequence.right"
     />
 
-    <div v-if="hasAppliedOverview && overview" class="period-workspace" :class="{ 'filters-open': filterRailOpen }">
-      <div class="period-main">
+    <ComparisonPeriodWorkspace v-if="hasAppliedOverview && overview" v-model:open="filterRailOpen">
         <ComparisonPeriodMovement
           :left="periodMovement.left"
           :right="periodMovement.right"
@@ -148,20 +98,7 @@
           :pitch-filter="periodPitchFilter"
           :group-filter="periodSituationFilter"
         />
-      </div>
-      <aside class="period-filter-rail" :class="{ open: filterRailOpen }">
-        <button
-          class="filter-rail-toggle"
-          type="button"
-          :aria-expanded="filterRailOpen"
-          aria-label="Toggle period filters"
-          @click="filterRailOpen = !filterRailOpen"
-        >
-          <span>{{ filterRailOpen ? '›' : '‹' }}</span>
-          <em>Filters</em>
-        </button>
-        <div class="filter-fields">
-          <h2>Period Filters</h2>
+      <template #filters>
           <label>
             Stand
             <CheckboxDropdown v-model="periodStandFilter" :options="standOptions" />
@@ -195,16 +132,15 @@
               <option value="situation">Situation</option>
             </select>
           </label>
-        </div>
-      </aside>
-    </div>
+      </template>
+    </ComparisonPeriodWorkspace>
 
     <ComparisonNotes v-if="hasAppliedOverview" :notes="overview?.notes || []" />
   </main>
 </template>
 
 <script setup lang="ts">
-import type { AnalysisResponse, ComparisonOverviewResponse, ComparisonPlayer } from '~/types/api'
+import type { AnalysisResponse, ComparisonOverviewResponse, ComparisonPlayer, PitcherTeamStint } from '~/types/api'
 
 const api = useApi()
 const directoryYear = ref(2026)
@@ -231,6 +167,10 @@ const periodSequence = ref<{ left: AnalysisResponse; right: AnalysisResponse } |
 const pending = ref(false)
 const errorMessage = ref('')
 const periodStuffLoading = ref(false)
+const teamStints = ref<PitcherTeamStint[]>([])
+const leftStintIndex = ref<number | null>(null)
+const rightStintIndex = ref<number | null>(null)
+const applyingTeamStints = ref(false)
 
 const standOptions = ['All', 'L', 'R']
 const countOptions = ['All', '0-0', '0-1', '0-2', '1-0', '1-1', '1-2', '2-0', '2-1', '2-2', '3-0', '3-1', '3-2', 'Pitcher Ahead', 'Hitter Ahead', 'Two Strikes']
@@ -442,6 +382,19 @@ function applyPeriods() {
   void loadOverview()
 }
 
+async function applyStintComparison(leftStint: PitcherTeamStint, rightStint: PitcherTeamStint) {
+  applyingTeamStints.value = true
+  leftYear.value = directoryYear.value
+  rightYear.value = directoryYear.value
+  await nextTick()
+  leftStart.value = leftStint.start_date
+  leftEnd.value = leftStint.end_date
+  rightStart.value = rightStint.start_date
+  rightEnd.value = rightStint.end_date
+  applyingTeamStints.value = false
+  await loadOverview()
+}
+
 async function loadPeriodStuffColors() {
   if (!canApplyPeriods.value || !pitcherId.value || periodStuffLoading.value) return
   periodStuffLoading.value = true
@@ -520,6 +473,9 @@ watch(directoryYear, async (year) => {
   overview.value = null
   periodSequence.value = null
   appliedPeriodKey.value = ''
+  teamStints.value = []
+  leftStintIndex.value = null
+  rightStintIndex.value = null
   leftYear.value = year
   rightYear.value = year
   await refreshOptions()
@@ -530,13 +486,24 @@ watch([pitcherId, leftYear, rightYear], async () => {
     overview.value = null
     periodSequence.value = null
     appliedPeriodKey.value = ''
+    teamStints.value = []
+    leftStintIndex.value = null
+    rightStintIndex.value = null
     return
   }
+  if (applyingTeamStints.value) return
   try {
-    const [leftRange, rightRange] = await Promise.all([
-      api.comparisonPeriodDateRange({ year: leftYear.value, pitcherId: pitcherId.value }),
-      api.comparisonPeriodDateRange({ year: rightYear.value, pitcherId: pitcherId.value })
-    ])
+    const leftRangePromise = api.comparisonPeriodDateRange({ year: leftYear.value, pitcherId: pitcherId.value })
+    const rightRangePromise = api.comparisonPeriodDateRange({ year: rightYear.value, pitcherId: pitcherId.value })
+    const [leftRange, rightRange] = await Promise.all([leftRangePromise, rightRangePromise])
+    const historyRange = leftYear.value === directoryYear.value
+      ? leftRange
+      : rightYear.value === directoryYear.value
+        ? rightRange
+        : await api.comparisonPeriodDateRange({ year: directoryYear.value, pitcherId: pitcherId.value })
+    teamStints.value = historyRange.team_stints || []
+    leftStintIndex.value = teamStints.value[0]?.stint_index ?? null
+    rightStintIndex.value = teamStints.value.at(-1)?.stint_index ?? null
     if (leftRange.start_date && leftRange.end_date) {
       leftStart.value = leftRange.start_date
       leftEnd.value = leftRange.end_date
@@ -573,6 +540,72 @@ watch([pitcherId, leftYear, rightYear], async () => {
   align-items: end;
   margin-top: 16px;
   padding: 18px;
+}
+
+.transfer-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  padding: 18px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.transfer-heading {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.transfer-heading h2,
+.transfer-kicker {
+  margin: 0;
+}
+
+.transfer-kicker {
+  color: var(--color-brand);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.transfer-heading h2 {
+  margin-top: 5px;
+  color: var(--color-foreground);
+  font-size: 18px;
+}
+
+.transfer-heading span {
+  color: var(--color-muted-text);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.transfer-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr)) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.transfer-apply-button {
+  min-height: 42px;
+  border: 1px solid color-mix(in srgb, var(--color-brand) 70%, transparent);
+  border-radius: 0;
+  padding: 0 18px;
+  background: var(--color-brand);
+  color: var(--color-brand-contrast);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.transfer-apply-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .period-panel {
@@ -729,9 +762,14 @@ input {
 @media (max-width: 940px) {
   .selector-panel,
   .period-panel,
+  .transfer-picker,
   .period-group,
   .period-workspace {
     grid-template-columns: 1fr;
+  }
+
+  .transfer-heading {
+    display: grid;
   }
 
   .period-filter-rail {

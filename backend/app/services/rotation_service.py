@@ -16,6 +16,7 @@ from app.repositories.pitch_repository import get_season_duckdb_path, load_pitch
 from app.services.discipline_service import CALLED_STRIKE_EVENTS, HIT_EVENTS, OUT_EVENTS, WHIFF_EVENTS, red_strike_zone_mask
 from app.services.personal_service import canonical_pitch_name, display_pitch_name
 from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
+from app.services.wpa_service import attach_plate_appearance_wpa, one_wpa_value_per_pa
 
 
 STARTER_FILTER_GS = 3
@@ -844,18 +845,17 @@ def build_game_log_rows(year: int, selected: pd.Series | None, warnings: list[st
         return []
 
     pitch_df = pitch_df.copy()
-    if "delta_home_win_exp" not in pitch_df.columns:
-        warnings.append("Pitch cache has no delta_home_win_exp column for WPA.")
+    pitch_df = attach_plate_appearance_wpa(pitch_df, year, settings.data_dir)
+    if "pitcher_wpa" not in pitch_df.columns or pitch_df["pitcher_wpa"].isna().all():
+        warnings.append("Plate-appearance WPA is unavailable for the selected starter.")
         return []
-
-    pitch_df["pitcher_wpa"] = pd.to_numeric(pitch_df["delta_home_win_exp"], errors="coerce").fillna(0)
+    pitch_df["pitcher_wpa_once"] = one_wpa_value_per_pa(pitch_df, "pitcher_wpa")
     if {"inning_topbot", "home_team", "away_team"}.issubset(pitch_df.columns):
         is_top = pitch_df["inning_topbot"].astype(str).str.lower().eq("top")
         pitch_df["pitcher_team"] = pitch_df["away_team"]
         pitch_df.loc[is_top, "pitcher_team"] = pitch_df.loc[is_top, "home_team"]
         pitch_df["opponent_team"] = pitch_df["home_team"]
         pitch_df.loc[is_top, "opponent_team"] = pitch_df.loc[is_top, "away_team"]
-        pitch_df.loc[~is_top, "pitcher_wpa"] *= -1
     else:
         if "pitcher_team" not in pitch_df.columns:
             pitch_df["pitcher_team"] = ""
@@ -864,7 +864,7 @@ def build_game_log_rows(year: int, selected: pd.Series | None, warnings: list[st
 
     game_log = (
         pitch_df.groupby(["game_date", "game_pk", "pitcher_team", "opponent_team"], dropna=False)
-        .agg(game_wpa=("pitcher_wpa", "sum"), pitches=("pitcher_wpa", "size"))
+        .agg(game_wpa=("pitcher_wpa_once", "sum"), pitches=("pitcher_wpa", "size"))
         .reset_index()
         .sort_values(["game_date", "game_pk"])
     )
@@ -1021,13 +1021,8 @@ def build_starter_fatigue_pa_series(
     game_pitch_df = pitch_df[pd.to_numeric(pitch_df["game_pk"], errors="coerce").eq(int(game_pk))].copy()
     if game_pitch_df.empty:
         return []
-    if "delta_home_win_exp" in game_pitch_df.columns:
-        game_pitch_df["pitcher_wpa"] = pd.to_numeric(game_pitch_df["delta_home_win_exp"], errors="coerce").fillna(0)
-        if "inning_topbot" in game_pitch_df.columns:
-            is_bottom = game_pitch_df["inning_topbot"].astype(str).str.lower().eq("bot")
-            game_pitch_df.loc[is_bottom, "pitcher_wpa"] *= -1
-    else:
-        game_pitch_df["pitcher_wpa"] = 0.0
+    game_pitch_df = attach_plate_appearance_wpa(game_pitch_df, year, settings.data_dir)
+    game_pitch_df["pitcher_wpa"] = pd.to_numeric(game_pitch_df.get("pitcher_wpa"), errors="coerce").fillna(0)
     if "at_bat_number" not in game_pitch_df.columns:
         game_pitch_df["at_bat_number"] = (range(len(game_pitch_df)))
     sort_cols = [column for column in ["inning", "at_bat_number", "pitch_number"] if column in game_pitch_df.columns]
@@ -1040,7 +1035,7 @@ def build_starter_fatigue_pa_series(
     for pa_index, (_, pa_df) in enumerate(game_pitch_df.groupby("at_bat_number", dropna=False), start=1):
         last_pitch = pa_df.iloc[-1]
         cumulative_pitches = int(last_pitch["_pitch_sequence"])
-        cumulative_wpa += float(pd.to_numeric(pa_df["pitcher_wpa"], errors="coerce").fillna(0).sum())
+        cumulative_wpa += float(pd.to_numeric(pa_df["pitcher_wpa"], errors="coerce").dropna().iloc[0]) if pa_df["pitcher_wpa"].notna().any() else 0.0
         fatigue_score = max(15, min(105, readiness - cumulative_pitches * fatigue_rate))
         event = first_text(last_pitch, ["events", "description", "type"])
         description = first_text(last_pitch, ["des", "description", "events"])

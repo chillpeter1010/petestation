@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.dependencies.auth import require_admin
-from app.api.routes import admin, auth, batter_comparison, batters, catchers, comparison, derived, discipline, games, home, location, models, personal, pitchers, pitching, rotation, similarity, stuff, teams
+from app.api.routes import admin, auth, batter_comparison, batters, catchers, comparison, derived, discipline, games, home, leverage, location, models, performance_state, personal, pitchers, pitching, rotation, similarity, stamina, stuff, teams
 from app.api.routes.auth import SESSION_COOKIE, get_auth_store
 from app.core.config import settings
 
@@ -42,6 +42,9 @@ app.include_router(personal.router, prefix="/api/personal", tags=["personal"])
 app.include_router(stuff.router, prefix="/api/stuff", tags=["stuff"])
 app.include_router(discipline.router, prefix="/api/discipline", tags=["discipline"])
 app.include_router(location.router, prefix="/api/location", tags=["location"])
+app.include_router(leverage.router, prefix="/api/leverage", tags=["leverage"])
+app.include_router(stamina.router, prefix="/api/stamina", tags=["stamina"])
+app.include_router(performance_state.router, prefix="/api/performance-state", tags=["performance-state"])
 app.include_router(pitching.router, prefix="/api/pitching", tags=["pitching"])
 app.include_router(similarity.router, prefix="/api/similarity", tags=["similarity"])
 app.include_router(comparison.router, prefix="/api/comparison", tags=["comparison"])

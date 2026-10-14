@@ -22,20 +22,45 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, rowIndex) in limitedRows" :key="rowIndex">
-            <td v-for="column in visibleColumns" :key="column.key" :style="cellStyle(row, column)">
-              <NuxtLink
-                v-if="column.key === linkColumn && getRowLink(row)"
-                class="table-link"
-                :to="getRowLink(row)"
-              >
-                {{ formatCell(getCell(row, column.key)) }}
-              </NuxtLink>
-              <template v-else>
-                {{ formatCell(getCell(row, column.key)) }}
-              </template>
-            </td>
-          </tr>
+          <template v-for="(row, rowIndex) in limitedRows" :key="rowIdentity(row, rowIndex)">
+            <tr
+              :class="{ 'expandable-row': expandable, 'is-expanded': isExpanded(row, rowIndex) }"
+              :tabindex="expandable ? 0 : undefined"
+              :aria-expanded="expandable ? isExpanded(row, rowIndex) : undefined"
+              @click="toggleRow(row, rowIndex)"
+              @keydown.enter.prevent="toggleRow(row, rowIndex)"
+              @keydown.space.prevent="toggleRow(row, rowIndex)"
+            >
+              <td v-for="column in visibleColumns" :key="column.key" :style="cellStyle(row, column)">
+                <NuxtLink
+                  v-if="column.key === linkColumn && getRowLink(row)"
+                  class="table-link"
+                  :class="{ 'table-link--with-headshot': column.key === headshotColumn }"
+                  :to="getRowLink(row)"
+                  @click.stop
+                >
+                  <MlbPlayerHeadshot
+                    v-if="column.key === headshotColumn"
+                    :player-id="headshotPlayerId(row)"
+                    :name="formatCell(getCell(row, column.key))"
+                    :size="headshotSize"
+                    :source-width="160"
+                    decorative
+                    shape="circle"
+                  />
+                  <span>{{ formatCell(getCell(row, column.key)) }}</span>
+                </NuxtLink>
+                <template v-else>
+                  {{ formatCell(getCell(row, column.key)) }}
+                </template>
+              </td>
+            </tr>
+            <tr v-if="isExpanded(row, rowIndex)" class="expanded-content-row">
+              <td :colspan="visibleColumns.length">
+                <slot name="expanded" :row="row" />
+              </td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -53,17 +78,32 @@ const props = withDefaults(defineProps<{
   maxRows?: number
   linkColumn?: string
   linkTo?: (row: Record<string, unknown>) => string | Record<string, unknown> | undefined
+  headshotColumn?: string
+  headshotIdKey?: string
+  headshotSize?: number
+  expandable?: boolean
+  rowKey?: string
 }>(), {
   title: '',
   table: undefined,
   maxRows: 12,
   linkColumn: '',
-  linkTo: undefined
+  linkTo: undefined,
+  headshotColumn: '',
+  headshotIdKey: 'player_id',
+  headshotSize: 38,
+  expandable: false,
+  rowKey: 'player_id'
 })
+
+const emit = defineEmits<{
+  rowToggle: [row: Record<string, unknown>, expanded: boolean]
+}>()
 
 const rows = computed(() => props.table?.rows || [])
 const sortKey = ref('')
 const sortDirection = ref<'asc' | 'desc'>('desc')
+const expandedRowKey = ref<string | null>(null)
 
 const visibleColumns = computed(() => {
   const columns = props.table?.columns || []
@@ -94,8 +134,29 @@ function getCell(row: Record<string, unknown>, key: string) {
   return row[key]
 }
 
+function rowIdentity(row: Record<string, unknown>, rowIndex: number) {
+  return String(row[props.rowKey] ?? rowIndex)
+}
+
+function isExpanded(row: Record<string, unknown>, rowIndex: number) {
+  return props.expandable && expandedRowKey.value === rowIdentity(row, rowIndex)
+}
+
+function toggleRow(row: Record<string, unknown>, rowIndex: number) {
+  if (!props.expandable) return
+  const key = rowIdentity(row, rowIndex)
+  const expanded = expandedRowKey.value !== key
+  expandedRowKey.value = expanded ? key : null
+  emit('rowToggle', row, expanded)
+}
+
 function getRowLink(row: Record<string, unknown>) {
   return props.linkTo ? props.linkTo(row) : undefined
+}
+
+function headshotPlayerId(row: Record<string, unknown>) {
+  const playerId = Number(row[props.headshotIdKey])
+  return Number.isInteger(playerId) && playerId > 0 ? playerId : null
 }
 
 function formatCell(value: unknown) {
@@ -269,12 +330,41 @@ td {
   text-decoration: none;
 }
 
+.table-link--with-headshot {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
 .table-link:hover {
   text-decoration: underline;
 }
 
 tbody tr:hover td {
   background: color-mix(in srgb, var(--color-muted) 62%, transparent);
+}
+
+.expandable-row {
+  cursor: pointer;
+}
+
+.expandable-row:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.expandable-row.is-expanded td {
+  background: color-mix(in srgb, var(--color-primary) 9%, var(--color-surface));
+}
+
+.expanded-content-row td {
+  padding: 0;
+  white-space: normal;
+  background: color-mix(in srgb, var(--color-muted) 35%, var(--color-surface));
+}
+
+.expanded-content-row:hover td {
+  background: color-mix(in srgb, var(--color-muted) 35%, var(--color-surface));
 }
 
 tbody tr:last-child td {

@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { Activity, Crosshair, Search, TableProperties, TrendingUp } from '@lucide/vue'
+import { Crosshair, Search, TableProperties, TrendingUp } from '@lucide/vue'
 import type { BatterLeaderboardRow } from '~/types/api'
 
 const api = useApi()
@@ -35,12 +35,11 @@ const year = ref(2026)
 const team = ref('All')
 const minimumPa = ref(100)
 const searchText = ref('')
-const view = ref<'standard' | 'contact' | 'discipline'>('standard')
+const view = ref<'standard' | 'contact'>('standard')
 const yearOptions = [2026, 2025, 2024, 2023, 2022, 2021]
 const views = [
-  { key: 'standard' as const, label: 'Production', description: 'Standard results', icon: TrendingUp },
-  { key: 'contact' as const, label: 'Contact', description: 'Expected & batted ball', icon: Crosshair },
-  { key: 'discipline' as const, label: 'Discipline', description: 'Walks, strikeouts & whiffs', icon: Activity }
+  { key: 'standard' as const, label: 'Production & discipline', description: 'Results, walks, strikeouts & whiffs', icon: TrendingUp },
+  { key: 'contact' as const, label: 'Contact', description: 'Expected & batted ball', icon: Crosshair }
 ]
 
 const { data: leaderboardRows, pending, error } = await useAsyncData(
@@ -85,11 +84,11 @@ select, input { width: 100%; min-height: 44px; border: 1px solid var(--color-bor
 .search-field > div { position: relative; }
 .search-field svg { position: absolute; top: 13px; left: 12px; color: var(--color-muted-text); pointer-events: none; }
 .search-field input { padding-left: 38px; }
-.view-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.view-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .view-tabs button { display: flex; align-items: center; gap: 11px; min-height: 62px; border: 1px solid var(--color-border); border-radius: 12px; padding: 10px 15px; color: var(--color-muted-text); background: var(--color-surface); cursor: pointer; text-align: left; transition: border-color 180ms ease, background 180ms ease; }
 .view-tabs button > span { display: grid; gap: 2px; }
-.view-tabs strong { color: var(--color-foreground); font-size: 13px; }
-.view-tabs small { font-size: 10px; }
+.view-tabs strong { color: var(--color-foreground); font-size: 17px; }
+.view-tabs small { font-size: 14px; }
 .view-tabs button.active { border-color: var(--color-primary); color: #111; background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface)); }
 .view-tabs button.active svg { color: var(--color-primary); }
 .state-card { margin: 0; border: 1px solid var(--color-border); border-radius: 15px; padding: 32px; color: var(--color-muted-text); background: var(--color-surface); }

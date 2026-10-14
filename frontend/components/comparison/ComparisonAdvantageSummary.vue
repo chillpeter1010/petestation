@@ -10,7 +10,7 @@
         <p v-if="!leftRows.length" class="empty">No clear edge.</p>
         <article v-for="row in leftRows" :key="`left-${row.Metric}`">
           <strong>{{ row.Metric }}</strong>
-          <span>+{{ gapText(row) }} pct</span>
+          <span>{{ edgeText(row) }}</span>
         </article>
       </div>
       <div>
@@ -18,7 +18,7 @@
         <p v-if="!rightRows.length" class="empty">No clear edge.</p>
         <article v-for="row in rightRows" :key="`right-${row.Metric}`">
           <strong>{{ row.Metric }}</strong>
-          <span>+{{ gapText(row) }} pct</span>
+          <span>{{ edgeText(row) }}</span>
         </article>
       </div>
     </div>
@@ -26,20 +26,23 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   title: string
   subtitle: string
   leftTitle?: string
   rightTitle?: string
   leftRows: Record<string, unknown>[]
   rightRows: Record<string, unknown>[]
+  valueMode?: 'percentile' | 'display'
 }>(), {
   leftTitle: 'Left Edge',
-  rightTitle: 'Right Edge'
+  rightTitle: 'Right Edge',
+  valueMode: 'percentile'
 })
 
-function gapText(row: Record<string, unknown>) {
-  return Math.abs(Number(row['Pctl Gap'] || 0)).toFixed(1)
+function edgeText(row: Record<string, unknown>) {
+  if (props.valueMode === 'display') return String(row.Display || '—')
+  return `+${Math.abs(Number(row['Pctl Gap'] || 0)).toFixed(1)} pct`
 }
 </script>
 

@@ -19,6 +19,7 @@ from app.services.admin_service import (
     run_roster_reference_refresh,
     run_video_lookup_backfill,
 )
+from app.services.data_freshness_service import refresh_data_freshness_report
 
 
 def write_state(path: Path, payload: dict[str, object]) -> None:
@@ -29,12 +30,17 @@ def write_state(path: Path, payload: dict[str, object]) -> None:
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(description="Run the complete Petehub daily data pipeline.")
     parser.add_argument("--year", type=int, default=datetime.now().year)
     parser.add_argument(
         "--include-pitch-stuff",
         action="store_true",
-        help="Also run the expensive per-pitch Stuff+ backfill.",
+        help="Deprecated compatibility flag; per-pitch Stuff+ is now always completed and verified.",
     )
     args = parser.parse_args()
 
@@ -95,6 +101,26 @@ def main() -> int:
             state["steps"]["roster_data"] = {"status": "completed", "seconds": round(perf_counter() - roster_started, 2), "result": roster_result}  # type: ignore[index]
         except Exception as exc:
             state["steps"]["roster_data"] = {"status": "failed", "seconds": round(perf_counter() - roster_started, 2), "error": str(exc)}  # type: ignore[index]
+            failed = True
+
+        freshness_started = perf_counter()
+        try:
+            freshness_result = refresh_data_freshness_report(year=args.year)
+            state["steps"]["data_freshness"] = {  # type: ignore[index]
+                "status": "completed",
+                "seconds": round(perf_counter() - freshness_started, 2),
+                "result": {
+                    "overall_status": freshness_result.get("overall_status"),
+                    "generated_at": freshness_result.get("generated_at"),
+                    "outputs": freshness_result.get("outputs"),
+                },
+            }
+        except Exception as exc:
+            state["steps"]["data_freshness"] = {  # type: ignore[index]
+                "status": "failed",
+                "seconds": round(perf_counter() - freshness_started, 2),
+                "error": str(exc),
+            }
             failed = True
 
         state["status"] = "failed" if failed else "completed"

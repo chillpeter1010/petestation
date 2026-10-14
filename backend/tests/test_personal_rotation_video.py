@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from app.services.personal_service import build_game_log, build_pitcher_wpa_games
 
@@ -26,11 +27,12 @@ def test_build_pitcher_wpa_games_flips_away_pitcher_home_wpa():
                 "pitcher_team": "AWY",
                 "home_team": "HME",
                 "away_team": "AWY",
-                "delta_home_win_exp": 0.1,
+                "at_bat_number": 1,
+                "pa_home_wpa": 0.1,
             }
         ]
     )
 
     games = build_pitcher_wpa_games(frame)
 
-    assert games.loc[0, "game_wpa"] == -0.1
+    assert games.loc[0, "game_wpa"] == pytest.approx(-0.1030875)

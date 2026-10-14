@@ -56,6 +56,14 @@ def test_aggregate_batters_uses_metric_specific_weights():
     assert row.plate_appearances == 240
 
 
+def test_aggregate_batters_ignores_placeholder_identity_name():
+    frame = pd.DataFrame([_row(1, "FF", 100)])
+
+    row = service._aggregate_batters(frame, {1: ("Batter 1", "NYY", 240)})[0]
+
+    assert row.name == "Hitter Example"
+
+
 def test_get_batter_swing_timing_filters_and_qualifies(tmp_path, monkeypatch):
     data_dir = tmp_path
     cache = service.timing_cache_path(2025, "R", data_dir)

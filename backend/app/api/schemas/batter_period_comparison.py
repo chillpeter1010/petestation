@@ -31,6 +31,7 @@ class BatterPeriodWindow(BaseModel):
     start_date: str
     end_date: str
     pitches: int
+    team: str | None = None
 
 
 class BatterPeriodComparisonResponse(BaseModel):
@@ -39,7 +40,7 @@ class BatterPeriodComparisonResponse(BaseModel):
     periods: dict[str, BatterPeriodWindow]
     filters: dict[str, list[str]] = Field(default_factory=dict)
     metrics: list[BatterPeriodMetric] = Field(default_factory=list)
+    percentile_cards: dict[str, list[dict[str, Any]]] = Field(default_factory=dict)
+    discipline: dict[str, dict[str, Any]] = Field(default_factory=dict)
     heatmaps: dict[str, list[dict[str, Any]]] = Field(default_factory=dict)
     bat_speed_domain: list[float] | None = None
-    timing_reference: dict[str, dict[str, Any]] = Field(default_factory=dict)
-    source_audit: dict[str, Any] = Field(default_factory=dict)

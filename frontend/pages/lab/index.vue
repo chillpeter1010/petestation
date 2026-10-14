@@ -5,10 +5,17 @@
       title="Pitcher Lab"
       description="Research workbenches for pitch quality, command, and workload models."
       back-to="/"
-      back-label="Petehub Home"
+      back-label="Home"
     />
 
     <section class="lab-grid" aria-label="Lab modules">
+      <NuxtLink class="lab-card ready explorer-card" to="/lab/pitcher-metrics">
+        <span>Cross-metric research</span>
+        <h2>Pitcher Metric Explorer</h2>
+        <p>Choose any two compatible pitcher-season metrics, inspect coverage, and run descriptive correlation and regression.</p>
+        <strong>Open</strong>
+      </NuxtLink>
+
       <NuxtLink class="lab-card ready" to="/rotation/fatigue-lab">
         <span>Starter</span>
         <h2>Starter Fatigue Lab</h2>
@@ -48,6 +55,27 @@
         <span>Pitching</span>
         <h2>Pitching+ Lab</h2>
         <p>Complete-pitch value, pitcher rankings, pitch-type splits, trends, and model validation.</p>
+        <strong>Open</strong>
+      </NuxtLink>
+
+      <NuxtLink class="lab-card ready leverage-card" to="/lab/leverage">
+        <span>Bullpen value</span>
+        <h2>RE24 &amp; Leverage Lab</h2>
+        <p>Test game states, inspect RE24 and LI, validate the estimates, and rank MLB relievers.</p>
+        <strong>Open</strong>
+      </NuxtLink>
+
+      <NuxtLink class="lab-card ready stamina-card" to="/lab/stamina">
+        <span>Workload quality</span>
+        <h2>Stamina Lab</h2>
+        <p>Audit cleaned pitch data, SP/RP role splits, Plus coverage, workload samples, and the Stamina+ research contract.</p>
+        <strong>Open</strong>
+      </NuxtLink>
+
+      <NuxtLink class="lab-card ready state-card" to="/lab/performance-state">
+        <span>Performance state</span>
+        <h2>Performance State Lab</h2>
+        <p>Inspect collapse and rebound forecasts, release gates, feature layers, and completed-appearance player timelines.</p>
         <strong>Open</strong>
       </NuxtLink>
     </section>
@@ -119,6 +147,11 @@
   color: var(--color-primary);
   background: transparent;
 }
+
+.leverage-card { border-radius: 0; }
+.stamina-card { border-radius: 0; }
+.state-card { border-radius: 0; border-color: color-mix(in srgb, var(--color-primary) 52%, var(--color-border)); }
+.explorer-card { border-color: color-mix(in srgb, var(--color-primary) 52%, var(--color-border)); }
 
 @media (max-width: 1120px) {
   .lab-grid {

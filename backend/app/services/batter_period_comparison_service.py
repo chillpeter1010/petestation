@@ -15,8 +15,8 @@ from app.api.schemas.batter_period_comparison import (
 from app.api.schemas.common import ResponseMeta
 from app.core.config import settings
 from app.repositories.pitch_repository import available_db_years, get_season_duckdb_path, resolve_pitch_table
-from app.services.batter_service import list_batter_options
-from app.services.batter_swing_timing_service import load_batter_timing_cache
+from app.services.batter_service import list_batter_leaderboard, list_batter_options
+from app.services.discipline_service import build_discipline_panel_groups
 
 SWING_EVENTS = {
     "swinging_strike", "swinging_strike_blocked", "foul", "foul_tip",
@@ -29,11 +29,25 @@ NON_AB_EVENTS = {
     "sac_fly_double_play", "catcher_interf", "truncated_pa",
 }
 HIT_EVENTS = {"single", "double", "triple", "home_run"}
+OUT_EVENTS = {"field_out", "force_out", "double_play", "triple_play", "grounded_into_double_play", "fielders_choice_out", "sac_bunt", "sac_fly", "sac_fly_double_play"}
 PITCH_FAMILIES = {
     "FF": "Fastball", "SI": "Fastball", "FC": "Fastball",
     "SL": "Breaking", "ST": "Breaking", "CU": "Breaking", "KC": "Breaking", "SV": "Breaking",
     "CH": "Offspeed", "FS": "Offspeed", "FO": "Offspeed",
 }
+
+PERIOD_PERCENTILE_SPECS = [
+    ("xwoba", "xwOBA", "rate", True, "xwoba", 1.0),
+    ("avg_ev", "Avg Exit Velo", "mph", True, "avg_ev", 1.0),
+    ("barrel_pct", "Barrel%", "percent", True, "barrel_rate", 0.01),
+    ("hard_hit_pct", "Hard-Hit%", "percent", True, "hard_hit_rate", 0.01),
+    ("sweet_spot_pct", "LA Sweet-Spot%", "percent", True, "sweet_spot_rate", 0.01),
+    ("avg_bat_speed", "Bat Speed", "mph", True, "avg_bat_speed", 1.0),
+    ("chase_pct", "Chase%", "percent", False, "chase_rate", 0.01),
+    ("whiff_pct", "Whiff%", "percent", False, "whiff_rate", 0.01),
+    ("k_pct", "K%", "percent", False, "strikeout_rate", 0.01),
+    ("bb_pct", "BB%", "percent", True, "walk_rate", 0.01),
+]
 
 
 def get_batter_period_options(year: int) -> BatterPeriodOptionsResponse:
@@ -47,13 +61,60 @@ def get_batter_period_options(year: int) -> BatterPeriodOptionsResponse:
 def get_batter_period_date_range(year: int, batter_id: int) -> dict[str, Any]:
     rows = load_batter_period_rows(year, batter_id)
     dates = pd.to_datetime(rows.get("game_date"), errors="coerce").dropna() if not rows.empty else pd.Series(dtype="datetime64[ns]")
+    team_stints = build_batter_team_stints(rows)
     return {
         "year": year,
         "batter_id": batter_id,
         "start_date": dates.min().strftime("%Y-%m-%d") if not dates.empty else None,
         "end_date": dates.max().strftime("%Y-%m-%d") if not dates.empty else None,
         "pitches": int(len(rows)),
+        "current_team": team_stints[-1]["team"] if team_stints else None,
+        "transfer_count": max(0, len(team_stints) - 1),
+        "team_stints": team_stints,
     }
+
+
+def build_batter_team_stints(rows: pd.DataFrame) -> list[dict[str, Any]]:
+    if rows.empty or "game_date" not in rows or "game_pk" not in rows:
+        return []
+    working = rows.copy()
+    batter_team = working.get("batter_team", pd.Series("", index=working.index)).fillna("").astype(str).str.strip().str.upper()
+    offense_team = working.get("offense_team", pd.Series("", index=working.index)).fillna("").astype(str).str.strip().str.upper()
+    working["team"] = batter_team.where(batter_team.ne(""), offense_team)
+    working = working.loc[working["team"].ne("") & working["game_date"].notna()].copy()
+    if working.empty:
+        return []
+    games = (
+        working.groupby(["game_pk", "game_date", "team"], as_index=False)
+        .size()
+        .rename(columns={"size": "pitches"})
+        .sort_values(["game_date", "game_pk"])
+    )
+    stints: list[dict[str, Any]] = []
+    for row in games.itertuples(index=False):
+        team = str(row.team)
+        game_date = str(row.game_date)[:10]
+        if not stints or stints[-1]["team"] != team:
+            stints.append(
+                {
+                    "stint_index": len(stints),
+                    "team": team,
+                    "start_date": game_date,
+                    "end_date": game_date,
+                    "pitches": int(row.pitches),
+                    "games": 1,
+                }
+            )
+        else:
+            stints[-1]["end_date"] = game_date
+            stints[-1]["pitches"] += int(row.pitches)
+            stints[-1]["games"] += 1
+    for stint in stints:
+        stint["label"] = (
+            f"{stint['team']} · {stint['start_date']} to {stint['end_date']} · "
+            f"{stint['games']} G · {stint['pitches']} pitches"
+        )
+    return stints
 
 
 def load_batter_period_rows(year: int, batter_id: int) -> pd.DataFrame:
@@ -76,7 +137,7 @@ def normalize_batter_period_rows(rows: pd.DataFrame) -> pd.DataFrame:
     if rows.empty:
         return rows.copy()
     result = rows.copy()
-    text_columns = ["events", "description", "stand", "p_throws", "pitch_type", "pitch_name"]
+    text_columns = ["events", "description", "stand", "p_throws", "pitch_type", "pitch_name", "bb_type", "batter_team", "offense_team"]
     for column in text_columns:
         if column not in result:
             result[column] = ""
@@ -119,6 +180,8 @@ def apply_batter_period_filters(
     count: str | None = None,
     pitch: str | None = None,
     pitch_result: str | None = None,
+    in_play_result: str | None = None,
+    pa_result: str | None = None,
 ) -> pd.DataFrame:
     if rows.empty:
         return rows.copy()
@@ -147,6 +210,25 @@ def apply_batter_period_filters(
             else:
                 mask |= filtered["description"].eq(normalized)
         filtered = filtered[mask]
+    in_play_values = _filter_values(in_play_result)
+    if in_play_values:
+        filtered = filtered[filtered["bb_type"].str.lower().isin([value.lower() for value in in_play_values])]
+    pa_values = _filter_values(pa_result)
+    if pa_values:
+        terminal = _terminal_pa_rows(filtered)
+        mask = pd.Series(False, index=terminal.index)
+        for value in pa_values:
+            normalized = value.lower().replace(" ", "_")
+            if normalized == "hit":
+                mask |= terminal["events"].isin(HIT_EVENTS)
+            elif normalized == "out":
+                mask |= terminal["events"].isin(OUT_EVENTS)
+            elif normalized == "strikeout":
+                mask |= terminal["events"].isin({"strikeout", "strikeout_double_play"})
+            else:
+                mask |= terminal["events"].eq(normalized)
+        pa_keys = terminal.loc[mask, ["game_pk", "at_bat_number"]].drop_duplicates()
+        filtered = filtered.merge(pa_keys, on=["game_pk", "at_bat_number"], how="inner")
     return filtered
 
 
@@ -254,10 +336,12 @@ def get_batter_period_comparison(
     pitcher_hand: str | None = None, pitch_family: str | None = None,
     count: str | None = None, pitch: str | None = None,
     pitch_result: str | None = None,
+    in_play_result: str | None = None,
+    pa_result: str | None = None,
 ) -> BatterPeriodComparisonResponse:
     left_all = load_batter_period_rows(left_year, batter_id)
     right_all = left_all.copy() if right_year == left_year else load_batter_period_rows(right_year, batter_id)
-    filter_args = dict(batter_side=batter_side, pitcher_hand=pitcher_hand, pitch_family=pitch_family, count=count, pitch=pitch, pitch_result=pitch_result)
+    filter_args = dict(batter_side=batter_side, pitcher_hand=pitcher_hand, pitch_family=pitch_family, count=count, pitch=pitch, pitch_result=pitch_result, in_play_result=in_play_result, pa_result=pa_result)
     left = apply_batter_period_filters(left_all, start_date=left_start, end_date=left_end, **filter_args)
     right = apply_batter_period_filters(right_all, start_date=right_start, end_date=right_end, **filter_args)
     left_stats = compute_batter_period_metrics(left)
@@ -275,6 +359,11 @@ def get_batter_period_comparison(
             denominator_label=denominator_label,
             period_a_denominator=left_denominator, period_b_denominator=right_denominator,
         ))
+
+    percentile_cards = {
+        "left": build_period_percentile_cards(left_year, left_stats),
+        "right": build_period_percentile_cards(right_year, right_stats),
+    }
 
     competitive_cutoffs = {
         left_year: _competitive_cutoff(left_all),
@@ -303,29 +392,80 @@ def get_batter_period_comparison(
         meta=ResponseMeta(year=right_year, data_updated_at=dates.max().to_pydatetime() if not dates.empty else None, warnings=warnings),
         batter=batter,
         periods={
-            "left": BatterPeriodWindow(label="Period A", year=left_year, start_date=left_start, end_date=left_end, pitches=len(left)),
-            "right": BatterPeriodWindow(label="Period B", year=right_year, start_date=right_start, end_date=right_end, pitches=len(right)),
+            "left": BatterPeriodWindow(label="Period A", year=left_year, start_date=left_start, end_date=left_end, pitches=len(left), team=_period_team(left)),
+            "right": BatterPeriodWindow(label="Period B", year=right_year, start_date=right_start, end_date=right_end, pitches=len(right), team=_period_team(right)),
         },
         filters=_filter_options(pd.concat([left_all, right_all], ignore_index=True)),
         metrics=metrics,
+        percentile_cards=percentile_cards,
+        discipline={
+            "left": {"panel_groups": build_discipline_panel_groups(left, _discipline_location_rows), "total": len(left)},
+            "right": {"panel_groups": build_discipline_panel_groups(right, _discipline_location_rows), "total": len(right)},
+        },
         heatmaps={"left": left_points, "right": right_points},
         bat_speed_domain=[round(min(bat_speeds), 1), round(max(bat_speeds), 1)] if bat_speeds else None,
-        timing_reference={
-            "left": _season_timing_reference(left_year, batter_id, pitcher_hand, batter_side),
-            "right": _season_timing_reference(right_year, batter_id, pitcher_hand, batter_side),
-        },
-        source_audit={
-            "exact_timing_distributions": {"status": "unavailable", "reason": "Local Savant caches contain season summaries, not date-filterable X/Y/Z bins or swing-level offsets."},
-            "batting_stance": {"status": "unavailable", "reason": "No foot-position, stance depth, distance-off-plate, stance-angle, release, or stance-frame fields exist locally."},
-            "intercept_geometry": {
-                "status": "available",
-                "meaning": "Swing intercept and attack geometry; not a batting-stance or foot-position measurement.",
-                "left": _intercept_summary(left),
-                "right": _intercept_summary(right),
-            },
-            "squared_up_and_blast": {"status": "unavailable", "reason": "The local pitch tables do not contain Statcast squared-up or blast classifications."},
-        },
     )
+
+
+def build_period_percentile_cards(year: int, stats: dict[str, tuple[float | int | None, int]]) -> list[dict[str, Any]]:
+    qualified = []
+    for row in list_batter_leaderboard(year):
+        plate_appearances = pd.to_numeric(row.get("plate_appearances"), errors="coerce")
+        if pd.notna(plate_appearances) and float(plate_appearances) >= 50:
+            qualified.append(row)
+    cards: list[dict[str, Any]] = []
+    for metric_key, label, unit, higher_is_better, pool_key, period_scale in PERIOD_PERCENTILE_SPECS:
+        raw_value = stats.get(metric_key, (None, 0))[0]
+        value = None if raw_value is None else float(raw_value) * period_scale
+        population = pd.to_numeric(pd.Series([row.get(pool_key) for row in qualified]), errors="coerce").dropna()
+        percentile = None
+        if value is not None and np.isfinite(value) and not population.empty:
+            favorable = population.le(value).mean() if higher_is_better else population.ge(value).mean()
+            percentile = round(float(np.clip(favorable * 100, 1, 100)), 0)
+        cards.append({
+            "key": metric_key,
+            "label": label,
+            "value": value,
+            "formatted_value": _format_percentile_value(value, unit),
+            "percentile": percentile,
+            "higher_is_better": higher_is_better,
+        })
+    return cards
+
+
+def _format_percentile_value(value: float | None, unit: str) -> str:
+    if value is None or not np.isfinite(value):
+        return "—"
+    if unit == "percent":
+        return f"{value * 100:.1f}%"
+    if unit == "rate":
+        return f"{value:.3f}".lstrip("0")
+    return f"{value:.1f}"
+
+
+def _period_team(rows: pd.DataFrame) -> str | None:
+    if rows.empty:
+        return None
+    for column in ("batter_team", "offense_team"):
+        values = rows.get(column, pd.Series(dtype="object")).fillna("").astype(str).str.strip()
+        values = values[values.ne("")]
+        if not values.empty:
+            return str(values.mode().iloc[0])
+    return None
+
+
+def _discipline_location_rows(rows: pd.DataFrame) -> list[dict[str, Any]]:
+    if rows.empty:
+        return []
+    columns = [
+        column for column in (
+            "game_date", "game_pk", "at_bat_number", "pitch_number", "plate_x", "plate_z",
+            "pitch_name", "pitch_type", "description", "events", "count", "release_speed",
+            "launch_speed", "bat_speed", "play_id", "video_url", "pitch_stuff_plus", "location_plus_pitch",
+        ) if column in rows.columns
+    ]
+    located = rows.dropna(subset=["plate_x", "plate_z"])[columns].copy()
+    return located.astype(object).where(pd.notna(located), None).to_dict("records")
 
 
 def compute_tracking_period_metrics(rows: pd.DataFrame, cutoff: float | None) -> dict[str, tuple[float | None, int]]:
@@ -398,58 +538,8 @@ def _filter_options(rows: pd.DataFrame) -> dict[str, list[str]]:
         "count": ["All", *values("count")],
         "pitch": ["All", *values("pitch_name")],
         "pitch_result": ["All", "Swing", "Whiff", "In Play", *values("description")],
-    }
-
-
-def _season_timing_reference(year: int, batter_id: int, pitcher_hand: str | None, batter_side: str | None) -> dict[str, Any]:
-    frame = load_batter_timing_cache(year, pitcher_hand or "All")
-    player = frame[frame["player_id"].eq(batter_id)].copy() if not frame.empty else pd.DataFrame()
-    sides = _filter_values(batter_side)
-    if sides and not player.empty:
-        player = player[player["batter_side"].isin(sides)]
-    if player.empty:
-        return {"mode": "unavailable", "year": year, "n_swings": 0, "metrics": {}}
-    swings = pd.to_numeric(player["n_swings"], errors="coerce").fillna(0)
-
-    def weighted(column: str, weights: pd.Series = swings, scale: float = 1.0) -> float | None:
-        values = pd.to_numeric(player.get(column), errors="coerce")
-        valid = values.notna() & weights.gt(0)
-        if not valid.any():
-            return None
-        return round(float(np.average(values[valid], weights=weights[valid])) * scale, 3)
-
-    whiff_weights = swings * pd.to_numeric(player["whiff_rate"], errors="coerce").fillna(0).clip(lower=0)
-    return {
-        "mode": "season_summary_reference",
-        "year": year,
-        "n_swings": int(round(float(swings.sum()))),
-        "metrics": {
-            "avg_miss_distance": weighted("miss_distance", whiff_weights),
-            "flawed_pct": weighted("flawed_percent", scale=100),
-            "perfect_pct": weighted("perfect_percent", scale=100),
-            "tied_up_pct": weighted("tied_up_percent", scale=100),
-            "centered_pct": weighted("centered_percent", scale=100),
-            "flail_pct": weighted("flailed_percent", scale=100),
-            "late_pct": weighted("late_percent", scale=100),
-            "on_time_pct": weighted("on_time_percent", scale=100),
-            "early_pct": weighted("early_percent", scale=100),
-            "over_pct": weighted("over_percent", scale=100),
-            "lined_up_pct": weighted("lined_up_percent", scale=100),
-            "under_pct": weighted("under_percent", scale=100),
-        },
-        "note": "Full-season Savant summary reference. It is not used in the arbitrary-period delta column.",
-    }
-
-
-def _intercept_summary(rows: pd.DataFrame) -> dict[str, Any]:
-    tracked = rows[rows["is_swing"] & ~rows["description"].isin(BUNT_EVENTS)]
-    return {
-        "tracked_swings": int(pd.to_numeric(tracked["bat_speed"], errors="coerce").notna().sum()),
-        "intercept_x_inches": _finite_or_none(pd.to_numeric(tracked["intercept_ball_minus_batter_pos_x_inches"], errors="coerce").mean()),
-        "intercept_y_inches": _finite_or_none(pd.to_numeric(tracked["intercept_ball_minus_batter_pos_y_inches"], errors="coerce").mean()),
-        "attack_angle_deg": _finite_or_none(pd.to_numeric(tracked["attack_angle"], errors="coerce").mean()),
-        "attack_direction_deg": _finite_or_none(pd.to_numeric(tracked["attack_direction"], errors="coerce").mean()),
-        "swing_path_tilt_deg": _finite_or_none(pd.to_numeric(tracked["swing_path_tilt"], errors="coerce").mean()),
+        "in_play_result": ["All", *values("bb_type")],
+        "pa_result": ["All", "Hit", "Out", "home_run", "Strikeout"],
     }
 
 

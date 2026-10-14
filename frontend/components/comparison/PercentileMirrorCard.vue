@@ -4,6 +4,7 @@
       <div>
         <p>{{ player?.meta?.year || '-' }} · {{ player?.team || '-' }} · {{ player?.role || '-' }}</p>
         <h2>{{ player?.display_name || 'Select Pitcher' }}</h2>
+        <small v-if="player?.meta?.period" class="period-context">{{ player.meta.period }} · {{ Number(player.meta.pitches || 0).toLocaleString() }} pitches</small>
       </div>
       <span>{{ sideLabel }}</span>
     </header>
@@ -73,7 +74,8 @@ function dotStyle(metric: ComparisonMetric) {
   const value = percentile(metric)
   return {
     background: savantColor(value),
-    left: isLeft.value ? `${100 - value}%` : `${value}%`
+    left: isLeft.value ? `${100 - value}%` : `${value}%`,
+    color: value >= 40 && value <= 60 ? '#111827' : '#ffffff'
   }
 }
 </script>
@@ -114,6 +116,13 @@ h2 {
   margin-top: 4px;
   color: var(--color-foreground);
   font-size: 24px;
+}
+
+.period-context {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-muted-text);
+  font-size: 12px;
 }
 
 header span {

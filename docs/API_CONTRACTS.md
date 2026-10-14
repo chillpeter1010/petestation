@@ -21,6 +21,7 @@ Most pitcher analysis endpoints should share these parameters where possible:
 ### Pitchers
 
 - `GET /api/pitchers`
+- `GET /api/pitchers/metric-explorer`
 - `GET /api/pitchers/{pitcher_id}`
 
 #### `GET /api/pitchers`
@@ -48,6 +49,12 @@ Response:
   }
 ]
 ```
+
+#### `GET /api/pitchers/metric-explorer`
+
+Returns one row per pitcher-season for the Pitcher Metric Explorer. Query parameter `year` selects the season. The response keeps only season-level fields and exposes a metric catalog with `key`, category, unit, direction and description so the client can safely populate arbitrary X/Y axes.
+
+The first release joins traditional results/workload, standard estimator fields, season Stuff+／Location+／Pitching+, and the separately published 2026 Stamina signals by MLBAM ID. Missing joins remain `null`; they are never converted to zero. `source_status` reports whether the basic, Plus, advanced and Stamina sources were available. Regression is computed interactively by the client over the filtered complete-case pitcher sample and is descriptive rather than causal.
 
 ### Pitcher Personal
 
@@ -194,6 +201,67 @@ Returns Swing Timing / Miss Distance payloads when a yearly CSV exists under `da
 - `GET /api/stuff/pitch-shapes`
 - `GET /api/stuff/pitcher-detail`
 
+#### `GET /api/stuff/leaderboard`
+
+Query parameters are `year`, `role=All|SP|RP`, `team`, and `minimum_ip`. The endpoint reads the atomic daily snapshot and never runs model inference during an HTTP request. It returns per-pitch-type Stuff+, Location+, and source-gated Pitching+ maps (`FA/SI/FC/FS/SL/CU/CH/KC/FO`), each season-level Plus score, `data_as_of`, model versions, warnings, and per-metric `source_status`.
+
+Pitching+ overall and pitch-type values use the newest complete-feature export available. When its date trails the current pitch source, the response keeps the values, reports `source_status.pitching_plus=stale`, exposes `pitching_data_as_of`, and returns an explicit warning so the UI never implies that different metric cutoffs match.
+
+### Pitching+ Lab
+
+- `GET /api/pitching/overview`
+- `GET /api/pitching/pitcher`
+
+Both responses include `data_as_of`, `cache_status`, and warnings. The overview additionally reports `source_data_as_of`, so an incomplete newest tracking date is visible instead of silently presenting the export as current.
+
+### RE24 & Leverage Lab
+
+- `GET /api/leverage/overview?year=2025|2026`
+- `POST /api/leverage/calculator`
+
+The overview returns two explicitly separated reliever leaderboards: `estimated_rows` from the local regular-season pitch store and `reference_rows` from `data/Reliever/<year>_reliever_wpa.csv`. Local WPA is measured once per plate appearance from consecutive PA-boundary `home_win_exp` states; raw pitch-level `delta_home_win_exp` is never season-summed. A fixed 2025 component calibration (`+WPA × 0.936080`, `-WPA × 1.030875`) is applied to 2025 and 2026 and identified in `model_version`; it was stable under an MLBAM-ID parity holdout. Reference players without a local relief appearance are excluded, with a warning when mixed-role reference scope may still differ. The response also returns per-metric linear validation diagnostics (`correlation`, `r_squared`, `mae`, `rmse`, `bias`, `slope`, and `intercept`), local and reference timestamps, model version, warnings, and the empirically derived runs-per-win value.
+
+The calculator accepts entry and exit inning, half, score, outs, and base occupancy. It estimates endpoint WPA, RE24, REW, gmLI, exLI, an endpoint span-LI proxy, WPA/LI proxy, and SD/MD result. `inLI` and Clutch remain unavailable because two endpoints do not contain the complete plate-appearance sequence required by those metrics. LI is an empirical Statcast state estimate and is not represented as an exact FanGraphs value.
+
+### Stamina Lab
+
+- `GET /api/stamina/overview?year=2026`
+- `GET /api/stamina/research-curves?year=2026&pitcher_id=<mlbam_id>`
+- `GET /api/stamina/game-states?year=2026&pitcher_id=<mlbam_id>`
+- `GET /api/stamina/physical-stability?year=2026&pitcher_id=<mlbam_id>`
+- `GET /api/stamina/command-retention?year=2026&pitcher_id=<mlbam_id>`
+- `GET /api/stamina/incremental-validation?year=2026`
+- `GET /api/stamina/season-summaries?year=2026`
+- `GET /api/stamina/external-validation?year=2026`
+- `GET /api/stamina/season-bias-repair?year=2026`
+- `GET /api/stamina/leaderboard?year=2026`
+
+The overview reads the generated `data/derived/stamina_lab_<year>.json` audit. Slice 11 retains league multi-signal family curves and exact-pitch-type early-reference diagnostics. `slice11_game_state` exposes observed-state v1.1: prior-season empirical-Bayes exact-type opening baselines, exact-pitch-type workload splines, fixed first-20-pitch family weights, inning-clustered uncertainty, single-game Overall/family Stamina+ and season-level diagnostics.
+
+`research-curves` reads `stamina_v2_multisignal_<year>.parquet` and returns all game/window family rows for one starter so the client can select a game locally. Values are within-appearance deviations from at least three early pitches of the same exact pitch type; movement and release-point fields are unsigned distances from the early centroid. The response is descriptive, not a leaderboard or next-start forecast.
+
+`game-states` reads `stamina_game_states_<year>.parquet` and `stamina_game_state_windows_<year>.parquet`. It returns each eligible start's Overall/Fastball/Breaking/Offspeed Game Stamina+, 80% interval, reliability, rolling 3/5-start state and 20-pitch-window retention. Overall requires 15 supported pitches after pitch 20 and at least 80% fixed opening-family coverage; each family requires 5 late pitches. An unobserved family keeps its opening weight, uses the league family-retention prior and adds uncertainty instead of being renormalized away. Unsupported values remain null.
+
+`physical-stability` reads `stamina_physical_games_<year>.parquet` and `stamina_physical_windows_<year>.parquet`. Contract `stamina_physical_signal_contract_v1` compares every later pitch with at least three first-20 pitches of the same exact pitch type. Velocity, spin-vector, movement-vector, release-point, extension and arm-angle drift remain separate components; contract `stamina_physical_stability_v1` robustly standardizes them on 2023, uses fixed weights, partial pooling and an 80% interval. Missing fixed weight receives a league-neutral contribution and lowers reliability instead of becoming zero or being silently renormalized. The endpoint is research-only and describes public tracking stability, not injury risk, intent or physiology. Rebuild Slice 15–16 with `python backend/scripts/build_stamina_lab.py --year 2026 --physical-stability-only`.
+
+`command-retention` reads `stamina_command_games_<year>.parquet` and `stamina_command_windows_<year>.parquet`. Contract `stamina_command_retention_contract_v1` uses at least three same-game first-20 exact-type pitches, a frozen 2023 early-Location/pitch-count/pitch-type Ridge expectation, and the fixed first-20 family mix. It returns Overall and family 20-pitch windows plus game-level Command Retention+, reliability and 80% intervals. Higher means Location+ held up better than expected; it is research-only and is not an injury, physiology or future-start prediction.
+
+`incremental-validation` reads `stamina_incremental_validation_<year>.json`. Contract `stamina_incremental_validation_v1` fits on 2025 and evaluates on 2026: a 21–40 early-Quality baseline is compared with a challenger adding Physical Stability+ and Command Retention+ to explain 61–80 Quality retention. The response exposes matched coverage, RMSE, rank correlation, calibration, distinctness gates and `composite_release_eligible`. The current challenger did not improve RMSE, so no composite score is released.
+
+The overview additionally exposes Slice 19 from `stamina_product_integration_<year>.json`. Contract `stamina_product_integration_v1` freezes the `keep_separate` product decision, representative-pitcher audit and personal-page rules. Pitcher Personal requests the existing game-state, physical-stability and command-retention endpoints in parallel, aligns them by game and preserves each signal's own interval and reliability. This does not create a new score or alter the leaderboard response.
+
+`season-summaries` reads `stamina_season_summaries_<year>.parquet`. It reliability-weights the observed game scores, carries both measurement and between-game uncertainty into an 80% interval, and applies scope-level empirical-Bayes partial pooling. Contract `stamina_observed_season_state_v1_1` qualifies Overall with at least 10 eligible starts, 150 supported late pitches and season-level reliability of 0.70; family scopes require 8 eligible starts, 50 supported late pitches and the same season-level reliability floor. Mean single-game reliability remains diagnostic but is no longer a hard season-ranking veto because repeated starts can yield a precise season estimate even when individual games are noisy. Only qualified rows receive an unadjusted diagnostic rank.
+
+`external-validation` reads the frozen game-state and season-summary artifacts for the requested year and its prior year. Contract `stamina_observed_external_validation_v1_1` checks coverage, pitch RMSE gain, game-level and season-level ceiling neutrality, within-game consistency, qualified support, season precision and weighting sensitivity under the v1.1 season gate. Cross-season pitcher rank is descriptive only and is not a release gate because the score measures season state rather than a permanent trait. The unadjusted season ceiling gate still fails as expected; the downstream frozen 2025 correction must pass its separate untouched-2026 audit before publication.
+
+`season-bias-repair` exposes contract `stamina_observed_season_bias_repair_v1_1`. It fits separate Overall/Fastball/Breaking/Offspeed low-degree early-Stuff+/velocity splines with Ridge alpha 10 on v1.1-qualified 2025 summaries only, adds correction uncertainty from 100 bootstrap refits, and evaluates the frozen correction once on 2026. Adjusted rows are written to `stamina_adjusted_season_summaries_<year>.parquet`; official ranks additionally require row-level adjusted reliability of at least 0.70. The revised 2026 audit passed every gate: maximum ceiling correlation 0.114, minimum median reliability 0.814, maximum median 80% interval width 4.052, at least 132 qualified pitchers per scope, minimum weighted-vs-unweighted rho 0.983 and minimum retained score spread 0.615. Therefore `leaderboard_release_eligible=true`, with the explicit limitation that 2026 is the only untouched external season for this correction version.
+
+`leaderboard` is the release-gated Slice 14 read path. It refuses a season unless its bias-repair audit is eligible and identifies that season as the untouched test year. Rows are Starter-only qualified Overall adjusted scores, ordered by the persisted official adjusted rank. The response also exposes starts, eligible Stamina games, average pitches, 80% interval, adjusted reliability, and separately qualified Fastball/Breaking/Offspeed scores; a family remains null when it fails its own support or adjusted-reliability gate. Research-only `quality_game_stamina_plus`, `physical_stability_plus` and `command_retention_plus` are separately calculated means that each require at least 10 eligible games; they remain null below that threshold and never change the official rank. Contract `stamina_observed_season_leaderboard_v1_1` currently publishes 149 Overall rows for 2026 and explicitly describes observed in-season retention rather than physiology or next-start prediction.
+
+Game Stamina+ is an observed performance-retention index with league average 100. It describes only the pitches seen in that appearance, does not predict the next start, and is not presented as a permanent trait or direct physiological measurement. Depth and other physical signals remain separate explanatory fields.
+
+The full artifact set is rebuilt outside HTTP requests with `python backend/scripts/build_stamina_lab.py --year <year>`. Slice 11 diagnostics use `--slice11-only`; the observed single-game and season timeline artifacts use `--game-state-only`; Slice 15–16 use `--physical-stability-only`; Slice 17–18 use `--command-validation-only`; Slice 19 uses `--product-integration-only`. If the season DuckDB changes after generation, the overview reports `dataset_status=stale` and warns that the research dataset must be rebuilt before modeling.
+
 ### Starter Discipline
 
 - `GET /api/discipline/leaderboard`
@@ -205,10 +273,92 @@ Returns Swing Timing / Miss Distance payloads when a yearly CSV exists under `da
 - `GET /api/similarity/search`
 - `POST /api/similarity/manual-shape`
 
+### Pitcher Comparison
+
+- `GET /api/comparison/period/options`
+- `GET /api/comparison/period/date-range`
+- `GET /api/comparison/period/overview`
+
+Pitcher labels in `period/options` use the latest regular-season team found in the yearly pitch store; an older team value in the annual comparison CSV is only a fallback. Pitcher roles are also derived from regular-season appearances using the shared `GS / G > 0.3` rule, so a stale CSV role cannot classify a starter as a reliever. The cached comparison pool is keyed by both the comparison CSV and pitch-store modification times, so a daily data refresh invalidates stale team or role labels without requiring a service restart.
+
+`period/date-range` additionally returns `current_team`, `transfer_count`, and chronological `team_stints`. A stint is a contiguous run of games for one team, so A → B → A is represented as three stints and two changes. Each stint includes `stint_index`, team, first/last appearance date, pitch count, game count, and a display label. The Period Comparison UI offers a one-click before/after comparison for two stints and explicit Period A／B stint selectors when more than two stints are detected.
+
+Period overview player cards derive their team from pitches inside each requested window. A single-team window displays that team; a manual window spanning multiple teams displays `N Tms` and exposes the ordered team list in player metadata.
+
 ### Models
 
 - `GET /api/models/movement`
 - `GET /api/models/spin-breakdown`
+
+### Pitcher Performance State Research
+
+- `GET /api/performance-state/overview`
+- `GET /api/performance-state/leaderboard?year=2026&role=SP|RP&target=process_collapse|result_collapse|return_to_baseline|strong_rebound&minimum_forecasts=5`
+- `GET /api/performance-state/player?year=2026&pitcher_id=<id>&role=SP|RP`
+- `GET /api/performance-state/shadow`
+- `GET /api/performance-state/v2-audit`
+- `GET /api/performance-state/v2-slice14-audit`
+- `GET /api/performance-state/v2-slice15-audit`
+- `GET /api/performance-state/v2-slice16-audit`
+- `GET /api/performance-state/v2-slice17-audit`
+- `GET /api/performance-state/v2-slice18-20-audit`
+- `GET /api/performance-state/v2-slice21-22-audit`
+- `GET /api/performance-state/v2-strict-2026-replay`
+- `GET /api/performance-state/v2-lab?year=2026&role=SP|RP&target=process_collapse|result_collapse|return_to_baseline|strong_rebound&minimum_forecasts=5`
+
+`overview` reads the precomputed Slices 0–9 audits. It exposes the frozen collapse/rebound label contract, appearance-level coverage, leakage-safe 2025 development, 2026 external diagnostics, role-pooled state-space diagnostics, Markov regimes, GAS+HAR volatility, the GJR-GARCH challenger, POT-EVT/CAViaR tail diagnostics, and separate collapse/rebound forecast validation. Slice 3A records actual pitcher-role calendar gaps, 2025-only timing-policy comparisons, explicit 60-day reset behavior, corrected five-day/calendar-day half-life units and the expanded low-persistence grid. HTTP requests never fit a model.
+
+`player` returns the selected pitcher's role-specific appearance timeline with the actual days since the prior same-role appearance, observed process/result scores, single-game WPA／RE24／WPA-LI and per-PA forms, mean Stuff+／Location+, collapse/rebound labels, one-step state forecasts, filtered Stuff/Command/Result states, HMM prior/filtered regime probabilities, EWMA/GAS/GAS+HAR/GJR variance forecasts, EVT extreme probability/supported severity, CAViaR 95% loss quantile, and Slice 8 probabilities/alerts for each separate target. SP and RP histories remain separate for dual-role pitchers. These states are research-only performance estimates and do not overwrite Stamina+, diagnose fatigue or predict injury.
+
+`leaderboard` is the Slice 10 research-board payload. It reads the frozen forecast and filtered-state Parquet files, never trains a model, and returns one row per pitcher-role with the latest evaluated pre-appearance probability, season mean probability, event count/rate and last evaluated date. It also returns the selected feature layer, amended-2026 validation metrics and release gate. The ranking is retrospective over completed appearances; it is explicitly not the next-game forecast planned for Slice 11. Conditional rebound boards contain only appearances following a same-role process collapse and do not pad missing opportunities.
+
+`shadow` reads the Slice 11 immutable long-format ledger and monitoring audit. The ledger key is year／pitcher／role／game／target; an existing key's probability is never overwritten, and a later source mismatch is counted as a preserved conflict. The initial 2026 population is labeled `historical_backfill`; only newly observed keys in later rebuilds can be labeled `prospective_append`. Monitoring reports calibration and confusion counts separately for every role-target pair. The integration gate remains closed until untouched 2027 data and at least 250 truly prospective rows per role-target are available. This endpoint does not produce a scheduled-next-game forecast.
+
+`v2-audit` reads the independent Slices 11A–13 audit. It exposes yearly eligibility/exclusion counts, opener／traditional-starter／bulk-reliever classifications, harmonized 2023–2026 warehouse coverage, and the strict expanding-window folds 2023→2024, 2023–24→2025 and diagnostic-only 2023–25→2026. Raw and cleaned cohorts remain separate; onset and persistent collapse are separate targets. Historical Plus values were retrospectively generated with the current frozen Plus models, so this endpoint validates the Performance State layer rather than claiming pristine out-of-sample Plus-model validation.
+
+`v2-slice14-audit` reads the independent Slice 14A/B artifact. Slice 14A reports pitcher-cluster bootstrap intervals, calibration slope/intercept/ECE and evidence status for each fold, role and target. Slice 14B fits the advanced state/regime/volatility/tail/forecast stack on 2023–2025 and evaluates once on diagnostic-only 2026; it does not touch v1 artifacts or the 2027 prospective holdout.
+
+`v2-slice15-audit` is the 2027 prospective-shadow readiness and monitoring contract. It fingerprints every Slice 14 input, locks training years/thresholds/calibration, reports whether an untouched 2027 source exists, and keeps the integration gate closed until append-only predictions and post-game observations reach at least 250 rows per role-target. When the source is absent it returns `awaiting_untouched_2027_source` with zero predictions; it never trains during an HTTP request.
+
+`v2-slice16-audit` is a research-only optimization challenger. It develops on 2023–2024, selects between stable EWMA/MA5 and workload/context features on 2025, refits on 2023–2025, and evaluates once on the fixed 2026 diagnostic. It reports prevalence baselines, frozen Slice 14 metrics, pitcher-cluster bootstrap intervals, and a repaired release gate that explicitly rejects zero-variance baseline-only predictions. It never overwrites Slice 14/15 and keeps production integration closed.
+
+`v2-slice17-audit` calibrates only the Slice 16 challenger. It selects raw, Platt or isotonic calibration on the 2025 window, applies the selected calibrator to a 2023–2025 refit, and reports raw-versus-calibrated Brier/log-loss on fixed 2026 diagnostics. A calibration is retained only when both Brier and log-loss are not worse; it does not replace Slice 14/15 automatically.
+
+`v2-slice18-20-audit` contains three research-only diagnostics: Slice 18 empirical-Bayes pitcher partial pooling, Slice 19 residualized-workload selection-bias sensitivity, and Slice 20 SP/RP plus dominant-arsenal subgroup calibration. All use 2023–2024 development, 2025 selection and 2026 fixed diagnostics; none claims causal workload effects or retunes production probabilities.
+
+`v2-slice21-22-audit` contains strict forward rolling-origin folds (2023→2024, 2023–2024→2025, 2023–2025→2026) for global, partial-pooling and residualized-workload challengers, followed by a research-only freeze decision. A retained challenger is never a formal model replacement; the response explicitly keeps production integration closed until untouched 2027 evidence exists.
+
+`v2-strict-2026-replay` is a pre-registered retrospective holdout replay. Its role-target layer map, feature policy, 2025 Platt calibration rule and fixed false-alert threshold are fingerprinted before the 2026 state files are loaded for scoring. Because this project has previously inspected 2026, the response explicitly does not call it an untouched test; 2027 remains the only untouched prospective year.
+
+`v2-lab` is the research-page synchronization contract. For the frozen 2026 diagnostic it aggregates Slice 14 role-target-specific probabilities as the Lab primary board, joins latest/season-mean deltas from Slice 18 partial-pooling and Slice 19 workload-bias challengers, and exposes the Slice 20 subgroup monitor, Slice 22 freeze decision and strict-replay status. It does not replace the formal `/leaderboards` model, overwrite v1 player timelines, or fit a model during an HTTP request; non-2026 requests should use the existing v1 Lab endpoint as fallback.
+
+The Slice 10/11 player chart plots two same-scale performance series by appearance date, not a probability line. Process/rebound targets compare observed `process_score` (personal-baseline-adjusted Stuff+ and Location+ mean) with the mean of the available pre-appearance Stuff and Command state forecasts. Result collapse compares observed `result_score` (personal-baseline-adjusted RE24/PA and WPA/LI/PA mean) with the pre-appearance Result state forecast. Red solid circles/line are actual values, blue diamonds/dashed line are forecasts, and a light vertical dashed connector shows each game's forecast error; a purple ring marks a target event that was also alerted. Hover/focus exposes WPA, RE24, WPA/LI, Stuff+, Location+, both scores, all four target probabilities and the selected target's outcome. Forecast probabilities remain separate from forecast performance values.
+
+Artifacts are rebuilt with `python backend/scripts/build_performance_state.py`; `--slice4-6-only` reuses the frozen v1.1 filtered states. Slice 4 compares 2–5 diagonal-Gaussian HMMs on 2025 and applies filtered, never smoothed, probabilities with elapsed-time transitions and 60-day stationary resets. Slice 5 fits Student-t GAS then a strictly lagged HAR correction with a 2025-only log-to-level smearing factor. Slice 6 uses `arch`'s Student-t likelihood with a constrained SciPy panel optimizer, resetting pitcher-role boundaries rather than concatenating unrelated players; per-pitcher GARCH fits are rejected for insufficient history. Outputs are `performance_state_slice4_6.json` and `performance_state_advanced_<year>.parquet`.
+
+`--slice7-only` reads the frozen advanced artifacts and writes `performance_state_slice7.json` plus `performance_state_tail_<year>.parquet`. POT candidates compare 90%/92.5%/95% thresholds and declustering run lengths 0/1/2 using only the chronological 2025 fit/validation split; candidates use a comparable full-validation censored likelihood, with `log(1-q)` below the threshold and `log(q)+GPD density` above it. The final GPD is bootstrapped 100 times and audited with KS fit, support coverage, held-out alert recall and false-alert rate. EVT survival is used only when the requested raw extreme threshold lies above the fitted POT threshold; otherwise the frozen 2025 empirical survival is returned with `evt_tail_supported=false`, and expected severity remains null. CAViaR compares SAV and asymmetric-slope specifications on 2025 validation, then reports 2026 quantile loss and Kupiec unconditional coverage.
+
+`--slice8-9-only` reads the frozen Slice 0–7 artifacts and writes `performance_state_slice8_9.json` plus `performance_state_forecasts_<year>.parquet`. For every SP/RP target, 2025 is divided chronologically into 60% training, 20% probability calibration and 20% validation. Five cumulative penalized-logistic layers are compared from lagged baseline through latent-state forecast, HMM prior, GAS+HAR and EVT; XGBoost with GJR/CAViaR is retained as a challenger. Current-appearance filtered states and innovations are forbidden predictors. Slice 9 applies the frozen choices to the amended 2026 external diagnostic and records PR-AUC, Brier/log loss, calibration bins, fixed false-alert metrics, pitcher-cluster bootstrap intervals, dominant-arsenal subgroups and explicit pass/fail gates. Targets remain separate and the overall decision is `keep_research_only`.
+
+`--slice11-only` reads the existing frozen forecast and filtered-state artifacts; it does not refit any model. It atomically appends unseen keys to `performance_state_shadow_ledger.parquet` and writes `performance_state_slice11.json`. Performance State rebuilds are not currently part of the daily pipeline; the data-freshness report therefore labels this dataset `manual frozen-model rebuild · immutable append ledger` instead of implying automatic currency.
+
+`--slice11a-13-only` builds only the independent v2 artifacts: `performance_state_v2_contract.json`, `performance_state_v2_slice11a_13.json`, `performance_state_v2_warehouse_<2023|2024|2025|2026>.parquet` and `performance_state_v2_predictions_<2024|2025|2026>.parquet`. It fixes the leverage reference to 2023, never rewrites v1 artifacts, and keeps 2027 untouched.
+
+`--slice14-only` builds `performance_state_v2_slice14.json`, one advanced state Parquet per year, and `performance_state_v2_slice14_predictions_2026.parquet`. It requires the Slices 11A–13 warehouses and uses 2023–2025 for all fitting/model selection; 2026 is diagnostic-only.
+
+`--slice15-only` writes the readiness artifact `performance_state_v2_slice15.json`. It fingerprints the frozen Slice 14 inputs and checks for `data/MLB2027/mlb_2027.duckdb`; it does not materialize, refit or retune a 2027 model. The source must be available before a future append-only materialization step can create prospective rows.
+
+`--slice16-only` writes `performance_state_v2_slice16.json` and `performance_state_v2_slice16_predictions_2026.parquet`. It is a non-destructive challenger build using only frozen Slice 14 state inputs; 2026 remains diagnostic-only and no production artifact is changed.
+
+`--slice17-only` writes `performance_state_v2_slice17.json` and `performance_state_v2_slice17_predictions_2026.parquet`. It calibrates the Slice 16 challenger using the temporally separate 2025 selection window; it never refits Slice 14/15 or opens production integration.
+
+`--slice18-20-only` writes `performance_state_v2_slice18_20.json`, plus separate Slice 18 and Slice 19 2026 challenger prediction Parquets. It performs partial-pooling, workload-sensitivity and subgroup-calibration diagnostics without changing frozen production inputs.
+
+`--slice21-22-only` writes `performance_state_v2_slice21_22.json` with forward-fold metrics and the non-production freeze decision. It does not rewrite Slice 14/15 or open any integration gate.
+
+`--strict-2026-replay-only` writes `performance_state_v2_strict_2026_replay.json` and `performance_state_v2_strict_2026_replay_predictions.parquet`. It fits only on 2023–2024, calibrates on 2025, then loads 2026 after the model fingerprint is fixed; it does not tune on 2026 or open production integration.
+
+The build uses 2025 to freeze empirical-Bayes personal baselines, thresholds, calendar-gap policy and all Slice 3A–6 parameters, then evaluates on 2026. Because Slice 3A was introduced after inspecting the first 2026 diagnostic, 2026 is labeled `test_with_documented_slice3a_amendment`, not pristine untouched validation; 2027 is reserved for prospective untouched validation. RE24 is pitcher-positive, WPA uses the shared plate-appearance boundary contract, and WPA/LI uses a shrunk 2025 empirical leverage table. `game_score_proxy` is explicitly a starter-only Bill James-style proxy, not an official earned-run Game Score.
 
 ### Batter Comparison
 
@@ -225,6 +375,17 @@ Arbitrary-date X/Y/Z timing is not available locally. `timing_reference` therefo
 `team-research` uses `data_mode=recent_observed_research`. Batting order is reconstructed from team PA sequence and defensive positions from fielder IDs. It returns descriptive order splits, observed pitcher-hand splits, recent starter/order probabilities and three empirical run-expectancy scenarios. Active roster, injuries, official DH／PH roles and probable starters are not available from the local tables and are listed in `coverage`／`limitations`.
 
 `team-research/lineup-scenarios` is the read-only Team Dashboard path for the three lineup cards: recent consensus, latest observed and run-expectancy candidate. It never reconstructs positions or runs simulations during an HTTP request. The data refresh pipeline computes both vs RHP and vs LHP results for every team, then atomically replaces `data/derived/batter_lineup_scenarios_<year>.json`. Responses expose `cache_status=current|stale|unavailable`; when newer pitch data exists or a rebuild fails, the endpoint continues serving the last completed entry with a warning.
+
+### Data Operations Observability
+
+- `GET /api/admin/data-freshness?year=2026` reads the latest generated freshness manifest. If no manifest exists for the requested year, it builds a non-persisted local snapshot without an external coverage request.
+- `POST /api/admin/data-freshness/refresh?year=2026` rebuilds official coverage, dataset cutoffs, automation state and page-impact mappings, then writes the latest JSON, Markdown and timestamped history snapshot under `data/admin_job_logs`.
+- `GET /api/admin/project-tracker` reads the Git-tracked `docs/PROJECT_TRACKER.json`, calculates project and portfolio progress from slice statuses, and returns handoff-ready Markdown.
+
+The freshness manifest is the runtime authority for data cutoff reporting. `docs/PROJECT_TRACKER.json` is the planning authority for project, slice, verification and next-step status.
+
+- `POST /api/admin/jobs/backfill-historical-plus?year=2024` starts the resumable local historical Plus pipeline for exactly one selected season. That season runs Location+, per-pitch Stuff+, Stuff leaderboard, Pitching+ and Stamina in dependency order; downstream stages do not run while per-pitch Stuff+ remains partial. A resumed season skips stages already marked `completed` or `current`. Admin child processes force UTF-8 on stdin/stdout/stderr so Windows legacy console encodings cannot turn a successfully written artifact into a failed job response.
+- `GET /api/admin/jobs/historical-plus-status` returns the persisted season/stage status and, while Stuff+ is running, its cached-row and pitcher progress. Re-running the POST resumes the per-pitch cache instead of discarding completed pitchers.
 
 ## Standard Response Shape
 

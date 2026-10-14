@@ -34,7 +34,7 @@ def test_comparison_options_and_overview_build_percentile_cards(tmp_path, monkey
     data.to_csv(tmp_path / "2026_pitcher_comparison.csv", index=False)
 
     monkeypatch.setattr(settings, "data_dir", tmp_path)
-    comparison_service.load_comparison_pool.cache_clear()
+    comparison_service.clear_comparison_pool_cache()
 
     options = comparison_service.get_comparison_options(2026)
     assert [pitcher.player_id for pitcher in options.pitchers] == [1, 2]
@@ -159,7 +159,7 @@ def test_period_comparison_overview_builds_metrics_from_pitch_rows(tmp_path, mon
 
     monkeypatch.setattr(settings, "data_dir", tmp_path)
     monkeypatch.setattr(comparison_service, "load_pitcher_cached_season", lambda *args, **kwargs: pitch_rows)
-    comparison_service.load_comparison_pool.cache_clear()
+    comparison_service.clear_comparison_pool_cache()
 
     overview = comparison_service.get_period_comparison_overview(
         pitcher_id=7,
@@ -191,6 +191,14 @@ def test_period_comparison_overview_builds_metrics_from_pitch_rows(tmp_path, mon
 
 
 def test_period_date_range_uses_pitcher_season_bounds(monkeypatch):
+    pitches = pd.DataFrame(
+        [
+            {"game_date": "2026-03-27", "game_pk": 1, "pitcher_team": "PIT"},
+            {"game_date": "2026-07-20", "game_pk": 2, "pitcher_team": "PIT"},
+            {"game_date": "2026-08-17", "game_pk": 3, "pitcher_team": "AZ"},
+        ]
+    )
+    monkeypatch.setattr(comparison_service, "load_pitcher_cached_season", lambda *args, **kwargs: pitches)
     monkeypatch.setattr(
         comparison_service,
         "load_pitcher_season_date_range",
@@ -205,7 +213,83 @@ def test_period_date_range_uses_pitcher_season_bounds(monkeypatch):
         "start_date": "2026-03-27",
         "end_date": "2026-07-09",
         "pitches": 1234,
+        "current_team": "AZ",
+        "transfer_count": 1,
+        "team_stints": [
+            {
+                "stint_index": 1,
+                "team": "PIT",
+                "start_date": "2026-03-27",
+                "end_date": "2026-07-20",
+                "pitches": 2,
+                "games": 2,
+                "label": "PIT · 2026-03-27–2026-07-20",
+            },
+            {
+                "stint_index": 2,
+                "team": "AZ",
+                "start_date": "2026-08-17",
+                "end_date": "2026-08-17",
+                "pitches": 1,
+                "games": 1,
+                "label": "AZ · 2026-08-17–2026-08-17",
+            },
+        ],
     }
+
+
+def test_comparison_pool_prefers_latest_pitch_team(tmp_path, monkeypatch):
+    pd.DataFrame(
+        [{"year": 2026, "player_id": 642701, "display_name": "Dennis Santana", "team": "PIT", "role": "RP"}]
+    ).to_csv(tmp_path / "2026_pitcher_comparison.csv", index=False)
+    monkeypatch.setattr(settings, "data_dir", tmp_path)
+    monkeypatch.setattr(
+        comparison_service,
+        "load_pitcher_latest_teams",
+        lambda *_args, **_kwargs: pd.DataFrame([{"player_id": 642701, "team": "AZ"}]),
+    )
+    comparison_service.clear_comparison_pool_cache()
+
+    pitcher = comparison_service.get_comparison_options(2026).pitchers[0]
+
+    assert pitcher.team == "AZ"
+    assert pitcher.display_label == "Dennis Santana (AZ, RP)"
+
+
+def test_comparison_pool_prefers_appearance_role_over_stale_csv(tmp_path, monkeypatch):
+    pd.DataFrame(
+        [{"year": 2026, "player_id": 669203, "display_name": "Corbin Burnes", "team": "AZ", "role": "RP"}]
+    ).to_csv(tmp_path / "2026_pitcher_comparison.csv", index=False)
+    monkeypatch.setattr(settings, "data_dir", tmp_path)
+    monkeypatch.setattr(
+        comparison_service,
+        "load_pitcher_master_and_appearances",
+        lambda *_args, **_kwargs: (
+            pd.DataFrame(),
+            pd.DataFrame([{"player_id": 669203, "G": 1, "GS": 1, "GR": 0}]),
+        ),
+    )
+    comparison_service.clear_comparison_pool_cache()
+
+    pitcher = comparison_service.get_comparison_options(2026).pitchers[0]
+
+    assert pitcher.role == "SP"
+    assert pitcher.display_label == "Corbin Burnes (AZ, SP)"
+
+
+def test_team_stints_preserve_return_to_previous_team():
+    pitches = pd.DataFrame(
+        [
+            {"game_date": "2026-04-01", "game_pk": 1, "pitcher_team": "AAA"},
+            {"game_date": "2026-05-01", "game_pk": 2, "pitcher_team": "BBB"},
+            {"game_date": "2026-06-01", "game_pk": 3, "pitcher_team": "AAA"},
+        ]
+    )
+
+    stints = comparison_service.build_pitcher_team_stints(pitches)
+
+    assert [stint["team"] for stint in stints] == ["AAA", "BBB", "AAA"]
+    assert [stint["stint_index"] for stint in stints] == [1, 2, 3]
 
 
 def test_period_video_payload_does_not_truncate_by_default():

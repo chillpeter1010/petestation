@@ -38,6 +38,28 @@ export function linearRegression(points: Array<{ x: number; y: number }>): Linea
   return { n, correlation, rSquared, slope, intercept, pValue, significant: pValue < 0.05 }
 }
 
+export function spearmanCorrelation(points: Array<{ x: number; y: number }>): number | null {
+  if (points.length < 3) return null
+  const rankedX = ranks(points.map(point => point.x))
+  const rankedY = ranks(points.map(point => point.y))
+  const result = linearRegression(rankedX.map((x, index) => ({ x, y: rankedY[index]! })))
+  return result?.correlation ?? null
+}
+
+function ranks(values: number[]) {
+  const sorted = values.map((value, index) => ({ value, index })).sort((left, right) => left.value - right.value)
+  const result = Array<number>(values.length)
+  let start = 0
+  while (start < sorted.length) {
+    let end = start + 1
+    while (end < sorted.length && sorted[end]!.value === sorted[start]!.value) end += 1
+    const averageRank = (start + 1 + end) / 2
+    for (let index = start; index < end; index += 1) result[sorted[index]!.index] = averageRank
+    start = end
+  }
+  return result
+}
+
 function studentTTwoSidedPValue(tStatistic: number, degreesOfFreedom: number) {
   const x = degreesOfFreedom / (degreesOfFreedom + tStatistic * tStatistic)
   return regularizedIncompleteBeta(x, degreesOfFreedom / 2, 0.5)

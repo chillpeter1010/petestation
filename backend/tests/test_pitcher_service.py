@@ -105,3 +105,29 @@ def test_list_pitcher_leaderboard_includes_average_starter_game_score(monkeypatc
     assert len(rows) == 1
     assert rows[0].name == "Ace Starter"
     assert rows[0].avg_game_score == 59.0
+
+
+def test_list_pitcher_leaderboard_handles_season_without_game_lines(monkeypatch):
+    player_master = pd.DataFrame(
+        [{"player_id": 1, "player_name": "Archive Pitcher", "roles": "pitcher", "pitcher_teams_2025": "AAA"}]
+    )
+    appearances = pd.DataFrame([{"player_id": 1, "G": 3, "GS": 3}])
+    monkeypatch.setattr(
+        pitcher_service,
+        "load_pitcher_master_and_appearances",
+        lambda year, data_dir: (player_master, appearances),
+    )
+    monkeypatch.setattr(pitcher_service, "_load_pitcher_game_lines", lambda year: pd.DataFrame())
+    monkeypatch.setattr(
+        pitcher_service,
+        "_load_pitcher_home_runs",
+        lambda year: pd.DataFrame(columns=["pitcher_id", "home_runs"]),
+    )
+
+    rows = pitcher_service.list_pitcher_leaderboard(2025)
+
+    assert len(rows) == 1
+    assert rows[0].name == "Archive Pitcher"
+    assert rows[0].ip is None
+    assert rows[0].whip is None
+    assert rows[0].strikeout_rate is None

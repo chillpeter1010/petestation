@@ -359,12 +359,18 @@ def backfill_video_lookup(
     all_game_pks = pd.to_numeric(games_df["game_pk"], errors="coerce").dropna().astype(int).tolist()
     pitch_lookup = normalize_pitch_lookup(cached_pitch_lookup)
     game_player_lookup = normalize_game_player_lookup(cached_player_lookup)
-    cached_game_pks = (
+    cached_pitch_game_pks = (
         pd.to_numeric(pitch_lookup["game_pk"], errors="coerce").dropna().astype(int).unique().tolist()
         if not pitch_lookup.empty
         else []
     )
-    missing_game_pks = [game_pk for game_pk in all_game_pks if game_pk not in set(cached_game_pks)]
+    cached_player_game_pks = (
+        pd.to_numeric(game_player_lookup["game_pk"], errors="coerce").dropna().astype(int).unique().tolist()
+        if not game_player_lookup.empty
+        else []
+    )
+    complete_game_pks = set(cached_pitch_game_pks).intersection(cached_player_game_pks)
+    missing_game_pks = [game_pk for game_pk in all_game_pks if game_pk not in complete_game_pks]
     if max_games is not None:
         missing_game_pks = missing_game_pks[: max(max_games, 0)]
 

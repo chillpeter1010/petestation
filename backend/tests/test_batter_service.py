@@ -128,6 +128,41 @@ def test_batter_name_falls_back_to_official_game_lookup(tmp_path, monkeypatch):
     assert batter_service.list_batter_leaderboard(2026)[0]["name"] == "Official Rookie"
 
 
+def test_placeholder_batter_name_falls_back_to_official_game_lookup(tmp_path, monkeypatch):
+    mlb_dir = tmp_path / "MLB2026"
+    mlb_dir.mkdir()
+    pitches = pd.DataFrame([_test_batter_pitch(1, 1, "single", "hit_into_play", 96.0, 4, 0.8, 1.2, 0.9, 0.9, 1.0)])
+    with duckdb.connect(str(mlb_dir / "mlb_2026.duckdb")) as conn:
+        conn.register("pitches_frame", pitches)
+        conn.execute("CREATE TABLE pitches AS SELECT * FROM pitches_frame")
+        conn.execute("CREATE TABLE player_master AS SELECT 1::BIGINT AS player_id, 'Batter 1'::VARCHAR AS player_name")
+        conn.execute(
+            """
+            CREATE TABLE game_player_lookup AS
+            SELECT 1::BIGINT AS game_pk, 1::BIGINT AS player_id,
+                   'Official Rookie'::VARCHAR AS player_name, 'batter'::VARCHAR AS role
+            """
+        )
+
+    monkeypatch.setattr(batter_service.settings, "data_dir", tmp_path)
+
+    assert batter_service.list_batter_leaderboard(2026)[0]["name"] == "Official Rookie"
+
+
+def test_placeholder_batter_name_falls_back_to_timing_cache(tmp_path, monkeypatch):
+    timing_dir = tmp_path / "MissDistance"
+    timing_dir.mkdir()
+    pd.DataFrame([{"id": 1, "name": "Rookie, Official"}]).to_csv(
+        timing_dir / "2026_batter_timing_summary_all.csv", index=False
+    )
+    frame = pd.DataFrame([{"player_id": 1, "name": "Batter 1"}])
+    monkeypatch.setattr(batter_service.settings, "data_dir", tmp_path)
+
+    resolved = batter_service._apply_batter_name_fallbacks(frame, 2026)
+
+    assert resolved.iloc[0]["name"] == "Official Rookie"
+
+
 def test_batter_location_points_keep_video_and_plus_scores(monkeypatch):
     raw = pd.DataFrame(
         [
@@ -187,12 +222,14 @@ def test_batter_game_log_exposes_batter_wpa_and_woba(monkeypatch):
                 "home_team": "AZ",
                 "away_team": "LAD",
                 "delta_home_win_exp": 0.04,
+                "batter_wpa": 0.04,
             },
             {
                 **_test_batter_pitch(1, 2, "walk", "ball", None, None, None, None, None, 0.7, 1.0),
                 "home_team": "AZ",
                 "away_team": "LAD",
                 "delta_home_win_exp": 0.01,
+                "batter_wpa": 0.01,
             },
         ]
     )

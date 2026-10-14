@@ -10,13 +10,21 @@
         <h1>Data operations</h1>
         <p>Pitch data, videos, official game lines, transactions, injuries, and contract snapshots live here. Automatic update: daily at 03:00 Asia/Taipei.</p>
       </div>
-      <label>
-        Season
-        <select v-model.number="year" :disabled="running">
-          <option v-for="option in yearOptions" :key="option" :value="option">{{ option }}</option>
-        </select>
-      </label>
+      <div class="operations-controls">
+        <button class="brand-switch" type="button" role="switch" :aria-checked="isPetehub" @click="toggleBrand">
+          <span class="brand-switch__track" aria-hidden="true"><span /></span>
+          <span><small>Site identity</small><strong>{{ brandName }}</strong></span>
+        </button>
+        <label>
+          Season
+          <select v-model.number="year" :disabled="running">
+            <option v-for="option in yearOptions" :key="option" :value="option">{{ option }}</option>
+          </select>
+        </label>
+      </div>
     </section>
+
+    <AdminProjectTracker />
 
     <SiteArchitectureMap />
 
@@ -31,6 +39,34 @@
     </section>
 
     <p v-if="message" :class="['operations-message', { error: failed }]" role="status">{{ message }}</p>
+
+    <section class="historical-panel" aria-labelledby="historical-plus-title">
+      <div class="historical-copy">
+        <span class="eyebrow">Historical model coverage</span>
+        <h2 id="historical-plus-title">Backfill Plus data by season</h2>
+        <p>Select one season below. Only that season runs Location+, per-pitch Stuff+, Plus leaderboards, Pitching+, and Stamina datasets; completed pitchers are skipped automatically.</p>
+        <p class="historical-note">This uses local compute, not chat tokens. You may close this page, but the backend must remain running.</p>
+      </div>
+      <div class="historical-action">
+        <span :class="['historical-state', historicalStateClass]">{{ historicalStateLabel }}</span>
+      </div>
+      <div class="historical-years" aria-label="Historical backfill season status">
+        <button
+          v-for="item in historicalYears"
+          :key="item.year"
+          type="button"
+          :disabled="historicalRunning"
+          :aria-label="`Update ${item.year} Plus data`"
+          @click="runHistoricalPlus(item.year)"
+        >
+          <span>{{ item.year }}</span>
+          <strong :class="`is-${item.status}`">{{ item.status }}</strong>
+          <small>{{ item.detail }}</small>
+          <em>{{ historicalRunning && Number(historicalStatus?.current_year) === item.year ? 'Running…' : `Update ${item.year}` }}</em>
+        </button>
+      </div>
+      <p class="historical-progress" role="status">{{ historicalMessage }}</p>
+    </section>
 
     <section class="pipeline-grid">
       <article v-for="item in pipelineItems" :key="item.key" class="pipeline-card">
@@ -55,6 +91,8 @@
       </div>
     </section>
 
+    <AdminDataFreshness ref="freshnessPanel" :year="year" />
+
     <section class="jobs-panel">
       <header><div><span class="eyebrow">This session</span><h2>Update jobs</h2></div><span>{{ jobs.length }} jobs</span></header>
       <div v-if="jobs.length" class="job-list">
@@ -78,8 +116,11 @@
 <script setup lang="ts">
 import { ArrowLeft, CheckCircle2, CircleX, Clock3, Database, DatabaseZap, Eraser, Film, FileChartColumn, RefreshCw, Settings2, ShieldPlus, WalletCards } from '@lucide/vue'
 import SiteArchitectureMap from '~/components/admin/SiteArchitectureMap.vue'
+import AdminDataFreshness from '~/components/admin/AdminDataFreshness.vue'
+import AdminProjectTracker from '~/components/admin/AdminProjectTracker.vue'
 
 const api = useApi()
+const { isPetehub, brandName, toggleBrand } = useSiteBrand()
 const year = ref(2026)
 const yearOptions = [2026, 2025, 2024, 2023, 2022, 2021]
 const running = ref(false)
@@ -88,7 +129,10 @@ const message = ref('')
 const jobs = ref<Record<string, any>[]>([])
 const status = ref<Record<string, unknown> | null>(null)
 const statusLoading = ref(false)
+const historicalStatus = ref<Record<string, any> | null>(null)
+const freshnessPanel = ref<InstanceType<typeof AdminDataFreshness> | null>(null)
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+let historicalPollTimer: ReturnType<typeof setInterval> | undefined
 
 const pipelineItems = [
   { key: 'pitches', group: 'Game pipeline', title: 'Pitch data', description: 'Refresh the season pitch database and derived source files.', scope: 'Season', icon: Database },
@@ -98,11 +142,63 @@ const pipelineItems = [
   { key: 'payroll', group: 'Roster pipeline', title: 'Contract snapshots', description: 'Refresh FanGraphs payroll and contract tables with bounded concurrency.', scope: '30 clubs', icon: WalletCards }
 ]
 
-onMounted(refreshStatus)
+const historicalRunning = computed(() => running.value || Boolean(historicalStatus.value?.active_job))
+const historicalStateLabel = computed(() => {
+  if (historicalStatus.value?.active_job) return 'RUNNING'
+  return String(historicalStatus.value?.status || 'not_started').replace('_', ' ').toUpperCase()
+})
+const historicalStateClass = computed(() => String(historicalStatus.value?.active_job ? 'running' : historicalStatus.value?.status || 'not_started'))
+const historicalMessage = computed(() => String(historicalStatus.value?.message || 'No historical backfill has been started.'))
+const historicalYears = computed(() => [2021, 2022, 2023, 2024, 2025].map(targetYear => {
+  const entry = historicalStatus.value?.years?.[String(targetYear)] || {}
+  const stage = String(entry.current_stage || '')
+  const stages = Object.values(entry.stages || {}) as Record<string, any>[]
+  const completedStages = stages.filter(item => ['completed', 'current'].includes(String(item.status))).length
+  const stuffProgress = entry.stages?.pitch_stuff_plus?.progress
+  const detail = stage === 'pitch_stuff_plus' && stuffProgress
+    ? `${Number(stuffProgress.coverage_pct || 0).toFixed(1)}% · ${Number(stuffProgress.processed_pitchers || 0).toLocaleString()} pitchers`
+    : stage ? `${stage.replaceAll('_', ' ')} · ${completedStages}/5` : `${completedStages}/5 stages`
+  return {
+    year: targetYear,
+    status: String(entry.status || 'pending'),
+    detail
+  }
+}))
+
+onMounted(async () => {
+  await Promise.all([refreshStatus(), refreshHistoricalPlusStatus()])
+  if (historicalStatus.value?.active_job) beginHistoricalStatusPolling()
+})
+onBeforeUnmount(() => historicalPollTimer && clearInterval(historicalPollTimer))
 
 async function runEverything() { await execute(async () => { await runGameSteps(); await runRosterStep() }, 'All data pipelines completed.') }
 async function runGamePipeline() { await execute(runGameSteps, 'Game data pipeline completed.') }
 async function runRosterPipeline() { await execute(runRosterStep, 'Contracts, transactions, and injuries updated.') }
+
+async function runHistoricalPlus(targetYear: number) {
+  if (historicalRunning.value) return
+  running.value = true
+  failed.value = false
+  message.value = `Starting the resumable ${targetYear} Plus backfill…`
+  try {
+    const started = await api.backfillHistoricalPlusJob(targetYear)
+    beginHistoricalStatusPolling()
+    await trackJob(started)
+    await refreshHistoricalPlusStatus()
+    const completed = historicalStatus.value?.years?.[String(targetYear)]?.status === 'completed'
+    failed.value = !completed
+    message.value = completed
+      ? `Historical Plus backfill completed for ${targetYear}.`
+      : `${targetYear} Plus backfill stopped before all stages completed. Select the same year to resume.`
+  } catch (error) {
+    failed.value = true
+    message.value = error instanceof Error ? error.message : `${targetYear} Plus backfill failed.`
+  } finally {
+    running.value = false
+    await Promise.all([refreshStatus(), refreshHistoricalPlusStatus()])
+    await freshnessPanel.value?.refresh(false)
+  }
+}
 
 async function execute(task: () => Promise<void>, successMessage: string) {
   if (running.value) return
@@ -119,6 +215,7 @@ async function execute(task: () => Promise<void>, successMessage: string) {
   } finally {
     running.value = false
     await refreshStatus()
+    await freshnessPanel.value?.refresh(false)
   }
 }
 
@@ -144,6 +241,7 @@ async function trackJob(started: Record<string, any>) {
     await sleep(2200)
     current = await api.adminJob(jobId)
     upsertJob(current)
+    if (String(current.name).includes('historical_plus')) await refreshHistoricalPlusStatus()
   }
   if (String(current.status) === 'failed') throw new Error(`${jobLabel(current)} failed: ${String(current.error || 'Unknown error')}`)
   return current
@@ -162,6 +260,22 @@ async function refreshStatus() {
   finally { statusLoading.value = false }
 }
 
+async function refreshHistoricalPlusStatus() {
+  try { historicalStatus.value = await api.historicalPlusStatus() }
+  catch { historicalStatus.value = null }
+}
+
+function beginHistoricalStatusPolling() {
+  if (historicalPollTimer) return
+  historicalPollTimer = setInterval(async () => {
+    await refreshHistoricalPlusStatus()
+    if (!historicalStatus.value?.active_job && historicalPollTimer) {
+      clearInterval(historicalPollTimer)
+      historicalPollTimer = undefined
+    }
+  }, 3000)
+}
+
 function statusValue(path: string) {
   const value = path.split('.').reduce<unknown>((current, key) => current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined, status.value)
   return value === undefined || value === null || value === '' ? '' : String(value)
@@ -169,6 +283,7 @@ function statusValue(path: string) {
 
 function jobLabel(job: Record<string, any>) {
   const name = String(job.name || '')
+  if (name.includes('historical_plus')) return `${Number(job.year || 0) || 'Historical'} Plus backfill`
   if (name.includes('roster')) return 'Contracts & transactions'
   if (name.includes('video')) return 'Video lookup'
   if (name.includes('game') || name.includes('line')) return 'Pitcher game lines'
@@ -179,6 +294,7 @@ function jobLabel(job: Record<string, any>) {
 function jobDetail(job: Record<string, any>) {
   if (job.error) return String(job.error)
   if (job.status !== 'completed') return job.status === 'running' ? 'Update is running on the backend.' : 'Waiting to start.'
+  if (String(job.name).includes('historical_plus')) return String(job.result?.message || 'Historical Plus datasets processed.')
   const coverage = job.result?.coverage
   if (coverage?.status === 'source_pending') {
     const pendingDates = coverage.source_pending?.pending_dates?.join(', ') || coverage.missing_dates?.join(', ') || 'latest games'
@@ -204,17 +320,19 @@ async function clearClientCache() {
 
 <style scoped>
 .operations-page { --orange: #f5a332; --line: rgba(245,163,50,.24); min-height: 100vh; padding: 28px clamp(18px,4vw,58px) 36px; color: #f7f7f7; background: radial-gradient(circle at 84% 4%,rgba(245,163,50,.18),transparent 30rem),linear-gradient(145deg,#070707,#111 55%,#070707); }
-.operations-topbar,.operations-hero,.command-bar,.pipeline-grid,.status-panel,.jobs-panel,.operations-page>footer { max-width: 1280px; margin-inline: auto; }
+.operations-topbar,.operations-hero,.command-bar,.historical-panel,.pipeline-grid,.status-panel,.jobs-panel,.operations-page>footer { max-width: 1280px; margin-inline: auto; }
 .operations-topbar { display:flex; align-items:center; justify-content:flex-end; margin-bottom:24px; }
 .home-link,.eyebrow { display:inline-flex; align-items:center; gap:7px; }.home-link{color:#bbb;font-weight:800;text-decoration:none}.home-link:hover{color:var(--orange)}
 .operations-hero { display:flex; align-items:end; justify-content:space-between; gap:30px; border:1px solid var(--line); border-radius:18px; padding:clamp(25px,4vw,46px); background:linear-gradient(110deg,rgba(255,255,255,.035),rgba(245,163,50,.08)); }
 .eyebrow { color:var(--orange); font-size:11px; font-weight:950; letter-spacing:.09em; text-transform:uppercase; }.operations-hero h1{margin:10px 0 8px;font-size:clamp(38px,5vw,62px);font-weight:750;line-height:1.06;letter-spacing:-.012em}.operations-hero p{max-width:690px;margin:0;color:#aaa;font-size:16px;line-height:1.55}
 .operations-hero label{display:grid;gap:8px;min-width:150px;color:#aaa;font-size:11px;font-weight:900;text-transform:uppercase}.operations-hero select{min-height:44px;border:1px solid #444;border-radius:10px;padding:0 12px;color:#fff;background:#111;font-weight:850}
+.operations-controls{display:flex;align-items:end;gap:12px}.brand-switch{min-height:58px;display:flex;align-items:center;gap:11px;border:1px solid #444;border-radius:10px;padding:8px 12px;color:#fff;background:#080808;cursor:pointer}.brand-switch:hover,.brand-switch:focus-visible{border-color:var(--orange)}.brand-switch>span:last-child{display:grid;gap:2px;text-align:left}.brand-switch small{color:#888;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.brand-switch strong{font-size:13px}.brand-switch__track{width:36px;height:20px;display:flex;align-items:center;border-radius:999px;padding:2px;background:#444;transition:background 140ms ease}.brand-switch__track>span{width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 140ms ease}.brand-switch[aria-checked="true"] .brand-switch__track{background:var(--orange)}.brand-switch[aria-checked="true"] .brand-switch__track>span{transform:translateX(16px)}
 .command-bar { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; border:1px solid #292929;border-radius:14px;padding:12px;background:rgba(17,17,17,.92)}.command-bar button{min-height:44px;display:inline-flex;align-items:center;gap:8px;border:1px solid #393939;border-radius:10px;padding:0 15px;color:#eee;background:#181818;font-weight:900;cursor:pointer}.command-bar button:hover{border-color:var(--orange)}.command-bar .primary-action{color:#111;border-color:var(--orange);background:var(--orange)}.command-bar .cache-action{margin-left:auto;color:#aaa}.command-bar button:disabled{cursor:wait;opacity:.55}
 .operations-message{max-width:1280px;margin:14px auto 0;border-left:3px solid #64c77a;padding:9px 13px;color:#d8f5df;background:rgba(70,150,88,.1)}.operations-message.error{border-color:#e3544d;color:#ffd8d4;background:rgba(190,58,50,.1)}
+.historical-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;margin-top:16px;border:1px solid var(--line);border-radius:14px;padding:22px;background:linear-gradient(115deg,rgba(245,163,50,.09),#121212 48%)}.historical-copy h2{margin:7px 0 8px;font-size:24px}.historical-copy p{max-width:780px;margin:0;color:#aaa;font-size:14px;line-height:1.55}.historical-copy .historical-note{margin-top:8px;color:#d9bd91}.historical-action{display:flex;align-items:flex-end;flex-direction:column;gap:10px}.historical-state{border:1px solid #444;border-radius:999px;padding:5px 9px;color:#aaa;font-size:10px;font-weight:950;letter-spacing:.07em}.historical-state.running{color:#111;border-color:var(--orange);background:var(--orange)}.historical-state.completed{color:#9ae8ac;border-color:#397648}.historical-state.partial,.historical-state.invalid{color:#ffc0b8;border-color:#98483f}.historical-years{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid #292929;border-radius:10px;overflow:hidden}.historical-years>button{display:grid;gap:4px;border:0;border-right:1px solid #292929;padding:13px 15px;color:inherit;background:rgba(0,0,0,.2);font:inherit;text-align:left;cursor:pointer}.historical-years>button:last-child{border-right:0}.historical-years>button:hover,.historical-years>button:focus-visible{background:rgba(245,163,50,.12);outline:0}.historical-years>button:disabled{cursor:wait;opacity:.58}.historical-years span{color:#eee;font-size:16px;font-weight:900}.historical-years strong{color:#888;font-size:10px;text-transform:uppercase}.historical-years strong.is-completed{color:#79db91}.historical-years strong.is-running{color:var(--orange)}.historical-years strong.is-failed{color:#ff8c80}.historical-years small{color:#777;font-size:10px}.historical-years em{margin-top:5px;color:var(--orange);font-size:10px;font-style:normal;font-weight:900;text-transform:uppercase}.historical-progress{grid-column:1/-1;margin:0;color:#bbb;font-size:12px}
 .pipeline-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}.pipeline-card{min-height:185px;display:flex;flex-direction:column;gap:15px;border:1px solid #292929;border-radius:14px;padding:18px;background:#141414}.pipeline-card>svg{color:var(--orange)}.pipeline-card span{color:#777;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.pipeline-card h2{margin:4px 0 0;font-size:17px}.pipeline-card p{margin:7px 0 0;color:#999;font-size:12px;line-height:1.5}.pipeline-card>strong{margin-top:auto;color:var(--orange);font-size:11px;text-transform:uppercase}
 .status-panel,.jobs-panel{margin-top:16px;border:1px solid #292929;border-radius:14px;background:#121212}.status-panel>header,.jobs-panel>header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #292929;padding:17px 20px}.status-panel h2,.jobs-panel h2{margin:5px 0 0;font-size:20px}.status-panel header button{width:36px;height:36px;display:grid;place-items:center;border:1px solid #333;border-radius:9px;color:var(--orange);background:#181818;cursor:pointer}.status-grid{display:grid;grid-template-columns:repeat(4,1fr)}.status-grid>div{display:grid;gap:7px;padding:20px;border-right:1px solid #292929}.status-grid>div:last-child{border:0}.status-grid span{color:#888;font-size:10px;font-weight:850;text-transform:uppercase}.status-grid strong{font:800 22px "Fira Code",monospace}
 .jobs-panel>header>span{color:#777;font-size:11px;font-weight:850}.job-list{display:grid}.job-list article{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:11px;border-bottom:1px solid #242424;padding:14px 20px}.job-list article:last-child{border:0}.job-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:var(--orange);background:rgba(245,163,50,.1)}.job-list h3{margin:0;font-size:14px}.job-list p{margin:4px 0 0;color:#888;font-size:11px}.job-pill{min-width:88px;border-radius:999px;padding:6px 9px;color:#111;background:#999;font-size:9px;font-weight:950;text-align:center;text-transform:uppercase}.job-pill.queued,.job-pill.running{background:var(--orange)}.job-pill.completed{background:#64c77a}.job-pill.failed{color:#fff;background:#c43d34}.empty-jobs{margin:0;padding:30px 20px;color:#777;text-align:center}.operations-page>footer{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;color:#666;font-size:10px;text-align:right}.spinning{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:1050px){.pipeline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.operations-hero{align-items:stretch;flex-direction:column}.command-bar{display:grid}.command-bar .cache-action{margin-left:0}.pipeline-grid,.status-grid{grid-template-columns:1fr}.status-grid>div{border-right:0;border-bottom:1px solid #292929}.job-list article{grid-template-columns:34px minmax(0,1fr)}.job-pill{grid-column:2;width:max-content}.operations-page>footer{text-align:left}}
+@media(max-width:1050px){.pipeline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.operations-hero{align-items:stretch;flex-direction:column}.operations-controls{align-items:stretch;flex-direction:column}.command-bar{display:grid}.command-bar .cache-action{margin-left:0}.historical-panel{grid-template-columns:1fr}.historical-action{align-items:stretch}.historical-years{grid-template-columns:1fr}.historical-years>button{border-right:0;border-bottom:1px solid #292929}.pipeline-grid,.status-grid{grid-template-columns:1fr}.status-grid>div{border-right:0;border-bottom:1px solid #292929}.job-list article{grid-template-columns:34px minmax(0,1fr)}.job-pill{grid-column:2;width:max-content}.operations-page>footer{text-align:left}}
 @media(prefers-reduced-motion:reduce){.spinning{animation:none}}
 </style>

@@ -487,8 +487,8 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .state-panel--error { color: #ff8a8a; }
 .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .metric-strip article { display: grid; gap: 5px; min-height: 112px; border: 1px solid var(--color-border); border-radius: 16px; padding: 17px 19px; background: linear-gradient(145deg, color-mix(in srgb, var(--color-accent) 8%, var(--color-surface)), var(--color-surface) 62%); }
-.metric-strip span, .mode-bar span, .cell-inspector header span { color: var(--color-accent); font-size: 10px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
-.metric-strip strong { color: var(--color-text); font: 900 25px "Fira Code", monospace; }
+.metric-strip span, .mode-bar span, .cell-inspector header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.metric-strip strong { color: var(--color-text); font: 900 29px "Fira Code", monospace; }
 .metric-strip small { color: var(--color-muted-text); font-size: 11px; }
 .analysis-row { display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr); align-items: stretch; gap: 14px; }
 .workbench { overflow: hidden; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); box-shadow: var(--shadow-sm); transition: opacity .15s ease; }
@@ -511,8 +511,8 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .heatmap-panel svg { width: min(100%, 690px); height: auto; margin: 0 auto; display: block; background: #f7f7f4; }
 .analysis-row .heatmap-panel svg { width: min(100%, 500px); }
 .analysis-row .mode-bar { align-items: flex-start; padding: 13px 15px; }
-.analysis-row .mode-bar h2 { font-size: 18px; }
-.analysis-row .mode-tabs button, .analysis-row .view-toggle button { padding: 7px 8px; font-size: 9px; }
+.analysis-row .mode-bar h2 { font-size: 21px; }
+.analysis-row .mode-tabs button, .analysis-row .view-toggle button { padding: 8px 10px; font-size: 11px; }
 .analysis-row .cell-inspector header { padding: 16px; }
 .analysis-row .inspector-score { padding: 18px 16px; }
 .analysis-row .inspector-score strong { font-size: 34px; }
@@ -524,7 +524,7 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .strike-zone { fill: none; stroke: #242424; stroke-width: 2.5; pointer-events: none; }
 .plate { fill: none; stroke: #242424; stroke-width: 2.5; pointer-events: none; }
 .axis-label { fill: #484848; font: 800 10px "Fira Code", monospace; text-anchor: middle; letter-spacing: .12em; }
-.legend { display: grid; grid-template-columns: auto minmax(180px, 1fr) auto; align-items: center; gap: 12px; color: #5d5d5d; font-size: 10px; }
+.legend { display: grid; grid-template-columns: auto minmax(180px, 1fr) auto; align-items: center; gap: 12px; color: #5d5d5d; font-size: 11px; }
 .legend i { height: 8px; border-radius: 99px; }
 .cell-inspector { display: flex; flex-direction: column; min-width: 0; }
 .cell-inspector header { display: grid; gap: 6px; border-bottom: 1px solid var(--color-border); padding: 22px; }
@@ -532,15 +532,15 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .inspector-score { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 5px 12px; padding: 28px 22px; background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent); }
 .inspector-score span { color: var(--color-muted-text); font-size: 12px; font-weight: 800; }
 .inspector-score strong { grid-row: span 2; color: var(--color-accent); font: 900 50px "Fira Code", monospace; }
-.inspector-score small { color: var(--color-muted-text); font-size: 10px; }
+.inspector-score small { color: var(--color-muted-text); font-size: 11px; }
 .outcome-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--color-border); }
 .outcome-grid div { display: grid; gap: 7px; min-height: 90px; border-right: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 15px 18px; }
 .outcome-grid div:nth-child(even) { border-right: 0; }
 .outcome-grid div.wide { grid-column: 1 / -1; border-right: 0; }
-.outcome-grid span { color: var(--color-muted-text); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.outcome-grid span { color: var(--color-muted-text); font-size: 11px; font-weight: 800; text-transform: uppercase; }
 .outcome-grid strong { color: var(--color-text); font: 900 22px "Fira Code", monospace; }
 .cell-inspector > p { margin: 0; padding: 24px 22px; color: var(--color-muted-text); line-height: 1.55; }
-.cell-inspector footer { display: grid; gap: 7px; margin-top: auto; border-top: 1px solid var(--color-border); padding: 18px 22px; color: var(--color-muted-text); font-size: 11px; line-height: 1.45; }
+.cell-inspector footer { display: grid; gap: 7px; margin-top: auto; border-top: 1px solid var(--color-border); padding: 18px 22px; color: var(--color-muted-text); font-size: 12px; line-height: 1.45; }
 .cell-inspector footer b { color: var(--color-accent); }
 .method-note { border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border)); border-radius: 14px; padding: 15px 17px; background: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface)); }
 .method-note strong { color: var(--color-accent); }
@@ -548,15 +548,15 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .league-lab { overflow: hidden; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); }
 .league-header { display: flex; align-items: end; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--color-border); padding: 19px 21px; }
 .league-header > div:first-child { display: grid; gap: 5px; }
-.league-header span, .detail-table-block header span { color: var(--color-accent); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.league-header span, .detail-table-block header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .league-header h2, .detail-table-block h3 { margin: 0; color: var(--color-text); }
-.league-header p { margin: 0; color: var(--color-muted-text); font-size: 12px; }
+.league-header p { margin: 0; color: var(--color-muted-text); font-size: 14px; }
 .league-controls { display: flex; gap: 10px; }
-.league-controls label { display: grid; gap: 5px; color: var(--color-muted-text); font-size: 10px; font-weight: 850; text-transform: uppercase; }
-.league-controls input, .league-controls select { min-width: 170px; height: 40px; border: 1px solid var(--color-border-strong); border-radius: 9px; padding: 0 11px; color: var(--color-text); background: var(--color-background); font: 700 12px inherit; }
+.league-controls label { display: grid; gap: 5px; color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }
+.league-controls input, .league-controls select { min-width: 170px; height: 42px; border: 1px solid var(--color-border-strong); border-radius: 9px; padding: 0 11px; color: var(--color-text); background: var(--color-background); font: 700 13px inherit; }
 .league-layout { display: grid; grid-template-columns: minmax(560px, 1fr) minmax(560px, 1fr); }
 .leaderboard-panel { min-width: 0; }
-.leaderboard-panel > header { display: flex; justify-content: space-between; padding: 13px 16px; color: var(--color-muted-text); font-size: 11px; }
+.leaderboard-panel > header { display: flex; justify-content: space-between; padding: 13px 16px; color: var(--color-muted-text); font-size: 13px; }
 .leaderboard-scroll { max-height: 760px; overflow: auto; }
 .table-scroll { width: 100%; overflow: auto; }
 table { width: 100%; min-width: 680px; border-collapse: collapse; }
@@ -565,39 +565,39 @@ table { width: 100%; min-width: 680px; border-collapse: collapse; }
 .fangraphs-table th button:hover { color: var(--color-accent); }
 .fangraphs-table th button span { margin-left: 3px; opacity: .55; }
 .fangraphs-table .metric-divider { border-left: 3px solid var(--color-border-strong); }
-th, td { border-bottom: 1px solid var(--color-border); padding: 11px 12px; text-align: right; white-space: nowrap; }
-th { position: sticky; top: 0; z-index: 1; color: var(--color-muted-text); background: var(--color-surface); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
-td { color: var(--color-muted-text); font: 700 11px "Fira Code", monospace; }
+th, td { border-bottom: 1px solid var(--color-border); padding: 13px 16px; text-align: right; white-space: nowrap; }
+th { position: sticky; top: 0; z-index: 1; color: var(--color-muted-text); background: var(--color-surface); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+td { color: var(--color-muted-text); font: 700 12px "Fira Code", monospace; }
 th:nth-child(2), td:nth-child(2), .detail-table-block th:first-child, .detail-table-block td:first-child { text-align: left; }
 tbody tr { cursor: pointer; transition: background .12s ease; }
 tbody tr:hover, tbody tr.selected { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
 tbody tr.selected { box-shadow: inset 3px 0 var(--color-accent); }
 td strong { display: block; color: var(--color-text); font-family: inherit; }
-td small { display: block; margin-top: 3px; color: var(--color-muted-text); font-size: 8px; text-transform: uppercase; }
-td.plus { color: var(--color-accent); font-size: 13px; font-weight: 900; }
+td small { display: block; margin-top: 3px; color: var(--color-muted-text); font-size: 10px; text-transform: uppercase; }
+td.plus { color: var(--color-accent); font-size: 14px; font-weight: 900; }
 .pitcher-detail { min-width: 0; }
 .compact-detail { overflow: auto; max-height: 760px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .pitcher-detail__hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 112px; padding: 20px; background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 62%); }
-.pitcher-detail__hero span { color: var(--color-muted-text); font-size: 10px; font-weight: 850; text-transform: uppercase; }
+.pitcher-detail__hero span { color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }
 .pitcher-detail__hero h2 { margin: 5px 0 0; color: var(--color-text); font-size: 25px; }
 .pitcher-detail__hero > strong { color: var(--color-accent); font: 900 42px "Fira Code", monospace; text-align: right; }
 .pitcher-detail__hero > strong small { display: block; color: var(--color-muted-text); font: 800 9px inherit; text-transform: uppercase; }
 .detail-metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
 .detail-metrics div { display: grid; gap: 7px; padding: 14px 16px; border-right: 1px solid var(--color-border); }
 .detail-metrics div:last-child { border-right: 0; }
-.detail-metrics span { color: var(--color-muted-text); font-size: 9px; font-weight: 850; text-transform: uppercase; }
+.detail-metrics span { color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }
 .detail-metrics strong { color: var(--color-text); font: 900 17px "Fira Code", monospace; }
 .detail-table-block header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; }
-.detail-table-block h3 { font-size: 15px; }
+.detail-table-block h3 { font-size: 17px; }
 .detail-table-block table { min-width: 720px; }
 .outing-scroll { max-height: 300px; }
 .detail-state { margin: 0; padding: 28px; color: var(--color-muted-text); }
 .comparison-panel { overflow: hidden; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .comparison-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--color-border); padding: 20px 22px; }
 .comparison-header div { display: grid; gap: 5px; }
-.comparison-header span { color: var(--color-accent); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.comparison-header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .comparison-header h2 { margin: 0; color: var(--color-text); font-size: 23px; }
-.comparison-header p { margin: 0; color: var(--color-muted-text); font-size: 12px; }
+.comparison-header p { margin: 0; color: var(--color-muted-text); font-size: 14px; }
 .comparison-header > strong { color: var(--color-accent); font: 900 34px "Fira Code", monospace; text-align: right; }
 .comparison-header > strong small { display: block; color: var(--color-muted-text); font: 800 9px inherit; text-transform: uppercase; }
 .regression-tabs { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--color-border); padding: 10px 14px; }
@@ -607,7 +607,7 @@ td.plus { color: var(--color-accent); font-size: 13px; font-weight: 900; }
 .comparison-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, .72fr); border-bottom: 1px solid var(--color-border); }
 .comparison-stats { display: grid; grid-template-columns: repeat(3, 1fr); }
 .comparison-stats article { display: grid; align-content: center; gap: 7px; min-height: 130px; border-right: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 18px; }
-.comparison-stats span, .comparison-stats small { color: var(--color-muted-text); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.comparison-stats span, .comparison-stats small { color: var(--color-muted-text); font-size: 11px; font-weight: 800; text-transform: uppercase; }
 .comparison-stats strong { color: var(--color-text); font: 900 23px "Fira Code", monospace; }
 .scatter-card { display: grid; place-items: center; padding: 16px; background: color-mix(in srgb, var(--color-background) 72%, var(--color-surface)); }
 .scatter-card svg { width: min(100%, 520px); }
@@ -616,7 +616,7 @@ td.plus { color: var(--color-accent); font-size: 13px; font-weight: 900; }
 .identity-line { stroke: var(--color-border-strong); stroke-width: 1.5; stroke-dasharray: 7 7; }
 .regression-line { stroke: var(--color-accent); stroke-width: 2.5; }
 .sensitivity-scroll table { min-width: 760px; }
-.comparison-panel > footer { display: flex; gap: 12px; padding: 15px 20px; color: var(--color-muted-text); font-size: 11px; line-height: 1.5; }
+.comparison-panel > footer { display: flex; gap: 12px; padding: 15px 20px; color: var(--color-muted-text); font-size: 13px; line-height: 1.5; }
 .comparison-panel > footer strong { flex: 0 0 auto; color: var(--color-accent); }
 @media (max-width: 1050px) { .analysis-row { grid-template-columns: 1fr; } .compact-detail { max-height: none; } }
 @media (max-width: 1250px) { .leaderboard-scroll { max-height: 520px; } .comparison-body { grid-template-columns: 1fr; } }

@@ -154,6 +154,17 @@
       :condition-label="sequenceConditionLabel"
     />
 
+    <StaminaTimeline
+      v-else-if="activeTab === 'stamina'"
+      :response="staminaDetail"
+      :physical-response="staminaPhysicalDetail"
+      :command-response="staminaCommandDetail"
+      :loading="staminaLoading"
+      :error="staminaError"
+      :errors="staminaSignalErrors"
+      three-signal
+    />
+
     <PitcherDisciplineTab
       v-else-if="activeTab === 'discipline'"
       v-model:stand="disciplineStand"
@@ -198,7 +209,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalysisResponse, PersonalOverviewResponse, TablePayload } from '~/types/api'
+import type { AnalysisResponse, PersonalOverviewResponse, StaminaCommandRetentionResponse, StaminaGameStatesResponse, StaminaPhysicalStabilityResponse, TablePayload } from '~/types/api'
 
 const filters = useAnalysisFilters()
 const api = useApi()
@@ -226,6 +237,7 @@ const tabs = [
   { key: 'outing', label: 'Outing Report' },
   { key: 'movement', label: 'Stuff' },
   { key: 'sequence', label: 'Sequence' },
+  { key: 'stamina', label: 'Stamina' },
   { key: 'discipline', label: 'Discipline' }
 ] as const
 
@@ -248,6 +260,12 @@ const rotation = ref<AnalysisResponse | null>(null)
 const outings = ref<AnalysisResponse | null>(null)
 const outingReport = ref<AnalysisResponse | null>(null)
 const timing = ref<AnalysisResponse | null>(null)
+const staminaDetail = ref<StaminaGameStatesResponse | null>(null)
+const staminaPhysicalDetail = ref<StaminaPhysicalStabilityResponse | null>(null)
+const staminaCommandDetail = ref<StaminaCommandRetentionResponse | null>(null)
+const staminaLoading = ref(false)
+const staminaError = ref('')
+const staminaSignalErrors = ref<string[]>([])
 const selectedRotationGamePk = ref<number | null>(null)
 const selectedOutingGamePk = ref<number | null>(Number.isFinite(routeGamePk) ? routeGamePk : null)
 const selectedStuffPitch = ref<Record<string, unknown> | null>(null)
@@ -288,6 +306,11 @@ const outingReportLoading = ref(false)
 let personalRequestVersion = 0
 const dataRefreshToken = ref(0)
 let outingReportRequestVersion = 0
+let staminaRequestVersion = 0
+let personalSelectionKey = ''
+let suppressNextRotationReload = false
+let suppressNextOutingReportReload = false
+const tabLoadKeys: Partial<Record<TabKey, string>> = {}
 
 const standOptions = ['All', 'L', 'R']
 const countOptions = ['All', '0-0', '0-1', '0-2', '1-0', '1-1', '1-2', '2-0', '2-1', '2-2', '3-0', '3-1', '3-2', 'Pitcher Ahead', 'Hitter Ahead', 'Two Strikes']
@@ -343,6 +366,7 @@ const selectedTeam = computed(() => {
 const overviewSummaryMetrics = computed(() => {
   const metrics = [...(overview.value?.summary || [])]
   const stuffValue = stuffScore.value?.summary.find((metric) => metric.key === 'stuff_plus')?.value ?? null
+  if (stuffValue === null) return metrics
   const index = metrics.findIndex((metric) => metric.key === 'stuff_plus' || metric.label === 'Stuff+')
   const metric = { key: 'stuff_plus', label: 'Stuff+', value: stuffValue }
   if (index >= 0) metrics[index] = metric
@@ -391,10 +415,24 @@ const selectedPitchVideoUrl = computed(() => {
 
 const selectedPitchFields = computed(() => {
   const pitch = selectedStuffPitch.value
-  const fields = ['game_date', 'game_pk', 'at_bat_number', 'pitch_number', 'pitch_name', 'description', 'events', 'balls', 'strikes', 'plate_x', 'plate_z', 'release_speed', 'play_id']
+  const fields = [
+    'game_date', 'game_pk', 'at_bat_number', 'pitch_number', 'pitch_name', 'description', 'events',
+    'balls', 'strikes', 'plate_x', 'plate_z', 'release_speed', 'pitch_stuff_plus', 'location_plus_pitch',
+    'stamina_plus_trait', 'stamina_expected_retention_delta', 'stamina_expected_stuff_plus',
+    'stamina_reliability', 'stamina_sample_label', 'play_id'
+  ]
+  const labels: Record<string, string> = {
+    pitch_stuff_plus: 'Observed Stuff+',
+    location_plus_pitch: 'Observed Location+',
+    stamina_plus_trait: 'Stamina+ trait',
+    stamina_expected_retention_delta: 'Expected retention Δ',
+    stamina_expected_stuff_plus: 'Expected Stuff+',
+    stamina_reliability: 'Stamina reliability',
+    stamina_sample_label: 'Stamina sample'
+  }
   return fields.map((key) => ({
     key,
-    label: key,
+    label: labels[key] || key,
     value: pitch ? formatFieldValue(pitch[key]) : '-'
   }))
 })
@@ -585,72 +623,158 @@ const outingRows = computed(() => outings.value?.tables.outings?.rows || [])
 
 watch(
   () => [filters.year, filters.role, filters.pitcherId, dataRefreshToken.value] as const,
-  async () => {
+  async ([year, role, pitcherId]) => {
     if (!filters.pitcherId) {
       clearResponses()
       return
     }
 
+    const nextSelectionKey = `${year}:${pitcherId}`
+    const hasLoadedResponses = Boolean(overview.value || pitches.value || movement.value || discipline.value || sequence.value || rotation.value || outings.value || stuffScore.value)
+    if (personalSelectionKey && personalSelectionKey !== nextSelectionKey && hasLoadedResponses) clearResponses()
+    personalSelectionKey = nextSelectionKey
     const requestVersion = ++personalRequestVersion
-    pitchStuffColorsEnabled.value = false
     loading.value = true
-    stuffScoreLoading.value = true
     errorMessage.value = ''
 
     try {
-      const params = { year: filters.year, pitcherId: filters.pitcherId }
-      const [
-        overviewResult,
-        pitchesResult,
-        movementResult,
-        disciplineResult,
-        sequenceResult,
-        rotationResult,
-        outingsResult,
-        stuffScoreResult
-      ] = await Promise.all([
-        api.personalOverview({ ...params, role: filters.role }),
-        api.personalPitches({ ...params, limit: 1000 }),
-        api.personalMovement(buildMovementParams()),
-        api.personalDiscipline(buildDisciplineParams()),
-        api.personalSequence(buildSequenceParams()),
-        api.personalRotation(params),
-        api.personalOutings(params),
-        api.stuffScore(params)
-      ])
+      const overviewResult = await api.personalOverview({ year, role, pitcherId: Number(pitcherId) })
 
       if (requestVersion !== personalRequestVersion) {
         return
       }
 
       overview.value = overviewResult
-      pitches.value = pitchesResult
-      movement.value = movementResult
-      discipline.value = disciplineResult
-      sequence.value = sequenceResult
-      rotation.value = rotationResult
-      outings.value = outingsResult
-      stuffScore.value = stuffScoreResult
-      syncSelectedRotationGame()
-      syncSelectedOutingGame()
-      await reloadOutingReport()
-      selectedStuffPitch.value = null
-      videoModalOpen.value = false
-      timing.value = null
-      if (showStuffTiming.value) {
-        await reloadTiming()
-      }
     } catch (error) {
       if (requestVersion !== personalRequestVersion) {
         return
       }
-      clearResponses()
+      overview.value = null
       errorMessage.value = error instanceof Error ? error.message : 'Request failed'
     } finally {
       if (requestVersion === personalRequestVersion) {
         loading.value = false
-        stuffScoreLoading.value = false
       }
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => [activeTab.value, filters.year, filters.pitcherId, dataRefreshToken.value] as const,
+  async ([tab, year, pitcherId, refreshToken]) => {
+    if (!pitcherId || tab === 'overview' || tab === 'stamina') return
+    const loadKey = `${year}:${pitcherId}:${refreshToken}`
+    if (tabLoadKeys[tab] === loadKey) return
+    tabLoadKeys[tab] = loadKey
+    const params = { year: Number(year), pitcherId: Number(pitcherId) }
+
+    try {
+      if (tab === 'movement') {
+        stuffLoading.value = true
+        stuffScoreLoading.value = true
+        const [pitchesResult, movementResult, stuffScoreResult] = await Promise.all([
+          api.personalPitches({ ...params, limit: 1000 }),
+          api.personalMovement(buildMovementParams()),
+          api.stuffScore(params)
+        ])
+        if (filters.year !== year || filters.pitcherId !== pitcherId) return
+        pitches.value = pitchesResult
+        movement.value = movementResult
+        stuffScore.value = stuffScoreResult
+        selectedStuffPitch.value = null
+        videoModalOpen.value = false
+        timing.value = null
+        if (showStuffTiming.value) await reloadTiming()
+      } else if (tab === 'sequence') {
+        sequenceLoading.value = true
+        const result = await api.personalSequence(buildSequenceParams())
+        if (filters.year === year && filters.pitcherId === pitcherId) sequence.value = result
+      } else if (tab === 'discipline') {
+        disciplineLoading.value = true
+        const result = await api.personalDiscipline(buildDisciplineParams())
+        if (filters.year === year && filters.pitcherId === pitcherId) discipline.value = result
+      } else if (tab === 'rotation') {
+        const result = await api.personalRotation({ ...params, gamePk: selectedRotationGamePk.value || undefined })
+        if (filters.year !== year || filters.pitcherId !== pitcherId) return
+        rotation.value = result
+        syncSelectedRotationGame()
+      } else if (tab === 'outing') {
+        const result = await api.personalOutings(params)
+        if (filters.year !== year || filters.pitcherId !== pitcherId) return
+        outings.value = result
+        syncSelectedOutingGame()
+        await reloadOutingReport()
+      }
+    } catch (error) {
+      if (filters.year === year && filters.pitcherId === pitcherId) {
+        delete tabLoadKeys[tab]
+        errorMessage.value = error instanceof Error ? error.message : `${tab} request failed`
+      }
+    } finally {
+      if (tab === 'movement') {
+        stuffLoading.value = false
+        stuffScoreLoading.value = false
+      } else if (tab === 'sequence') {
+        sequenceLoading.value = false
+      } else if (tab === 'discipline') {
+        disciplineLoading.value = false
+      }
+    }
+  },
+  { immediate: true }
+)
+
+watch(
+  () => [activeTab.value, filters.year, filters.pitcherId, dataRefreshToken.value] as const,
+  async ([tab, year, pitcherId]) => {
+    if (tab !== 'stamina') return
+    if (!pitcherId) {
+      staminaDetail.value = null
+      staminaPhysicalDetail.value = null
+      staminaCommandDetail.value = null
+      staminaError.value = 'Select a pitcher to load Stamina+.'
+      staminaSignalErrors.value = []
+      staminaLoading.value = false
+      return
+    }
+    if (![2025, 2026].includes(Number(year))) {
+      staminaDetail.value = null
+      staminaPhysicalDetail.value = null
+      staminaCommandDetail.value = null
+      staminaError.value = 'Observed Game Stamina+ is currently available for 2025 and 2026.'
+      staminaSignalErrors.value = []
+      staminaLoading.value = false
+      return
+    }
+    const requestVersion = ++staminaRequestVersion
+    staminaLoading.value = true
+    staminaError.value = ''
+    staminaSignalErrors.value = []
+    try {
+      const [quality, physical, command] = await Promise.allSettled([
+        api.staminaGameStates(Number(year), Number(pitcherId)),
+        api.staminaPhysicalStability(Number(year), Number(pitcherId)),
+        api.staminaCommandRetention(Number(year), Number(pitcherId))
+      ])
+      if (requestVersion !== staminaRequestVersion) return
+      staminaDetail.value = quality.status === 'fulfilled' ? quality.value : null
+      staminaPhysicalDetail.value = physical.status === 'fulfilled' ? physical.value : null
+      staminaCommandDetail.value = command.status === 'fulfilled' ? command.value : null
+      staminaError.value = quality.status === 'rejected' ? 'Quality Stamina+ could not be loaded.' : ''
+      staminaSignalErrors.value = [
+        physical.status === 'rejected' ? 'Physical Stability+ could not be loaded.' : '',
+        command.status === 'rejected' ? 'Command Retention+ could not be loaded.' : ''
+      ].filter(Boolean)
+    } catch (error) {
+      if (requestVersion === staminaRequestVersion) {
+        staminaDetail.value = null
+        staminaPhysicalDetail.value = null
+        staminaCommandDetail.value = null
+        staminaError.value = error instanceof Error ? error.message : 'Could not load Stamina+.'
+      }
+    } finally {
+      if (requestVersion === staminaRequestVersion) staminaLoading.value = false
     }
   },
   { immediate: true }
@@ -789,7 +913,11 @@ watch(
 watch(
   () => selectedRotationGamePk.value,
   async (gamePk, previousGamePk) => {
-    if (!gamePk || !filters.pitcherId || gamePk === previousGamePk) {
+    if (suppressNextRotationReload) {
+      suppressNextRotationReload = false
+      return
+    }
+    if (activeTab.value !== 'rotation' || !rotation.value || !gamePk || !filters.pitcherId || gamePk === previousGamePk) {
       return
     }
     try {
@@ -803,7 +931,11 @@ watch(
 watch(
   () => selectedOutingGamePk.value,
   async (gamePk, previousGamePk) => {
-    if (!gamePk || !filters.pitcherId || gamePk === previousGamePk) {
+    if (suppressNextOutingReportReload) {
+      suppressNextOutingReportReload = false
+      return
+    }
+    if (activeTab.value !== 'outing' || !outings.value || !gamePk || !filters.pitcherId || gamePk === previousGamePk) {
       return
     }
     await reloadOutingReport()
@@ -970,6 +1102,8 @@ function normalizedPitchName(value: string) {
 
 function clearResponses() {
   outingReportRequestVersion += 1
+  suppressNextRotationReload = false
+  suppressNextOutingReportReload = false
   overview.value = null
   pitches.value = null
   movement.value = null
@@ -980,10 +1114,19 @@ function clearResponses() {
   outings.value = null
   outingReport.value = null
   timing.value = null
+  staminaRequestVersion += 1
+  staminaDetail.value = null
+  staminaPhysicalDetail.value = null
+  staminaCommandDetail.value = null
+  staminaLoading.value = false
+  staminaError.value = ''
+  staminaSignalErrors.value = []
   selectedRotationGamePk.value = null
   selectedOutingGamePk.value = null
   selectedStuffPitch.value = null
   videoModalOpen.value = false
+  pitchStuffColorsEnabled.value = false
+  for (const key of Object.keys(tabLoadKeys) as TabKey[]) delete tabLoadKeys[key]
 }
 
 function buildMovementParams() {
@@ -1131,6 +1274,9 @@ function toFilterParam(value: string) {
 }
 
 function pitchPointKey(point: Record<string, unknown>) {
+  if (point._movement_point_key) {
+    return String(point._movement_point_key)
+  }
   return [
     point.game_pk,
     point.at_bat_number,
@@ -1149,6 +1295,7 @@ function syncSelectedRotationGame() {
   }
   const currentExists = rows.some((row) => Number(row.game_pk) === selectedRotationGamePk.value)
   if (!currentExists) {
+    suppressNextRotationReload = true
     selectedRotationGamePk.value = Number(rows.at(-1)?.game_pk) || null
   }
 }
@@ -1161,6 +1308,7 @@ function syncSelectedOutingGame() {
   }
   const currentExists = rows.some((row) => Number(row['Game PK']) === selectedOutingGamePk.value)
   if (!currentExists) {
+    suppressNextOutingReportReload = true
     selectedOutingGamePk.value = Number(rows[0]?.['Game PK']) || null
   }
 }

@@ -16,6 +16,8 @@ dependencies = [
   "joblib>=1.4.0",
   "scikit-learn==1.8.0",
   "xgboost==3.2.0",
+  "hmmlearn==0.3.3",
+  "arch==8.0.0",
 ]
 
 [project.optional-dependencies]

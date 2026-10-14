@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -12,6 +13,7 @@ from app.repositories.pitch_repository import get_season_duckdb_path, resolve_pi
 from app.services.discipline_service import add_discipline_flags, build_discipline_panel_groups
 from app.services.pitch_location_score_service import load_pitch_location_scores
 from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
+from app.services.wpa_service import attach_plate_appearance_wpa, one_wpa_value_per_pa
 
 ZONE_X = (-0.83, 0.83)
 ZONE_Z = (1.5, 3.5)
@@ -58,6 +60,7 @@ def list_batter_options(year: int, team: str = "All") -> list[dict[str, Any]]:
 def list_batter_leaderboard(year: int, team: str = "All") -> list[dict[str, Any]]:
     stats = _load_batter_duckdb_leaderboard(year)
     if not stats.empty:
+        stats = _apply_batter_name_fallbacks(stats, year)
         if team and team != "All":
             stats = stats[stats["team"] == team]
         stats = stats.sort_values(["plate_appearances", "pitches", "name"], ascending=[False, False, True])
@@ -78,6 +81,7 @@ def list_batter_leaderboard(year: int, team: str = "All") -> list[dict[str, Any]
         stats["max_ev"] = stats["max_ev_pitch"].fillna(stats["max_ev"])
         stats = stats.drop(columns=[column for column in stats.columns if column.endswith("_pitch")])
 
+    stats = _apply_batter_name_fallbacks(stats, year)
     stats["team"] = stats["team"].fillna("-").astype(str).replace({"": "-"})
     if team and team != "All":
         stats = stats[stats["team"] == team]
@@ -213,7 +217,7 @@ def _load_batter_pitch_rows(year: int, batter_id: int) -> pd.DataFrame:
             [batter_id],
         ).fetchdf()
 
-    return _normalize_batter_pitch_rows(raw)
+    return _normalize_batter_pitch_rows(attach_plate_appearance_wpa(raw, year, settings.data_dir))
 
 
 def _normalize_batter_pitch_rows(raw: pd.DataFrame) -> pd.DataFrame:
@@ -236,6 +240,8 @@ def _normalize_batter_pitch_rows(raw: pd.DataFrame) -> pd.DataFrame:
         "launch_angle",
         "bat_speed",
         "delta_home_win_exp",
+        "pa_home_wpa",
+        "batter_wpa",
         "woba_value",
         "woba_denom",
     ]:
@@ -324,6 +330,8 @@ def _pitch_row_columns() -> list[str]:
         "launch_angle",
         "bat_speed",
         "delta_home_win_exp",
+        "pa_home_wpa",
+        "batter_wpa",
         "woba_value",
         "woba_denom",
         "bb_type",
@@ -522,10 +530,7 @@ def _build_batter_game_log(rows: pd.DataFrame) -> TablePayload:
         home_team = _mode_string(group["home_team"])
         away_team = _mode_string(group["away_team"])
         opponent = away_team if offense_team == home_team else home_team
-        home_wpa = pd.to_numeric(group["delta_home_win_exp"], errors="coerce")
-        game_wpa = home_wpa.sum(min_count=1)
-        if offense_team != home_team:
-            game_wpa = -game_wpa
+        game_wpa = one_wpa_value_per_pa(group, "batter_wpa").sum(min_count=1)
         woba_denom = pd.to_numeric(group["woba_denom"], errors="coerce").sum(min_count=1)
         woba_value = pd.to_numeric(group["woba_value"], errors="coerce").sum(min_count=1)
         grouped.append(
@@ -832,7 +837,9 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                 player_join = "LEFT JOIN player_master player ON try_cast(player.player_id AS BIGINT) = stats.player_id"
                 master_name_expr = (
                     "CASE WHEN lower(trim(CAST(player.player_name AS VARCHAR))) "
-                    "IN ('', 'unknown', 'unknown batter') THEN NULL "
+                    "IN ('', 'unknown', 'unknown batter', 'unknown pitcher') "
+                    "OR lower(trim(CAST(player.player_name AS VARCHAR))) LIKE 'batter %' "
+                    "OR lower(trim(CAST(player.player_name AS VARCHAR))) LIKE 'pitcher %' THEN NULL "
                     "ELSE trim(CAST(player.player_name AS VARCHAR)) END"
                 )
         if "game_player_lookup" in tables:
@@ -841,7 +848,9 @@ def _load_batter_duckdb_leaderboard(year: int) -> pd.DataFrame:
                     SELECT player_id, arg_max(player_name, game_pk) AS player_name
                     FROM game_player_lookup
                     WHERE lower(trim(CAST(role AS VARCHAR))) = 'batter'
-                      AND lower(trim(CAST(player_name AS VARCHAR))) NOT IN ('', 'unknown', 'unknown batter')
+                      AND lower(trim(CAST(player_name AS VARCHAR))) NOT IN ('', 'unknown', 'unknown batter', 'unknown pitcher')
+                      AND lower(trim(CAST(player_name AS VARCHAR))) NOT LIKE 'batter %'
+                      AND lower(trim(CAST(player_name AS VARCHAR))) NOT LIKE 'pitcher %'
                     GROUP BY player_id
                 ) official_batter ON try_cast(official_batter.player_id AS BIGINT) = stats.player_id
             """
@@ -1159,6 +1168,53 @@ def _format_savant_name(value: object) -> str:
         return " ".join(text.split()) or "Unknown Batter"
     last, first = [part.strip() for part in text.split(",", 1)]
     return " ".join(f"{first} {last}".split()) or "Unknown Batter"
+
+
+def is_placeholder_player_name(value: object) -> bool:
+    text = " ".join(str(value or "").split()).lower()
+    if text in {"", "unknown", "unknown batter", "unknown pitcher"} or text.isdigit():
+        return True
+    prefix, _, suffix = text.partition(" ")
+    return prefix in {"batter", "pitcher"} and suffix.isdigit()
+
+
+def _apply_batter_name_fallbacks(frame: pd.DataFrame, year: int) -> pd.DataFrame:
+    if frame.empty or "name" not in frame or "player_id" not in frame:
+        return frame
+    names = _load_batter_timing_name_map(year)
+    if not names:
+        return frame
+    resolved = frame.copy()
+    invalid = resolved["name"].map(is_placeholder_player_name)
+    replacements = resolved.loc[invalid, "player_id"].map(
+        lambda player_id: names.get(int(player_id)) if pd.notna(player_id) else None
+    )
+    replaceable = replacements.notna()
+    resolved.loc[replacements.index[replaceable], "name"] = replacements[replaceable]
+    return resolved
+
+
+def _load_batter_timing_name_map(year: int) -> dict[int, str]:
+    path = Path(settings.data_dir) / "MissDistance" / f"{int(year)}_batter_timing_summary_all.csv"
+    if not path.exists():
+        return {}
+    return _load_batter_timing_name_map_cached(str(path.resolve()), path.stat().st_mtime_ns)
+
+
+@lru_cache(maxsize=16)
+def _load_batter_timing_name_map_cached(path: str, modified_at: int) -> dict[int, str]:
+    del modified_at
+    try:
+        source = pd.read_csv(path, usecols=["id", "name"])
+    except (OSError, ValueError):
+        return {}
+    source["id"] = pd.to_numeric(source["id"], errors="coerce")
+    source = source.dropna(subset=["id", "name"]).drop_duplicates("id", keep="last")
+    return {
+        int(row.id): _format_savant_name(row.name)
+        for row in source.itertuples(index=False)
+        if not is_placeholder_player_name(row.name)
+    }
 
 
 def _percent_to_rate(value: object) -> float | None:

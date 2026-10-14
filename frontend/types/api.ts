@@ -60,6 +60,122 @@ export interface StuffCalculatorResponse {
   derived_features: Record<string, number>
 }
 
+export interface LeverageStateInput {
+  inning: number
+  half: 'Top' | 'Bottom'
+  outs: number
+  runner_first: boolean
+  runner_second: boolean
+  runner_third: boolean
+  fielding_score: number
+  opponent_score: number
+}
+
+export interface LeverageScenarioInput {
+  year: 2025 | 2026
+  entry: LeverageStateInput
+  exit: LeverageStateInput
+}
+
+export interface LeverageMetric {
+  key: string
+  label: string
+  value: number | string | null
+  status: string
+  note: string | null
+}
+
+export interface LeverageScenarioResponse {
+  year: number
+  data_as_of: string | null
+  model_version: string
+  entry: Record<string, number | string | null>
+  exit: Record<string, number | string | null>
+  metrics: LeverageMetric[]
+  warnings: string[]
+}
+
+export interface LeverageLeaderboardRow {
+  rank: number
+  player_id: number
+  name: string
+  team: string
+  appearances: number | null
+  wpa: number | null
+  negative_wpa: number | null
+  positive_wpa: number | null
+  re24: number | null
+  rew: number | null
+  pli: number | null
+  inli: number | null
+  gmli: number | null
+  exli: number | null
+  pulls: number | null
+  wpa_li: number | null
+  clutch: number | null
+  shutdowns: number | null
+  meltdowns: number | null
+}
+
+export interface LeverageValidationRow {
+  metric: string
+  samples: number
+  correlation: number | null
+  r_squared: number | null
+  mae: number | null
+  rmse: number | null
+  bias: number | null
+  slope: number | null
+  intercept: number | null
+}
+
+export interface LeverageOverviewResponse {
+  year: number
+  data_as_of: string | null
+  reference_updated_at: string | null
+  model_version: string
+  runs_per_win: number
+  warnings: string[]
+  estimated_rows: LeverageLeaderboardRow[]
+  reference_rows: LeverageLeaderboardRow[]
+  validation: LeverageValidationRow[]
+}
+
+export interface PitchQualityLeaderboardRow {
+  rank: number
+  player_id: number
+  name: string
+  team: string
+  role: string
+  ip: number | null
+  pitches: number
+  pitch_type_scores: Record<string, number | null>
+  location_pitch_type_scores: Record<string, number | null>
+  pitching_pitch_type_scores: Record<string, number | null>
+  stuff_plus: number | null
+  location_plus: number | null
+  pitching_plus: number | null
+  location_pitches: number
+  location_status: string
+}
+
+export interface PitchQualityLeaderboardResponse {
+  year: number
+  data_as_of: string | null
+  generated_at: string | null
+  model_version: string
+  location_generated_at: string | null
+  pitching_generated_at: string | null
+  pitching_model_version: string | null
+  pitching_data_as_of: string | null
+  source_status: Record<string, 'current' | 'stale' | 'unavailable'>
+  cache_status: 'current' | 'stale' | 'unavailable'
+  pitch_types: string[]
+  total_pitchers: number
+  warnings: string[]
+  rows: PitchQualityLeaderboardRow[]
+}
+
 export interface PersonalOverviewResponse extends AnalysisResponse {
   pitcher_id: number
   selected_pitcher: Record<string, unknown>
@@ -102,6 +218,34 @@ export interface PitcherLeaderboardRow {
   whip: number | null
   strikeout_rate: number | null
   walk_rate: number | null
+}
+
+export interface PitcherMetricDefinition {
+  key: string
+  label: string
+  category: string
+  unit: string
+  higher_is_better: boolean | null
+  description: string
+}
+
+export interface PitcherMetricExplorerRow {
+  player_id: number
+  name: string
+  team: string
+  role: string
+  metrics: Record<string, number | null>
+}
+
+export interface PitcherMetricExplorerResponse {
+  year: number
+  available_years: number[]
+  data_as_of: string | null
+  metrics: PitcherMetricDefinition[]
+  rows: PitcherMetricExplorerRow[]
+  teams: string[]
+  source_status: Record<string, string>
+  warnings: string[]
 }
 
 export interface BatterOption {
@@ -809,6 +953,40 @@ export interface ComparisonOptionsResponse {
   pitchers: ComparisonPlayer[]
 }
 
+export interface ComparisonTeamStint {
+  stint_index: number
+  team: string
+  start_date: string
+  end_date: string
+  pitches: number
+  games: number
+  label: string
+}
+
+export type PitcherTeamStint = ComparisonTeamStint
+
+export interface BatterPeriodDateRange {
+  year: number
+  batter_id: number
+  start_date: string | null
+  end_date: string | null
+  pitches: number
+  current_team: string | null
+  transfer_count: number
+  team_stints: ComparisonTeamStint[]
+}
+
+export interface PitcherPeriodDateRange {
+  year: number
+  pitcher_id: number
+  start_date: string | null
+  end_date: string | null
+  pitches: number
+  current_team: string | null
+  transfer_count: number
+  team_stints: PitcherTeamStint[]
+}
+
 export interface ComparisonOverviewResponse {
   meta: ResponseMeta
   players: {
@@ -847,13 +1025,13 @@ export interface BatterPeriodOptionsResponse {
 export interface BatterPeriodComparisonResponse {
   meta: ResponseMeta
   batter: BatterOption | null
-  periods: Record<'left' | 'right', { label: string; year: number; start_date: string; end_date: string; pitches: number }>
+  periods: Record<'left' | 'right', { label: string; year: number; start_date: string; end_date: string; pitches: number; team: string | null }>
   filters: Record<string, string[]>
   metrics: BatterPeriodMetric[]
+  percentile_cards: Record<'left' | 'right', ComparisonMetric[]>
+  discipline: Record<'left' | 'right', { panel_groups?: Record<string, unknown>; total?: number }>
   heatmaps: Record<'left' | 'right', Record<string, unknown>[]>
   bat_speed_domain: [number, number] | null
-  timing_reference: Record<'left' | 'right', { mode: string; year: number; n_swings: number; metrics: Record<string, number | null>; note?: string }>
-  source_audit: Record<string, unknown>
 }
 
 export interface BatterTeamResearchResponse {
@@ -918,13 +1096,1563 @@ export interface PitchingLeaderboardRow {
 export interface PitchingDistributionBin { low: number; high: number; count: number }
 export interface PitchingOverviewResponse {
   year: number; available_years: number[]; generated_at: string | null; model_version: string; public_candidate: string
+  data_as_of: string | null; source_data_as_of: string | null; cache_status: string; warnings: string[]
   minimum_pitches: number; minimum_innings: number
   total_pitchers: number; total_pitches: number; league_average: number; median: number; p10: number; p90: number
   rows: PitchingLeaderboardRow[]; distribution: PitchingDistributionBin[]
   candidates: Record<string, { validation_metrics: Record<string, number>; test_metrics: Record<string, number> }>
 }
 export interface PitchingPitcherResponse {
-  year: number; pitcher: PitchingLeaderboardRow
+  year: number; data_as_of: string | null; cache_status: string; warnings: string[]; pitcher: PitchingLeaderboardRow
   pitch_types: Array<{ pitch_type: string; pitches: number; pitching_plus: number; xrv_per_100: number }>
   outings: Array<{ game_pk: number; game_date: string; pitches: number; pitching_plus: number; xrv_per_100: number }>
+}
+
+export interface StaminaCleaningStep {
+  key: string
+  label: string
+  input_rows: number
+  output_rows: number
+  removed_rows: number
+  status: string
+  note: string
+}
+
+export interface StaminaRoleSummary {
+  role: 'SP' | 'RP'
+  pitches: number
+  appearances: number
+  pitchers: number
+  dual_role_pitchers: number
+}
+
+export interface StaminaCoverageRow {
+  role: 'SP' | 'RP'
+  pitches: number
+  stuff_scored: number
+  stuff_coverage_pct: number
+  location_scored: number
+  location_coverage_pct: number
+  both_scored: number
+  both_coverage_pct: number
+}
+
+export interface StaminaPitchBucket {
+  role: 'SP' | 'RP'
+  bucket: string
+  pitches: number
+  appearances: number
+  pitchers: number
+  stuff_coverage_pct: number
+  location_coverage_pct: number
+}
+
+export interface StaminaFeatureAudit {
+  group: string
+  feature: string
+  status: string
+  coverage_pct: number
+  note: string
+}
+
+export interface StaminaHypothesis {
+  key: string
+  title: string
+  status: string
+  question: string
+  primary_outcomes: string[]
+  required_controls: string[]
+}
+
+export interface StaminaArmAngleAudit {
+  coverage_pct: number
+  missing_pitches: number
+  otherwise_trackable_missing: number
+  dates: number
+  zero_coverage_dates: string[]
+  zero_coverage_date_count: number
+  pattern: string
+  note: string
+}
+
+export interface StaminaSlice1Point {
+  role: 'SP' | 'RP'
+  dimension: 'appearance_pitch_count' | 'season_workload'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  bucket: string
+  order: number
+  reference: boolean
+  adjusted_delta: number
+  ci_low: number
+  ci_high: number
+  standard_error: number
+  raw_mean: number
+  pitches: number
+  appearances: number
+  pitchers: number
+}
+
+export interface StaminaSlice1Summary {
+  role: 'SP' | 'RP'
+  dimension: 'appearance_pitch_count' | 'season_workload'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  reference_bucket: string
+  terminal_bucket: string
+  adjusted_delta: number
+  ci_low: number
+  ci_high: number
+  direction: 'decline' | 'increase' | 'inconclusive'
+}
+
+export interface StaminaSlice1Diagnostic {
+  role: 'SP' | 'RP'
+  status: string
+  pitches: number
+  appearances: number | null
+  pitchers: number | null
+  clusters: number | null
+  fixed_effects: string[]
+  controls: string[]
+  outcomes: Record<string, { within_r_squared: number }>
+}
+
+export interface StaminaSlice1Result {
+  status: string
+  method: string
+  interpretation: string
+  points: StaminaSlice1Point[]
+  summaries: StaminaSlice1Summary[]
+  diagnostics: StaminaSlice1Diagnostic[]
+  warnings: string[]
+}
+
+export interface StaminaSlice2Appearance {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  reference_bucket: string
+  target_bucket: string
+  order: number
+  appearances: number
+  pitchers: number
+  unweighted_delta: number
+  unweighted_ci_low: number
+  unweighted_ci_high: number
+  weighted_delta: number
+  weighted_ci_low: number
+  weighted_ci_high: number
+}
+
+export interface StaminaSlice2SelectionModel {
+  role: 'SP' | 'RP'
+  bucket: string
+  auc: number
+  features: string[]
+  cross_fit: string
+  at_risk_appearances: number
+  reached_appearances: number
+  marginal_reach_pct: number
+  effective_sample_size: number
+  max_weight: number
+}
+
+export interface StaminaSlice2TTO {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  target_bucket: string
+  tto: string
+  appearances: number
+  pitchers: number
+  weighted_delta: number
+  ci_low: number
+  ci_high: number
+}
+
+export interface StaminaSlice2Season {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  reference_bucket: string
+  target_bucket: string
+  order: number
+  pitchers: number
+  paired_delta: number
+  ci_low: number
+  ci_high: number
+}
+
+export interface StaminaSlice2Extreme {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  slice1_adjusted_delta: number
+  survivor_paired_delta: number
+  weighted_paired_delta: number
+  target_bucket: string
+}
+
+export interface StaminaSlice2Result {
+  status: string
+  method: string
+  appearance_results: StaminaSlice2Appearance[]
+  season_fixed_cohort: StaminaSlice2Season[]
+  selection_models: StaminaSlice2SelectionModel[]
+  tto_sensitivity: StaminaSlice2TTO[]
+  extreme_comparison: StaminaSlice2Extreme[]
+  warnings: string[]
+}
+
+export interface StaminaSlice3Pitcher {
+  rank: number
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  unit_pitches: number
+  raw_slope: number
+  standard_error?: number | null
+  posterior_slope: number
+  ci_low: number
+  ci_high: number
+  reliability: number
+  reliability_label: 'strong' | 'moderate' | 'limited'
+  retention_band: 'above_average' | 'below_average' | 'indistinguishable'
+  appearances: number
+  observations: number
+  matched_pitches: number
+  target_windows: number
+}
+
+export interface StaminaSlice3Prior {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  unit_pitches: number
+  candidate_pitchers: number
+  eligible_pitchers: number
+  minimum_appearances: number
+  league_slope: number
+  between_pitcher_sd: number
+}
+
+export interface StaminaSlice3Validation {
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  pitchers: number
+  spearman_correlation: number | null
+  mean_absolute_difference: number | null
+  status: 'stable' | 'partial' | 'weak'
+}
+
+export interface StaminaSlice3Result {
+  status: string
+  method: string
+  leaderboard: StaminaSlice3Pitcher[]
+  priors: StaminaSlice3Prior[]
+  split_half_validation: StaminaSlice3Validation[]
+  warnings: string[]
+}
+
+export interface StaminaSlice4WorkloadAudit {
+  feature: string
+  field: string
+  coverage_pct: number
+  lagged_only: boolean
+}
+
+export interface StaminaSlice4Effect {
+  analysis: string
+  endpoint: 'readiness' | 'retention'
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  outcome_label: string
+  feature: string
+  feature_label: string
+  unit: string
+  estimate: number
+  ci_low: number
+  ci_high: number
+  within_pitcher_sd?: number | null
+  standardized_effect?: number | null
+  relative_strength_pct?: number | null
+  significant: boolean
+  appearances: number
+  pitchers: number
+}
+
+export interface StaminaSlice4Diagnostic {
+  endpoint: 'readiness' | 'retention'
+  role: 'SP' | 'RP'
+  outcome: 'pitch_stuff_plus' | 'location_plus_pitch'
+  status: string
+  appearances: number
+  pitchers: number
+  within_r_squared: number
+}
+
+export interface StaminaSlice4Validation {
+  validation: string
+  train_year?: number | null
+  test_year?: number | null
+  year?: number | null
+  role?: 'SP' | 'RP' | null
+  outcome?: 'pitch_stuff_plus' | 'location_plus_pitch' | null
+  outcome_label?: string | null
+  endpoint?: 'readiness' | 'retention' | null
+  status: string
+  train_appearances?: number | null
+  test_appearances?: number | null
+  correlation?: number | null
+  rmse?: number | null
+  baseline_rmse?: number | null
+  mae?: number | null
+  rmse_improvement_pct?: number | null
+  source_coverage_pct?: number | null
+  reason?: string | null
+}
+
+export interface StaminaSlice4Result {
+  status: string
+  method: string
+  workload_audit: StaminaSlice4WorkloadAudit[]
+  readiness_effects: StaminaSlice4Effect[]
+  retention_effects: StaminaSlice4Effect[]
+  season_effects: StaminaSlice4Effect[]
+  diagnostics: StaminaSlice4Diagnostic[]
+  time_validation: StaminaSlice4Validation[]
+  cross_season_validation: StaminaSlice4Validation[]
+  warnings: string[]
+}
+
+export interface StaminaSlice5Score {
+  rank: number
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  role: 'SP' | 'RP'
+  unit_pitches: number
+  stamina_plus: number
+  ci_low: number
+  ci_high: number
+  retention_advantage: number
+  raw_advantage: number
+  reliability: number
+  reliability_label: 'strong' | 'moderate' | 'limited'
+  sample_label: 'qualified' | 'limited' | 'provisional'
+  seasons: number
+  season?: number | null
+  score_scope?: 'season' | 'trait' | null
+  appearances: number
+  matched_pitches: number
+  publication_status: 'validated' | 'research_only' | 'season_estimate'
+}
+
+export interface StaminaSlice5Prior {
+  role: 'SP' | 'RP'
+  unit_pitches: number
+  pitchers: number
+  two_season_pitchers: number
+  league_center: number
+  between_pitcher_sd: number
+}
+
+export interface StaminaSlice5SeasonPrior {
+  season: number
+  role: 'SP' | 'RP'
+  unit_pitches: number
+  eligible_pitchers: number
+  league_slope: number
+  between_pitcher_sd: number
+  split_half_spearman?: number | null
+  split_half_status: string
+}
+
+export interface StaminaSlice5Validation {
+  role: 'SP' | 'RP'
+  train_year: number
+  test_year: number
+  status: 'validated' | 'research_only' | 'insufficient'
+  common_pitchers: number
+  reliable_pitchers: number
+  source_coverage_pct: number
+  spearman_correlation?: number | null
+  pearson_correlation?: number | null
+  rmse?: number | null
+  baseline_rmse?: number | null
+  rmse_improvement_pct?: number | null
+  mae?: number | null
+  calibration_slope?: number | null
+  calibration_intercept?: number | null
+  gates: Record<string, boolean>
+}
+
+export interface StaminaSlice5Result {
+  status: string
+  publication_status: 'validated' | 'research_only'
+  method: string
+  train_year: number
+  test_year: number
+  leaderboard: StaminaSlice5Score[]
+  season_leaderboard: StaminaSlice5Score[]
+  priors: StaminaSlice5Prior[]
+  season_priors: StaminaSlice5SeasonPrior[]
+  validations: StaminaSlice5Validation[]
+  warnings: string[]
+}
+
+export interface StaminaSlice6Result {
+  status: string
+  method: string
+  pitch_rows: number
+  trait_rows: number
+  expected_rows: number
+  trait_coverage_pct: number
+  expected_coverage_pct: number
+  warnings: string[]
+}
+
+export interface StaminaSlice7FamilyCoverage {
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  pitch_types: string[]
+  pitches: number
+  appearances: number
+  pitchers: number
+  stuff_coverage_pct: number
+  velocity_coverage_pct: number
+  early_pitches: number
+  late_pitches: number
+  early_usage_pct: number
+  late_usage_pct: number
+  late_usage_delta_pp: number
+}
+
+export interface StaminaSlice7MissingAudit {
+  key: string
+  label: string
+  pitches: number
+  pct: number
+}
+
+export interface StaminaSlice7BiasCorrelation {
+  key: string
+  label: string
+  pitchers: number
+  spearman?: number | null
+}
+
+export interface StaminaSlice7CeilingBand {
+  band: string
+  pitchers: number
+  early_stuff: number
+  late_stuff: number
+  naive_delta: number
+  mean_stamina_plus: number
+}
+
+export interface StaminaSlice7Target {
+  key: string
+  label: string
+  definition: string
+  purpose: string
+}
+
+export interface StaminaSlice7ReleaseGate {
+  key: string
+  scope: string
+  threshold: string
+}
+
+export interface StaminaSlice7Result {
+  status: string
+  contract_version: string
+  scope: string
+  method: string
+  classified_pitches: number
+  classified_coverage_pct: number
+  classified_stuff_coverage_pct: number
+  pitchers_with_v1_audit: number
+  family_coverage: StaminaSlice7FamilyCoverage[]
+  unclassified_pitch_types: Array<{ pitch_type: string, pitches: number }>
+  missing_audit: StaminaSlice7MissingAudit[]
+  bias_correlations: StaminaSlice7BiasCorrelation[]
+  ceiling_bands: StaminaSlice7CeilingBand[]
+  targets: StaminaSlice7Target[]
+  release_gates: StaminaSlice7ReleaseGate[]
+  warnings: string[]
+}
+
+export interface StaminaSlice8FamilyAudit {
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  pitches: number
+  appearances: number
+  pitchers: number
+  ma5_rows: number
+  ma5_coverage_pct: number
+}
+
+export interface StaminaSlice8CurvePoint {
+  family: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  bucket: string
+  order: number
+  pitches: number
+  appearances: number
+  pitchers: number
+  adjusted_stuff?: number | null
+  raw_stuff?: number | null
+  trailing_ma5?: number | null
+  fixed_weight_coverage_pct?: number | null
+}
+
+export interface StaminaSlice8Result {
+  status: string
+  contract_version: string
+  method: string
+  context_controls: string[]
+  context_r_squared: number
+  pitch_curve_rows: number
+  appearance_curve_rows: number
+  overall_curve_rows: number
+  prior_weight_pitchers: number
+  early_weight_appearances: number
+  family_audit: StaminaSlice8FamilyAudit[]
+  league_curves: StaminaSlice8CurvePoint[]
+  warnings: string[]
+}
+
+export interface StaminaSlice9ModelComparison {
+  model: string
+  kind: 'baseline' | 'primary' | 'gamm' | 'ml_challenger'
+  train_pitches: number
+  test_pitches: number
+  train_appearances: number
+  test_appearances: number
+  rmse: number
+  mae: number
+  correlation?: number | null
+  rmse_improvement_pct: number
+  status: string
+}
+
+export interface StaminaSlice9FamilyPrior {
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  candidate_pitchers: number
+  eligible_pitchers: number
+  league_slope: number
+  between_pitcher_sd: number
+  median_reliability: number
+}
+
+export interface StaminaSlice9Influence {
+  feature: string
+  importance: number
+  relative_strength_pct: number
+}
+
+export interface StaminaSlice9Result {
+  status: string
+  contract_version: string
+  method: string
+  development_split_date?: string | null
+  selection_weighting: string
+  hierarchical_estimate_rows: number
+  comparisons: StaminaSlice9ModelComparison[]
+  family_priors: StaminaSlice9FamilyPrior[]
+  challenger_influence: StaminaSlice9Influence[]
+  warnings: string[]
+}
+
+export interface StaminaSlice10ModelValidation {
+  model: string
+  kind: 'primary' | 'gamm' | 'ml_challenger'
+  train_pitches: number
+  test_pitches: number
+  rmse: number
+  baseline_rmse: number
+  rmse_improvement_pct: number
+  correlation?: number | null
+  calibration_slope?: number | null
+  calibration_intercept?: number | null
+  residual_early_stuff_spearman?: number | null
+  residual_early_velocity_spearman?: number | null
+  gates: Record<string, boolean>
+  status: string
+}
+
+export interface StaminaSlice10ScopeValidation {
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  status: string
+  common_pitchers: number
+  source_coverage_pct: number
+  spearman_correlation?: number | null
+  rmse?: number | null
+  baseline_rmse?: number | null
+  rmse_improvement_pct?: number | null
+  calibration_slope?: number | null
+  calibration_intercept?: number | null
+  residual_early_stuff_spearman?: number | null
+  residual_early_velocity_spearman?: number | null
+  gates: Record<string, boolean>
+}
+
+export interface StaminaSlice10Result {
+  status: string
+  publication_status: 'candidate_ready' | 'research_only'
+  contract_version: string
+  method: string
+  train_year: number
+  test_year: number
+  selected_model?: string | null
+  model_validations: StaminaSlice10ModelValidation[]
+  scope_validations: StaminaSlice10ScopeValidation[]
+  validated_scopes: string[]
+  candidate_rows: number
+  warnings: string[]
+}
+
+export interface StaminaSlice11Player {
+  pitcher_id: number
+  name: string
+  team: string
+  appearances: number
+}
+
+export interface StaminaSlice11Coverage {
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  signal: string
+  available_rows: number
+  total_rows: number
+  coverage_pct: number
+}
+
+export interface StaminaSlice11CurvePoint {
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  bucket: string
+  order: number
+  pitches: number
+  appearances: number
+  pitchers: number
+  stuff_delta?: number | null
+  velocity_delta?: number | null
+  spin_delta?: number | null
+  movement_drift_inches?: number | null
+  release_point_drift_inches?: number | null
+  extension_delta?: number | null
+  location_delta?: number | null
+  usage_pct?: number | null
+  usage_delta_pp?: number | null
+}
+
+export interface StaminaSlice11Transition {
+  bucket: string
+  order: number
+  appearances: number
+  speed_gap_mph?: number | null
+  speed_gap_delta_mph?: number | null
+}
+
+export interface StaminaSlice11Result {
+  status: string
+  publication_status: 'research_only'
+  contract_version: string
+  method: string
+  artifact_rows: number
+  pitchers: number
+  appearances: number
+  minimum_early_pitches: number
+  players: StaminaSlice11Player[]
+  signal_coverage: StaminaSlice11Coverage[]
+  league_curves: StaminaSlice11CurvePoint[]
+  transitions: StaminaSlice11Transition[]
+  warnings: string[]
+}
+
+export interface StaminaArchetypeCell {
+  key: string
+  label: string
+  stuff_band: 'Low' | 'Average' | 'High'
+  location_band: 'Low' | 'Average' | 'High'
+  appearances: number
+  pitchers: number
+  reached_61_80: number
+  early_stuff?: number | null
+  early_location?: number | null
+  support_status: 'supported' | 'limited'
+}
+
+export interface StaminaArchetypeCurve {
+  archetype_key: string
+  family: 'Fastball' | 'Breaking' | 'Offspeed'
+  bucket: string
+  order: number
+  pitches: number
+  appearances: number
+  pitchers: number
+  supported: boolean
+  stuff_delta?: number | null
+  velocity_delta?: number | null
+  spin_delta?: number | null
+  movement_drift_inches?: number | null
+  release_point_drift_inches?: number | null
+  extension_delta?: number | null
+  location_delta?: number | null
+  usage_pct?: number | null
+  usage_delta_pp?: number | null
+}
+
+export interface StaminaArchetypeResult {
+  status: string
+  publication_status: 'research_only'
+  contract_version: string
+  method: string
+  minimum_early_pitches: number
+  minimum_curve_appearances: number
+  minimum_curve_pitchers: number
+  eligible_appearances: number
+  excluded_appearances: number
+  cells: StaminaArchetypeCell[]
+  curves: StaminaArchetypeCurve[]
+  warnings: string[]
+}
+
+export interface StaminaColdStartCheckpoint {
+  checkpoint: number
+  pitchers: number
+  future_appearances: number
+  rmse?: number | null
+  baseline_rmse?: number | null
+  rmse_improvement_pct?: number | null
+  spearman_correlation?: number | null
+  calibration_slope?: number | null
+  interval_80_coverage_pct?: number | null
+  residual_early_stuff_spearman?: number | null
+  residual_early_velocity_spearman?: number | null
+  median_reliability?: number | null
+  gates: Record<string, boolean>
+  status: string
+}
+
+export interface StaminaColdStartResult {
+  status: string
+  publication_status: 'research_only' | 'provisional_candidate'
+  contract_version: string
+  method: string
+  train_year: number
+  test_year: number
+  target_window: string
+  appearance_rows: number
+  eligible_retention_appearances: number
+  reached_61_80_appearances: number
+  prior_pitchers: number
+  prior_appearances: number
+  between_pitcher_sd: number
+  within_pitcher_sd: number
+  pitch_model_rmse: number
+  pitch_baseline_rmse: number
+  pitch_rmse_improvement_pct: number
+  checkpoints: StaminaColdStartCheckpoint[]
+  validated_checkpoint?: number | null
+  candidate_rows: number
+  release_gates: string[]
+  warnings: string[]
+}
+
+export interface StaminaColdStartV2Calibration {
+  checkpoint: number
+  personal_weight: number
+  interval_80_halfwidth?: number | null
+  development_pitchers: number
+}
+
+export interface StaminaColdStartV2Result {
+  status: string
+  publication_status: 'research_only'
+  contract_version: string
+  method: string
+  development_year: number
+  audit_year: number
+  target_window: string
+  development_rows: number
+  audit_rows: number
+  development_pitchers: number
+  audit_pitchers: number
+  prior_pitchers: number
+  prior_appearances: number
+  calibrations: StaminaColdStartV2Calibration[]
+  development_checkpoints: StaminaColdStartCheckpoint[]
+  audit_checkpoints: StaminaColdStartCheckpoint[]
+  audit_passed_checkpoints: number[]
+  formal_release_eligible: boolean
+  candidate_rows: number
+  release_gates: string[]
+  warnings: string[]
+}
+
+export interface StaminaColdStartCandidate {
+  pitcher: number
+  pitcher_name: string
+  team: string
+  season: number
+  stamina_plus: number
+  posterior_retention: number
+  ci_low: number
+  ci_high: number
+  reliability: number
+  retention_appearances: number
+  total_starts: number
+  late_pitches: number
+  prior_source: string
+  status: string
+  publication_status: string
+}
+
+export interface StaminaColdStartAppearance {
+  pitcher: number
+  pitcher_name: string
+  team: string
+  game_pk: number
+  game_date: string
+  season_start_number: number
+  retention_start_number: number
+  total_pitches: number
+  reached_61_80: boolean
+  retention_eligible: boolean
+  early_stuff?: number | null
+  early_location?: number | null
+  early_velocity?: number | null
+  game_retention?: number | null
+  raw_retention_delta?: number | null
+  observed_late_stuff?: number | null
+  expected_late_stuff?: number | null
+  velocity_delta?: number | null
+  location_delta?: number | null
+  late_pitches?: number | null
+  observation_weight?: number | null
+}
+
+export interface StaminaColdStartPitcherResponse {
+  year: number
+  publication_status: 'research_only' | 'provisional_candidate'
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  candidate?: StaminaColdStartCandidate | null
+  appearances: StaminaColdStartAppearance[]
+  warnings: string[]
+}
+
+export interface StaminaResearchGame {
+  game_pk: number
+  game_date: string
+  total_pitches: number
+}
+
+export interface StaminaResearchCurve {
+  pitcher: number
+  pitcher_name: string
+  team: string
+  game_pk: number
+  game_date: string
+  appearance_total_pitches: number
+  pitch_family: 'Fastball' | 'Breaking' | 'Offspeed'
+  analysis_bucket: string
+  order: number
+  pitches: number
+  reference_pitches: number
+  observation_weight: number
+  stuff_delta?: number | null
+  velocity_delta?: number | null
+  spin_delta?: number | null
+  movement_drift_inches?: number | null
+  release_point_drift_inches?: number | null
+  extension_delta?: number | null
+  location_delta?: number | null
+  usage_pct: number
+  usage_delta_pp: number
+}
+
+export interface StaminaResearchCurvesResponse {
+  year: number
+  publication_status: 'research_only'
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  games: StaminaResearchGame[]
+  curves: StaminaResearchCurve[]
+  warnings: string[]
+}
+
+export interface StaminaGameStateScope {
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  eligible_games: number
+  league_retention: number
+  state_sd: number
+  median_reliability: number
+}
+
+export interface StaminaGameStateResult {
+  status: string
+  publication_status: 'observed_state'
+  contract_version: string
+  method: string
+  reference_year: number
+  season: number
+  minimum_early_exact_pitches: number
+  minimum_overall_late_pitches: number
+  minimum_family_late_pitches: number
+  minimum_fixed_mix_coverage_pct: number
+  interval_method: string
+  state_rows: number
+  window_rows: number
+  eligible_overall_games: number
+  pitchers: number
+  overall_start_coverage_pct: number
+  median_interval_width: number
+  pitch_model_rmse: number
+  pitch_baseline_rmse: number
+  pitch_rmse_improvement_pct: number
+  early_stuff_spearman?: number | null
+  early_velocity_spearman?: number | null
+  within_game_split_spearman?: number | null
+  scope_parameters: StaminaGameStateScope[]
+  warnings: string[]
+}
+
+export interface StaminaGameState {
+  pitcher: number
+  game_pk: number
+  game_date: string
+  pitcher_name: string
+  team: string
+  season_start_number: number
+  total_pitches: number
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  pitches: number
+  effective_pitches: number
+  minimum_pitches: number
+  eligible: boolean
+  raw_retention: number
+  posterior_retention?: number | null
+  stamina_plus?: number | null
+  ci_low?: number | null
+  ci_high?: number | null
+  reliability?: number | null
+  confidence: 'high' | 'medium' | 'low'
+  rolling_3?: number | null
+  rolling_5?: number | null
+  velocity_delta?: number | null
+  early_stuff?: number | null
+  early_velocity?: number | null
+  sampling_variance: number
+  clusters: number
+  observed_mix_retention?: number | null
+  fixed_mix_coverage?: number | null
+  early_baseline_reliability?: number | null
+}
+
+export interface StaminaGameStateWindow {
+  pitcher: number
+  game_pk: number
+  game_date: string
+  pitcher_name: string
+  team: string
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  analysis_bucket: string
+  order: number
+  pitches: number
+  effective_pitches: number
+  retention?: number | null
+  velocity_delta?: number | null
+}
+
+export interface StaminaGameStatesResponse {
+  year: number
+  publication_status: 'observed_state'
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  states: StaminaGameState[]
+  windows: StaminaGameStateWindow[]
+  warnings: string[]
+}
+
+export interface StaminaPhysicalSignal {
+  key: string
+  label: string
+  unit: string
+  weight: number
+  direction: string
+  definition: string
+}
+
+export interface StaminaPhysicalCoverage {
+  year: number
+  pitches: number
+  appearances: number
+  pitchers: number
+  window_rows: number
+  supported_late_pitches: number
+  late_pitches: number
+  supported_late_pct: number
+  signal_coverage_pct: Record<string, number>
+}
+
+export interface StaminaSlice15Result {
+  status: string
+  publication_status: string
+  contract_version: string
+  development_year: number
+  covered_years: number[]
+  minimum_early_exact_pitches: number
+  minimum_late_pitches: number
+  minimum_component_coverage_pct: number
+  method: string
+  signals: StaminaPhysicalSignal[]
+  coverage: StaminaPhysicalCoverage[]
+  warnings: string[]
+}
+
+export interface StaminaPhysicalPlayer {
+  pitcher_id: number
+  name: string
+  team: string
+  appearances: number
+}
+
+export interface StaminaPhysicalYearAudit {
+  year: number
+  window_rows: number
+  game_rows: number
+  eligible_games: number
+  pitchers: number
+  median_reliability: number
+  median_interval_width: number
+  split_window_spearman?: number | null
+  velocity_vs_physical_spearman?: number | null
+  score_p05?: number | null
+  score_p50?: number | null
+  score_p95?: number | null
+}
+
+export interface StaminaSlice16Result {
+  status: string
+  publication_status: string
+  model_version: string
+  contract_version: string
+  development_year: number
+  scoring_year: number
+  method: string
+  players: StaminaPhysicalPlayer[]
+  year_audits: StaminaPhysicalYearAudit[]
+  warnings: string[]
+}
+
+export interface StaminaPhysicalGame {
+  pitcher: number
+  game_pk: number
+  game_date: string
+  pitcher_name: string
+  team: string
+  season_start_number: number
+  windows: number
+  late_pitches: number
+  supported_pitches: number
+  component_coverage: number
+  velocity_plus?: number | null
+  spin_plus?: number | null
+  movement_plus?: number | null
+  release_point_plus?: number | null
+  extension_plus?: number | null
+  arm_angle_plus?: number | null
+  raw_physical_stability_plus: number
+  physical_stability_plus: number
+  ci_low: number
+  ci_high: number
+  reliability: number
+  eligible: boolean
+  confidence: string
+}
+
+export interface StaminaPhysicalWindow {
+  pitcher: number
+  game_pk: number
+  game_date: string
+  pitcher_name: string
+  team: string
+  analysis_bucket: string
+  order: number
+  total_pitches: number
+  supported_pitches: number
+  support_pct: number
+  component_coverage: number
+  velocity_plus?: number | null
+  spin_plus?: number | null
+  movement_plus?: number | null
+  release_point_plus?: number | null
+  extension_plus?: number | null
+  arm_angle_plus?: number | null
+  raw_physical_stability_plus: number
+  physical_stability_plus: number
+  ci_low: number
+  ci_high: number
+  reliability: number
+  eligible: boolean
+}
+
+export interface StaminaPhysicalStabilityResponse {
+  year: number
+  publication_status: string
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  games: StaminaPhysicalGame[]
+  windows: StaminaPhysicalWindow[]
+  warnings: string[]
+}
+
+export interface StaminaCommandYearAudit {
+  year: number; pitch_rows: number; window_rows: number; game_rows: number; eligible_overall_games: number; pitchers: number
+  pitch_model_rmse: number; pitch_baseline_rmse: number; pitch_rmse_improvement_pct: number
+  early_location_spearman?: number | null; fixed_vs_observed_mix_spearman?: number | null; split_window_spearman?: number | null
+  median_reliability: number; median_interval_width: number; score_p05?: number | null; score_p50?: number | null; score_p95?: number | null
+}
+
+export interface StaminaSlice17Result {
+  status: string; publication_status: string; contract_version: string; model_version: string
+  development_year: number; scoring_year: number; covered_years: number[]
+  minimum_early_exact_pitches: number; minimum_window_pitches: number; minimum_game_pitches: number; minimum_fixed_mix_coverage_pct: number
+  method: string; players: StaminaPhysicalPlayer[]; year_audits: StaminaCommandYearAudit[]; warnings: string[]
+}
+
+export interface StaminaValidationGate { key: string; label: string; threshold: string; value: unknown; passed: boolean }
+export interface StaminaSlice18Result {
+  status: string; publication_status: string; validation_version: string; train_year: number; test_year: number
+  predictor_window: string; target_window: string; method: string; train_rows: number; test_rows: number
+  train_pair_coverage_pct: number; test_pair_coverage_pct: number
+  models: Record<string, { rmse?: number | null; spearman?: number | null; calibration_slope?: number | null }>
+  rmse_improvement_pct: number; rmse_improvement_over_velocity_pct: number
+  pairwise_spearman: Record<string, number | null>; challenger_standardized_coefficients: Record<string, number>
+  gates: StaminaValidationGate[]; composite_release_eligible: boolean; decision: string; warnings: string[]
+}
+
+export interface StaminaProductRepresentative {
+  case: string; pitcher_id: number; name: string; team: string
+  quality_games: number; physical_games: number; command_games: number
+  quality_stamina_plus: number; physical_stability_plus: number; command_retention_plus: number
+  quality_reliability: number; physical_reliability: number; command_reliability: number
+}
+
+export interface StaminaSlice19Result {
+  status: string; publication_status: string; contract_version: string; year: number
+  decision: string; composite_release_eligible: boolean; method: string; qualified_three_signal_pitchers: number
+  representative_pitchers: StaminaProductRepresentative[]; product_rules: string[]; warnings: string[]
+}
+
+export interface StaminaCommandGame {
+  pitcher: number; game_pk: number; game_date: string; pitcher_name: string; team: string; year: number; scope: string
+  windows: number; late_pitches: number; raw_retention: number; raw_command_retention_plus: number; command_retention_plus: number
+  ci_low: number; ci_high: number; reliability: number; fixed_mix_coverage: number; early_location: number
+  early_baseline_reliability: number; eligible: boolean; confidence: string; season_start_number: number
+}
+
+export interface StaminaCommandWindow {
+  pitcher: number; game_pk: number; game_date: string; order: number; analysis_bucket: string; pitcher_name: string; team: string
+  scope: string; pitches: number; retention: number; observed_mix_retention?: number | null; fixed_mix_coverage?: number | null
+  observed_location_change: number; early_location: number; early_baseline_reliability: number; year: number
+  sampling_variance: number; raw_command_retention_plus: number; reliability: number; command_retention_plus: number
+  ci_low: number; ci_high: number; eligible: boolean
+}
+
+export interface StaminaCommandRetentionResponse {
+  year: number; publication_status: string; pitcher_id: number; pitcher_name: string; team: string
+  games: StaminaCommandGame[]; windows: StaminaCommandWindow[]; warnings: string[]
+}
+
+export interface StaminaSeasonSummaryRow {
+  pitcher: number
+  pitcher_name: string
+  team: string
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  total_starts: number
+  eligible_games: number
+  supported_pitches: number
+  effective_games: number
+  average_pitches: number
+  mean_game_reliability: number
+  raw_stamina_plus: number
+  unweighted_stamina_plus: number
+  season_sampling_variance: number
+  qualified: boolean
+  minimum_games: number
+  minimum_pitches: number
+  stamina_plus: number
+  ci_low: number
+  ci_high: number
+  reliability: number
+  confidence: 'high' | 'medium' | 'low'
+  rank?: number | null
+}
+
+export interface StaminaSeasonSummariesResponse {
+  year: number
+  publication_status: 'research_only'
+  contract_version: string
+  rows: StaminaSeasonSummaryRow[]
+  warnings: string[]
+}
+
+export interface StaminaSeasonSummaryAudit {
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  pitchers: number
+  qualified_pitchers: number
+  minimum_games: number
+  minimum_pitches: number
+  median_reliability: number
+  median_interval_width: number
+  weighted_vs_unweighted_spearman?: number | null
+}
+
+export interface StaminaSlice12Result {
+  status: string
+  publication_status: 'research_only'
+  contract_version: string
+  season: number
+  method: string
+  minimum_season_reliability: number
+  rows: number
+  scope_audits: StaminaSeasonSummaryAudit[]
+  warnings: string[]
+}
+
+export interface StaminaExternalValidationGate {
+  key: string
+  label: string
+  threshold: string
+  value: unknown
+  passed: boolean
+}
+
+export interface StaminaExternalSeasonAudit {
+  year: number
+  qualified_pitchers: number
+  stamina_vs_early_stuff_spearman?: number | null
+  stamina_vs_early_velocity_spearman?: number | null
+  stamina_vs_eligible_games_spearman?: number | null
+  stamina_vs_average_pitches_spearman?: number | null
+}
+
+export interface StaminaSlice13Result {
+  status: string
+  publication_status: 'validated_observed_state' | 'research_only'
+  contract_version: string
+  validation_year: number
+  test_year: number
+  leaderboard_release_eligible: boolean
+  gates: StaminaExternalValidationGate[]
+  season_audits: StaminaExternalSeasonAudit[]
+  common_qualified_pitchers: number
+  cross_season_stamina_spearman?: number | null
+  cross_season_note: string
+  warnings: string[]
+}
+
+export interface StaminaBiasRepairModelAudit {
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  development_pitchers: number
+  ridge_alpha: number
+  spline_knots: number
+  spline_degree: number
+  prediction_center: number
+}
+
+export interface StaminaBiasRepairSeasonAudit {
+  year: number
+  scope: 'Overall' | 'Fastball' | 'Breaking' | 'Offspeed'
+  qualified_pitchers: number
+  before_early_stuff_spearman?: number | null
+  after_early_stuff_spearman?: number | null
+  before_early_velocity_spearman?: number | null
+  after_early_velocity_spearman?: number | null
+  median_reliability: number
+  median_interval_width: number
+  weighted_vs_unweighted_spearman?: number | null
+  spread_retained_ratio?: number | null
+}
+
+export interface StaminaSlice13AResult {
+  status: string
+  publication_status: 'validated_observed_state' | 'research_only'
+  contract_version: string
+  development_year: number
+  test_year: number
+  leaderboard_release_eligible: boolean
+  method: string
+  model_audits: StaminaBiasRepairModelAudit[]
+  season_audits: StaminaBiasRepairSeasonAudit[]
+  gates: StaminaExternalValidationGate[]
+  warnings: string[]
+}
+
+export interface StaminaLeaderboardRow {
+  rank: number
+  pitcher_id: number
+  name: string
+  team: string
+  starts: number
+  eligible_games: number
+  average_pitches: number
+  fastball_stamina_plus?: number | null
+  breaking_stamina_plus?: number | null
+  offspeed_stamina_plus?: number | null
+  ci_low: number
+  ci_high: number
+  reliability: number
+  stamina_plus: number
+  quality_game_stamina_plus?: number | null
+  physical_stability_plus?: number | null
+  command_retention_plus?: number | null
+}
+
+export interface StaminaLeaderboardResponse {
+  year: number
+  data_as_of?: string | null
+  publication_status: 'validated_observed_state'
+  contract_version: string
+  correction_version: string
+  development_year: number
+  test_year: number
+  rows: StaminaLeaderboardRow[]
+  warnings: string[]
+}
+
+export interface StaminaOverviewResponse {
+  year: number
+  data_as_of: string | null
+  generated_at: string
+  dataset_status: string
+  model_version: string
+  dataset_rows: number
+  appearances: number
+  pitchers: number
+  dual_role_pitchers: number
+  cleaning: StaminaCleaningStep[]
+  roles: StaminaRoleSummary[]
+  coverage: StaminaCoverageRow[]
+  pitch_buckets: StaminaPitchBucket[]
+  feature_audit: StaminaFeatureAudit[]
+  hypotheses: StaminaHypothesis[]
+  arm_angle_audit: StaminaArmAngleAudit
+  slice1: StaminaSlice1Result
+  slice2: StaminaSlice2Result
+  slice3: StaminaSlice3Result
+  slice4: StaminaSlice4Result
+  slice5?: StaminaSlice5Result | null
+  slice6?: StaminaSlice6Result | null
+  slice7?: StaminaSlice7Result | null
+  slice8?: StaminaSlice8Result | null
+  slice9?: StaminaSlice9Result | null
+  slice10?: StaminaSlice10Result | null
+  slice11?: StaminaSlice11Result | null
+  slice11_game_state?: StaminaGameStateResult | null
+  slice15?: StaminaSlice15Result | null
+  slice16?: StaminaSlice16Result | null
+  slice17?: StaminaSlice17Result | null
+  slice18?: StaminaSlice18Result | null
+  slice19?: StaminaSlice19Result | null
+  slice12?: StaminaSlice12Result | null
+  slice13?: StaminaSlice13Result | null
+  slice13a?: StaminaSlice13AResult | null
+  warnings: string[]
+}
+
+export type PerformanceStateTarget = 'process_collapse' | 'result_collapse' | 'return_to_baseline' | 'strong_rebound'
+
+export interface PerformanceStateMetricSummary {
+  rows: number
+  events: number
+  prevalence: number | null
+  average_precision: number | null
+  brier: number | null
+  log_loss: number | null
+  calibration?: {
+    ece?: number | null
+    intercept?: number | null
+    slope?: number | null
+    bins?: Array<{ rows: number; mean_probability: number; observed_rate: number }>
+  }
+}
+
+export interface PerformanceStateValidation {
+  external_rows: number
+  primary: PerformanceStateMetricSummary
+  development_prevalence_baseline: PerformanceStateMetricSummary
+  xgboost_challenger: PerformanceStateMetricSummary
+  fixed_false_alert_metrics: { threshold: number; alert_rate: number; recall: number; false_alert_rate: number }
+  pitcher_cluster_bootstrap: {
+    requested_samples: number
+    successful_samples: number
+    average_precision_delta_95_interval: Array<number | null>
+    brier_delta_95_interval: Array<number | null>
+  }
+  release_gate: {
+    average_precision_gain: number
+    minimum_average_precision_gain: number
+    brier_not_worse: boolean
+    log_loss_not_worse: boolean
+    passed: boolean
+  }
+  excess_recovery_diagnostic?: Record<string, number | string | null> | null
+}
+
+export interface PerformanceStateModelAudit {
+  eligible_development_rows: number
+  split_rows: Record<string, number>
+  selected_primary_layer: string
+  selected_features: string[]
+  validation_ablations: Record<string, PerformanceStateMetricSummary>
+  validation_xgboost_challenger: PerformanceStateMetricSummary
+  primary_feature_importance: Array<{ feature: string; importance: number }>
+  xgboost_feature_importance: Array<{ feature: string; importance: number }>
+  fixed_false_alert_threshold: number
+}
+
+export interface PerformanceStateLeaderboardRow {
+  rank: number
+  pitcher_id: number
+  pitcher_name: string
+  team: string | null
+  role: 'SP' | 'RP'
+  appearances: number
+  eligible_forecasts: number
+  latest_game_date: string
+  latest_probability: number
+  season_mean_probability: number
+  actual_events: number
+  actual_rate: number
+  latest_actual: boolean
+}
+
+export interface PerformanceStateLeaderboardResponse {
+  year: number
+  role: 'SP' | 'RP'
+  target: PerformanceStateTarget
+  target_label: string
+  model_version: string
+  status: string
+  data_as_of: string | null
+  evaluation_status: string
+  selected_primary_layer: string
+  model: PerformanceStateModelAudit
+  validation: PerformanceStateValidation
+  rows: PerformanceStateLeaderboardRow[]
+  warnings: string[]
+}
+
+export interface PerformanceStateV2LabRow extends PerformanceStateLeaderboardRow {
+  shadow_slice18_latest_probability: number | null
+  shadow_slice18_season_mean_probability: number | null
+  shadow_slice19_latest_probability: number | null
+  shadow_slice19_season_mean_probability: number | null
+  shadow_slice18_delta: number | null
+  shadow_slice19_delta: number | null
+}
+
+export interface PerformanceStateV2LabResponse {
+  year: number
+  role: 'SP' | 'RP'
+  target: string
+  target_label: string
+  model_version: string
+  status: string
+  data_as_of: string | null
+  evaluation_status: string
+  selected_primary_layer: string
+  rows: PerformanceStateV2LabRow[]
+  primary_source: Record<string, unknown>
+  shadow: Record<string, Record<string, unknown>>
+  subgroup_monitor: Record<string, unknown>
+  freeze_decision: Record<string, unknown>
+  strict_replay: Record<string, unknown>
+  fallback: { available: boolean; endpoint: string; model_version: string }
+  warnings: string[]
+}
+
+export interface PerformanceStatePlayerRow {
+  pitcher_id: number
+  pitcher_name: string
+  team: string | null
+  role: 'SP' | 'RP'
+  game_pk: number
+  game_date: string
+  pitches: number
+  plate_appearances: number | null
+  mean_stuff_plus: number | null
+  mean_location_plus: number | null
+  re24: number | null
+  re24_per_pa: number | null
+  wpa: number | null
+  wpa_li: number | null
+  wpa_li_per_pa: number | null
+  process_score: number | null
+  result_score: number | null
+  stuff_state_forecast: number | null
+  command_state_forecast: number | null
+  result_state_forecast: number | null
+  process_collapse: boolean
+  result_collapse: boolean
+  return_to_baseline: boolean
+  strong_rebound: boolean
+  excess_recovery: number | null
+  regime_filtered_label: string | null
+  regime_prior_collapse: number | null
+  gas_har_variance_forecast: number | null
+  evt_extreme_probability: number | null
+  evt_tail_supported: boolean | null
+  process_collapse_probability: number | null
+  process_collapse_alert: boolean | null
+  result_collapse_probability: number | null
+  result_collapse_alert: boolean | null
+  return_to_baseline_probability: number | null
+  return_to_baseline_alert: boolean | null
+  strong_rebound_probability: number | null
+  strong_rebound_alert: boolean | null
+}
+
+export interface PerformanceStatePlayerResponse {
+  year: number
+  pitcher_id: number
+  pitcher_name: string
+  roles: Array<'SP' | 'RP'>
+  model_version: string
+  status: string
+  rows: PerformanceStatePlayerRow[]
+  warnings: string[]
+}
+
+export interface PerformanceStateShadowResponse {
+  version: string
+  status: string
+  generated_at: string
+  evaluation_year: number
+  source_forecast_model_version: string
+  observation_mode: string
+  ledger_rows: number
+  appended_rows: number
+  probability_conflicts_preserved: number
+  prospective_rows: number
+  monitoring: Record<string, Record<string, {
+    rows: number
+    pitchers: number
+    data_as_of: string | null
+    metrics: PerformanceStateMetricSummary
+    confusion: { hits: number; misses: number; false_alerts: number; correct_negatives: number }
+  }>>
+  integration_gate: { eligible: boolean; required_untouched_year: number; minimum_prospective_rows_per_role_target: number; reason: string }
+  dataset_status: string
+  warnings: string[]
 }

@@ -96,7 +96,7 @@ const emit = defineEmits<{
   'video-selection': [value: { teamId: string; pitcherId: number; pitcherName: string; gamePk: number } | null]
 }>()
 const api = useApi()
-const activeGameIndex = ref(Math.max(0, props.games.length - 1))
+const activeGameIndex = ref(defaultGameIndex(props.games))
 const selectedStarterIndex = ref(0)
 const selectedGamePk = ref<number | null>(null)
 const activeGame = computed(() => props.games[activeGameIndex.value] || null)
@@ -153,7 +153,7 @@ const fatigueMetrics = computed(() => {
   ]
 })
 
-watch(() => props.games.length, length => { activeGameIndex.value = Math.max(0, length - 1) })
+watch(() => props.games.length, () => { activeGameIndex.value = defaultGameIndex(props.games) })
 watch([recentGames, selectedStarter, activeGame], ([recent, , game]) => {
   const ids = recent.map(row => Number(row.game_pk))
   const activePk = Number(game?.game_pk)
@@ -173,6 +173,21 @@ function moveGame(direction: number) {
   selectedGamePk.value = null
 }
 function selectStarter(index: number) { selectedStarterIndex.value = index; selectedGamePk.value = null }
+function defaultGameIndex(games: TeamStarterGame[]) {
+  const cutoff = taipeiDateOffset(-1)
+  for (let index = games.length - 1; index >= 0; index -= 1) {
+    if (games[index].game_date <= cutoff) return index
+  }
+  return Math.max(0, games.length - 1)
+}
+function taipeiDateOffset(dayOffset: number) {
+  const taipeiParts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date())
+  const value = (type: Intl.DateTimeFormatPartTypes) => Number(taipeiParts.find(part => part.type === type)?.value)
+  const date = new Date(Date.UTC(value('year'), value('month') - 1, value('day') + dayOffset))
+  return date.toISOString().slice(0, 10)
+}
 function gameLabel(row: Record<string, unknown>) { return `${String(row.game_date || '').slice(0, 10)} vs ${row.opponent_team || '—'} · ${formatNumber(row.pitches)} P` }
 function formatNumber(value: unknown) { const number = Number(value); return Number.isFinite(number) ? Math.round(number).toString() : '—' }
 </script>

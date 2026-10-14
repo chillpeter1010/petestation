@@ -16,7 +16,13 @@ from app.api.schemas.comparison import (
 )
 from app.api.schemas.common import ResponseMeta
 from app.core.config import settings
-from app.repositories.pitch_repository import load_pitcher_cached_season, load_pitcher_latest_teams, load_pitcher_season_date_range
+from app.repositories.pitch_repository import (
+    get_season_duckdb_path,
+    load_pitcher_cached_season,
+    load_pitcher_latest_teams,
+    load_pitcher_master_and_appearances,
+    load_pitcher_season_date_range,
+)
 from app.services.personal_service import (
     CALLED_STRIKE_EVENTS,
     HIT_EVENTS,
@@ -209,8 +215,8 @@ def merge_role_metric_sources(pool: pd.DataFrame, year: int) -> pd.DataFrame:
     return merged
 
 
-@lru_cache(maxsize=8)
-def load_comparison_pool(year: int) -> pd.DataFrame:
+@lru_cache(maxsize=16)
+def _load_comparison_pool_cached(year: int, _comparison_stamp: int, _pitch_stamp: int) -> pd.DataFrame:
     path = comparison_path(year)
     if not path.exists():
         return pd.DataFrame()
@@ -244,24 +250,31 @@ def load_comparison_pool(year: int) -> pd.DataFrame:
     pool["display_name"] = pool["display_name"].fillna(pool["player_id"].astype(str))
 
     if "team" not in pool.columns:
-        team_lookup = load_pitcher_latest_teams(year, settings.data_dir)
-        if not team_lookup.empty:
-            pool = pool.merge(team_lookup, on="player_id", how="left")
-        else:
-            pool["team"] = "FA"
-    else:
-        missing_team = pool["team"].isna() | pool["team"].astype(str).str.strip().eq("")
-        if missing_team.any():
-            team_lookup = load_pitcher_latest_teams(year, settings.data_dir).rename(columns={"team": "team_from_pitches"})
-            if not team_lookup.empty:
-                pool = pool.merge(team_lookup, on="player_id", how="left")
-                pool.loc[missing_team, "team"] = pool.loc[missing_team, "team_from_pitches"]
-                pool = pool.drop(columns=["team_from_pitches"])
+        pool["team"] = pd.NA
+    team_lookup = load_pitcher_latest_teams(year, settings.data_dir).rename(columns={"team": "team_from_pitches"})
+    if not team_lookup.empty:
+        pool = pool.merge(team_lookup, on="player_id", how="left")
+        latest_team = pool["team_from_pitches"].fillna("").astype(str).str.strip()
+        pool.loc[latest_team.ne(""), "team"] = latest_team[latest_team.ne("")]
+        pool = pool.drop(columns=["team_from_pitches"])
     pool["team"] = pool["team"].replace("", pd.NA).fillna("FA").astype(str)
 
     if "role" not in pool.columns:
         pool["role"] = "RP"
     pool["role"] = pool["role"].replace("", pd.NA).fillna("RP").astype(str).str.upper()
+    _, appearance_stats = load_pitcher_master_and_appearances(year, settings.data_dir)
+    if not appearance_stats.empty and {"player_id", "G", "GS"}.issubset(appearance_stats.columns):
+        roles = appearance_stats[["player_id", "G", "GS"]].copy()
+        roles["player_id"] = pd.to_numeric(roles["player_id"], errors="coerce")
+        roles["G"] = pd.to_numeric(roles["G"], errors="coerce").fillna(0)
+        roles["GS"] = pd.to_numeric(roles["GS"], errors="coerce").fillna(0)
+        roles = roles[roles["player_id"].notna() & roles["G"].gt(0)].copy()
+        roles["player_id"] = roles["player_id"].astype(int)
+        roles["role_from_appearances"] = np.where(roles["GS"] / roles["G"] > 0.3, "SP", "RP")
+        pool = pool.merge(roles[["player_id", "role_from_appearances"]], on="player_id", how="left")
+        has_appearance_role = pool["role_from_appearances"].notna()
+        pool.loc[has_appearance_role, "role"] = pool.loc[has_appearance_role, "role_from_appearances"]
+        pool = pool.drop(columns=["role_from_appearances"])
 
     pool["display_label"] = (
         pool["display_name"].astype(str)
@@ -284,6 +297,26 @@ def load_comparison_pool(year: int) -> pd.DataFrame:
         pool[f"{key}_pct"] = pct.clip(1, 100)
 
     return pool.sort_values("display_name").reset_index(drop=True)
+
+
+def _file_stamp(path: Path) -> int:
+    try:
+        return path.stat().st_mtime_ns
+    except OSError:
+        return 0
+
+
+def load_comparison_pool(year: int) -> pd.DataFrame:
+    normalized_year = int(year)
+    return _load_comparison_pool_cached(
+        normalized_year,
+        _file_stamp(comparison_path(normalized_year)),
+        _file_stamp(get_season_duckdb_path(normalized_year, settings.data_dir)),
+    )
+
+
+def clear_comparison_pool_cache() -> None:
+    _load_comparison_pool_cached.cache_clear()
 
 
 def player_from_row(row: pd.Series) -> ComparisonPlayer:
@@ -414,11 +447,61 @@ def get_comparison_options(year: int) -> ComparisonOptionsResponse:
     )
 
 
+def build_pitcher_team_stints(pitches: pd.DataFrame) -> list[dict[str, object]]:
+    required = {"game_date", "pitcher_team"}
+    if pitches.empty or not required.issubset(pitches.columns):
+        return []
+
+    working = pitches.copy()
+    working["game_date"] = pd.to_datetime(working["game_date"], errors="coerce")
+    working["pitcher_team"] = working["pitcher_team"].fillna("").astype(str).str.strip()
+    working = working[working["game_date"].notna() & working["pitcher_team"].ne("")].copy()
+    if working.empty:
+        return []
+
+    game_keys = ["game_date"]
+    if "game_pk" in working.columns:
+        game_keys.append("game_pk")
+    games = (
+        working.groupby([*game_keys, "pitcher_team"], dropna=False)
+        .size()
+        .reset_index(name="pitches")
+        .sort_values([*game_keys, "pitches", "pitcher_team"], ascending=[True] * len(game_keys) + [False, True])
+        .drop_duplicates(game_keys, keep="first")
+        .sort_values(game_keys)
+        .reset_index(drop=True)
+    )
+    games["stint_group"] = games["pitcher_team"].ne(games["pitcher_team"].shift()).cumsum()
+
+    stints: list[dict[str, object]] = []
+    for stint_index, (_, stint) in enumerate(games.groupby("stint_group", sort=True), start=1):
+        team = str(stint["pitcher_team"].iloc[0])
+        start_date = stint["game_date"].min().strftime("%Y-%m-%d")
+        end_date = stint["game_date"].max().strftime("%Y-%m-%d")
+        stints.append(
+            {
+                "stint_index": stint_index,
+                "team": team,
+                "start_date": start_date,
+                "end_date": end_date,
+                "pitches": int(stint["pitches"].sum()),
+                "games": int(len(stint)),
+                "label": f"{team} · {start_date}–{end_date}",
+            }
+        )
+    return stints
+
+
 def get_period_date_range(year: int, pitcher_id: int) -> dict[str, object]:
+    pitches = load_pitcher_cached_season(year, pitcher_id, settings.data_dir)
+    team_stints = build_pitcher_team_stints(pitches)
     return {
         "year": int(year),
         "pitcher_id": int(pitcher_id),
         **load_pitcher_season_date_range(year, pitcher_id, settings.data_dir),
+        "current_team": team_stints[-1]["team"] if team_stints else None,
+        "transfer_count": max(0, len(team_stints) - 1),
+        "team_stints": team_stints,
     }
 
 
@@ -693,14 +776,35 @@ def build_standard_period_comparison(left_df: pd.DataFrame, right_df: pd.DataFra
     )
 
 
-def period_player_from_options(year: int, pitcher_id: int, period_label: str, start_date: str, end_date: str) -> ComparisonPlayer | None:
+def period_team_label(pitches: pd.DataFrame) -> tuple[str | None, list[str]]:
+    stints = build_pitcher_team_stints(pitches)
+    teams = [str(stint["team"]) for stint in stints]
+    if not teams:
+        return None, []
+    unique_teams = list(dict.fromkeys(teams))
+    return (unique_teams[0] if len(unique_teams) == 1 else f"{len(unique_teams)} Tms"), unique_teams
+
+
+def period_player_from_options(
+    year: int,
+    pitcher_id: int,
+    period_label: str,
+    start_date: str,
+    end_date: str,
+    pitches: pd.DataFrame | None = None,
+) -> ComparisonPlayer | None:
     pool = load_comparison_pool(year)
     rows = pool[pool["player_id"] == int(pitcher_id)] if not pool.empty else pd.DataFrame()
     if rows.empty:
         return None
     player = player_from_row(rows.iloc[0])
-    player.meta.update({"year": year, "period": period_label, "start_date": start_date, "end_date": end_date})
-    player.display_label = f"{player.display_label} - {period_label}"
+    period_team, teams = period_team_label(pitches) if pitches is not None else (None, [])
+    if period_team:
+        player.team = period_team
+    player.meta.update(
+        {"year": year, "period": period_label, "start_date": start_date, "end_date": end_date, "teams": teams}
+    )
+    player.display_label = f"{player.display_name} ({player.team}, {player.role}) - {period_label}"
     return player
 
 
@@ -831,8 +935,14 @@ def get_period_comparison_overview(
     include_pitch_stuff: bool = False,
 ) -> ComparisonOverviewResponse:
     warnings: list[str] = []
-    left_df = load_pitcher_cached_season(left_year, pitcher_id, settings.data_dir, start_date=left_start, end_date=left_end)
-    right_df = load_pitcher_cached_season(right_year, pitcher_id, settings.data_dir, start_date=right_start, end_date=right_end)
+    left_source_df = load_pitcher_cached_season(
+        left_year, pitcher_id, settings.data_dir, start_date=left_start, end_date=left_end
+    )
+    right_source_df = load_pitcher_cached_season(
+        right_year, pitcher_id, settings.data_dir, start_date=right_start, end_date=right_end
+    )
+    left_df = left_source_df
+    right_df = right_source_df
     left_df = apply_stuff_filters(
         left_df,
         stand=stand,
@@ -860,8 +970,12 @@ def get_period_comparison_overview(
     right_metrics = build_metric_card_from_values(compute_period_metrics(right_df), right_year, PERIOD_METRIC_SPECS)
     metric_table = build_metric_comparison_table(left_metrics, right_metrics)
     standard_table = build_standard_period_comparison(left_df, right_df)
-    left_player = period_player_from_options(left_year, pitcher_id, "Period A", left_start, left_end)
-    right_player = period_player_from_options(right_year, pitcher_id, "Period B", right_start, right_end)
+    left_player = period_player_from_options(
+        left_year, pitcher_id, "Period A", left_start, left_end, pitches=left_source_df
+    )
+    right_player = period_player_from_options(
+        right_year, pitcher_id, "Period B", right_start, right_end, pitches=right_source_df
+    )
     left_movement_df = left_df
     right_movement_df = right_df
     if include_pitch_stuff:

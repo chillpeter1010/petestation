@@ -30,3 +30,38 @@ class StuffCalculatorResponse(BaseModel):
     model_version: str
     contexts_evaluated: int
     derived_features: dict[str, float]
+
+
+class PitchQualityLeaderboardRow(BaseModel):
+    rank: int
+    player_id: int
+    name: str
+    team: str
+    role: str
+    ip: float | None = None
+    pitches: int
+    pitch_type_scores: dict[str, float | None] = Field(default_factory=dict)
+    location_pitch_type_scores: dict[str, float | None] = Field(default_factory=dict)
+    pitching_pitch_type_scores: dict[str, float | None] = Field(default_factory=dict)
+    stuff_plus: float | None = None
+    location_plus: float | None = None
+    pitching_plus: float | None = None
+    location_pitches: int = 0
+    location_status: str = "unavailable"
+
+
+class PitchQualityLeaderboardResponse(BaseModel):
+    year: int
+    data_as_of: str | None = None
+    generated_at: str | None = None
+    model_version: str
+    location_generated_at: str | None = None
+    pitching_generated_at: str | None = None
+    pitching_model_version: str | None = None
+    pitching_data_as_of: str | None = None
+    source_status: dict[str, str] = Field(default_factory=dict)
+    cache_status: str
+    pitch_types: list[str] = Field(default_factory=list)
+    total_pitchers: int
+    warnings: list[str] = Field(default_factory=list)
+    rows: list[PitchQualityLeaderboardRow] = Field(default_factory=list)

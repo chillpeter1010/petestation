@@ -2,6 +2,7 @@ import type {
   AnalysisResponse,
   BatterLeaderboardRow,
   BatterOption,
+  BatterPeriodDateRange,
   BatterLineupScenarioResponse,
   BatterPeriodComparisonResponse,
   BatterPeriodOptionsResponse,
@@ -16,12 +17,33 @@ import type {
   LocationHeatmapResponse,
   LocationLeaderboardResponse,
   LocationPitcherResponse,
+  LeverageOverviewResponse,
+  LeverageScenarioInput,
+  LeverageScenarioResponse,
+  StaminaOverviewResponse,
+  StaminaResearchCurvesResponse,
+  StaminaGameStatesResponse,
+  StaminaPhysicalStabilityResponse,
+  StaminaCommandRetentionResponse,
+  StaminaSlice18Result,
+  StaminaSeasonSummariesResponse,
+  StaminaSlice13Result,
+  StaminaSlice13AResult,
+  StaminaLeaderboardResponse,
   OptionItem,
   PersonalOverviewResponse,
   PitcherLeaderboardRow,
+  PitcherMetricExplorerResponse,
   PitcherOption,
+  PitcherPeriodDateRange,
   PitchingOverviewResponse,
   PitchingPitcherResponse,
+  PitchQualityLeaderboardResponse,
+  PerformanceStateLeaderboardResponse,
+  PerformanceStateV2LabResponse,
+  PerformanceStatePlayerResponse,
+  PerformanceStateShadowResponse,
+  PerformanceStateTarget,
   TeamDashboardResponse,
   TeamHittingIntelligenceResponse,
   TeamPayrollResponse,
@@ -51,6 +73,103 @@ export function useApi() {
     pitchingPitcher: (params: { year: number; pitcherId: number }) =>
       $fetch<PitchingPitcherResponse>(`${apiBase}/pitching/pitcher`, {
         query: { year: params.year, pitcher_id: params.pitcherId, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    leverageOverview: (year: number) =>
+      $fetch<LeverageOverviewResponse>(`${apiBase}/leverage/overview`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    leverageCalculator: (input: LeverageScenarioInput) =>
+      $fetch<LeverageScenarioResponse>(`${apiBase}/leverage/calculator`, {
+        method: 'POST',
+        body: input
+      }),
+    staminaOverview: (year: number) =>
+      $fetch<StaminaOverviewResponse>(`${apiBase}/stamina/overview`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    performanceStateLeaderboard: (params: { year: number; role: 'SP' | 'RP'; target: PerformanceStateTarget; minimumForecasts?: number }) =>
+      $fetch<PerformanceStateLeaderboardResponse>(`${apiBase}/performance-state/leaderboard`, {
+        query: {
+          year: params.year,
+          role: params.role,
+          target: params.target,
+          minimum_forecasts: params.minimumForecasts || 1,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
+      }),
+    performanceStateV2Lab: (params: { year: number; role: 'SP' | 'RP'; target: PerformanceStateTarget; minimumForecasts?: number }) =>
+      $fetch<PerformanceStateV2LabResponse>(`${apiBase}/performance-state/v2-lab`, {
+        query: {
+          year: params.year,
+          role: params.role,
+          target: params.target,
+          minimum_forecasts: params.minimumForecasts || 1,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
+      }),
+    performanceStatePlayer: (params: { year: number; pitcherId: number; role?: 'SP' | 'RP' }) =>
+      $fetch<PerformanceStatePlayerResponse>(`${apiBase}/performance-state/player`, {
+        query: {
+          year: params.year,
+          pitcher_id: params.pitcherId,
+          role: params.role,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
+      }),
+    performanceStateShadow: () =>
+      $fetch<PerformanceStateShadowResponse>(`${apiBase}/performance-state/shadow`, {
+        query: { _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaResearchCurves: (year: number, pitcherId: number) =>
+      $fetch<StaminaResearchCurvesResponse>(`${apiBase}/stamina/research-curves`, {
+        query: { year, pitcher_id: pitcherId, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaGameStates: (year: number, pitcherId: number) =>
+      $fetch<StaminaGameStatesResponse>(`${apiBase}/stamina/game-states`, {
+        query: { year, pitcher_id: pitcherId, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaPhysicalStability: (year: number, pitcherId: number) =>
+      $fetch<StaminaPhysicalStabilityResponse>(`${apiBase}/stamina/physical-stability`, {
+        query: { year, pitcher_id: pitcherId, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaCommandRetention: (year: number, pitcherId: number) =>
+      $fetch<StaminaCommandRetentionResponse>(`${apiBase}/stamina/command-retention`, {
+        query: { year, pitcher_id: pitcherId, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaIncrementalValidation: (year: number) =>
+      $fetch<StaminaSlice18Result>(`${apiBase}/stamina/incremental-validation`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaSeasonSummaries: (year: number) =>
+      $fetch<StaminaSeasonSummariesResponse>(`${apiBase}/stamina/season-summaries`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaExternalValidation: (year: number) =>
+      $fetch<StaminaSlice13Result>(`${apiBase}/stamina/external-validation`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaSeasonBiasRepair: (year: number) =>
+      $fetch<StaminaSlice13AResult>(`${apiBase}/stamina/season-bias-repair`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    staminaLeaderboard: (year: number) =>
+      $fetch<StaminaLeaderboardResponse>(`${apiBase}/stamina/leaderboard`, {
+        query: { year, _ts: Date.now() },
         cache: 'no-store'
       }),
     homeRecommendations: (year = 2026) =>
@@ -104,6 +223,11 @@ export function useApi() {
           role: params.role || 'All',
           team: params.team || 'All'
         }
+      }),
+    pitcherMetricExplorer: (year: number) =>
+      $fetch<PitcherMetricExplorerResponse>(`${apiBase}/pitchers/metric-explorer`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
       }),
     batters: (params: { year: number; team?: string }) =>
       $fetch<BatterOption[]>(`${apiBase}/batters`, {
@@ -300,8 +424,17 @@ export function useApi() {
         query: { year: params.year, pitcher_id: params.pitcherId, _ts: Date.now() },
         cache: 'no-store'
       }),
-    stuffLeaderboard: (year: number) =>
-      $fetch<AnalysisResponse>(`${apiBase}/stuff/leaderboard`, { query: { year } }),
+    stuffLeaderboard: (params: { year: number; role?: string; team?: string; minimumIp?: number }) =>
+      $fetch<PitchQualityLeaderboardResponse>(`${apiBase}/stuff/leaderboard`, {
+        query: {
+          year: params.year,
+          role: params.role || 'All',
+          team: params.team || 'All',
+          minimum_ip: params.minimumIp || 0,
+          _ts: Date.now()
+        },
+        cache: 'no-store'
+      }),
     stuffFeatures: (params: { year: number; pitcherId: number; startDate?: string; endDate?: string }) =>
       $fetch<AnalysisResponse>(`${apiBase}/stuff/features`, {
         query: {
@@ -414,7 +547,10 @@ export function useApi() {
         }
       }),
     comparisonPersonalOptions: (year: number) =>
-      $fetch<ComparisonOptionsResponse>(`${apiBase}/comparison/personal/options`, { query: { year } }),
+      $fetch<ComparisonOptionsResponse>(`${apiBase}/comparison/personal/options`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
     comparisonPersonalOverview: (params: {
       year?: number
       leftYear: number
@@ -444,10 +580,14 @@ export function useApi() {
         }
       }),
     comparisonPeriodOptions: (year: number) =>
-      $fetch<ComparisonOptionsResponse>(`${apiBase}/comparison/period/options`, { query: { year } }),
+      $fetch<ComparisonOptionsResponse>(`${apiBase}/comparison/period/options`, {
+        query: { year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
     comparisonPeriodDateRange: (params: { year: number; pitcherId: number }) =>
-      $fetch<{ year: number; pitcher_id: number; start_date: string | null; end_date: string | null; pitches: number }>(`${apiBase}/comparison/period/date-range`, {
-        query: { year: params.year, pitcher_id: params.pitcherId }
+      $fetch<PitcherPeriodDateRange>(`${apiBase}/comparison/period/date-range`, {
+        query: { year: params.year, pitcher_id: params.pitcherId, _ts: Date.now() },
+        cache: 'no-store'
       }),
     comparisonPeriodOverview: (params: {
       pitcherId: number
@@ -514,7 +654,7 @@ export function useApi() {
     batterPeriodOptions: (year: number) =>
       $fetch<BatterPeriodOptionsResponse>(`${apiBase}/batter-comparison/period/options`, { query: { year } }),
     batterPeriodDateRange: (params: { year: number; batterId: number }) =>
-      $fetch<{ year: number; batter_id: number; start_date: string | null; end_date: string | null; pitches: number }>(`${apiBase}/batter-comparison/period/date-range`, {
+      $fetch<BatterPeriodDateRange>(`${apiBase}/batter-comparison/period/date-range`, {
         query: { year: params.year, batter_id: params.batterId }
       }),
     batterPeriodOverview: (params: {
@@ -531,6 +671,8 @@ export function useApi() {
       count?: string
       pitch?: string
       pitchResult?: string
+      inPlayResult?: string
+      paResult?: string
     }) => $fetch<BatterPeriodComparisonResponse>(`${apiBase}/batter-comparison/period/overview`, {
       query: {
         batter_id: params.batterId,
@@ -545,8 +687,12 @@ export function useApi() {
         pitch_family: params.pitchFamily,
         count: params.count,
         pitch: params.pitch,
-        pitch_result: params.pitchResult
-      }
+        pitch_result: params.pitchResult,
+        in_play_result: params.inPlayResult,
+        pa_result: params.paResult,
+        _ts: Date.now()
+      },
+      cache: 'no-store'
     }),
     batterTeamResearch: (params: { year: number; team: string; opponentHand?: string }) =>
       $fetch<BatterTeamResearchResponse>(`${apiBase}/batter-comparison/team-research`, {
@@ -592,6 +738,15 @@ export function useApi() {
       }),
     adminStatus: (year: number) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/status`, { query: { year } }),
+    dataFreshness: (year: number) =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/data-freshness`, { query: { year } }),
+    refreshDataFreshness: (year: number) =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/data-freshness/refresh`, {
+        method: 'POST',
+        query: { year }
+      }),
+    projectTracker: () =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/project-tracker`),
     pitcherDataStatus: (year: number) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/pitcher-data-status`, { query: { year } }),
     videoLookupStatus: (year: number) =>
@@ -628,6 +783,13 @@ export function useApi() {
         method: 'POST',
         query: { year }
       }),
+    backfillHistoricalPlusJob: (year: number) =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/backfill-historical-plus`, {
+        method: 'POST',
+        query: { year }
+      }),
+    historicalPlusStatus: () =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/historical-plus-status`),
     adminJob: (jobId: string) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/${jobId}`)
   }

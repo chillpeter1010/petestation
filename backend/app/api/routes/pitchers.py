@@ -1,9 +1,16 @@
 from fastapi import APIRouter
 
 from app.api.schemas.common import PitcherLeaderboardRow, PitcherOption
+from app.api.schemas.pitcher_metric_explorer import PitcherMetricExplorerResponse
+from app.services.pitcher_metric_explorer_service import get_pitcher_metric_explorer
 from app.services.pitcher_service import list_pitcher_leaderboard, list_pitcher_options
 
 router = APIRouter()
+
+
+@router.get("/metric-explorer", response_model=PitcherMetricExplorerResponse)
+def pitcher_metric_explorer(year: int = 2026) -> PitcherMetricExplorerResponse:
+    return PitcherMetricExplorerResponse(**get_pitcher_metric_explorer(year=year))
 
 
 @router.get("/leaderboard", response_model=list[PitcherLeaderboardRow])

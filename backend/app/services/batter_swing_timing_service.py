@@ -20,7 +20,7 @@ from app.api.schemas.batter_swing_timing import (
 )
 from app.core.config import settings
 from app.repositories.pitch_repository import get_season_duckdb_path
-from app.services.batter_service import list_batter_leaderboard
+from app.services.batter_service import is_placeholder_player_name, list_batter_leaderboard
 from app.services.batter_swing_matchup_service import (
     available_pitcher_teams,
     build_matchup_pitch_profiles,
@@ -395,7 +395,8 @@ def _aggregate_group(
 
     raw_name = str(group.get("name", pd.Series([""])).iloc[0] or "")
     raw_team = str(group.get("team_name", pd.Series(["-"])).iloc[0] or "-")
-    name = identity[0] if identity and identity[0] else _display_name(raw_name)
+    identity_name = identity[0] if identity else ""
+    name = _display_name(raw_name) if is_placeholder_player_name(identity_name) else identity_name
     team = identity[1] if identity and identity[1] not in {"", "-"} else TEAM_NAME_TO_CODE.get(raw_team, "-" if raw_team == "zMLB" else raw_team)
     plate_appearances = identity[2] if identity else None
     side = str(group["batter_side"].mode().iloc[0]) if "batter_side" in group and not group["batter_side"].mode().empty else "-"

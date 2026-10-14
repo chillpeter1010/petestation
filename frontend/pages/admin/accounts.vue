@@ -27,13 +27,14 @@
 import type { AuthUser } from '~/composables/useAuth'
 
 const auth = useAuth()
+const { brandName } = useSiteBrand()
 const accounts = ref<AuthUser[]>([])
 const loading = ref(true)
 const busyId = ref<number | null>(null)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-useHead({ title: 'Account approvals · Petehub' })
+useHead(() => ({ title: `Account approvals · ${brandName.value}` }))
 
 onMounted(loadAccounts)
 

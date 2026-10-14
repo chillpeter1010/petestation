@@ -6,6 +6,7 @@ from app.api.schemas.common import ResponseMeta
 from app.api.schemas.home import HomeRecommendationsResponse, HomeVideoRecommendation
 from app.core.config import settings
 from app.repositories.pitch_repository import get_season_duckdb_path
+from app.services.wpa_service import calibrated_pitcher_wpa_sql, plate_appearance_wpa_ctes
 
 
 TEAM_SEARCH_NAMES = {
@@ -45,7 +46,8 @@ def get_home_video_recommendations(year: int = 2026) -> HomeRecommendationsRespo
             batter_name = "CAST(p.batter AS VARCHAR)" if not has_players else "coalesce(batter_player.player_name, CAST(p.batter AS VARCHAR))"
             frame = conn.execute(
                 f"""
-                WITH eligible AS (
+                WITH {plate_appearance_wpa_ctes('pitches')},
+                eligible AS (
                     SELECT DISTINCT
                         p.game_pk,
                         CAST(p.game_date AS DATE) AS game_date,
@@ -60,8 +62,9 @@ def get_home_video_recommendations(year: int = 2026) -> HomeRecommendationsRespo
                         p.pitch_name,
                         p.events,
                         p.des,
-                        abs(p.delta_home_win_exp) AS wpa
+                        abs({calibrated_pitcher_wpa_sql("CASE WHEN p.inning_topbot = 'Top' THEN w.pa_home_wpa ELSE -w.pa_home_wpa END")}) AS wpa
                     FROM pitches p
+                    JOIN wpa_values w USING (game_pk, at_bat_number)
                     JOIN pitch_play_lookup l
                       ON l.game_pk = p.game_pk
                      AND l.at_bat_number = p.at_bat_number
@@ -71,6 +74,9 @@ def get_home_video_recommendations(year: int = 2026) -> HomeRecommendationsRespo
                       AND trim(CAST(l.play_id AS VARCHAR)) NOT IN ('', 'None', 'nan', 'NaN')
                       AND l.video_url IS NOT NULL
                       AND trim(CAST(l.video_url AS VARCHAR)) NOT IN ('', 'None', 'nan', 'NaN')
+                    QUALIFY row_number() OVER (
+                        PARTITION BY p.game_pk, p.at_bat_number ORDER BY p.pitch_number DESC
+                    ) = 1
                 ), latest AS (
                     SELECT max(game_date) AS latest_date FROM eligible
                 ), recent_pool AS (
@@ -204,7 +210,8 @@ def search_home_videos(query: str, year: int = 2026, limit: int = 12) -> HomeRec
             parameters.append(limit)
             frame = conn.execute(
                 f"""
-                WITH eligible AS (
+                WITH {plate_appearance_wpa_ctes('pitches')},
+                eligible AS (
                     SELECT DISTINCT
                         p.game_pk,
                         CAST(p.game_date AS DATE) AS game_date,
@@ -219,8 +226,9 @@ def search_home_videos(query: str, year: int = 2026, limit: int = 12) -> HomeRec
                         p.pitch_name,
                         p.events,
                         p.des,
-                        abs(p.delta_home_win_exp) AS wpa
+                        abs({calibrated_pitcher_wpa_sql("CASE WHEN p.inning_topbot = 'Top' THEN w.pa_home_wpa ELSE -w.pa_home_wpa END")}) AS wpa
                     FROM pitches p
+                    JOIN wpa_values w USING (game_pk, at_bat_number)
                     JOIN pitch_play_lookup l
                       ON l.game_pk = p.game_pk
                      AND l.at_bat_number = p.at_bat_number
@@ -231,6 +239,9 @@ def search_home_videos(query: str, year: int = 2026, limit: int = 12) -> HomeRec
                       AND l.video_url IS NOT NULL
                       AND trim(CAST(l.video_url AS VARCHAR)) NOT IN ('', 'None', 'nan', 'NaN')
                       AND {filters}
+                    QUALIFY row_number() OVER (
+                        PARTITION BY p.game_pk, p.at_bat_number ORDER BY p.pitch_number DESC
+                    ) = 1
                 )
                 SELECT *, 'Search result' AS recommendation_source,
                        max(game_date) OVER () AS latest_date

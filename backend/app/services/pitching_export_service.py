@@ -49,6 +49,19 @@ def _metadata(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _freshness(meta: dict) -> tuple[str | None, str | None, str, list[str]]:
+    data_as_of = str(meta.get("data_as_of")) if meta.get("data_as_of") else None
+    source_data_as_of = str(meta.get("source_data_as_of")) if meta.get("source_data_as_of") else data_as_of
+    status = "current" if data_as_of and data_as_of == source_data_as_of else "stale"
+    warnings: list[str] = []
+    if status == "stale":
+        warnings.append(
+            f"Pitching+ 完整特徵資料截至 {data_as_of or 'unknown'}；逐球來源截至 "
+            f"{source_data_as_of or 'unknown'}。缺少模型必要特徵的日期未納入推論。"
+        )
+    return data_as_of, source_data_as_of, status, warnings
+
+
 def _ip_to_outs(value: object) -> int:
     if value is None or pd.isna(value):
         return 0
@@ -139,7 +152,10 @@ def get_pitching_overview(
     distribution = [PitchingDistributionBin(low=float(edges[i]), high=float(edges[i + 1]), count=int(counts[i])) for i in range(len(counts))]
     candidates = {name: {"validation_metrics": value.get("validation_metrics", {}), "test_metrics": value.get("test_metrics", {})}
                   for name, value in meta.get("candidates", {}).items()}
-    return PitchingOverviewResponse(year=year, available_years=_available_years(root), generated_at=meta.get("generated_at"), model_version=meta.get("model_version", "unknown"),
+    data_as_of, source_data_as_of, cache_status, warnings = _freshness(meta)
+    return PitchingOverviewResponse(year=year, data_as_of=data_as_of, source_data_as_of=source_data_as_of,
+        cache_status=cache_status, warnings=warnings, available_years=_available_years(root),
+        generated_at=meta.get("exported_at") or meta.get("generated_at"), model_version=meta.get("model_version", "unknown"),
         public_candidate=meta.get("public_candidate", "base"), minimum_pitches=minimum_pitches, minimum_innings=minimum_innings, total_pitchers=len(rows),
         total_pitches=int(frame["pitches"].sum()), median=round(float(np.median(values)), 1) if len(values) else 0,
         p10=round(float(np.percentile(values, 10)), 1) if len(values) else 0, p90=round(float(np.percentile(values, 90)), 1) if len(values) else 0,
@@ -148,6 +164,7 @@ def get_pitching_overview(
 
 def get_pitching_pitcher(year: int, pitcher_id: int, data_root: Path | None = None) -> PitchingPitcherResponse:
     root = _artifact_dir(data_root)
+    meta = _metadata(root / "pete_pitching_metadata.json")
     identities = _identity_map(year, data_root)
     overall = pd.read_csv(root / f"pitching_plus_pitchers_{year}.csv")
     match = overall[overall["pitcher"].astype(int) == pitcher_id]
@@ -169,4 +186,8 @@ def get_pitching_pitcher(year: int, pitcher_id: int, data_root: Path | None = No
         conn.close()
     outing_rows = [PitchingOutingRow(game_pk=int(r.game_pk), game_date=str(r.game_date), pitches=int(r.pitches),
         pitching_plus=round(float(r.pitching_plus), 1), xrv_per_100=round(float(r.xrv_per_100), 3)) for r in outings.itertuples()]
-    return PitchingPitcherResponse(year=year, pitcher=row, pitch_types=type_rows, outings=outing_rows)
+    data_as_of, _, cache_status, warnings = _freshness(meta)
+    return PitchingPitcherResponse(
+        year=year, data_as_of=data_as_of, cache_status=cache_status, warnings=warnings,
+        pitcher=row, pitch_types=type_rows, outings=outing_rows,
+    )

@@ -13,7 +13,8 @@ def test_home_recommendations_returns_six_four_two_mix(tmp_path, monkeypatch):
                 game_pk BIGINT, game_date DATE, at_bat_number BIGINT, pitch_number BIGINT,
                 pitcher BIGINT, batter BIGINT, player_name VARCHAR, home_team VARCHAR,
                 away_team VARCHAR, inning BIGINT, inning_topbot VARCHAR, pitch_name VARCHAR,
-                events VARCHAR, des VARCHAR, delta_home_win_exp DOUBLE
+                events VARCHAR, des VARCHAR, delta_home_win_exp DOUBLE, game_type VARCHAR,
+                home_win_exp DOUBLE, post_home_score INTEGER, post_away_score INTEGER
             )
         """)
         conn.execute("""
@@ -26,8 +27,8 @@ def test_home_recommendations_returns_six_four_two_mix(tmp_path, monkeypatch):
         for index in range(30):
             game_date = latest - timedelta(days=index % 20)
             conn.execute(
-                "INSERT INTO pitches VALUES (?, ?, ?, 1, 10, 20, 'Pitcher', 'AZ', 'PIT', 8, 'Top', 'Slider', 'single', ?, ?)",
-                [1000 + index, game_date, index + 1, f"Play {index}", index / 100],
+                "INSERT INTO pitches VALUES (?, ?, ?, 1, 10, 20, 'Pitcher', 'AZ', 'PIT', 8, 'Top', 'Slider', 'single', ?, ?, 'R', ?, 1, 0)",
+                [1000 + index, game_date, index + 1, f"Play {index}", index / 100, 0.5 - index / 200],
             )
             conn.execute(
                 "INSERT INTO pitch_play_lookup VALUES (?, ?, 1, ?, ?)",
@@ -54,7 +55,8 @@ def test_home_video_search_matches_all_keywords(tmp_path, monkeypatch):
                 game_pk BIGINT, game_date DATE, at_bat_number BIGINT, pitch_number BIGINT,
                 pitcher BIGINT, batter BIGINT, player_name VARCHAR, home_team VARCHAR,
                 away_team VARCHAR, inning BIGINT, inning_topbot VARCHAR, pitch_name VARCHAR,
-                events VARCHAR, des VARCHAR, delta_home_win_exp DOUBLE
+                events VARCHAR, des VARCHAR, delta_home_win_exp DOUBLE, game_type VARCHAR,
+                home_win_exp DOUBLE, post_home_score INTEGER, post_away_score INTEGER
             )
         """)
         conn.execute("""
@@ -64,7 +66,7 @@ def test_home_video_search_matches_all_keywords(tmp_path, monkeypatch):
             )
         """)
         conn.execute(
-            "INSERT INTO pitches VALUES (1, '2026-07-31', 1, 1, 10, 20, 'Pitcher', 'AZ', 'PIT', 8, 'Top', 'Slider', 'home_run', 'A grand slam to left field', 0.42)"
+            "INSERT INTO pitches VALUES (1, '2026-07-31', 1, 1, 10, 20, 'Pitcher', 'AZ', 'PIT', 8, 'Top', 'Slider', 'home_run', 'A grand slam to left field', 0.42, 'R', 0.42, 1, 0)"
         )
         conn.execute("INSERT INTO pitch_play_lookup VALUES (1, 1, 1, 'grand-slam-play', 'https://example.com/grand-slam')")
 

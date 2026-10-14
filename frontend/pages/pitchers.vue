@@ -1,11 +1,15 @@
 <template>
   <main class="petehub-home">
     <header class="top-bar">
-      <NuxtLink class="brand-lockup" to="/" aria-label="Petehub home">
-        <span>Pete</span><strong>hub</strong>
+      <NuxtLink class="pitcher-home-link" to="/" aria-label="Home">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m3 11 9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+          <path d="M9 20v-6h6v6" />
+        </svg>
+        <span>Home</span>
       </NuxtLink>
       <nav class="top-nav" aria-label="Primary">
-        <NuxtLink to="/">Home</NuxtLink>
         <NuxtLink to="/comparison">Comparison</NuxtLink>
         <NuxtLink to="/rotation">Rotation</NuxtLink>
         <NuxtLink to="/lab">Lab</NuxtLink>
@@ -24,7 +28,7 @@
     <section class="search-panel">
       <div class="search-heading">
         <div>
-          <h2>Search Petehub</h2>
+          <h2>Search pitchers</h2>
           <p>{{ allPitchers.length.toLocaleString() }} pitchers indexed for {{ year }}.</p>
         </div>
         <div class="search-controls">
@@ -217,6 +221,35 @@ function appearanceMeta(pitcher: PitcherOption) {
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 36px;
+}
+
+.petehub-home .pitcher-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  padding: 0;
+  color: var(--hub-muted);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.petehub-home .pitcher-home-link svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.petehub-home .pitcher-home-link:hover,
+.petehub-home .pitcher-home-link:focus-visible {
+  color: var(--hub-orange);
 }
 
 .petehub-home .brand-lockup {

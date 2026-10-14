@@ -87,13 +87,17 @@
         </g>
 
         <g v-if="hoveredPoint" class="hover-card">
-          <rect :x="hoverCard.x" :y="hoverCard.y" :width="hoverCard.width" height="176" rx="6" />
+          <rect :x="hoverCard.x" :y="hoverCard.y" :width="hoverCard.width" height="272" rx="6" />
           <text :x="hoverCard.textX" :y="hoverCard.y + 26" class="hover-title">{{ hoveredPoint.date }}</text>
           <text :x="hoverCard.textX" :y="hoverCard.y + 50">Pitch {{ hoveredPoint.pitch }}</text>
           <text :x="hoverCard.textX" :y="hoverCard.y + 74">Desc {{ hoveredPoint.description || '-' }}</text>
           <text :x="hoverCard.textX" :y="hoverCard.y + 98">Video {{ hoveredPoint.video }}</text>
           <text :x="hoverCard.textX" :y="hoverCard.y + 122">Stuff+ {{ hoveredPoint.stuffPlus }}</text>
           <text :x="hoverCard.textX" :y="hoverCard.y + 146">Location+ {{ hoveredPoint.locationPlus }}</text>
+          <text :x="hoverCard.textX" :y="hoverCard.y + 170">Stamina+ {{ hoveredPoint.staminaPlus }}</text>
+          <text :x="hoverCard.textX" :y="hoverCard.y + 194">Expected Δ {{ hoveredPoint.expectedRetention }}</text>
+          <text :x="hoverCard.textX" :y="hoverCard.y + 218">Expected Stuff+ {{ hoveredPoint.expectedStuffPlus }}</text>
+          <text :x="hoverCard.textX" :y="hoverCard.y + 242" class="hover-note">Observed ≠ fatigue cause</text>
         </g>
         </g>
       </svg>
@@ -152,6 +156,9 @@ const hoveredPoint = ref<{
   video: 'Y' | 'N'
   stuffPlus: string
   locationPlus: string
+  staminaPlus: string
+  expectedRetention: string
+  expectedStuffPlus: string
   key: string
   raw: Record<string, unknown>
 } | null>(null)
@@ -245,6 +252,9 @@ const plottedPoints = computed(() => {
       video: videoFlag(point),
       stuffPlus: formatPlusScore(point.pitch_stuff_plus ?? point.stuff_plus),
       locationPlus: formatPlusScore(point.location_plus_pitch ?? point.location_plus),
+      staminaPlus: formatPlusScore(point.stamina_plus_trait),
+      expectedRetention: formatSignedScore(point.stamina_expected_retention_delta),
+      expectedStuffPlus: formatPlusScore(point.stamina_expected_stuff_plus),
       batSpeed: nullableNumber(point.bat_speed),
       swung: Boolean(point.is_swing),
       key: pitchPointKey(point),
@@ -447,6 +457,11 @@ function formatVelo(value: unknown) {
 function formatPlusScore(value: unknown) {
   const numberValue = Number(value)
   return Number.isFinite(numberValue) ? numberValue.toFixed(1) : '—'
+}
+
+function formatSignedScore(value: unknown) {
+  const numberValue = Number(value)
+  return Number.isFinite(numberValue) ? `${numberValue > 0 ? '+' : ''}${numberValue.toFixed(1)}` : '—'
 }
 
 function nullableNumber(value: unknown) {
@@ -690,5 +705,11 @@ circle.selected {
   fill: #ffffff;
   font-size: 15px;
   font-weight: 700;
+}
+
+.hover-card .hover-note {
+  fill: #f6ad55;
+  font-size: 11px;
+  font-weight: 800;
 }
 </style>

@@ -301,6 +301,9 @@ def list_pitcher_leaderboard(year: int, role: str = "All", team: str = "All") ->
     if str(team).upper() != "ALL":
         rows = rows[rows["Team"] == str(team)].copy()
 
+    for column in ["ip", "pitches", "outs", "hits", "walks", "strikeouts", "batters_faced"]:
+        if column not in rows.columns:
+            rows[column] = np.nan
     rows["avg_pitches"] = np.where(rows["G"] > 0, rows.get("pitches", 0) / rows["G"], np.nan)
     innings = rows.get("outs", 0) / 3
     rows["whip"] = np.where(innings > 0, (rows.get("hits", 0) + rows.get("walks", 0)) / innings, np.nan)

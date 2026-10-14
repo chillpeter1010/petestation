@@ -8,7 +8,7 @@ import subprocess
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +29,15 @@ from app.services.video_service import get_video_lookup_status
 
 _DUCKDB_WRITE_LOCK = threading.Lock()
 
+
+HISTORICAL_PLUS_STAGES = [
+    ("location_plus", {"job": "location_scores"}),
+    ("pitch_stuff_plus", {"job": "pitch_stuff_scores"}),
+    ("pitching_plus", {"job": "pitching_plus"}),
+    ("plus_leaderboard", {"job": "stuff_leaderboard"}),
+    ("stamina_dataset", {"job": "stamina_dataset"}),
+]
+
 _DUCKDB_WRITE_CHILD = r"""
 from __future__ import annotations
 
@@ -37,6 +46,11 @@ import sys
 import traceback
 
 from app.core.config import settings
+
+
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="replace")
 
 
 def main() -> int:
@@ -51,6 +65,18 @@ def main() -> int:
             from app.services.game_line_service import backfill_pitcher_game_lines
 
             result = backfill_pitcher_game_lines(data_dir=settings.data_dir, **payload)
+        elif job == "starter_reference":
+            from app.services.starter_reference_service import refresh_starter_reference_data
+
+            result = refresh_starter_reference_data(data_dir=settings.data_dir, **payload)
+        elif job == "batter_timing":
+            from app.services.batter_swing_timing_service import refresh_batter_timing_cache
+
+            year = int(payload["year"])
+            result = {
+                hand: refresh_batter_timing_cache(year=year, pitcher_hand=hand, data_dir=settings.data_dir)
+                for hand in ["All", "L", "R"]
+            }
         elif job == "location_scores":
             from app.ml.location_exports import export_location_scores
 
@@ -59,6 +85,22 @@ def main() -> int:
             from app.services.pitch_stuff_cache_service import refresh_pitch_stuff_scores
 
             result = refresh_pitch_stuff_scores(data_dir=settings.data_dir, **payload)
+        elif job == "stamina_dataset":
+            from app.services.stamina_lab_service import refresh_stamina_dataset
+
+            result = refresh_stamina_dataset(data_dir=settings.data_dir, **payload)
+        elif job == "stuff_leaderboard":
+            from app.services.stuff_leaderboard_service import refresh_stuff_leaderboard
+
+            result = refresh_stuff_leaderboard(data_dir=settings.data_dir, **payload)
+        elif job == "pitching_plus":
+            from app.ml.pitching_plus import refresh_pitching_exports
+
+            result = refresh_pitching_exports(
+                data_dir=settings.data_dir,
+                artifact_dir=settings.data_dir / "models" / "pitching_plus",
+                **payload,
+            )
         elif job == "batter_lineup_scenarios":
             from app.services.batter_team_research_service import refresh_batter_lineup_scenario_cache
 
@@ -168,6 +210,11 @@ def sync_legacy_pitcher_refresh_outputs(year: int) -> dict[str, object]:
 
 
 def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False) -> dict[str, object]:
+    # ``include_pitch_stuff`` is retained for callers created before per-pitch
+    # Stuff+ became a required refresh step.  Incremental scoring already skips
+    # unchanged pitchers, so leaving a fixed pitcher budget here only creates a
+    # silently partial cache after multi-day source updates.
+    del include_pitch_stuff
     with _DUCKDB_WRITE_LOCK:
         initial_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir)
         repair = None
@@ -191,22 +238,187 @@ def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False
         result["pitcher_game_lines"] = _run_duckdb_write_child(
             {"job": "pitcher_game_lines", "year": int(year)}
         )
+        result["starter_reference"] = _run_optional_refresh_child(
+            {"job": "starter_reference", "year": int(year)}
+        )
         result["location_plus"] = _run_duckdb_write_child(
             {"job": "location_scores", "year": int(year)}
         )
-        if include_pitch_stuff:
-            result["pitch_stuff_plus"] = _run_duckdb_write_child(
-                {"job": "pitch_stuff_scores", "year": int(year)}
+        result["pitching_plus"] = _run_optional_refresh_child(
+            {"job": "pitching_plus", "export_year": int(year), "reference_year": int(year) - 1}
+        )
+        result["pitch_stuff_plus"] = _run_duckdb_write_child(
+            {"job": "pitch_stuff_scores", "year": int(year)}
+        )
+        if result["pitch_stuff_plus"].get("status") != "current":  # type: ignore[union-attr]
+            raise RuntimeError(
+                "Per-pitch Stuff+ refresh did not reach current status: "
+                f"{result['pitch_stuff_plus']}"
             )
-        else:
-            result["pitch_stuff_plus"] = {
-                "status": "deferred",
-                "reason": "Per-pitch Stuff+ backfill runs separately so it cannot block the daily data refresh.",
-            }
+        result["plus_leaderboard"] = _run_optional_refresh_child(
+            {"job": "stuff_leaderboard", "year": int(year)}
+        )
+        result["stamina_dataset"] = _run_duckdb_write_child(
+            {"job": "stamina_dataset", "year": int(year)}
+        )
         result["batter_lineup_scenarios"] = _run_duckdb_write_child(
             {"job": "batter_lineup_scenarios", "year": int(year)}
         )
+        result["batter_timing"] = _run_optional_refresh_child(
+            {"job": "batter_timing", "year": int(year)}
+        )
         return result
+
+
+def _run_optional_refresh_child(payload: dict[str, object]) -> dict[str, object]:
+    """Keep the last atomic snapshot when an external reference source is temporarily unavailable."""
+    try:
+        return _run_duckdb_write_child(payload)
+    except Exception as exc:
+        return {
+            "status": "stale",
+            "error": str(exc),
+            "preserved_previous_snapshot": True,
+        }
+
+
+def _historical_plus_state_path(data_dir: Path | None = None) -> Path:
+    root = data_dir or settings.data_dir
+    return root / "admin_job_logs" / "historical_plus_backfill.json"
+
+
+def get_historical_plus_backfill_status(data_dir: Path | None = None) -> dict[str, object]:
+    path = _historical_plus_state_path(data_dir)
+    if not path.exists():
+        return {
+            "status": "not_started",
+            "start_year": 2021,
+            "end_year": 2025,
+            "state_path": str(path),
+            "years": {},
+        }
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"status": "invalid", "error": str(exc), "state_path": str(path), "years": {}}
+    for year, year_state in dict(payload.get("years") or {}).items():
+        if not isinstance(year_state, dict) or year_state.get("current_stage") != "pitch_stuff_plus":
+            continue
+        progress_path = (data_dir or settings.data_dir) / "admin_job_logs" / f"pitch_stuff_backfill_{year}.json"
+        if not progress_path.exists():
+            continue
+        try:
+            progress = json.loads(progress_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        stages = year_state.get("stages")
+        if isinstance(stages, dict) and isinstance(stages.get("pitch_stuff_plus"), dict):
+            stages["pitch_stuff_plus"]["progress"] = progress
+    payload["state_path"] = str(path)
+    return payload
+
+
+def run_historical_plus_backfill(
+    start_year: int = 2021,
+    end_year: int = 2025,
+    data_dir: Path | None = None,
+) -> dict[str, object]:
+    """Resume the historical Plus pipeline without recomputing completed pitch caches."""
+
+    first_year, last_year = int(start_year), int(end_year)
+    if first_year > last_year:
+        raise ValueError("start_year must be less than or equal to end_year")
+    root = data_dir or settings.data_dir
+    path = _historical_plus_state_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    previous = get_historical_plus_backfill_status(root)
+    years = dict(previous.get("years") or {})
+
+    def write_state(status: str, **updates: object) -> dict[str, object]:
+        payload: dict[str, object] = {
+            "status": status,
+            "start_year": first_year,
+            "end_year": last_year,
+            "years": years,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            **updates,
+        }
+        temporary = path.with_suffix(".tmp")
+        temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+        temporary.replace(path)
+        payload["state_path"] = str(path)
+        return payload
+
+    write_state("running", message="Historical Plus backfill started.")
+    failed_years: list[int] = []
+    year_order = list(range(first_year, last_year + 1))
+    if 2025 in year_order:
+        year_order = [2025, *[year for year in year_order if year != 2025]]
+    for year in year_order:
+        source_path = root / f"MLB{year}" / f"mlb_{year}.duckdb"
+        year_state = dict(years.get(str(year)) or {})
+        year_state.update({"status": "running", "source_path": str(source_path), "stages": dict(year_state.get("stages") or {})})
+        years[str(year)] = year_state
+        if not source_path.exists():
+            year_state.update({"status": "failed", "error": f"Missing season database: {source_path}"})
+            failed_years.append(year)
+            write_state("running", current_year=year, message=year_state["error"])
+            continue
+
+        for stage_name, base_payload in HISTORICAL_PLUS_STAGES:
+            existing_stage = year_state["stages"].get(stage_name)
+            if isinstance(existing_stage, dict) and existing_stage.get("status") in {"completed", "current"}:
+                continue
+            stage_payload = dict(base_payload)
+            if stage_name == "pitching_plus":
+                # Historical exports are centered on the season being displayed;
+                # unlike the live-year refresh they do not require a prior-year database.
+                stage_payload.update({"export_year": year, "reference_year": year})
+            else:
+                stage_payload["year"] = year
+            year_state["current_stage"] = stage_name
+            year_state["stages"][stage_name] = {"status": "running"}
+            write_state(
+                "running",
+                current_year=year,
+                current_stage=stage_name,
+                message=f"{year}: running {stage_name}.",
+            )
+            try:
+                with _DUCKDB_WRITE_LOCK:
+                    result = _run_duckdb_write_child(stage_payload)
+                stage_status = str(result.get("status") or "completed")
+                year_state["stages"][stage_name] = {"status": stage_status, "result": result}
+                if stage_name == "pitch_stuff_plus" and stage_status != "current":
+                    raise RuntimeError(f"Per-pitch Stuff+ remains {stage_status}; rerun to resume missing pitchers.")
+            except Exception as exc:
+                year_state["stages"][stage_name] = {"status": "failed", "error": str(exc)}
+                year_state.update({"status": "failed", "error": f"{stage_name}: {exc}"})
+                failed_years.append(year)
+                write_state(
+                    "running",
+                    current_year=year,
+                    current_stage=stage_name,
+                    message=f"{year}: {stage_name} failed; continuing with the next season.",
+                )
+                break
+        else:
+            year_state.update({"status": "completed", "completed_at": datetime.now(timezone.utc).isoformat()})
+            year_state.pop("error", None)
+            year_state.pop("current_stage", None)
+            write_state("running", current_year=year, message=f"{year}: all Plus datasets completed.")
+
+    final_status = "completed" if not failed_years else "partial"
+    return write_state(
+        final_status,
+        failed_years=sorted(set(failed_years)),
+        message=(
+            "Historical Plus backfill completed."
+            if not failed_years
+            else "Historical Plus backfill is partial. Press the button again to resume failed seasons."
+        ),
+        finished_at=datetime.now(timezone.utc).isoformat(),
+    )
 
 
 def _repair_missing_statcast_dates(year: int, missing_dates: list[str]) -> dict[str, object]:
@@ -287,6 +499,7 @@ def _run_duckdb_write_child(payload: dict[str, object]) -> dict[str, object]:
         if not existing_pythonpath
         else str(backend_dir) + os.pathsep + existing_pythonpath
     )
+    env["PYTHONIOENCODING"] = "utf-8"
     completed = subprocess.run(
         [sys.executable, "-c", _DUCKDB_WRITE_CHILD, json.dumps(payload, ensure_ascii=False)],
         cwd=str(backend_dir.parent),
@@ -493,6 +706,16 @@ def run_roster_reference_refresh(year: int = 2026) -> dict[str, object]:
 
 def get_admin_status(year: int = 2026) -> dict[str, object]:
     from app.services.pitch_stuff_cache_service import get_pitch_stuff_cache_status
+    from app.services.stuff_leaderboard_service import get_stuff_leaderboard
+
+    try:
+        leaderboard_status = get_stuff_leaderboard(year=year)
+        leaderboard_status = {
+            key: leaderboard_status.get(key)
+            for key in ["cache_status", "data_as_of", "generated_at", "model_version", "total_pitchers", "warnings"]
+        }
+    except FileNotFoundError as exc:
+        leaderboard_status = {"cache_status": "unavailable", "error": str(exc)}
 
     return {
         "year": int(year),
@@ -500,6 +723,7 @@ def get_admin_status(year: int = 2026) -> dict[str, object]:
         "video_lookup": get_video_lookup_status(year=year, data_dir=settings.data_dir),
         "pitcher_game_lines": get_pitcher_game_line_status(year=year, data_dir=settings.data_dir),
         "pitch_stuff_plus": get_pitch_stuff_cache_status(year=year, data_dir=settings.data_dir),
+        "plus_leaderboard": leaderboard_status,
     }
 
 

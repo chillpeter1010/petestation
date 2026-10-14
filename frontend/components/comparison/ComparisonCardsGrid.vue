@@ -1,19 +1,14 @@
 <template>
   <section class="comparison-cards-grid">
-    <PercentileMirrorCard side="left" :player="leftPlayer" :metrics="leftMetrics" />
-    <PercentileMirrorCard side="right" :player="rightPlayer" :metrics="rightMetrics" />
+    <slot name="left"><PercentileMirrorCard side="left" :player="leftPlayer" :metrics="leftMetrics" /></slot>
+    <slot name="right"><PercentileMirrorCard side="right" :player="rightPlayer" :metrics="rightMetrics" /></slot>
   </section>
 </template>
 
 <script setup lang="ts">
 import type { ComparisonMetric, ComparisonPlayer } from '~/types/api'
 
-defineProps<{
-  leftPlayer: ComparisonPlayer | null
-  rightPlayer: ComparisonPlayer | null
-  leftMetrics: ComparisonMetric[]
-  rightMetrics: ComparisonMetric[]
-}>()
+withDefaults(defineProps<{ leftPlayer?: ComparisonPlayer | null; rightPlayer?: ComparisonPlayer | null; leftMetrics?: ComparisonMetric[]; rightMetrics?: ComparisonMetric[] }>(), { leftPlayer: null, rightPlayer: null, leftMetrics: () => [], rightMetrics: () => [] })
 </script>
 
 <style scoped>

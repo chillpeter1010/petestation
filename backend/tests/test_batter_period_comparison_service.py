@@ -80,6 +80,11 @@ def test_comparison_uses_shared_bat_speed_domain_and_b_minus_a_delta(monkeypatch
         "value": 10, "label": "Test Batter (TST)", "name": "Test Batter", "team": "TST",
         "games": 2, "plate_appearances": 4,
     }])
+    monkeypatch.setattr(service, "list_batter_leaderboard", lambda year: [
+        {"plate_appearances": 100, "xwoba": 0.2, "avg_ev": 85, "barrel_rate": 0.04, "hard_hit_rate": 0.3, "sweet_spot_rate": 0.25, "avg_bat_speed": 68, "chase_rate": 0.35, "whiff_rate": 0.3, "strikeout_rate": 0.28, "walk_rate": 0.05},
+        {"plate_appearances": 100, "xwoba": 0.5, "avg_ev": 90, "barrel_rate": 0.10, "hard_hit_rate": 0.45, "sweet_spot_rate": 0.35, "avg_bat_speed": 72, "chase_rate": 0.25, "whiff_rate": 0.2, "strikeout_rate": 0.2, "walk_rate": 0.10},
+        {"plate_appearances": 100, "xwoba": 0.8, "avg_ev": 95, "barrel_rate": 0.16, "hard_hit_rate": 0.6, "sweet_spot_rate": 0.45, "avg_bat_speed": 76, "chase_rate": 0.15, "whiff_rate": 0.1, "strikeout_rate": 0.12, "walk_rate": 0.15},
+    ])
 
     payload = service.get_batter_period_comparison(
         batter_id=10,
@@ -100,6 +105,11 @@ def test_comparison_uses_shared_bat_speed_domain_and_b_minus_a_delta(monkeypatch
     assert payload.heatmaps["left"][1]["bat_speed"] == 75.0
     assert payload.heatmaps["right"][0]["bat_speed"] is None
     assert payload.heatmaps["right"][1]["bat_speed"] == 80.0
+    left_xwoba = next(metric for metric in payload.percentile_cards["left"] if metric["key"] == "xwoba")
+    right_xwoba = next(metric for metric in payload.percentile_cards["right"] if metric["key"] == "xwoba")
+    assert left_xwoba["percentile"] != right_xwoba["percentile"]
+    assert payload.discipline["left"]["total"] == 3
+    assert payload.discipline["right"]["total"] == 2
 
 
 def test_filters_apply_the_same_context_to_each_period():
@@ -118,6 +128,15 @@ def test_filters_apply_the_same_context_to_each_period():
     assert len(filtered) == 2
     assert filtered["description"].eq("hit_into_play").all()
 
+    hit_pa = service.apply_batter_period_filters(
+        rows,
+        start_date="2026-01-01",
+        end_date="2026-12-31",
+        pa_result="Hit",
+    )
+    assert len(hit_pa) == 2
+    assert hit_pa["at_bat_number"].eq(1).all()
+
 
 def test_tracking_and_miss_distance_use_tracked_denominators():
     rows = sample_rows()
@@ -132,3 +151,18 @@ def test_tracking_and_miss_distance_use_tracked_denominators():
     assert metrics["avg_swing_length"][1] == 3
     assert metrics["avg_miss_distance"] == (4.25, 1)
     assert metrics["squared_up_pct"] == (None, 0)
+
+
+def test_batter_team_stints_keep_contiguous_return_to_team_separate():
+    rows = service.normalize_batter_period_rows(pd.DataFrame([
+        _row("2026-04-01", 1, 1, "ball", "", game_pk=1, batter_team="PIT"),
+        _row("2026-04-02", 2, 1, "ball", "", game_pk=2, batter_team="PIT"),
+        _row("2026-06-01", 3, 1, "ball", "", game_pk=3, batter_team="AZ"),
+        _row("2026-08-01", 4, 1, "ball", "", game_pk=4, batter_team="PIT"),
+    ]))
+
+    stints = service.build_batter_team_stints(rows)
+
+    assert [stint["team"] for stint in stints] == ["PIT", "AZ", "PIT"]
+    assert stints[0]["games"] == 2
+    assert stints[2]["stint_index"] == 2

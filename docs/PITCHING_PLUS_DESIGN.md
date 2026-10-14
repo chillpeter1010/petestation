@@ -81,6 +81,13 @@ bootstrap refits before it is shown in player-facing reports.
 4. Validate stability across pitch families and seasons.
 5. Only then connect Pitching+ to player, outing, and team pages.
 
+## Production wiring status — 2026-09-10
+
+- Public artifact: `pete_pitching_complete_pitch_v1`; the base model remains public and the sequence model remains research-only.
+- Daily pitch refresh now reruns the existing production artifact for the prior-year reference and current export year, then rebuilds the combined Plus leaderboard.
+- Parquet, pitcher CSV, pitch-type CSV, and metadata are written through temporary files before replacement. HTTP requests remain read-only.
+- The combined leaderboard uses a strict cutoff gate. On 2026-09-10 the raw source reached 2026-09-08, but that date had no `arm_angle`; complete-feature Pitching+ therefore ended at 2026-09-07 and is visibly marked stale rather than mixed into the 2026-09-08 leaderboard.
+
 ## Pitch order research track
 
 The public base model deliberately excludes the previous pitch. Published

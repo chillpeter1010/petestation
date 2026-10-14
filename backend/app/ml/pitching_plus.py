@@ -246,24 +246,31 @@ def export_2026_scores(
     run_values: dict[str, float],
     scale: dict[str, float | int],
     artifact_dir: Path,
+    export_year: int = 2026,
 ) -> dict[str, str | int]:
     scored = frame[["pitch_uid", "game_pk", "game_date", "pitcher", "pitch_type"]].copy()
     scored["xrv_pitching"] = expected_run_value(probabilities, classes, run_values)
     scored["pitching_plus"] = _plus(scored["xrv_pitching"], scale)
-    pitch_path = artifact_dir / "pitching_plus_pitches_2026.parquet"
-    scored.to_parquet(pitch_path, index=False)
+    pitch_path = artifact_dir / f"pitching_plus_pitches_{int(export_year)}.parquet"
+    pitch_temporary = pitch_path.with_suffix(".tmp.parquet")
+    scored.to_parquet(pitch_temporary, index=False)
     pitcher = scored.groupby("pitcher", as_index=False).agg(
         pitches=("xrv_pitching", "size"), xrv_pitching=("xrv_pitching", "mean")
     )
     pitcher["pitching_plus"] = _plus(pitcher["xrv_pitching"], scale)
-    pitcher_path = artifact_dir / "pitching_plus_pitchers_2026.csv"
-    pitcher.to_csv(pitcher_path, index=False)
+    pitcher_path = artifact_dir / f"pitching_plus_pitchers_{int(export_year)}.csv"
+    pitcher_temporary = pitcher_path.with_suffix(".tmp.csv")
+    pitcher.to_csv(pitcher_temporary, index=False)
     pitch_type = scored.groupby(["pitcher", "pitch_type"], as_index=False).agg(
         pitches=("xrv_pitching", "size"), xrv_pitching=("xrv_pitching", "mean")
     )
     pitch_type["pitching_plus"] = _plus(pitch_type["xrv_pitching"], scale)
-    pitch_type_path = artifact_dir / "pitching_plus_pitch_types_2026.csv"
-    pitch_type.to_csv(pitch_type_path, index=False)
+    pitch_type_path = artifact_dir / f"pitching_plus_pitch_types_{int(export_year)}.csv"
+    pitch_type_temporary = pitch_type_path.with_suffix(".tmp.csv")
+    pitch_type.to_csv(pitch_type_temporary, index=False)
+    pitch_temporary.replace(pitch_path)
+    pitcher_temporary.replace(pitcher_path)
+    pitch_type_temporary.replace(pitch_type_path)
     return {
         "pitch_rows": int(len(scored)),
         "pitcher_rows": int(len(pitcher)),
@@ -373,6 +380,7 @@ def train_pitching_plus(
         production_run_values,
         scale,
         artifact_dir,
+        export_year=2026,
     )
     metadata: dict[str, object] = {
         "model_version": "pete_pitching_complete_pitch_v1",
@@ -426,7 +434,8 @@ def refresh_pitching_exports(
     reference_scale = pitching_scale(reference, reference_xrv, minimum_pitches=500)
     scale = dict(metadata["pitching_plus_scale"])
 
-    export = build_pitching_frame(load_season(data_dir, export_year, 1.0))
+    export_source = load_season(data_dir, export_year, 1.0)
+    export = build_pitching_frame(export_source)
     export_probabilities = _probabilities(model, export, BASE_FEATURES, temperature)
     export_xrv = expected_run_value(export_probabilities, classes, run_values)
     export_scale = pitching_scale(
@@ -443,10 +452,18 @@ def refresh_pitching_exports(
     scale["reference_mean_xrv"] = float(reference_scale["mean_xrv"])
     scale["center_model"] = "production model on export-season qualified pitchers"
     scale["spread_model"] = "development model on unseen validation season"
-    exports = export_2026_scores(export, export_probabilities, classes, run_values, scale, artifact_dir)
+    exports = export_2026_scores(
+        export, export_probabilities, classes, run_values, scale, artifact_dir, export_year=export_year
+    )
     metadata["pitching_plus_scale"] = scale
     metadata["exports"] = exports
     metadata["export_year"] = int(export_year)
     metadata["exported_at"] = datetime.now(timezone.utc).isoformat()
-    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
+    dates = pd.to_datetime(export.get("game_date"), errors="coerce")
+    metadata["data_as_of"] = dates.max().date().isoformat() if dates.notna().any() else None
+    source_dates = pd.to_datetime(export_source.get("game_date"), errors="coerce")
+    metadata["source_data_as_of"] = source_dates.max().date().isoformat() if source_dates.notna().any() else None
+    metadata_temporary = metadata_path.with_suffix(".tmp")
+    metadata_temporary.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
+    metadata_temporary.replace(metadata_path)
     return metadata

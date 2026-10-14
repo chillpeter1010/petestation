@@ -51,6 +51,8 @@ def read_batter_period_comparison(
     count: str | None = None,
     pitch: str | None = None,
     pitch_result: str | None = None,
+    in_play_result: str | None = None,
+    pa_result: str | None = None,
 ) -> BatterPeriodComparisonResponse:
     return get_batter_period_comparison(
         batter_id=batter_id,
@@ -66,4 +68,6 @@ def read_batter_period_comparison(
         count=count,
         pitch=pitch,
         pitch_result=pitch_result,
+        in_play_result=in_play_result,
+        pa_result=pa_result,
     )

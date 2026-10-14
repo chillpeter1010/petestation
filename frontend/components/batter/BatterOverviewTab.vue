@@ -7,7 +7,14 @@
       <BatterTimingFingerprint class="compact-fingerprint" :timing="timing" :loading="timingLoading" />
       <BatterTrendChart class="compact-trend" :rows="gameLog.rows" />
     </div>
-    <BatterPercentileProfile class="percentile-panel" :year="overview?.meta.year || 0" :metrics="percentileMetrics" />
+    <BatterPercentileProfile
+      class="percentile-panel"
+      :year="overview?.meta.year || 0"
+      :player-id="Number(selectedBatter.batter_id || 0)"
+      :name="String(selectedBatter.name || '')"
+      :team="String(selectedBatter.team || '')"
+      :metrics="percentileMetrics"
+    />
     <section class="panel pitch-panel">
       <header><div><span>Attack map</span><h2>Performance by pitch type</h2></div><small>{{ pitchMix.rows.length }} pitch types</small></header>
       <div class="pitch-list">
@@ -37,6 +44,10 @@ const dashboard = computed(() => props.overview?.tables?.dashboard || empty)
 const gameLog = computed(() => props.overview?.tables?.season_game_log || empty)
 const pitchMix = computed(() => props.overview?.tables?.pitch_mix || empty)
 const dashboardRow = computed(() => dashboard.value.rows[0] || {})
+const selectedBatter = computed(() => {
+  const batter = props.overview?.charts?.selected_batter
+  return batter && typeof batter === 'object' ? batter as Record<string, unknown> : {}
+})
 const percentileMetrics = computed(() => { const metrics = props.overview?.charts?.percentile_profile; return Array.isArray(metrics) ? metrics as BatterPercentileMetric[] : [] })
 const featuredMetrics = computed(() => [
   { label: 'OPS', value: rate(dashboardRow.value.OPS), note: `${rate(dashboardRow.value.OBP)} OBP · ${rate(dashboardRow.value.SLG)} SLG` },

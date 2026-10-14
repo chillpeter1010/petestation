@@ -23,6 +23,8 @@ from app.services.game_line_service import clean_pitcher_game_line, load_officia
 from app.services.pitch_location_score_service import load_pitch_location_scores
 from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
 from app.services.pitcher_service import clean_name, list_pitcher_options, normalize_name, normalize_role
+from app.services.stamina_lab_service import load_pitch_stamina_state
+from app.services.wpa_service import attach_plate_appearance_wpa, calibrate_pitcher_wpa, one_wpa_value_per_pa
 
 
 PITCH_LABELS = {
@@ -369,6 +371,20 @@ def build_overview_summary(dashboard_row: pd.DataFrame, selected_pitcher: dict[s
     return summary
 
 
+def build_overview_percentile_profile(year: int, pitcher_id: int) -> list[dict[str, Any]]:
+    # Lazy import avoids a module cycle: comparison_service reuses pitch helpers from this module.
+    from app.services.comparison_service import PERIOD_METRIC_SPECS, build_metric_card, load_comparison_pool
+
+    pool = load_comparison_pool(year)
+    pitcher_row = pool[pool["player_id"].eq(int(pitcher_id))]
+    if pitcher_row.empty:
+        return []
+
+    period_keys = {str(spec["key"]) for spec in PERIOD_METRIC_SPECS}
+    metrics = [metric for metric in build_metric_card(pitcher_row.iloc[0], year) if metric.key in period_keys]
+    return [metric.model_dump() for metric in metrics]
+
+
 def _load_season_pitcher_game_lines(year: int) -> pd.DataFrame:
     csv_path = settings.data_dir / f"MLB{int(year)}" / f"mlb_{int(year)}_pitcher_game_lines.csv.gz"
     if csv_path.exists():
@@ -508,6 +524,7 @@ def get_personal_overview(year: int, pitcher_id: int, role: str = "SP") -> Perso
         pitcher_id=int(pitcher_id),
         selected_pitcher=selected_pitcher,
         summary=build_overview_summary(dashboard_row, selected_pitcher),
+        charts={"percentile_profile": build_overview_percentile_profile(year, pitcher_id)},
         tables={
             "dashboard": dataframe_to_table_payload(dashboard_row),
             "br": dataframe_to_table_payload(br_row),
@@ -567,6 +584,13 @@ def build_pitch_location_scatter(pitch_df: pd.DataFrame) -> list[dict[str, Any]]
         "video_url",
         "pitch_stuff_plus",
         "location_plus_pitch",
+        "stamina_plus_trait",
+        "stamina_expected_retention_delta",
+        "stamina_expected_stuff_plus",
+        "stamina_early_stuff_baseline",
+        "stamina_reliability",
+        "stamina_sample_label",
+        "stamina_role",
     ]
     available_columns = [column for column in columns if column in scored.columns]
     working = scored[available_columns].copy()
@@ -697,7 +721,14 @@ def build_movement_scatter_rows(data: pd.DataFrame) -> list[dict[str, Any]]:
     scatter_df = scatter_df.dropna(subset=["h_break", "v_break"])
     columns = [
         column
-        for column in ["pitch_name", "h_break", "v_break", "release_speed", "arm_angle", "pitch_stuff_plus"]
+        for column in [
+            "game_date", "game_pk", "at_bat_number", "pitch_number", "pitch_name", "pitch_type",
+            "description", "events", "balls", "strikes", "plate_x", "plate_z", "h_break", "v_break",
+            "release_speed", "arm_angle", "play_id", "video_url", "pitch_stuff_plus",
+            "location_plus_pitch", "stamina_plus_trait", "stamina_expected_retention_delta",
+            "stamina_expected_stuff_plus", "stamina_early_stuff_baseline", "stamina_reliability",
+            "stamina_sample_label", "stamina_role",
+        ]
         if column in scatter_df.columns
     ]
     return dataframe_to_table_payload(scatter_df[columns].copy()).rows
@@ -1289,6 +1320,7 @@ def get_personal_movement(
     include_pitch_stuff: bool = False,
 ) -> AnalysisResponse:
     pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, start_date=start_date, end_date=end_date)
+    pitch_df = load_pitch_stamina_state(pitch_df, year=year, data_dir=settings.data_dir)
     filtered_df = apply_stuff_filters(
         pitch_df,
         stand=stand,
@@ -1307,20 +1339,7 @@ def get_personal_movement(
     scatter_df = filtered_df.copy()
     if include_pitch_stuff:
         scatter_df = add_pitch_stuff_scores(scatter_df, pitch_df)
-    if not scatter_df.empty and {"pfx_x", "pfx_z"}.issubset(scatter_df.columns):
-        scatter_df["h_break"] = pd.to_numeric(scatter_df["pfx_x"], errors="coerce") * -12
-        scatter_df["v_break"] = pd.to_numeric(scatter_df["pfx_z"], errors="coerce") * 12
-        if "release_speed" in scatter_df.columns:
-            scatter_df["release_speed"] = pd.to_numeric(scatter_df["release_speed"], errors="coerce")
-        scatter_df = scatter_df.dropna(subset=["h_break", "v_break"])
-        if "arm_angle" in scatter_df.columns:
-            scatter_df["arm_angle"] = pd.to_numeric(scatter_df["arm_angle"], errors="coerce")
-        scatter_columns = [
-            column
-            for column in ["pitch_name", "h_break", "v_break", "release_speed", "arm_angle", "pitch_stuff_plus"]
-            if column in scatter_df.columns
-        ]
-        scatter_df = scatter_df[scatter_columns].copy()
+    movement_scatter = build_movement_scatter_rows(scatter_df)
 
     return AnalysisResponse(
         meta=ResponseMeta(year=year),
@@ -1330,7 +1349,7 @@ def get_personal_movement(
             MetricItem(key="pitch_types", label="Pitch Types", value=int(summary_df["pitch_name"].nunique()) if not summary_df.empty else 0),
         ],
         charts={
-            "movement_scatter": dataframe_to_table_payload(scatter_df).rows,
+            "movement_scatter": movement_scatter,
             "pitch_location_scatter": build_pitch_location_scatter(filtered_df),
             "filter_snapshot": snapshot,
             "catcher_options": build_catcher_options(pitch_df),
@@ -1665,28 +1684,30 @@ def build_conditioned_wpa_summary_table(data: pd.DataFrame, count_key: str | Non
         conditioned = build_conditioned_count_subset(data, count_key, pitch_name)
         if conditioned.empty:
             continue
-        pitcher_wpa = pd.to_numeric(conditioned.get("pitcher_wpa"), errors="coerce")
+        pitcher_wpa = one_wpa_value_per_pa(conditioned, "pitcher_wpa")
+        downstream_pas = int(conditioned[["game_pk", "at_bat_number"]].drop_duplicates().shape[0])
         records.append(
             {
                 "Pitch": pitch_name,
                 "downstream_pitches": int(len(conditioned)),
-                "downstream_pas": int(conditioned[["game_pk", "at_bat_number"]].drop_duplicates().shape[0]),
+                "downstream_pas": downstream_pas,
                 "downstream_wpa_sum": pitcher_wpa.sum(min_count=1),
-                "wpa_per_100": pitcher_wpa.mean() * 100 if pitcher_wpa.notna().any() else np.nan,
+                "wpa_per_100": pitcher_wpa.sum(min_count=1) / downstream_pas * 100 if downstream_pas and pitcher_wpa.notna().any() else np.nan,
             }
         )
     return pd.DataFrame(records).sort_values(["downstream_wpa_sum", "downstream_pitches"], ascending=[False, False]).reset_index(drop=True) if records else pd.DataFrame()
 
 
 def build_conditioned_summary(conditioned: pd.DataFrame, count_key: str | None, selected_pitch: str | None) -> dict[str, Any]:
-    pitcher_wpa = pd.to_numeric(conditioned.get("pitcher_wpa"), errors="coerce") if not conditioned.empty else pd.Series(dtype="float")
+    pitcher_wpa = one_wpa_value_per_pa(conditioned, "pitcher_wpa") if not conditioned.empty else pd.Series(dtype="float")
+    downstream_pas = int(conditioned[["game_pk", "at_bat_number"]].drop_duplicates().shape[0]) if not conditioned.empty else 0
     return {
         "count": count_key,
         "pitch": selected_pitch,
         "downstream_pitches": int(len(conditioned)),
-        "downstream_pas": int(conditioned[["game_pk", "at_bat_number"]].drop_duplicates().shape[0]) if not conditioned.empty else 0,
+        "downstream_pas": downstream_pas,
         "downstream_wpa_sum": clean_value(pitcher_wpa.sum(min_count=1)) if pitcher_wpa.notna().any() else None,
-        "wpa_per_100": clean_value(pitcher_wpa.mean() * 100) if pitcher_wpa.notna().any() else None,
+        "wpa_per_100": clean_value(pitcher_wpa.sum(min_count=1) / downstream_pas * 100) if downstream_pas and pitcher_wpa.notna().any() else None,
     }
 
 
@@ -1963,6 +1984,7 @@ def get_personal_sequence(
     followup_pitch: str | None = None,
 ) -> AnalysisResponse:
     pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, start_date=start_date, end_date=end_date)
+    pitch_df = add_pitcher_wpa_column(attach_plate_appearance_wpa(pitch_df, year, settings.data_dir))
     filtered_df = apply_sequence_filters(pitch_df, stand=stand, count=count, pitch=pitch, pitch_result=pitch_result, catcher=catcher)
     shallow_df, two_strike_df = build_sequence_outcome_tables(filtered_df, current_pitch_filter=current_pitch)
     snapshot = build_filter_snapshot_stats(filtered_df)
@@ -2433,19 +2455,20 @@ def add_pitcher_wpa_column(data: pd.DataFrame) -> pd.DataFrame:
     if "pitcher_wpa" in working.columns:
         working["pitcher_wpa"] = pd.to_numeric(working["pitcher_wpa"], errors="coerce")
         return working
-    if "delta_home_win_exp" not in working.columns:
+    if "pa_home_wpa" not in working.columns:
         working["pitcher_wpa"] = np.nan
         return working
     if "pitcher_team" not in working.columns and {"inning_topbot", "home_team", "away_team"}.issubset(working.columns):
         working["pitcher_team"] = np.where(working["inning_topbot"].astype(str) == "Top", working["home_team"], working["away_team"])
     if {"pitcher_team", "home_team"}.issubset(working.columns):
-        working["pitcher_wpa"] = np.where(
+        raw_pitcher_wpa = np.where(
             working["pitcher_team"] == working["home_team"],
-            pd.to_numeric(working["delta_home_win_exp"], errors="coerce"),
-            -pd.to_numeric(working["delta_home_win_exp"], errors="coerce"),
+            pd.to_numeric(working["pa_home_wpa"], errors="coerce"),
+            -pd.to_numeric(working["pa_home_wpa"], errors="coerce"),
         )
+        working["pitcher_wpa"] = calibrate_pitcher_wpa(raw_pitcher_wpa)
     else:
-        working["pitcher_wpa"] = pd.to_numeric(working["delta_home_win_exp"], errors="coerce")
+        working["pitcher_wpa"] = np.nan
     return working
 
 
@@ -2453,6 +2476,7 @@ def build_pitcher_wpa_games(pitch_df: pd.DataFrame) -> pd.DataFrame:
     if pitch_df.empty or not {"game_date", "game_pk"}.issubset(pitch_df.columns):
         return pd.DataFrame()
     working = add_pitcher_wpa_column(pitch_df)
+    working["pitcher_wpa_once"] = one_wpa_value_per_pa(working, "pitcher_wpa")
     working["game_date"] = pd.to_datetime(working["game_date"], errors="coerce")
     if "pitcher_team" not in working.columns and {"inning_topbot", "home_team", "away_team"}.issubset(working.columns):
         working["pitcher_team"] = np.where(working["inning_topbot"].astype(str) == "Top", working["home_team"], working["away_team"])
@@ -2461,7 +2485,7 @@ def build_pitcher_wpa_games(pitch_df: pd.DataFrame) -> pd.DataFrame:
     group_cols = [column for column in ["game_date", "game_pk", "pitcher_team", "opponent_team"] if column in working.columns]
     games = (
         working.groupby(group_cols, dropna=False)
-        .agg(game_wpa=("pitcher_wpa", "sum"), pitches=("game_pk", "size"))
+        .agg(game_wpa=("pitcher_wpa_once", "sum"), pitches=("game_pk", "size"))
         .reset_index()
         .sort_values(["game_date", "game_pk"])
     )
@@ -2514,6 +2538,7 @@ def get_personal_rotation(
     end_date: str | None = None,
 ) -> AnalysisResponse:
     pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, start_date=start_date, end_date=end_date)
+    pitch_df = attach_plate_appearance_wpa(pitch_df, year, settings.data_dir)
     game_log_df = build_game_log(pitch_df)
     wpa_games_df = build_pitcher_wpa_games(pitch_df)
     selected_game_pk = int(game_pk) if game_pk is not None else (int(wpa_games_df["game_pk"].iloc[-1]) if not wpa_games_df.empty else None)
