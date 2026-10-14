@@ -70,21 +70,21 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 
 ## Daily Data Reliability
 
-- Status: **in_progress**
-- Progress: **43%** (3/7 slices)
+- Status: **done**
+- Progress: **100%** (7/7 slices)
 - Owner area: Data operations
-- Updated: 2026-09-30
-- Summary: Pitch data is current through the latest officially completed games. Per-pitch Stuff+ requires full incremental completion and 100% eligible-row verification before downstream snapshots rebuild; Per aspera ad astra exposes resumable single-season 2021–2025 Plus backfill buttons with persisted per-year progress.
-- Next step: Repair the Statcast date cap, dead-lock handling, durable logs and monolithic pitch-data step.
+- Updated: 2026-10-14
+- Summary: The daily pipeline is split into independently retryable stages with atomic state, per-step heartbeat, durable UTF-8 stdout/stderr, dead-PID recovery and an America/New_York source-date cap. Legacy derived exports are retired/read-only, manual reliever references are content-versioned, and the admin page exposes the latest scheduler state.
+- Next step: Observe the next full scheduled run. Use --retry-failed or one or more --step arguments when a source or downstream stage fails; do not rerun completed heavy stages unnecessarily.
 
 | Slice | Status | Deliverable | Verification |
 |---|---|---|---|
 | Slice 0 · Core automation | done | Daily pitch, video, line, Plus and roster jobs | Previously completed runs recorded |
 | Slice 1 · Freshness manifest | done | JSON, Markdown and page-impact report | Service and UI added |
-| Slice 2 · Scheduler observability | planned | Sub-step heartbeat and durable stdout/stderr | Pending |
-| Slice 3 · Timezone and source cap | planned | Do not request future US Statcast dates | Pending |
-| Slice 4 · Failure isolation | planned | Independent downstream retries and dead-PID recovery | Pending |
-| Slice 5 · Legacy/manual sources | planned | Resolve or clearly gate derived exports and reliever references | Pending |
+| Slice 2 · Scheduler observability | done | Sub-step heartbeat and durable stdout/stderr | Schema v2 daily state records PID, run/step heartbeats, attempts and log paths; child processes persist separate UTF-8 stdout/stderr; admin status and UI expose the latest state |
+| Slice 3 · Timezone and source cap | done | Do not request future US Statcast dates | Official coverage and the external legacy updater are capped to the America/New_York calendar date; timezone boundary test passed |
+| Slice 4 · Failure isolation | done | Independent downstream retries and dead-PID recovery | Thirteen named stages support --step and --retry-failed; unrelated stages continue after a failure, dependent stages become retryable blocked entries, and dead locks/running states recover as interrupted |
+| Slice 5 · Legacy/manual sources | done | Resolve or clearly gate derived exports and reliever references | Legacy exports are marked retired_read_only with canonical-use warning; reliever reference is manual_reference_only with row count and SHA-256 artifact version |
 | Slice 6 · Historical Plus backfill | done | Single-season buttons for resumable Location+, per-pitch Stuff+, leaderboard, Pitching+ and Stamina rebuilds | Each UI request sends exactly one year; resume and partial-cache tests, Nuxt typecheck and UTF-8 passed |
 
 ## Project & Slice Tracker
@@ -192,6 +192,25 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 | Slice 22 · Research-only freeze decision | done | Turn rolling-origin evidence into explicit keep-Slice14 versus retain-research-challenger decisions without replacing the formal model | SP persistent-collapse residualized-workload and RP return-to-baseline partial-pooling meet the two-fold research consistency rule; all other targets keep Slice14; formal_model_replaced=false and production gate CLOSED |
 | Slice 23 · Strict 2026 replay lock | done | Freeze the role-target layer map, 2023–2024 training, 2025 Platt calibration and false-alert policy before scoring 2026 once | Strict replay fingerprint bd7b04755f1d4de5608814b2c225feabf24d0fe65e547d99b2f8ce8830716a19 generated with 81,092 eligible predictions; model fit/calibration completes before the 2026 state files are loaded; rebound cohorts use the same target eligibility as Slice14; artifact explicitly says retrospective_holdout_replay and integration CLOSED |
 | Slice 24 · Lab model synchronization | done | Expose Slice 14 role-target primary probabilities in /lab/performance-state with Slice 18/19 shadow deltas, Slice 20 subgroup monitoring and Slice 22 freeze context; preserve v1 player timeline as explicit fallback | New /api/performance-state/v2-lab route and Lab integration verified against frozen artifacts; formal /leaderboards remains unchanged; backend v2-lab tests, UTF-8 check and Nuxt typecheck passed |
+
+## Player Archetypes & Pitch Strategy
+
+- Status: **planned**
+- Progress: **0%** (0/7 slices)
+- Owner area: Player and sequence research
+- Updated: 2026-10-14
+- Summary: Build season-specific, reliability-aware multi-label pitcher and batter profiles, then use strictly chronological beliefs to study pitch selection. Descriptive full-season tags must remain separate from pre-pitch posterior beliefs and counterfactual strategy claims.
+- Next step: Begin with Slice 0: inventory the retired 3×3 Stamina archetype artifact and audit 2021–2026 pitcher/batter feature coverage, denominators, role splits and point-in-time availability before choosing a clustering model.
+
+| Slice | Status | Deliverable | Verification |
+|---|---|---|---|
+| Slice 0 · Prior-work and feature coverage audit | planned | Inventory the old per-start 3×3 Stuff/Location grid and define season-player feature contracts for pitchers and batters | Pending: year/role/player coverage, minimum support, missingness, scale direction and point-in-time availability tables |
+| Slice 1 · Season feature warehouse | planned | One immutable pitcher-season table and one batter-season table with repertoire, shape, command, discipline, contact and platoon dimensions | Pending: unique player-season keys, no outcome/feature denominator mixing, role and handedness normalization, sample-size reliability |
+| Slice 2 · Multi-label archetype challenger | planned | Compare interpretable rule tags with soft clustering or mixture memberships; publish three to four supported tags rather than one forced identity | Pending: bootstrap assignment stability, cluster support, silhouette/separation diagnostics, representative-player review and null tags for weak support |
+| Slice 3 · Cross-year stability and transitions | planned | Measure which tags persist, change with role/team/arsenal, or reflect one-season noise | Pending: adjacent-year overlap, transition matrix, traded-player continuity, rookie/cold-start coverage and uncertainty |
+| Slice 4 · Pitch-decision state warehouse | planned | Chronological pre-pitch state with count, base/out, score, platoon, prior pitch/outcome, pitcher/batter tags, catcher and available arsenal | Pending: no future leakage, plate-appearance boundaries, action support and state sparsity audit |
+| Slice 5 · Bayesian belief updating | planned | Hierarchical priors from archetypes with pitcher/batter-specific posterior updates from earlier observations only | Pending: posterior calibration, log loss/Brier versus static and player-only baselines, cold-start behavior and chronological replay |
+| Slice 6 · Strategy rationality and game-theory lab | planned | Compare observed mixed pitch strategies with supported expected-value and entropy/exploitability diagnostics without labeling unobserved alternatives as facts | Pending: propensity/off-policy sensitivity, overlap gates, uncertainty intervals, held-out season validation and explicit research-only release decision |
 
 ## Player Health & Availability Research
 

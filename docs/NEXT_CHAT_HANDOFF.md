@@ -1,6 +1,6 @@
 # Petehub 專案新對話交接文件
 
-更新日期：2026-10-08
+更新日期：2026-10-14
 專案根目錄：`C:\intern\project_transfer`
 
 > **編碼警告：本文件與專案內含繁體中文。新對話必須以 UTF-8 讀取檔案，例如 PowerShell 使用 `Get-Content -Raw -Encoding UTF8`；不可依賴系統預設編碼，避免中文亂碼或誤寫回檔案。**
@@ -19,6 +19,27 @@ Performance State v1已完成Slice 0–11，獨立v2已完成Slice 11A–15；�
 回答使用繁體中文，先簡短說明要改哪些檔案，再直接執行；修改後只回報異動檔案與必要驗證結果。
 若會修改全域共用元件、共用 CSS、共用資料 schema 或模型契約，必須先明確提醒。
 ```
+
+---
+
+## 2026-10-14 Daily Data Reliability Slice 2–5
+
+- `backend/scripts/daily_update.py` 已升級為 schema v2 的13步可恢復管線。每次執行保存 PID、整體／步驟 heartbeat、attempt、開始／結束時間、耗時、精簡結果與 UTF-8 stdout／stderr 路徑；大型 child process 另在 `data/admin_job_logs/child_processes/` 保存逐次輸出，不再只留在 subprocess 記憶體。
+- CLI 支援重複使用 `--step <name>` 單獨執行特定步驟，以及 `--retry-failed` 只重跑上一輪 failed／interrupted／blocked 步驟。無依賴的下游工作不因單一步驟失敗而全部停止；Plus leaderboard／Stamina 若本輪 Location+ 或 per-pitch Stuff+ 失敗則標成可重試的 blocked。
+- `pipeline_reliability_service.py` 使用原子 JSON 狀態檔與 PID 存活檢查。殘留 lock 若 owner PID 已死亡會安全回收；狀態仍為 running 但 PID 已死亡時會轉為 `interrupted`，不再用固定6小時誤判。
+- Statcast 官方覆蓋與外部 legacy updater 都以 `America/New_York` 當地日期為上限；台灣已跨日但美東尚未跨日時不再請求美國來源的未來日期。外部 legacy worktree 沒有被修改，而是在 Petehub adapter 邊界暫時套用 end-date cap。
+- `daily-update.cmd` 改用腳本相對路徑並優先使用 `backend/.venv`，不再寫死 `C:\intern\project_transfer`。Admin status／Data operations 頁已顯示最近 daily status 與 heartbeat。
+- Freshness contract 現將 `derived_exports.duckdb` 固定標成 `retired_read_only`，不得供目前正式排行榜使用；手動 reliever WPA reference 標成 `manual_reference_only`，並回報列數與 SHA-256 artifact version，未知截止日不再假裝 current。
+- 安全 smoke 只執行 `data_freshness` 步驟，schema v2 state、heartbeat與durable logs成功。2026正式來源截至2026-09-27：Statcast 716,544球、video 714,483列、official pitcher lines 20,802列、Location+ 713,824球、per-pitch Stuff+ 713,853球、Stamina 716,544球皆 current；Pitching+截至2026-09-26為預期1日落後。整體仍顯示 stale，原因是transactions截至2026-10-10、payroll截至2026-09-20及刻意保留的retired legacy export，不代表核心投球資料落後。
+- 驗證：可靠度／tracker targeted tests 18 passed；完整 backend 229 passed；Python compileall、UTF-8、Nuxt typecheck、`git diff --check`通過。未執行完整資料更新或模型重算。
+
+### Player Archetypes & Pitch Strategy 規劃
+
+- 過去確實做過 `stamina_v2_slice11_archetypes_v1`：它用每場先發前20球的 Stuff+／Location+ 固定切成 Low／Average／High 3×3，共9種「當場早段狀態」。`stamina_v2_archetypes_2026.parquet`仍保留，但目前Stamina metadata會移除該obsolete區塊。它不是資料驅動的球員分群，也不是投手整季身分，因此不能直接拿來當配球信念。
+- 新 tracker 專案 `player-archetypes-pitch-strategy` 規劃 Slice 0–6：先做舊成果與2021–2026特徵覆蓋稽核，再建投手／打者season-player warehouse、multi-label soft archetypes、跨年穩定性、嚴格時間序的pre-pitch decision states、hierarchical Bayesian belief update，最後才做含propensity/off-policy敏感度的策略合理性／game-theory Lab。
+- 每人3–4個tag可行，但應由不同維度各取可靠標籤，例如投手的arsenal／shape、location／approach、platoon／sequence、workload state；打者的swing decision、contact/power、pitch-family response與platoon。不要把K-means單一cluster硬翻譯成四個tag，也不要對低樣本新秀補出過度確定的標籤。
+- Full-season descriptive tags與當時可知的belief必須分開。分析某場配球是否合理時，只能使用該球之前的資料或前一季prior；用完整球季tag回頭解釋同球季早期選球會產生future leakage。
+- 現有Pitcher Personal／Catcher sequence已提供count pitch mix、conditioned pitch mix、next-pitch follow-up與conditioned WPA，可作描述性起點；但未被選擇的球路沒有真實反事實結果，所以後續不能只比較observed run value便宣稱某次配球錯誤，必須先處理action propensity、support/overlap與不確定性。
 
 ---
 

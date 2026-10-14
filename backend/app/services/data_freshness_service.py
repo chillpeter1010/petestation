@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from hashlib import sha256
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
@@ -53,6 +54,16 @@ def _timestamp(path: Path) -> str | None:
     return datetime.fromtimestamp(path.stat().st_mtime, tz=TAIPEI).isoformat(timespec="seconds")
 
 
+def _file_version(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    digest = sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return f"sha256:{digest.hexdigest()}"
+
+
 def _relative_status(data_as_of: str | None, source_as_of: str | None, expected_lag: int = 0) -> str:
     if not data_as_of:
         return "unavailable"
@@ -77,8 +88,10 @@ def _dataset(
     rows: int | None = None,
     source_as_of: str | None = None,
     warnings: list[str] | None = None,
+    publication_status: str | None = None,
+    artifact_version: str | None = None,
 ) -> dict[str, Any]:
-    return {
+    payload = {
         "key": key,
         "label": label,
         "status": status,
@@ -91,6 +104,11 @@ def _dataset(
         "depends_on": depends_on or [],
         "warnings": warnings or [],
     }
+    if publication_status:
+        payload["publication_status"] = publication_status
+    if artifact_version:
+        payload["artifact_version"] = artifact_version
+    return payload
 
 
 def _pitch_source(year: int, data_dir: Path) -> dict[str, Any]:
@@ -448,6 +466,10 @@ def build_data_freshness_report(
     )
 
     reliever_path = root / "Reliever" / f"{year}_reliever_wpa.csv"
+    reliever_rows = None
+    if reliever_path.exists():
+        with reliever_path.open("r", encoding="utf-8-sig", errors="replace") as source:
+            reliever_rows = max(sum(1 for _ in source) - 1, 0)
     datasets.append(
         _dataset(
             "reliever_reference",
@@ -456,9 +478,12 @@ def build_data_freshness_report(
             data_as_of=None,
             source_as_of=None,
             generated_at=_timestamp(reliever_path),
+            rows=reliever_rows,
             automation="manual import",
             affected_pages=["/lab/leverage"],
-            warnings=["The collected reference does not record an exact data_as_of date."],
+            warnings=["The collected reference does not record an exact data_as_of date; its SHA-256 version is shown instead."],
+            publication_status="manual_reference_only",
+            artifact_version=_file_version(reliever_path),
         )
     )
 
@@ -467,14 +492,17 @@ def build_data_freshness_report(
         _dataset(
             "legacy_derived_exports",
             "Legacy derived exports",
-            status=_relative_status(legacy["latest"], pitch["latest"]),
+            status="stale" if legacy["latest"] else "unavailable",
             data_as_of=legacy["latest"],
             source_as_of=pitch["latest"],
             generated_at=legacy["generated_at"],
             rows=legacy["rows"],
-            automation="not connected",
+            automation="retired · no automatic refresh",
             affected_pages=["/api/derived", "/lab/stuff?model_mode=snapshot"],
             depends_on=["statcast_pitch_data"],
+            warnings=["Read-only compatibility artifact. Do not use it for current leaderboards or canonical Stuff+ pages."],
+            publication_status="retired_read_only",
+            artifact_version=_file_version(root / "derived" / "derived_exports.duckdb"),
         )
     )
 

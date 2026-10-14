@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from types import SimpleNamespace
 
 import pytest
@@ -8,6 +9,27 @@ from fastapi import BackgroundTasks
 
 from app.api.routes import admin as admin_routes
 from app.services import admin_service
+
+
+def test_legacy_refresh_is_capped_to_mlb_source_date() -> None:
+    captured: dict[str, object] = {}
+
+    def update_statcast_year_cache(*args, **kwargs):
+        captured.update(kwargs)
+        return None
+
+    module = SimpleNamespace(
+        update_statcast_year_cache=update_statcast_year_cache,
+        refresh_pitcher_data=lambda **_: (
+            module.update_statcast_year_cache(year=2026, end_dt=date(2026, 10, 14)) or {"updated": True}
+        ),
+    )
+
+    result = admin_service._refresh_legacy_pitcher_data(module, 2026, date(2026, 10, 13))
+
+    assert result["updated"] is True
+    assert captured["end_dt"] == date(2026, 10, 13)
+    assert module.update_statcast_year_cache is update_statcast_year_cache
 
 
 def test_pitch_refresh_rebuilds_location_scores(monkeypatch) -> None:
@@ -50,7 +72,7 @@ def test_pitch_refresh_rebuilds_location_scores(monkeypatch) -> None:
 
 def test_default_pitch_refresh_completes_pitch_stuff_and_rebuilds_stamina(monkeypatch) -> None:
     monkeypatch.setattr(admin_service, "audit_pitch_coverage", lambda **_: {"complete": True, "missing_dates": []})
-    monkeypatch.setattr(admin_service, "classify_source_pending", lambda _: {"source_pending": False})
+    monkeypatch.setattr(admin_service, "classify_source_pending", lambda _, **__: {"source_pending": False})
     monkeypatch.setattr(admin_service, "_import_legacy_pitcher_data_update", lambda: type("Updater", (), {"refresh_pitcher_data": staticmethod(lambda **_: {})}))
     monkeypatch.setattr(admin_service, "sync_legacy_pitcher_refresh_outputs", lambda **_: {})
     child_jobs = []

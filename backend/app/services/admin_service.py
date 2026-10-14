@@ -23,7 +23,13 @@ from app.services.payroll.importer import (
     write_payroll_snapshot,
 )
 from app.services.payroll.team_slugs import TEAM_PAYROLL_SLUGS
-from app.services.pitch_refresh_service import audit_pitch_coverage, classify_source_pending, summarize_missing_coverage
+from app.services.pipeline_reliability_service import read_daily_update_state
+from app.services.pitch_refresh_service import (
+    audit_pitch_coverage,
+    classify_source_pending,
+    mlb_source_date,
+    summarize_missing_coverage,
+)
 from app.services.transaction_service import get_team_transactions
 from app.services.video_service import get_video_lookup_status
 
@@ -209,32 +215,58 @@ def sync_legacy_pitcher_refresh_outputs(year: int) -> dict[str, object]:
     }
 
 
-def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False) -> dict[str, object]:
-    # ``include_pitch_stuff`` is retained for callers created before per-pitch
-    # Stuff+ became a required refresh step.  Incremental scoring already skips
-    # unchanged pitchers, so leaving a fixed pitcher budget here only creates a
-    # silently partial cache after multi-day source updates.
-    del include_pitch_stuff
+def _refresh_legacy_pitcher_data(module: Any, year: int, source_through: date) -> dict[str, object]:
+    """Cap the external legacy updater without modifying its separate worktree."""
+
+    original_update = getattr(module, "update_statcast_year_cache", None)
+    if not callable(original_update):
+        return dict(module.refresh_pitcher_data(year=int(year)))
+
+    def capped_update(*args: object, **kwargs: object) -> object:
+        requested = kwargs.get("end_dt")
+        kwargs["end_dt"] = min(requested, source_through) if isinstance(requested, date) else source_through
+        return original_update(*args, **kwargs)
+
+    module.update_statcast_year_cache = capped_update
+    try:
+        return dict(module.refresh_pitcher_data(year=int(year)))
+    finally:
+        module.update_statcast_year_cache = original_update
+
+
+def run_pitch_source_refresh(year: int = 2026) -> dict[str, object]:
+    source_through = mlb_source_date()
     with _DUCKDB_WRITE_LOCK:
-        initial_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir)
+        initial_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir, through=source_through)
         repair = None
         if not initial_audit["complete"]:
             repair = _repair_missing_statcast_dates(int(year), list(initial_audit["missing_dates"]))
 
         module = _import_legacy_pitcher_data_update()
-        result = dict(module.refresh_pitcher_data(year=int(year)))
+        result = _refresh_legacy_pitcher_data(module, int(year), source_through)
+        result["source_through"] = source_through.isoformat()
         result["synced_to_site_data"] = sync_legacy_pitcher_refresh_outputs(year=int(year))
         result["initial_coverage"] = initial_audit
         if repair is not None:
             result["repair"] = repair
 
-        final_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir)
-        pending = classify_source_pending(final_audit)
+        final_audit = audit_pitch_coverage(year=int(year), data_dir=settings.data_dir, through=source_through)
+        pending = classify_source_pending(final_audit, today=source_through)
         final_audit["status"] = "current" if final_audit["complete"] else ("source_pending" if pending["source_pending"] else "incomplete")
         final_audit["source_pending"] = pending
         result["coverage"] = final_audit
         if not final_audit["complete"] and not pending["source_pending"]:
             raise RuntimeError(summarize_missing_coverage(final_audit))
+        return result
+
+
+def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False) -> dict[str, object]:
+    # ``include_pitch_stuff`` is retained for callers created before per-pitch
+    # Stuff+ became a required refresh step. Incremental scoring skips unchanged
+    # pitchers, so the complete cache remains the only publishable state.
+    del include_pitch_stuff
+    result = run_pitch_source_refresh(year=int(year))
+    with _DUCKDB_WRITE_LOCK:
         result["pitcher_game_lines"] = _run_duckdb_write_child(
             {"job": "pitcher_game_lines", "year": int(year)}
         )
@@ -268,6 +300,68 @@ def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False
             {"job": "batter_timing", "year": int(year)}
         )
         return result
+
+
+DAILY_PIPELINE_STEPS = (
+    "pitch_data",
+    "video_lookup",
+    "pitcher_game_lines",
+    "starter_reference",
+    "location_plus",
+    "pitching_plus",
+    "pitch_stuff_plus",
+    "plus_leaderboard",
+    "stamina_dataset",
+    "batter_lineup_scenarios",
+    "batter_timing",
+    "roster_data",
+    "data_freshness",
+)
+
+
+def run_daily_pipeline_step(name: str, year: int = 2026) -> dict[str, object]:
+    target = str(name)
+    season = int(year)
+    if target == "pitch_data":
+        return run_pitch_source_refresh(season)
+    if target == "video_lookup":
+        return run_video_lookup_backfill(year=season)
+    if target == "pitcher_game_lines":
+        return run_pitcher_game_line_backfill(year=season)
+    if target == "starter_reference":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_optional_refresh_child({"job": "starter_reference", "year": season})
+    if target == "location_plus":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_duckdb_write_child({"job": "location_scores", "year": season})
+    if target == "pitching_plus":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_optional_refresh_child({"job": "pitching_plus", "export_year": season, "reference_year": season - 1})
+    if target == "pitch_stuff_plus":
+        with _DUCKDB_WRITE_LOCK:
+            result = _run_duckdb_write_child({"job": "pitch_stuff_scores", "year": season})
+        if result.get("status") != "current":
+            raise RuntimeError(f"Per-pitch Stuff+ remains {result.get('status') or 'unknown'}.")
+        return result
+    if target == "plus_leaderboard":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_optional_refresh_child({"job": "stuff_leaderboard", "year": season})
+    if target == "stamina_dataset":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_duckdb_write_child({"job": "stamina_dataset", "year": season})
+    if target == "batter_lineup_scenarios":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_duckdb_write_child({"job": "batter_lineup_scenarios", "year": season})
+    if target == "batter_timing":
+        with _DUCKDB_WRITE_LOCK:
+            return _run_optional_refresh_child({"job": "batter_timing", "year": season})
+    if target == "roster_data":
+        return run_roster_reference_refresh(year=season)
+    if target == "data_freshness":
+        from app.services.data_freshness_service import refresh_data_freshness_report
+
+        return refresh_data_freshness_report(year=season)
+    raise ValueError(f"Unknown daily pipeline step: {target}")
 
 
 def _run_optional_refresh_child(payload: dict[str, object]) -> dict[str, object]:
@@ -511,6 +605,12 @@ def _run_duckdb_write_child(payload: dict[str, object]) -> dict[str, object]:
     )
     stdout = completed.stdout or ""
     stderr = completed.stderr or ""
+    log_dir = settings.data_dir / "admin_job_logs" / "child_processes"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ")
+    job_name = str(payload.get("job") or "unknown").replace("/", "_").replace("\\", "_")
+    (log_dir / f"{stamp}_{job_name}.stdout.log").write_text(stdout, encoding="utf-8")
+    (log_dir / f"{stamp}_{job_name}.stderr.log").write_text(stderr, encoding="utf-8")
     lines = [line.strip() for line in stdout.splitlines() if line.strip()]
     parsed: dict[str, Any] | None = None
     if lines:
@@ -719,6 +819,7 @@ def get_admin_status(year: int = 2026) -> dict[str, object]:
 
     return {
         "year": int(year),
+        "daily_update": read_daily_update_state(settings.data_dir),
         "pitcher_data": get_pitcher_data_status(year=year),
         "video_lookup": get_video_lookup_status(year=year, data_dir=settings.data_dir),
         "pitcher_game_lines": get_pitcher_game_line_status(year=year, data_dir=settings.data_dir),

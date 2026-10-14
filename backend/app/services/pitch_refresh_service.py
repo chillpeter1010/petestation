@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
+from zoneinfo import ZoneInfo
 
 import duckdb
 
@@ -12,8 +13,20 @@ from app.repositories.pitch_repository import get_season_duckdb_path, resolve_pi
 from app.services.video_service import fetch_json
 
 
+MLB_TIMEZONE = ZoneInfo("America/New_York")
+
+
+def mlb_source_date(now: datetime | None = None) -> date:
+    """Return the calendar date MLB data sources can legitimately expose."""
+
+    instant = now or datetime.now(timezone.utc)
+    if instant.tzinfo is None:
+        instant = instant.replace(tzinfo=timezone.utc)
+    return instant.astimezone(MLB_TIMEZONE).date()
+
+
 def fetch_completed_regular_season_games(year: int, through: date | None = None) -> list[dict[str, object]]:
-    end_date = min(through or date.today(), date(int(year), 11, 30))
+    end_date = min(through or mlb_source_date(), date(int(year), 11, 30))
     query = urlencode(
         {
             "sportId": 1,
@@ -93,7 +106,7 @@ def classify_source_pending(
 ) -> dict[str, object]:
     """Separate normal recent Statcast publication lag from older coverage gaps."""
 
-    reference_day = today or date.today()
+    reference_day = today or mlb_source_date()
     cutoff = reference_day - timedelta(days=max(0, int(grace_days)))
     recent_dates: list[str] = []
     stale_dates: list[str] = []

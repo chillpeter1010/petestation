@@ -47,6 +47,10 @@ def test_build_and_write_freshness_report(tmp_path: Path) -> None:
     shadow = next(item for item in report["datasets"] if item["key"] == "performance_state_shadow")
     assert shadow["status"] == "unavailable"
     assert shadow["automation"] == "manual frozen-model rebuild · immutable append ledger"
+    legacy = next(item for item in report["datasets"] if item["key"] == "legacy_derived_exports")
+    assert legacy["publication_status"] == "retired_read_only"
+    reliever = next(item for item in report["datasets"] if item["key"] == "reliever_reference")
+    assert reliever["publication_status"] == "manual_reference_only"
     assert any(page["route"] == "/leaderboards" for page in report["pages"])
 
     outputs = write_data_freshness_report(report, tmp_path, keep_history=False)
