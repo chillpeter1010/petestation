@@ -11,6 +11,8 @@
           <NuxtLink to="/pitchers">Pitchers</NuxtLink>
           <NuxtLink to="/batters">Batters</NuxtLink>
           <NuxtLink to="/fielders">Fielders</NuxtLink>
+          <NuxtLink to="/games/today">Games</NuxtLink>
+          <NuxtLink to="/lab">Lab</NuxtLink>
         </nav>
         <HomePlayerSearch v-model="videoQuery" @entity-change="detectedEntity = $event" />
       </div>
@@ -169,13 +171,13 @@ function refreshVideos() {
 }
 
 .site-home__actions {
-  width: min(100%, 620px);
+  width: min(100%, 790px);
   display: grid;
   justify-items: end;
   gap: 12px;
 }
 
-.site-home__actions > .home-player-search { width: min(100%, 560px); }
+.site-home__actions > .home-player-search { width: min(100%, 620px); }
 
 .site-home__brand {
   position: relative;

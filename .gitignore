@@ -31,6 +31,7 @@ backend/*.log
 data/admin_job_logs/
 .logs/
 tmp/
+outputs/
 
 # Local agent tooling
 .agents/

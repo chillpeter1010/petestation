@@ -1,5 +1,7 @@
 # Module Candidates
 
+> 文件狀態：**REFERENCE / REVIEW BEFORE USE**。這是migration期間找到的抽象化候選，不保證仍未實作。採用前先以`rg`核對現行backend；不得把本清單當成current backlog。
+
 This file records duplicated logic found during migration slices and where it should eventually live.
 
 ## Already Seen

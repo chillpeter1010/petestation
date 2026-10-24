@@ -25,6 +25,7 @@
       <TeamSeasonContext :record="dashboard.season_record" :next-game="dashboard.next_game" />
 
       <nav class="team-dashboard__quick-nav" aria-label="Team dashboard sections">
+        <NuxtLink :to="{ path: '/games/today', query: { year, team: teamId } }"><Gamepad2 :size="15" /> Games</NuxtLink>
         <a href="#rotation"><RotateCw :size="15" /> Rotation</a>
         <a href="#impact"><Clapperboard :size="15" /> Pitch arsenal</a>
         <a href="#bullpen"><Gauge :size="15" /> Bullpen</a>
@@ -104,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { Activity, Banknote, CalendarDays, ChartNoAxesCombined, Clapperboard, Gauge, ListOrdered, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
+import { Activity, Banknote, CalendarDays, ChartNoAxesCombined, Clapperboard, Gamepad2, Gauge, ListOrdered, RotateCw, TriangleAlert, Trophy, Users } from '@lucide/vue'
 
 definePageMeta({ key: route => route.fullPath })
 

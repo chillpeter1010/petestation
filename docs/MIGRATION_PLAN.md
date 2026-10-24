@@ -1,5 +1,7 @@
 # Streamlit to Website Migration Plan
 
+> 文件狀態：**REFERENCE**。這份文件保留Nuxt／FastAPI拆分原則與page migration definition of done；其中migration order是早期規劃，不代表目前優先序。現況與下一步只看`PROJECT_TRACKER.json`。
+
 ## Goal
 
 Treat the current Streamlit app as a working prototype, then migrate it into a maintainable product architecture:

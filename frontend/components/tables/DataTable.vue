@@ -1,7 +1,10 @@
 <template>
   <section class="data-table-wrap">
     <header v-if="title" class="table-header">
-      <h2>{{ title }}</h2>
+      <div class="table-title-group">
+        <h2>{{ title }}</h2>
+        <slot name="title-extra" />
+      </div>
       <span>{{ rows.length.toLocaleString() }} rows</span>
     </header>
     <div v-if="rows.length" class="table-scroll">
@@ -38,12 +41,34 @@
                   :class="{ 'table-link--with-headshot': column.key === headshotColumn }"
                   :to="getRowLink(row)"
                   @click.stop
+                  @keydown.enter.stop
+                  @keydown.space.stop
                 >
                   <MlbPlayerHeadshot
                     v-if="column.key === headshotColumn"
                     :player-id="headshotPlayerId(row)"
                     :name="formatCell(getCell(row, column.key))"
                     :size="headshotSize"
+                    :source-width="160"
+                    decorative
+                    shape="circle"
+                  />
+                  <span>{{ formatCell(getCell(row, column.key)) }}</span>
+                </NuxtLink>
+                <NuxtLink
+                  v-else-if="column.key === secondaryLinkColumn && getSecondaryRowLink(row)"
+                  class="table-link"
+                  :class="{ 'table-link--with-headshot': Boolean(secondaryHeadshotIdKey) }"
+                  :to="getSecondaryRowLink(row)"
+                  @click.stop
+                  @keydown.enter.stop
+                  @keydown.space.stop
+                >
+                  <MlbPlayerHeadshot
+                    v-if="secondaryHeadshotIdKey"
+                    :player-id="secondaryHeadshotPlayerId(row)"
+                    :name="formatCell(getCell(row, column.key))"
+                    :size="secondaryHeadshotSize"
                     :source-width="160"
                     decorative
                     shape="circle"
@@ -64,7 +89,7 @@
         </tbody>
       </table>
     </div>
-    <p v-else class="empty">No rows available for the current filters.</p>
+    <p v-else class="empty">{{ emptyText }}</p>
   </section>
 </template>
 
@@ -81,8 +106,14 @@ const props = withDefaults(defineProps<{
   headshotColumn?: string
   headshotIdKey?: string
   headshotSize?: number
+  secondaryLinkColumn?: string
+  secondaryLinkTo?: (row: Record<string, unknown>) => string | Record<string, unknown> | undefined
+  secondaryHeadshotIdKey?: string
+  secondaryHeadshotSize?: number
+  cellStyleFor?: (row: Record<string, unknown>, column: { key: string; label: string }) => Record<string, string | number> | undefined
   expandable?: boolean
   rowKey?: string
+  emptyText?: string
 }>(), {
   title: '',
   table: undefined,
@@ -92,8 +123,14 @@ const props = withDefaults(defineProps<{
   headshotColumn: '',
   headshotIdKey: 'player_id',
   headshotSize: 38,
+  secondaryLinkColumn: '',
+  secondaryLinkTo: undefined,
+  secondaryHeadshotIdKey: '',
+  secondaryHeadshotSize: 38,
+  cellStyleFor: undefined,
   expandable: false,
-  rowKey: 'player_id'
+  rowKey: 'player_id',
+  emptyText: 'No rows available for the current filters.'
 })
 
 const emit = defineEmits<{
@@ -154,8 +191,17 @@ function getRowLink(row: Record<string, unknown>) {
   return props.linkTo ? props.linkTo(row) : undefined
 }
 
+function getSecondaryRowLink(row: Record<string, unknown>) {
+  return props.secondaryLinkTo ? props.secondaryLinkTo(row) : undefined
+}
+
 function headshotPlayerId(row: Record<string, unknown>) {
   const playerId = Number(row[props.headshotIdKey])
+  return Number.isInteger(playerId) && playerId > 0 ? playerId : null
+}
+
+function secondaryHeadshotPlayerId(row: Record<string, unknown>) {
+  const playerId = Number(row[props.secondaryHeadshotIdKey])
   return Number.isInteger(playerId) && playerId > 0 ? playerId : null
 }
 
@@ -211,8 +257,12 @@ function toNumber(value: unknown) {
 }
 
 function cellStyle(row: Record<string, unknown>, column: { key: string; label: string }) {
+  const customStyle = props.cellStyleFor?.(row, column)
+  if (customStyle) {
+    return customStyle
+  }
   const key = column.key
-  if (key === props.linkColumn || /name|id|team|date|role/i.test(key)) {
+  if (key === props.linkColumn || key === props.secondaryLinkColumn || /name|id|team|date|role/i.test(key)) {
     return {}
   }
   const value = toNumber(getCell(row, key))
@@ -258,6 +308,14 @@ function isPercentileColumn(column: { key: string; label: string }, value: numbe
   color: var(--color-foreground);
   font-size: 15px;
   letter-spacing: 0;
+}
+
+.table-title-group {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .table-header span,

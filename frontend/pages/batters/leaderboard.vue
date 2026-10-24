@@ -21,7 +21,14 @@
 
       <div v-if="pending" class="skeleton-table" aria-label="Loading batter leaderboard"><span v-for="item in 8" :key="item" /></div>
       <p v-else-if="error" class="state-card">Unable to load the batter leaderboard.</p>
-      <BatterLeaderboardTable v-else :rows="filteredBatters" :view="view" :year="year" />
+      <BatterLeaderboardTable
+        v-else
+        :rows="filteredBatters"
+        :percentile-rows="leaderboardRows.filter(row => (row.plate_appearances || 0) >= minimumPa)"
+        :minimum-pa="minimumPa"
+        :view="view"
+        :year="year"
+      />
     </section>
   </main>
 </template>

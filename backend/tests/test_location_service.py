@@ -60,6 +60,7 @@ def test_build_location_feature_table_uses_red_zone_separately_from_heart_zone()
     overall = features.loc[features["Pitch"].eq("Overall")].iloc[0]
     assert overall["zone_pct"] == 25
     assert overall["heart_pct"] == 25
+    assert overall["meatball_pct"] == 25
     assert overall["shadow_pct"] > 0
     assert overall["chase_pct"] > 0
 

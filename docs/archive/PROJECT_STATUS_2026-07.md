@@ -1,4 +1,6 @@
-# Project Status
+# Project Status（2026-07 封存快照）
+
+> 文件狀態：**SUPERSEDED / ARCHIVE**。內容曾是 migration-era 產品盤點，但 Batter、Catcher、模型與 Game Center 狀態已過時。現況只看 `docs/PROJECT_TRACKER.json`，跨對話摘要看 `docs/NEXT_CHAT_HANDOFF.md`。
 
 Petehub is currently a portfolio-stage baseball analytics platform. The core direction is to turn a Streamlit prototype into a maintainable website with a Nuxt 3 frontend and a FastAPI backend.
 

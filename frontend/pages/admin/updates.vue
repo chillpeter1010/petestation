@@ -26,6 +26,8 @@
 
     <AdminProjectTracker />
 
+    <AdminResearchDisplayStandards />
+
     <SiteArchitectureMap />
 
     <section class="command-bar" aria-label="Update commands">
@@ -66,6 +68,43 @@
         </button>
       </div>
       <p class="historical-progress" role="status">{{ historicalMessage }}</p>
+    </section>
+
+    <section class="historical-panel catcher-ledger-panel" aria-labelledby="catcher-ledger-title">
+      <div class="historical-copy">
+        <span class="eyebrow">Catcher descriptive metrics · Slice 1</span>
+        <h2 id="catcher-ledger-title">Build catcher ledger by season</h2>
+        <p>Select a season to download or resume immutable MLB game feeds, rebuild PA and runner responsibility accounting, and reconcile the pitcher-catcher ledger to official pitcher game lines.</p>
+        <p class="historical-note">Existing snapshots are reused. This runs on the backend without chat tokens; keep the backend running, but this page may be closed or refreshed.</p>
+      </div>
+      <div class="historical-action">
+        <span :class="['historical-state', catcherStateClass]">{{ catcherStateLabel }}</span>
+      </div>
+      <div class="historical-years catcher-years" aria-label="Catcher ledger season status">
+        <button
+          v-for="item in catcherYears"
+          :key="item.year"
+          type="button"
+          :class="{ 'is-complete': item.status === 'completed' }"
+          :disabled="catcherRunning || item.status === 'completed'"
+          :aria-label="item.status === 'completed' ? `${item.year} catcher ledger completed` : `Build ${item.year} catcher ledger`"
+          @click="runCatcherLedger(item.year)"
+        >
+          <span>{{ item.year }}</span>
+          <strong :class="`is-${item.status}`">{{ item.status }}</strong>
+          <small>{{ item.detail }}</small>
+          <div
+            class="catcher-progress-track"
+            role="progressbar"
+            :aria-label="`${item.year} catcher ledger progress`"
+            :aria-valuenow="item.progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ><i :style="{ width: `${item.progress}%` }" /></div>
+          <em>{{ catcherRunning && Number(catcherStatus?.active_job?.year) === item.year ? 'Running…' : item.status === 'completed' ? 'Completed' : item.status === 'failed' ? 'Retry after review' : 'Start / resume' }}</em>
+        </button>
+      </div>
+      <p class="historical-progress" role="status">{{ catcherMessage }}</p>
     </section>
 
     <section class="pipeline-grid">
@@ -120,6 +159,7 @@ import { ArrowLeft, CheckCircle2, CircleX, Clock3, Database, DatabaseZap, Eraser
 import SiteArchitectureMap from '~/components/admin/SiteArchitectureMap.vue'
 import AdminDataFreshness from '~/components/admin/AdminDataFreshness.vue'
 import AdminProjectTracker from '~/components/admin/AdminProjectTracker.vue'
+import AdminResearchDisplayStandards from '~/components/admin/AdminResearchDisplayStandards.vue'
 
 const api = useApi()
 const { isPetehub, brandName, toggleBrand } = useSiteBrand()
@@ -132,9 +172,11 @@ const jobs = ref<Record<string, any>[]>([])
 const status = ref<Record<string, unknown> | null>(null)
 const statusLoading = ref(false)
 const historicalStatus = ref<Record<string, any> | null>(null)
+const catcherStatus = ref<Record<string, any> | null>(null)
 const freshnessPanel = ref<InstanceType<typeof AdminDataFreshness> | null>(null)
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 let historicalPollTimer: ReturnType<typeof setInterval> | undefined
+let catcherPollTimer: ReturnType<typeof setInterval> | undefined
 
 const pipelineItems = [
   { key: 'pitches', group: 'Game pipeline', title: 'Pitch data', description: 'Refresh the season pitch database and derived source files.', scope: 'Season', icon: Database },
@@ -167,11 +209,45 @@ const historicalYears = computed(() => [2021, 2022, 2023, 2024, 2025].map(target
   }
 }))
 
-onMounted(async () => {
-  await Promise.all([refreshStatus(), refreshHistoricalPlusStatus()])
-  if (historicalStatus.value?.active_job) beginHistoricalStatusPolling()
+const catcherRunning = computed(() => running.value || Boolean(catcherStatus.value?.active_job))
+const catcherStateLabel = computed(() => {
+  if (catcherStatus.value?.active_job) return 'RUNNING'
+  return String(catcherStatus.value?.status || 'not_started').replace('_', ' ').toUpperCase()
 })
-onBeforeUnmount(() => historicalPollTimer && clearInterval(historicalPollTimer))
+const catcherStateClass = computed(() => String(catcherStatus.value?.active_job ? 'running' : catcherStatus.value?.status || 'not_started'))
+const catcherMessage = computed(() => String(catcherStatus.value?.message || 'No catcher ledger season has been completed.'))
+const catcherYears = computed(() => [2021, 2022, 2023, 2024, 2025, 2026].map(targetYear => {
+  const entry = catcherStatus.value?.years?.[String(targetYear)] || {}
+  const available = Number(entry.available_snapshots || 0)
+  const expected = Number(entry.expected_games || 0)
+  const status = String(entry.status || (available ? 'partial' : 'not_started'))
+  const processed = Number(entry.processed_games || 0)
+  const progress = status === 'completed'
+    ? 100
+    : expected
+      ? Math.max(0, Math.min(100, Math.round(((status === 'building' ? processed : available) / expected) * 100)))
+      : 0
+  const detail = status === 'completed'
+    ? `${Number(entry.summary?.pitcher_catcher_rows || 0).toLocaleString()} pairs · reconciled`
+    : status === 'building' && expected
+      ? `${processed.toLocaleString()} / ${expected.toLocaleString()} games · building ledger`
+    : expected
+      ? `${available.toLocaleString()} / ${expected.toLocaleString()} feeds · ${String(entry.stage || 'pending').replaceAll('_', ' ')}`
+      : available
+        ? `${available.toLocaleString()} feeds saved · resumable`
+        : 'No snapshots yet'
+  return { year: targetYear, status, detail, progress }
+}))
+
+onMounted(async () => {
+  await Promise.all([refreshStatus(), refreshHistoricalPlusStatus(), refreshCatcherStatus()])
+  if (historicalStatus.value?.active_job) beginHistoricalStatusPolling()
+  if (catcherStatus.value?.active_job) beginCatcherStatusPolling()
+})
+onBeforeUnmount(() => {
+  if (historicalPollTimer) clearInterval(historicalPollTimer)
+  if (catcherPollTimer) clearInterval(catcherPollTimer)
+})
 
 async function runEverything() { await execute(async () => { await runGameSteps(); await runRosterStep() }, 'All data pipelines completed.') }
 async function runGamePipeline() { await execute(runGameSteps, 'Game data pipeline completed.') }
@@ -199,6 +275,30 @@ async function runHistoricalPlus(targetYear: number) {
     running.value = false
     await Promise.all([refreshStatus(), refreshHistoricalPlusStatus()])
     await freshnessPanel.value?.refresh(false)
+  }
+}
+
+async function runCatcherLedger(targetYear: number) {
+  if (catcherRunning.value) return
+  running.value = true
+  failed.value = false
+  message.value = `Starting or resuming the ${targetYear} catcher ledger…`
+  try {
+    const started = await api.buildCatcherDescriptiveLedgerJob(targetYear)
+    beginCatcherStatusPolling()
+    await trackJob(started)
+    await refreshCatcherStatus()
+    const completed = catcherStatus.value?.years?.[String(targetYear)]?.status === 'completed'
+    failed.value = !completed
+    message.value = completed
+      ? `${targetYear} catcher ledger completed and reconciled.`
+      : `${targetYear} catcher ledger stopped before completion. Select the same season to resume.`
+  } catch (error) {
+    failed.value = true
+    message.value = error instanceof Error ? error.message : `${targetYear} catcher ledger failed.`
+  } finally {
+    running.value = false
+    await refreshCatcherStatus()
   }
 }
 
@@ -244,6 +344,7 @@ async function trackJob(started: Record<string, any>) {
     current = await api.adminJob(jobId)
     upsertJob(current)
     if (String(current.name).includes('historical_plus')) await refreshHistoricalPlusStatus()
+    if (String(current.name).includes('catcher_descriptive')) await refreshCatcherStatus()
   }
   if (String(current.status) === 'failed') throw new Error(`${jobLabel(current)} failed: ${String(current.error || 'Unknown error')}`)
   return current
@@ -267,6 +368,11 @@ async function refreshHistoricalPlusStatus() {
   catch { historicalStatus.value = null }
 }
 
+async function refreshCatcherStatus() {
+  try { catcherStatus.value = await api.catcherDescriptiveLedgerStatus() }
+  catch { catcherStatus.value = null }
+}
+
 function beginHistoricalStatusPolling() {
   if (historicalPollTimer) return
   historicalPollTimer = setInterval(async () => {
@@ -274,6 +380,17 @@ function beginHistoricalStatusPolling() {
     if (!historicalStatus.value?.active_job && historicalPollTimer) {
       clearInterval(historicalPollTimer)
       historicalPollTimer = undefined
+    }
+  }, 3000)
+}
+
+function beginCatcherStatusPolling() {
+  if (catcherPollTimer) return
+  catcherPollTimer = setInterval(async () => {
+    await refreshCatcherStatus()
+    if (!catcherStatus.value?.active_job && catcherPollTimer) {
+      clearInterval(catcherPollTimer)
+      catcherPollTimer = undefined
     }
   }, 3000)
 }
@@ -286,6 +403,7 @@ function statusValue(path: string) {
 function jobLabel(job: Record<string, any>) {
   const name = String(job.name || '')
   if (name.includes('historical_plus')) return `${Number(job.year || 0) || 'Historical'} Plus backfill`
+  if (name.includes('catcher_descriptive')) return `${Number(job.year || 0) || 'Catcher'} catcher ledger`
   if (name.includes('roster')) return 'Contracts & transactions'
   if (name.includes('video')) return 'Video lookup'
   if (name.includes('game') || name.includes('line')) return 'Pitcher game lines'
@@ -297,6 +415,10 @@ function jobDetail(job: Record<string, any>) {
   if (job.error) return String(job.error)
   if (job.status !== 'completed') return job.status === 'running' ? 'Update is running on the backend.' : 'Waiting to start.'
   if (String(job.name).includes('historical_plus')) return String(job.result?.message || 'Historical Plus datasets processed.')
+  if (String(job.name).includes('catcher_descriptive')) {
+    const summary = job.result?.yearly_summary
+    return `${Number(summary?.games || 0).toLocaleString()} games · ${Number(summary?.official_play_rows || summary?.official_pa_rows || 0).toLocaleString()} official plays · ${Number(summary?.pitcher_catcher_rows || 0).toLocaleString()} pitcher-catcher rows.`
+  }
   const coverage = job.result?.coverage
   if (coverage?.status === 'source_pending') {
     const pendingDates = coverage.source_pending?.pending_dates?.join(', ') || coverage.missing_dates?.join(', ') || 'latest games'
@@ -332,9 +454,17 @@ async function clearClientCache() {
 .command-bar { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; border:1px solid #292929;border-radius:14px;padding:12px;background:rgba(17,17,17,.92)}.command-bar button{min-height:44px;display:inline-flex;align-items:center;gap:8px;border:1px solid #393939;border-radius:10px;padding:0 15px;color:#eee;background:#181818;font-weight:900;cursor:pointer}.command-bar button:hover{border-color:var(--orange)}.command-bar .primary-action{color:#111;border-color:var(--orange);background:var(--orange)}.command-bar .cache-action{margin-left:auto;color:#aaa}.command-bar button:disabled{cursor:wait;opacity:.55}
 .operations-message{max-width:1280px;margin:14px auto 0;border-left:3px solid #64c77a;padding:9px 13px;color:#d8f5df;background:rgba(70,150,88,.1)}.operations-message.error{border-color:#e3544d;color:#ffd8d4;background:rgba(190,58,50,.1)}
 .historical-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;margin-top:16px;border:1px solid var(--line);border-radius:14px;padding:22px;background:linear-gradient(115deg,rgba(245,163,50,.09),#121212 48%)}.historical-copy h2{margin:7px 0 8px;font-size:24px}.historical-copy p{max-width:780px;margin:0;color:#aaa;font-size:14px;line-height:1.55}.historical-copy .historical-note{margin-top:8px;color:#d9bd91}.historical-action{display:flex;align-items:flex-end;flex-direction:column;gap:10px}.historical-state{border:1px solid #444;border-radius:999px;padding:5px 9px;color:#aaa;font-size:10px;font-weight:950;letter-spacing:.07em}.historical-state.running{color:#111;border-color:var(--orange);background:var(--orange)}.historical-state.completed{color:#9ae8ac;border-color:#397648}.historical-state.partial,.historical-state.invalid{color:#ffc0b8;border-color:#98483f}.historical-years{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid #292929;border-radius:10px;overflow:hidden}.historical-years>button{display:grid;gap:4px;border:0;border-right:1px solid #292929;padding:13px 15px;color:inherit;background:rgba(0,0,0,.2);font:inherit;text-align:left;cursor:pointer}.historical-years>button:last-child{border-right:0}.historical-years>button:hover,.historical-years>button:focus-visible{background:rgba(245,163,50,.12);outline:0}.historical-years>button:disabled{cursor:wait;opacity:.58}.historical-years span{color:#eee;font-size:16px;font-weight:900}.historical-years strong{color:#888;font-size:10px;text-transform:uppercase}.historical-years strong.is-completed{color:#79db91}.historical-years strong.is-running{color:var(--orange)}.historical-years strong.is-failed{color:#ff8c80}.historical-years small{color:#777;font-size:10px}.historical-years em{margin-top:5px;color:var(--orange);font-size:10px;font-style:normal;font-weight:900;text-transform:uppercase}.historical-progress{grid-column:1/-1;margin:0;color:#bbb;font-size:12px}
+.catcher-ledger-panel{background:linear-gradient(115deg,rgba(76,145,255,.11),#121212 48%)}
+.historical-years.catcher-years{grid-template-columns:repeat(6,minmax(0,1fr))}
+.historical-years>button.is-complete:disabled{cursor:default;opacity:.78}
+.historical-state.downloading,.historical-state.building{color:#111;border-color:var(--orange);background:var(--orange)}
+.historical-state.snapshot_failures,.historical-years strong.is-snapshot_failures{color:#ff8c80;border-color:#98483f}
+.historical-years strong.is-downloading,.historical-years strong.is-building{color:var(--orange)}
+.catcher-progress-track{height:6px;overflow:hidden;border-radius:999px;background:#292929}.catcher-progress-track i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#4c91ff,var(--orange));transition:width 180ms ease}
 .pipeline-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px}.pipeline-card{min-height:185px;display:flex;flex-direction:column;gap:15px;border:1px solid #292929;border-radius:14px;padding:18px;background:#141414}.pipeline-card>svg{color:var(--orange)}.pipeline-card span{color:#777;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.pipeline-card h2{margin:4px 0 0;font-size:17px}.pipeline-card p{margin:7px 0 0;color:#999;font-size:12px;line-height:1.5}.pipeline-card>strong{margin-top:auto;color:var(--orange);font-size:11px;text-transform:uppercase}
 .status-panel,.jobs-panel{margin-top:16px;border:1px solid #292929;border-radius:14px;background:#121212}.status-panel>header,.jobs-panel>header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #292929;padding:17px 20px}.status-panel h2,.jobs-panel h2{margin:5px 0 0;font-size:20px}.status-panel header button{width:36px;height:36px;display:grid;place-items:center;border:1px solid #333;border-radius:9px;color:var(--orange);background:#181818;cursor:pointer}.status-grid{display:grid;grid-template-columns:repeat(3,1fr)}.status-grid>div{display:grid;gap:7px;border-right:1px solid #292929;border-bottom:1px solid #292929;padding:20px}.status-grid>div:nth-child(3n){border-right:0}.status-grid>div:nth-last-child(-n+3){border-bottom:0}.status-grid span{color:#888;font-size:10px;font-weight:850;text-transform:uppercase}.status-grid strong{font:800 22px "Fira Code",monospace}.status-grid .status-time{font-size:13px;line-height:1.45}
 .jobs-panel>header>span{color:#777;font-size:11px;font-weight:850}.job-list{display:grid}.job-list article{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:11px;border-bottom:1px solid #242424;padding:14px 20px}.job-list article:last-child{border:0}.job-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:var(--orange);background:rgba(245,163,50,.1)}.job-list h3{margin:0;font-size:14px}.job-list p{margin:4px 0 0;color:#888;font-size:11px}.job-pill{min-width:88px;border-radius:999px;padding:6px 9px;color:#111;background:#999;font-size:9px;font-weight:950;text-align:center;text-transform:uppercase}.job-pill.queued,.job-pill.running{background:var(--orange)}.job-pill.completed{background:#64c77a}.job-pill.failed{color:#fff;background:#c43d34}.empty-jobs{margin:0;padding:30px 20px;color:#777;text-align:center}.operations-page>footer{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;color:#666;font-size:10px;text-align:right}.spinning{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:1050px){.pipeline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.operations-hero{align-items:stretch;flex-direction:column}.operations-controls{align-items:stretch;flex-direction:column}.command-bar{display:grid}.command-bar .cache-action{margin-left:0}.historical-panel{grid-template-columns:1fr}.historical-action{align-items:stretch}.historical-years{grid-template-columns:1fr}.historical-years>button{border-right:0;border-bottom:1px solid #292929}.pipeline-grid,.status-grid{grid-template-columns:1fr}.status-grid>div,.status-grid>div:nth-child(3n){border-right:0;border-bottom:1px solid #292929}.status-grid>div:last-child{border-bottom:0}.job-list article{grid-template-columns:34px minmax(0,1fr)}.job-pill{grid-column:2;width:max-content}.operations-page>footer{text-align:left}}
+@media(max-width:680px){.historical-years.catcher-years{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.spinning{animation:none}}
 </style>

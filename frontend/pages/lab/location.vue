@@ -187,6 +187,7 @@
           <div class="league-controls">
             <label>Search<input v-model="leaderboardSearch" type="search" placeholder="Pitcher or team"></label>
             <label>Minimum pitches<select v-model.number="minimumPitches"><option :value="100">100 · Matched sample</option><option :value="300">300 · Qualified</option><option :value="500">500 · Stable</option><option :value="0">All · Provisional</option></select></label>
+            <LeaderboardDisplayControls v-model:display-mode="displayMode" v-model:heatmap-enabled="heatmapEnabled" />
           </div>
         </header>
 
@@ -204,13 +205,14 @@
                 <tbody>
                   <tr v-for="(row, index) in sortedLeaderboard" :key="`${row.pitcher_id}-${row.pitcher_name}`" :class="{ selected: selectedPitcherId === row.pitcher_id }" @click="selectedPitcherId = row.pitcher_id">
                     <td>{{ index + 1 }}</td><td><strong>{{ row.pitcher_name }}</strong><small>{{ row.sample_status }}</small></td><td>{{ row.team }}</td><td>{{ formatInteger(row.pitches) }}</td>
-                    <td v-for="key in pitchColumnKeys" :key="key">{{ formatNullable(row[key]) }}</td>
-                    <td class="plus metric-divider">{{ row.location_plus.toFixed(1) }}</td>
+                    <td v-for="key in pitchColumnKeys" :key="key" :style="locationStyle(row, key)">{{ locationValue(row, key, formatNullable(row[key])) }}</td>
+                    <td class="plus metric-divider" :style="locationStyle(row, 'location_plus')">{{ locationValue(row, 'location_plus', row.location_plus.toFixed(1)) }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </section>
+          <p class="leaderboard-pr-note">PR母體是目前 Minimum pitches 門檻下的完整 2026 聯盟名單；搜尋不改變母體。各球種 Loc+ 與 Location+ 都是越高越佳，Pitches 與 Sample status 不排名或上色。</p>
         </div>
       </section>
 
@@ -251,6 +253,7 @@
 
 <script setup lang="ts">
 import type { LocationComparisonResponse, LocationHeatmapCell, LocationHeatmapResponse, LocationLeaderboardResponse, LocationLeaderboardRow, LocationPitcherResponse } from '~/types/api'
+import { buildLeaderboardPercentiles, leaderboardHeatStyle, leaderboardMetricValue, type LeaderboardDisplayMode } from '~/utils/leaderboardDisplay'
 
 type ModeKey = 'location_plus' | 'called_strike_pct' | 'whiff_pct' | 'barrel_pct' | 'ball_pct' | 'density_pct'
 type SortKey = 'rank' | 'pitcher_name' | 'team' | 'pitches' | 'loc_fa' | 'loc_si' | 'loc_fc' | 'loc_fs' | 'loc_sl' | 'loc_cu' | 'loc_ch' | 'loc_kc' | 'loc_fo' | 'location_plus'
@@ -277,6 +280,8 @@ const selectedPitcherId = ref(0)
 const activeComparisonKey = ref('overall')
 const sortKey = ref<SortKey>('location_plus')
 const sortDirection = ref<'asc' | 'desc'>('desc')
+const displayMode = ref<LeaderboardDisplayMode>('actual')
+const heatmapEnabled = ref(true)
 const leaderboardPending = ref(false)
 const detailPending = ref(false)
 const leaderboardError = ref('')
@@ -296,6 +301,7 @@ const filteredLeaderboard = computed(() => {
   return uniqueRows.filter((row) => row.pitcher_name.toLowerCase().includes(query) || row.team.toLowerCase().includes(query))
 })
 const pitchColumnKeys = ['loc_fa', 'loc_si', 'loc_fc', 'loc_fs', 'loc_sl', 'loc_cu', 'loc_ch', 'loc_kc', 'loc_fo'] as const
+const locationMetricKeys: Array<typeof pitchColumnKeys[number] | 'location_plus'> = [...pitchColumnKeys, 'location_plus']
 const leaderboardColumns: { key: SortKey; label: string }[] = [
   { key: 'rank', label: '#' }, { key: 'pitcher_name', label: 'Pitcher' }, { key: 'team', label: 'Team' }, { key: 'pitches', label: 'Pitches' },
   { key: 'loc_fa', label: 'Loc+ FA' }, { key: 'loc_si', label: 'Loc+ SI' }, { key: 'loc_fc', label: 'Loc+ FC' },
@@ -303,6 +309,13 @@ const leaderboardColumns: { key: SortKey; label: string }[] = [
   { key: 'loc_ch', label: 'Loc+ CH' }, { key: 'loc_kc', label: 'Loc+ KC' }, { key: 'loc_fo', label: 'Loc+ FO' },
   { key: 'location_plus', label: 'Location+' }
 ]
+const locationPercentiles = computed(() => buildLeaderboardPercentiles(
+  [...new Map((leaderboard.value?.rows || []).map(row => [row.pitcher_id, row])).values()],
+  row => String(row.pitcher_id),
+  Object.fromEntries(locationMetricKeys.map(key => [key, {
+    value: (row: LocationLeaderboardRow) => row[key], direction: 'higher' as const
+  }]))
+))
 const sortedLeaderboard = computed(() => [...filteredLeaderboard.value].sort((left, right) => compareRows(left, right, sortKey.value, sortDirection.value)))
 const activeComparison = computed(() => comparison.value?.series.find(item => item.key === activeComparisonKey.value) || comparison.value?.series[0] || null)
 const comparisonDomain = computed(() => {
@@ -340,6 +353,14 @@ onMounted(() => { loadHeatmap(); loadLeaderboard(); loadComparison() })
 function scheduleLoad() {
   if (refreshTimer) clearTimeout(refreshTimer)
   refreshTimer = setTimeout(loadHeatmap, 120)
+}
+
+function locationValue(row: LocationLeaderboardRow, key: typeof pitchColumnKeys[number] | 'location_plus', actual: string) {
+  return leaderboardMetricValue(displayMode.value, locationPercentiles.value.get(String(row.pitcher_id)) || {}, key, actual)
+}
+
+function locationStyle(row: LocationLeaderboardRow, key: typeof pitchColumnKeys[number] | 'location_plus') {
+  return leaderboardHeatStyle(locationPercentiles.value.get(String(row.pitcher_id))?.[key], heatmapEnabled.value)
 }
 
 async function loadHeatmap() {
@@ -551,7 +572,8 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .league-header span, .detail-table-block header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .league-header h2, .detail-table-block h3 { margin: 0; color: var(--color-text); }
 .league-header p { margin: 0; color: var(--color-muted-text); font-size: 14px; }
-.league-controls { display: flex; gap: 10px; }
+.league-controls { display: flex; align-items: end; gap: 10px; flex-wrap: wrap; }
+.leaderboard-pr-note { margin: 10px 16px 16px; color: var(--color-muted-text); font-size: 12px; line-height: 1.55; }
 .league-controls label { display: grid; gap: 5px; color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }
 .league-controls input, .league-controls select { min-width: 170px; height: 42px; border: 1px solid var(--color-border-strong); border-radius: 9px; padding: 0 11px; color: var(--color-text); background: var(--color-background); font: 700 13px inherit; }
 .league-layout { display: grid; grid-template-columns: minmax(560px, 1fr) minmax(560px, 1fr); }

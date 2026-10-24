@@ -2,6 +2,7 @@
   <main class="lab-hub">
     <section class="hub-hero"><span>Batter Lab</span><h1>Study the hitter’s response.</h1><p>Research workbenches separate swing decisions, bat-to-ball execution, and damage instead of compressing them into one grade.</p></section>
     <section class="study-grid">
+      <NuxtLink class="study-card tags" to="/batters/lab/tags"><span>Player archetypes</span><h2>Batter Tag Lab</h2><strong>Review tags</strong></NuxtLink>
       <NuxtLink class="study-card" to="/batters/lab/stuff-attack"><span>Pitch quality</span><h2>Stuff Attack</h2><strong>Open research</strong></NuxtLink>
       <NuxtLink class="study-card timing" to="/batters/lab/swing-timing"><span>Bat-to-ball alignment</span><h2>Swing Timing</h2><strong>Open research</strong></NuxtLink>
       <NuxtLink class="study-card vision" to="/batters/lab/vision"><span>Swing visual</span><h2>Vision</h2><strong>Open research</strong></NuxtLink>
@@ -24,6 +25,7 @@ p, li { color: var(--color-muted-text); line-height: 1.6; }
 .study-card strong { display: inline-flex; margin-top: 10px; border-radius: 999px; padding: 8px 14px; color: var(--color-on-primary); background: var(--color-primary); }
 .study-card.timing { background: radial-gradient(circle at top right, color-mix(in srgb, #8fd3f4 18%, transparent), transparent 38%), var(--color-surface); }
 .study-card.vision { background: radial-gradient(circle at top right, color-mix(in srgb, #69d3c3 20%, transparent), transparent 40%), var(--color-surface); }
+.study-card.tags { background: radial-gradient(circle at top right, color-mix(in srgb, #c4a7ff 20%, transparent), transparent 40%), var(--color-surface); }
 @media (max-width: 760px) { .lab-hub { padding-top: 32px; } .study-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .study-card { transition: none; } }
 </style>

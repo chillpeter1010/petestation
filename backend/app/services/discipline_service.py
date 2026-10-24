@@ -93,6 +93,9 @@ STRIKE_ZONE_X_MIN = -0.83
 STRIKE_ZONE_X_MAX = 0.83
 STRIKE_ZONE_Z_MIN = 1.5
 STRIKE_ZONE_Z_MAX = 3.5
+MEATBALL_X_MAX = 0.83 / 3.0
+MEATBALL_Z_NORM_MIN = 1.0 / 3.0
+MEATBALL_Z_NORM_MAX = 2.0 / 3.0
 
 
 def clean_value(value: Any) -> Any:
@@ -133,6 +136,31 @@ def red_strike_zone_mask(data: pd.DataFrame) -> pd.Series:
     return geometric.where(has_coordinates, fallback).fillna(False)
 
 
+def meatball_zone_mask(data: pd.DataFrame) -> pd.Series:
+    """Return the Savant-compatible middle-middle (zone 5) miss proxy.
+
+    Statcast's zone 5 is the primary source so the aggregate rate stays
+    comparable with Baseball Savant Meatball%.  When ``zone`` is unavailable,
+    fall back to the horizontal and vertical middle thirds of that batter's
+    recorded strike zone.  This describes observed location, not intended
+    target, so callers must not present it as a verified command miss.
+    """
+
+    zone_num = numeric_series(data, "zone")
+    has_zone = zone_num.notna()
+    plate_x = numeric_series(data, "plate_x")
+    plate_z = numeric_series(data, "plate_z")
+    sz_top = numeric_series(data, "sz_top")
+    sz_bot = numeric_series(data, "sz_bot")
+    zone_height = (sz_top - sz_bot).where((sz_top - sz_bot) > 0)
+    plate_z_norm = (plate_z - sz_bot) / zone_height
+    coordinate_middle = (
+        plate_x.abs().le(MEATBALL_X_MAX)
+        & plate_z_norm.between(MEATBALL_Z_NORM_MIN, MEATBALL_Z_NORM_MAX)
+    )
+    return zone_num.eq(5).where(has_zone, coordinate_middle).fillna(False)
+
+
 def add_discipline_flags(data: pd.DataFrame) -> pd.DataFrame:
     working = data.copy()
     description = normalize_text_series(working, "description")
@@ -157,6 +185,7 @@ def add_discipline_flags(data: pd.DataFrame) -> pd.DataFrame:
     working["_out_zone"] = has_location & ~working["_in_zone"]
     working["_edge_zone"] = zone_num.isin([2, 4, 6, 8, 11, 12, 13, 14, 16, 17, 18, 19])
     working["_heart_zone"] = zone_num.isin([1, 3, 5, 7, 9])
+    working["_meatball_zone"] = meatball_zone_mask(working)
     working["_first_pitch"] = numeric_series(working, "pitch_number").eq(1)
     return working
 
@@ -185,7 +214,7 @@ def summarize_discipline_group(group: pd.DataFrame, label: str, pitcher: str = "
         "Whiff%": (group["_is_whiff"].sum() / swing_mask.sum() * 100) if swing_mask.sum() else np.nan,
         "Edge%": group["_edge_zone"].mean() * 100 if pitch_count else np.nan,
         "1st Strike%": group.loc[first_pitch_mask, "_is_strike"].mean() * 100 if first_pitch_mask.sum() else np.nan,
-        "Heart Ball%": group["_heart_zone"].mean() * 100 if pitch_count else np.nan,
+        "Meatball%": group["_meatball_zone"].mean() * 100 if pitch_count else np.nan,
         "CStr%": group["_is_called_strike"].mean() * 100 if pitch_count else np.nan,
         "SwStr%": group["_is_swstr"].mean() * 100 if pitch_count else np.nan,
         "CSW%": (group["_is_called_strike"] | group["_is_whiff"]).mean() * 100 if pitch_count else np.nan,

@@ -141,3 +141,22 @@ def test_get_stuff_score_filters_exact_game_pk(monkeypatch):
 
     source_pitches = next(metric.value for metric in payload.summary if metric.key == "source_pitches")
     assert source_pitches == 3
+
+
+def test_get_stuff_score_excludes_pitch_out_from_all_stuff_totals(monkeypatch):
+    frame = pd.concat([
+        _sample_pitch_frame(),
+        _sample_pitch_frame().iloc[[0]].assign(pitch_name="Pitch Out"),
+    ], ignore_index=True)
+    monkeypatch.setattr("app.services.stuff_service.load_pitcher_cached_season", lambda **_: frame)
+    monkeypatch.setattr(
+        "app.services.stuff_service._pete_pitch_type_scores",
+        lambda *_args, **_kwargs: (pd.DataFrame(), None, None),
+    )
+
+    payload = get_stuff_score(year=2026, pitcher_id=1)
+
+    source_pitches = next(metric.value for metric in payload.summary if metric.key == "source_pitches")
+    assert source_pitches == 3
+    assert all(row["Pitch"] != "Pitch Out" for row in payload.tables["stuff_scores"].rows)
+    assert all(row["Pitch"] != "Pitch Out" for row in payload.tables["stuff_variability"].rows)

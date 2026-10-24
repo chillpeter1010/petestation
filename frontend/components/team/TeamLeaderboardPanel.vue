@@ -5,7 +5,10 @@
         <span><Trophy :size="16" aria-hidden="true" /> Team leaders</span>
         <h2>Performance board</h2>
       </div>
-      <NuxtLink to="/leaderboards">All leaderboards <ArrowUpRight :size="15" /></NuxtLink>
+      <div class="team-panel__tools">
+        <NuxtLink to="/leaderboards">All leaderboards <ArrowUpRight :size="15" /></NuxtLink>
+        <LeaderboardDisplayControls v-model:display-mode="displayMode" v-model:heatmap-enabled="heatmapEnabled" />
+      </div>
     </header>
 
     <TabsRoot class="leader-tabs" default-value="pitching">
@@ -23,7 +26,7 @@
               <MlbPlayerHeadshot :player-id="row.player_id" :name="row.name" :size="34" :source-width="160" decorative shape="circle" />
               <strong>{{ row.name }}</strong>
             </span>
-            <span>{{ row.games }}</span><span>{{ formatNumber(row.ip, 1) }}</span><span>{{ formatNumber(row.era, 2) }}</span><span>{{ formatNumber(row.whip, 2) }}</span><span>{{ row.strikeouts ?? '-' }}</span><span>{{ formatPercent(row.strikeout_rate) }}</span><span>{{ formatPercent(row.walk_rate) }}</span>
+            <span>{{ row.games }}</span><span>{{ formatNumber(row.ip, 1) }}</span><span :style="metricStyle(pitchingPercentiles, row.player_id, 'ERA')">{{ shown(pitchingPercentiles, row.player_id, 'ERA', formatNumber(row.era, 2)) }}</span><span :style="metricStyle(pitchingPercentiles, row.player_id, 'WHIP')">{{ shown(pitchingPercentiles, row.player_id, 'WHIP', formatNumber(row.whip, 2)) }}</span><span>{{ row.strikeouts ?? '-' }}</span><span :style="metricStyle(pitchingPercentiles, row.player_id, 'K%')">{{ shown(pitchingPercentiles, row.player_id, 'K%', formatPercent(row.strikeout_rate)) }}</span><span :style="metricStyle(pitchingPercentiles, row.player_id, 'BB%')">{{ shown(pitchingPercentiles, row.player_id, 'BB%', formatPercent(row.walk_rate)) }}</span>
           </NuxtLink>
         </div>
       </TabsContent>
@@ -37,11 +40,12 @@
               <MlbPlayerHeadshot :player-id="row.player_id" :name="row.name" :size="34" :source-width="160" decorative shape="circle" />
               <strong>{{ row.name }}</strong>
             </span>
-            <span>{{ row.plate_appearances ?? '-' }}</span><span>{{ formatRate(row.avg) }}</span><span>{{ formatRate(row.obp) }}</span><span>{{ formatRate(row.slg) }}</span><span>{{ formatRate(row.ops) }}</span><span>{{ formatRate(row.woba) }}</span><span>{{ row.home_runs ?? '-' }}</span>
+            <span>{{ row.plate_appearances ?? '-' }}</span><span :style="metricStyle(battingPercentiles, row.player_id, 'AVG')">{{ shown(battingPercentiles, row.player_id, 'AVG', formatRate(row.avg)) }}</span><span :style="metricStyle(battingPercentiles, row.player_id, 'OBP')">{{ shown(battingPercentiles, row.player_id, 'OBP', formatRate(row.obp)) }}</span><span :style="metricStyle(battingPercentiles, row.player_id, 'SLG')">{{ shown(battingPercentiles, row.player_id, 'SLG', formatRate(row.slg)) }}</span><span :style="metricStyle(battingPercentiles, row.player_id, 'OPS')">{{ shown(battingPercentiles, row.player_id, 'OPS', formatRate(row.ops)) }}</span><span :style="metricStyle(battingPercentiles, row.player_id, 'wOBA')">{{ shown(battingPercentiles, row.player_id, 'wOBA', formatRate(row.woba)) }}</span><span>{{ row.home_runs ?? '-' }}</span>
           </NuxtLink>
         </div>
       </TabsContent>
     </TabsRoot>
+    <p class="pr-note">League PR uses all same-season pitchers with at least 20 IP or hitters with at least 100 PA. Team rows below the gate show —; counts and workload are not ranked.</p>
   </section>
 </template>
 
@@ -49,6 +53,7 @@
 import { ArrowUpRight, Trophy } from '@lucide/vue'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import type { BatterLeaderboardRow, PitcherLeaderboardRow } from '~/types/api'
+import { buildLeaderboardPercentiles, leaderboardHeatStyle, leaderboardMetricValue, type LeaderboardDisplayMode } from '~/utils/leaderboardDisplay'
 
 const props = defineProps<{
   pitching: PitcherLeaderboardRow[]
@@ -56,6 +61,45 @@ const props = defineProps<{
   teamId: string
   year: number
 }>()
+const api = useApi()
+const displayMode = ref<LeaderboardDisplayMode>('actual')
+const heatmapEnabled = ref(true)
+
+const { data: leaguePitchingRows } = await useAsyncData(
+  () => `team-panel-pitcher-pr-${props.year}`,
+  () => api.pitcherLeaderboard({ year: props.year, role: 'All' }),
+  { watch: [() => props.year], default: () => [] }
+)
+const { data: leagueBattingRows } = await useAsyncData(
+  () => `team-panel-batter-pr-${props.year}`,
+  () => api.batterLeaderboard({ year: props.year }),
+  { watch: [() => props.year], default: () => [] }
+)
+const pitchingPercentiles = computed(() => buildLeaderboardPercentiles(
+  leaguePitchingRows.value.filter(row => Number(row.ip || 0) >= 20),
+  row => String(row.player_id),
+  {
+    ERA: { value: row => row.era, direction: 'lower' }, WHIP: { value: row => row.whip, direction: 'lower' },
+    'K%': { value: row => row.strikeout_rate, direction: 'higher' }, 'BB%': { value: row => row.walk_rate, direction: 'lower' }
+  }
+))
+const battingPercentiles = computed(() => buildLeaderboardPercentiles(
+  leagueBattingRows.value.filter(row => Number(row.plate_appearances || 0) >= 100),
+  row => String(row.player_id),
+  {
+    AVG: { value: row => row.avg, direction: 'higher' }, OBP: { value: row => row.obp, direction: 'higher' },
+    SLG: { value: row => row.slg, direction: 'higher' }, OPS: { value: row => row.ops, direction: 'higher' },
+    wOBA: { value: row => row.woba, direction: 'higher' }
+  }
+))
+
+function shown(map: Map<string, Record<string, number>>, playerId: number, label: string, actual: string | number) {
+  return leaderboardMetricValue(displayMode.value, map.get(String(playerId)) || {}, label, actual)
+}
+
+function metricStyle(map: Map<string, Record<string, number>>, playerId: number, label: string) {
+  return leaderboardHeatStyle(map.get(String(playerId))?.[label], heatmapEnabled.value)
+}
 
 function pitcherLink(row: PitcherLeaderboardRow) {
   return { path: '/pitcher-personal', query: { year: props.year, role: row.role, team: props.teamId, pitcher_id: row.player_id } }
@@ -106,6 +150,9 @@ function formatPercent(value: number | null) {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+.team-panel__tools { display: flex; align-items: end; justify-content: flex-end; gap: 14px; flex-wrap: wrap; }
+.pr-note { margin: 12px 0 0; color: var(--color-muted-text); font-size: 11px; line-height: 1.5; }
+@media (max-width: 760px) { .team-panel__header { flex-direction: column; } .team-panel__tools { justify-content: flex-start; } }
 
 .team-panel__header h2 {
   margin: 5px 0 0;

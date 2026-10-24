@@ -105,19 +105,23 @@
             class="poster-zone-chart"
             title="Locations vs LHB"
             :points="locationByStand.L"
+            :selected-key="selectedOutingPitchKey"
             compact
             :point-scale="1.25"
             :plot-scale="1.2"
             :point-opacity="0.78"
+            @select-point="selectOutingPitch"
           />
           <StrikeZoneScatter
             class="poster-zone-chart"
             title="Locations vs RHB"
             :points="locationByStand.R"
+            :selected-key="selectedOutingPitchKey"
             compact
             :point-scale="1.25"
             :plot-scale="1.2"
             :point-opacity="0.78"
+            @select-point="selectOutingPitch"
           />
         </section>
 
@@ -158,16 +162,19 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:selectedGamePk': [value: number | null]
+  'select-pitch': [pitch: Record<string, unknown>]
 }>()
 
 const movementMode = ref<'scatter' | 'average'>('average')
 const api = useApi()
 const modelScoreLoading = ref(false)
+const selectedOutingPitch = ref<Record<string, unknown> | null>(null)
 const stuffScorePayload = ref<AnalysisResponse | null>(null)
 const locationScorePayload = ref<LocationPitcherResponse | null>(null)
 let modelScoreRequestId = 0
 
 const outingRows = computed(() => props.outings?.tables.outings?.rows || [])
+const selectedOutingPitchKey = computed(() => selectedOutingPitch.value ? pitchPointKey(selectedOutingPitch.value) : null)
 const pitchMixRows = computed(() => {
   const rows = props.report?.charts.pitch_mix
   return Array.isArray(rows) ? rows.filter((row): row is Record<string, unknown> => row && typeof row === 'object' && !Array.isArray(row)) : []
@@ -406,6 +413,10 @@ watch(
   { immediate: true }
 )
 
+watch(() => props.selectedGamePk, () => {
+  selectedOutingPitch.value = null
+})
+
 function posterPitchLabel(pitch: string) {
   if (pitch === 'Four-Seam' || pitch === '4-Seam') {
     return 'FF'
@@ -458,6 +469,22 @@ const pitchColors: Record<string, string> = {
 function emitSelectedGame(value: string) {
   const parsed = Number(value)
   emit('update:selectedGamePk', Number.isFinite(parsed) && parsed > 0 ? parsed : null)
+}
+
+function selectOutingPitch(pitch: Record<string, unknown>) {
+  selectedOutingPitch.value = pitch
+  emit('select-pitch', pitch)
+}
+
+function pitchPointKey(point: Record<string, unknown>) {
+  return [
+    point.game_pk,
+    point.at_bat_number,
+    point.pitch_number,
+    point.plate_x,
+    point.plate_z,
+    point.pitch_name
+  ].map(value => String(value ?? '')).join('|')
 }
 
 function rowsFrom(value: unknown) {
@@ -996,6 +1023,14 @@ function directionClass(direction: string) {
 }
 
 .poster-analysis-board :deep(.data-table-wrap) {
+  border: 0;
+  border-top: 3px solid rgba(245, 161, 43, 0.88);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.poster-analysis-board :deep(.stuff-card) {
   border: 0;
   border-top: 3px solid rgba(245, 161, 43, 0.88);
   border-radius: 0;

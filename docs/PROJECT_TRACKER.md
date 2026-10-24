@@ -1,6 +1,6 @@
 # Petehub Project Tracker
 
-Updated: 2026-10-07
+Updated: 2026-10-24
 
 This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 
@@ -9,7 +9,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 - Status: **done**
 - Progress: **100%** (10/10 slices)
 - Owner area: Batters
-- Updated: 2026-09-26
+- Updated: 2026-10-20
 - Summary: Period comparison, tracking, timing, team research and lineup simulation are complete; hitter period comparison now shares the pitcher workflow shell and transfer-stint controls.
 - Next step: Only reopen when a verified exact timing, stance, roster or injury source becomes available.
 
@@ -17,7 +17,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 |---|---|---|---|
 | Slice 0 · Baseline | done | Checkpoint and contracts | Checkpoint recorded |
 | Slice 1 · Period skeleton | done | Batter A/B period comparison | API and UI verified |
-| Slice 2 · Core metrics | done | Production, quality and discipline metrics | Targeted tests passed |
+| Slice 2 · Core metrics | done | Production, quality and discipline metrics | Targeted tests passed; public Production/Contact and Stuff Attack boards now share actual/PR display, fixed-population tie-aware percentiles and favorable-direction heat maps |
 | Slice 3 · Dual heatmaps | done | Bat Speed and Choice comparison | Shared scale verified |
 | Slice 4 · Bat Tracking | done | Tracked-swing period metrics | Denominators verified |
 | Slice 5 · Timing | done | Miss Distance and timing references | Source gates verified |
@@ -31,7 +31,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 - Status: **in_progress**
 - Progress: **92%** (12/13 slices)
 - Owner area: Pitchers
-- Updated: 2026-10-08
+- Updated: 2026-10-20
 - Summary: Basic, Stuff+, Location+ and Pitching+ leaderboards with pitch-type splits, headshots and automated snapshots remain frozen. A separate Plus v2 research track has been opened for a second cleaning pass, tracking-era taxonomy, position-player pitching exclusion and out-of-time validation; formal scores are not replaced by the research track.
 - Next step: Keep Stuff+ v2/v5 research-only; allow Location+ v2 to enter shadow monitoring, then proceed to Slice 11 historical backfill/release gate only after prospective checks.
 
@@ -41,7 +41,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 | Slice 1 · Navigation | done | Four leaderboard views | Routes verified |
 | Slice 2 · Stuff+ | done | Overall and pitch-type Stuff+ | Pete model contract verified |
 | Slice 3 · Location+ | done | Overall and pitch-type Location+ | Aggregate contract verified |
-| Slice 4 · Presentation | done | Filters, links and headshots | Typecheck passed |
+| Slice 4 · Presentation | done | Filters, links, headshots and comparable leaderboard display | Public Basic/Stuff+/Location+/Pitching+/Stamina+, Team Performance, Location+ Field and Pitching+ Lab now expose actual/PR display and favorable-direction heat maps with fixed reference populations; Nuxt typecheck passed |
 | Slice 5 · Pitching+ export | done | Independent complete-pitch inference | Strict cutoff displayed |
 | Slice 6 · Automation | done | Daily atomic snapshots | Targeted tests passed |
 | Slice 7 · Plus v2 data cleaning and tracking-era audit | done | Re-audit position-player pitching, pitch taxonomy, tracking-field missingness and pre/post-Trackman comparability without changing formal scores | Generated data/derived/plus_v2_slice7.json; year-by-year exclusion counts, canonical map, Slider/Sweeper support, arm-angle/movement coverage and unmapped rows recorded |
@@ -73,7 +73,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 - Status: **done**
 - Progress: **100%** (7/7 slices)
 - Owner area: Data operations
-- Updated: 2026-10-14
+- Updated: 2026-10-15
 - Summary: The daily pipeline is split into independently retryable stages with atomic state, per-step heartbeat, durable UTF-8 stdout/stderr, dead-PID recovery and an America/New_York source-date cap. Legacy derived exports are retired/read-only, manual reliever references are content-versioned, and the admin page exposes the latest scheduler state.
 - Next step: Observe the next full scheduled run. Use --retry-failed or one or more --step arguments when a source or downstream stage fails; do not rerun completed heavy stages unnecessarily.
 
@@ -90,17 +90,18 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 ## Project & Slice Tracker
 
 - Status: **done**
-- Progress: **100%** (3/3 slices)
+- Progress: **100%** (4/4 slices)
 - Owner area: Per aspera ad astra
-- Updated: 2026-09-26
-- Summary: A tracked source of truth, progress bars, slice history and handoff-ready Markdown are available in Data operations.
-- Next step: Update this tracker whenever a future request creates, completes, blocks or defers a slice.
+- Updated: 2026-10-24
+- Summary: The JSON tracker remains the sole status authority; generated tracker Markdown and a concise marker-delimited handoff progress table now sync together, while detailed history and superseded migration workboards live under docs/archive.
+- Next step: For future material work, update the project document and tracker JSON, run the sync script, then keep only recent cross-project changes or live blockers in the concise handoff.
 
 | Slice | Status | Deliverable | Verification |
 |---|---|---|---|
 | Slice 0 · Tracker contract | done | Versioned JSON source of truth | Schema loads |
 | Slice 1 · Admin progress UI | done | Project cards and slice progress | Typecheck passed |
 | Slice 2 · Handoff output | done | Generated Markdown and copy action | Markdown generated |
+| Slice 3 · Documentation lifecycle | done | Concise active handoff, automated current-progress block, categorized canonical documents and archived stale status/workboard/history | Tracker sync and targeted tests passed; UTF-8 and Markdown references audited |
 
 ## Stamina+ Research & Lab
 
@@ -140,7 +141,7 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 
 ## Pitcher Metric Explorer
 
-- Status: **active**
+- Status: **done**
 - Progress: **33%** (1/3 slices)
 - Owner area: Pitcher Lab
 - Updated: 2026-10-04
@@ -195,22 +196,68 @@ This file is generated from `docs/PROJECT_TRACKER.json`. Update the JSON first.
 
 ## Player Archetypes & Pitch Strategy
 
-- Status: **planned**
-- Progress: **0%** (0/7 slices)
+- Status: **done**
+- Progress: **100%** (12/12 slices)
 - Owner area: Player and sequence research
-- Updated: 2026-10-14
-- Summary: Build season-specific, reliability-aware multi-label pitcher and batter profiles, then use strictly chronological beliefs to study pitch selection. Descriptive full-season tags must remain separate from pre-pitch posterior beliefs and counterfactual strategy claims.
-- Next step: Begin with Slice 0: inventory the retired 3×3 Stamina archetype artifact and audit 2021–2026 pitcher/batter feature coverage, denominators, role splits and point-in-time availability before choosing a clustering model.
+- Updated: 2026-10-19
+- Summary: Season-specific player tags, chronological pitch-selection beliefs, realized location, prior weapon/threat state, supported value and mixed-strategy diagnostics are complete through Slice 6D. Entropy is available as a threshold-labeled aggregate research diagnostic, while threshold sensitivity blocks an entropy leaderboard and the absence of a batter response model blocks true exploitability, individual strategy advice and causal claims. All human-readable Slice reports, catcher-calling prework and the Arm Angle supporting repair are consolidated in docs/PLAYER_ARCHETYPES_PITCH_STRATEGY.md; builders now update machine-readable artifacts without recreating per-Slice Markdown files.
+- Next step: Treat Slice 0–6D as complete. If this research continues, either expose only the aggregate threshold-labeled entropy/supported-deviation panels in the Lab, or open a separately scoped batter-response slice with chronological validation before using true exploitability language.
 
 | Slice | Status | Deliverable | Verification |
 |---|---|---|---|
-| Slice 0 · Prior-work and feature coverage audit | planned | Inventory the old per-start 3×3 Stuff/Location grid and define season-player feature contracts for pitchers and batters | Pending: year/role/player coverage, minimum support, missingness, scale direction and point-in-time availability tables |
-| Slice 1 · Season feature warehouse | planned | One immutable pitcher-season table and one batter-season table with repertoire, shape, command, discipline, contact and platoon dimensions | Pending: unique player-season keys, no outcome/feature denominator mixing, role and handedness normalization, sample-size reliability |
-| Slice 2 · Multi-label archetype challenger | planned | Compare interpretable rule tags with soft clustering or mixture memberships; publish three to four supported tags rather than one forced identity | Pending: bootstrap assignment stability, cluster support, silhouette/separation diagnostics, representative-player review and null tags for weak support |
-| Slice 3 · Cross-year stability and transitions | planned | Measure which tags persist, change with role/team/arsenal, or reflect one-season noise | Pending: adjacent-year overlap, transition matrix, traded-player continuity, rookie/cold-start coverage and uncertainty |
-| Slice 4 · Pitch-decision state warehouse | planned | Chronological pre-pitch state with count, base/out, score, platoon, prior pitch/outcome, pitcher/batter tags, catcher and available arsenal | Pending: no future leakage, plate-appearance boundaries, action support and state sparsity audit |
-| Slice 5 · Bayesian belief updating | planned | Hierarchical priors from archetypes with pitcher/batter-specific posterior updates from earlier observations only | Pending: posterior calibration, log loss/Brier versus static and player-only baselines, cold-start behavior and chronological replay |
-| Slice 6 · Strategy rationality and game-theory lab | planned | Compare observed mixed pitch strategies with supported expected-value and entropy/exploitability diagnostics without labeling unobserved alternatives as facts | Pending: propensity/off-policy sensitivity, overlap gates, uncertainty intervals, held-out season validation and explicit research-only release decision |
+| Slice 0 · Prior-work and feature coverage audit | done | Inventory the old per-start 3×3 Stuff/Location grid and define season-player feature contracts for pitchers and batters | Audited 4,284,184 regular-season pitches and 1,099,489 PA across 2021–2026. Old 3×3 has 4,836 unique starts/375 pitchers but 95.7% of starts fall in Average Location cells, so it is retired as player identity. Raw pitch/release/location features support all six years; per-pitch Stuff+ is complete only in 2023–2026 (2021 37.1%, 2022 0%); batter swing-shape is supported from 2024, partial in 2023. Artifact, readable report, denominator/time-availability contracts and 2 dedicated tests passed. |
+| Slice 1 · Season feature warehouse | done | One immutable pitcher-season table and one batter-season table with repertoire, shape, command, discipline, contact and platoon dimensions | Built versioned 2021–2026 Parquets with 6,564 unique pitcher-season-role rows (4,891 eligible) and 4,384 unique batter-season rows (2,775 eligible); duplicate keys 0/0. Raw numerators and denominators, empirical-Bayes rates, qualified-reference year×role×throwing-hand or year×bat-side z-scores, sample reliability, SP/RP hybrid rows, 1,382 opener-like appearances, position-player pitching and pure-pitcher batting exclusions are retained. Season Plus and per-pitch Plus remain separate; no imputation, tags or same-season pre-pitch use. SHA-256 fingerprints and 3 dedicated tests passed. |
+| Slice 2 · Multi-label archetype challenger | done | Compare interpretable rule tags with soft clustering or mixture memberships; publish three to four supported tags rather than one forced identity | Rule prototypes and role-separated Gaussian mixtures were compared across 10 cohorts/dimensions with k=2–5 BIC selection, minimum cluster support and 30 player-cluster bootstraps. Outputs contain 26,256 pitcher tag rows and 17,536 batter tag rows; eligible tagged entities average 3.39/3.43 published tags. SP arsenal failed the model-level silhouette/stability gate and remains null; 951 eligible batter swing-shape rows remain unavailable rather than imputed. Three dedicated tests passed. |
+| Slice 2A · Transparent arsenal and Arm Slot tags | done | Add exact-pitch arsenal depth, concentration, primary-pair and handed Arm Slot tags without forcing another learned cluster | Official 2026 Arm Angle backfill added 184,493 exact-key values and raised coverage from 73.580% to 99.327% while preserving all 716,544 pitch rows; all 832 eligible 2026 pitcher-role rows now exceed 70% Arm Angle coverage. Slice 2A emits 26,256 unique entity-dimension rows: arsenal depth/concentration support all 4,891 eligible rows, primary pair and Arm Slot support 4,873. Paul Sewald resolves to Two-Pitch RP/FF-ST Primary Pair/RHP Sidearm, Seth Lugo to Versatile SP with 7.04 effective pitches, Trey Yesavage to RHP Overhand and Chris Sale to LHP Sidearm. |
+| Slice 3 · Cross-year stability, transitions and tag balance | done | Measure which tags persist, change with role/team/arsenal, or reflect one-season noise; publish a sortable player tag roster and year-by-role tag distribution tables | Generated 10,948 unique player-season-role roster rows, 883 distribution rows and 4,011 transition cells from 29,541 adjacent-season tag pairs. Arm Slot retains 81.2%, Arsenal Depth 69.0%, Command 69.9% and exact Primary Pair 52.1%; the latter remains monitor. Boundary changes affect 0.5–6.0% of Arsenal Depth rows and about 13% of Arm Slot rows at ±2 degrees. SP learned Arsenal remains research-only and is excluded from the roster. Pitcher and Batter Tag Labs expose dimension-aware 3–4 tag rosters, distribution filters, sample reliability, headshots and personal-page links through a non-admin read endpoint. After safely replaying a WAL left by a dead daily-update process, all 246 backend tests, UTF-8 and Nuxt typecheck passed. |
+| Slice 4 · Pitch-decision state warehouse | done | Chronological pre-pitch state with count, base/out, score, platoon, prior pitch/outcome, pitcher/batter tags, catcher, available arsenal and supported catcher/pair/H2H priors | Built player_archetype_slice4_decision_states_v1 with 4,268,301 regular-season pitch decisions across 2021–2026. Source-row reconciliation, unique decision keys, PA-safe previous-pitch boundaries, nonnegative prior counts, prior-map totals and prior-season tag-year checks all pass with zero errors. The warehouse separates target action and observed post-decision labels, exposes strictly prior pitcher/catcher/pair/H2H maps plus backoff/support levels, and carries 2022–2026 prior-season pitcher/batter tag coverage of 76.18–77.70%/80.53–84.23%. Fifteen relevant tests passed. |
+| Slice 5 · Bayesian belief updating | done | Hierarchical priors from archetypes with pitcher/batter-specific posterior updates from earlier observations only | Built player_archetype_slice5_belief_update_v1 with a frozen 2021–2024 train, 2025 first-half calibration/second-half validation and untouched 2026 test. The 710,253-row deterministic training sample fits converged 58/172-feature regularized context/tag models without player IDs or post-decision features. On 2026, prior tags improve log loss from 0.922221 to 0.902987; pitcher-only updating reaches 0.847472 and the selected hierarchical update reaches 0.846456, Brier 0.518562, Top-1 57.963%, Top-2 89.682%, macro recall 48.618% and ECE 1.100%. Catcher weight shrinks to 0; pitcher-catcher and H2H weights are 0.1. Conditional exact-pitch output reaches log loss 1.499513, Top-1 40.591% and Top-2 66.861%. Cold-start groups remain scored and rows below 100 are withheld from metric claims. Model, 713,853-row prediction Parquet, SHA-256 contract, report and four dedicated tests are complete. |
+| Slice 5A · Observed location and Meatball proxy | done | Add batter-relative horizontal/vertical location cells and a Savant-compatible middle-middle miss proxy without leaking post-pitch location into the frozen choice model | Generated 713,853 unique 2026 pitch rows with 100% Statcast zone, coordinate and batter-zone normalization coverage. Meatball% uses zone 5 first and coordinate middle thirds only as fallback: 51,138 pitches, 7.164%. Middle-Middle reconciles exactly to the Meatball numerator; the Yamamoto-McCann home-run pitch remains Inside-Middle/zone 11 rather than being labeled a miss from its result. Slice 5 was not retrained, true target miss remains unsupported; 14 targeted and all 261 backend tests passed. |
+| Slice 6A · Pitcher Weapon State | done | Build exact-pitch pregame baselines and strictly lagged same-outing Stuff+/Location+ readiness for every supported pitch candidate | Generated 3,910,760 candidate rows across all 713,853 2026 decisions and exactly one chosen row per decision. Candidate Stuff+/Location+ state coverage is 100%; future-count, duplicate and chosen-target mismatch audits are zero. The Yamamoto–McCann case shows the four-seam state below baseline while the chosen sinker remained available; observed target scores stay post-pitch only. |
+| Slice 6B · Batter Threat Surface | done | Estimate reliability-aware Hunt+, Contact+ and Damage+ by batter, pitcher hand, count tier, pitch family and batter-relative location with league fallback | Generated 231,105 rows from 2021–2025 only: 230,785 batter cells and 320 league fallback cells, with zero null metrics or time-scope errors. Among 2026 chosen pitches, 67.31% map to high-support batter contexts, 14.79% limited, 8.06% sparse and 9.84% league fallback. Twelve targeted and all 265 backend tests passed. |
+| Slice 6C · Supported strategy value | done | Apply overlap and propensity gates before comparing observed strategy value or supported alternatives | Built a pre-pitch HistGradientBoosting value challenger with 2025 first-half development, 2025 second-half validation and untouched 2026 evaluation. All 3,910,760 candidate rows across 713,853 decisions score successfully; at the 2.5% propensity, 20-pitch weapon and 30-pitch threat gates, 582,185 decisions (81.56%) have at least two supported choices and 556,315 observed choices (77.93%) are supported. Validation RMSE is 0.228234 versus 0.228442 threat-only; 2026 RMSE is 0.224830 versus 0.225102. Effective sample size remains 347,572–507,134 across default-threshold weight caps, but the 90% single-pitch half-width is 0.294617 runs and zero alternative intervals separate, so only aggregate observational analysis is released; individual best-pitch and causal claims remain disabled. Four dedicated Slice 6C tests and eight Slice 6A–6C targeted tests passed. |
+| Slice 6D · Game-theory diagnostics | done | Report mixed-strategy entropy, supported deviations and exploitability sensitivity without factual-best-pitch claims | Verified the frozen Slice 6C SHA-256 before generating 2,303,246 unique threshold×decision diagnostics over four propensity gates. At the 2.5% gate, 582,185 decisions average normalized entropy 0.8571, 3.497 effective supported choices, 46.83% top-choice probability and 0.003188 runs/pitch one-sided supported deviation; zero deviations exceed the 0.294617-run single-pitch noise floor. Pitcher-cluster 90% intervals cover Overall, role, count-tier and platoon panels with no default subgroup below 500 decisions. Entropy changes by as much as 0.1051 across gates in BatterAhead counts, so an entropy leaderboard is withheld; deviation sensitivity is smaller at 0.000634. The Yamamoto–McCann case has 0.9271 normalized entropy and 5.265 effective choices, while the modeled SI-versus-FS gap remains far inside uncertainty. Aggregate diagnostics are research-ready, but true exploitability, individual advice and causal/factual-best claims remain disabled. Four dedicated Slice 6D tests and eight Slice 6C–6D targeted tests passed. |
+
+## Pitch Strategy Simulation & Game Theory
+
+- Status: **planned**
+- Progress: **0%** (0/8 slices)
+- Owner area: Sequence and game-theory research
+- Updated: 2026-10-16
+- Summary: Keep this research line focused on pre-pitch beliefs, pitch and location choices, batter response, sequential simulation and supported game-theory diagnostics. Catcher identity may be tested only as a predictive covariate; catcher rankings and descriptive catcher value belong to the separate catcher project.
+- Next step: Begin Slice 0 by freezing the completed Slice 4–6D inputs, chronology, pre/post-pitch boundary and replay vocabulary before adding any new location, transition or simulation model.
+
+| Slice | Status | Deliverable | Verification |
+|---|---|---|---|
+| Slice 0 · Frozen decision and replay contract | planned | Freeze source fingerprints, chronological boundaries, supported-choice rules, pre/post-pitch fields and user-facing claim language inherited from completed Slice 4–6D | Pending: artifact hash checks, one-row-per-decision reconciliation, leakage tests, probability-mass checks, representative game and cold-start cases |
+| Slice 1 · Game Decision Replay | planned | Game, inning, plate-appearance and pitch navigation showing pre-pitch family beliefs and supported alternatives before revealing actual pitch, observed location, quality and result | Pending: pre/post reveal boundary, actual-event matching, uncertainty display, loading behavior, API/schema tests and Nuxt typecheck |
+| Slice 2 · Pre-pitch location distribution | planned | Estimate a calibrated batter-relative location-cell distribution conditional on pitch type and information available before release, without pretending to know an exact target | Pending: chronological development/validation/test split, grid reconciliation, log loss/Brier/calibration, cold-start fallback and no realized-location leakage |
+| Slice 3 · Pitch outcome transition model | planned | Estimate calibrated Ball, Called Strike, Whiff, Foul and In-Play transitions from pitch choice, probabilistic location and pre-pitch context | Pending: mutually exclusive event contract, probability-mass conservation, chronological validation, class calibration, count-state reconciliation and frequency-baseline comparison |
+| Slice 4 · Next-pitch and plate-appearance simulator | planned | Monte Carlo simulation that samples pitch type, location cell and outcome while updating the count, base/out and prior-pitch state | Pending: frozen component versions, deterministic seeds, impossible-state tests, replay calibration and distribution-level rather than exact-event claims |
+| Slice 5 · Batter belief and response challenger | planned | Test whether batters measurably update swing, take and attack behavior after sequences and strategy changes | Pending: chronological comparison against static batter behavior, minimum repeated-context support, calibration, clustered uncertainty and a stop gate when incremental response signal is absent |
+| Slice 6 · Best-response and exploitability audit | planned | Estimate supported best-response and exploitability ranges only if Slice 5 establishes a detectable batter-response layer | Pending: overlap gates, end-to-end uncertainty, threshold sensitivity, no single-pitch advice and an explicit no-release result when effects do not clear noise |
+| Slice 7 · Research Lab integration and release decision | planned | Integrate approved replay, simulation and aggregate strategy panels while preserving limitations and versioned inputs | Pending: representative case review, version display, reproducibility, API/schema tests, UTF-8, Nuxt typecheck and explicit leaderboard/no-leaderboard decision |
+
+## Catcher Descriptive Metrics
+
+- Status: **done**
+- Progress: **100%** (9/9 slices)
+- Owner area: Catcher research
+- Updated: 2026-10-20
+- Summary: Slices 0–8 are complete. The reconciled 2021–2026 ledger, c/t rates, cSaveRun reliability, Petehub xERA v1 and Statcast FRV defense axis are released with explicit association limits. Slice 7 passed an authenticated browser audit of the Catcher Leaderboard, Paired Duo and Catcher Lab. Slice 8 adds a 2026-only research bridge from frozen Slice 6C/6D strategy artifacts: 713,853 observed decisions, 582,185 multi-choice supported decisions and 111 catcher contexts. Entropy and supported deviation remain separate diagnostics; no catcher strategy leaderboard, composite score, true exploitability, caller attribution or individual best-pitch advice is released. Park factor remains an unapplied candidate pending source and formula confirmation.
+- Next step: No required catcher-descriptive Slice remains. Reopen only if the park-factor source URL/methodology and an exposure-weighted adjustment formula are frozen, or if a separately validated batter-response layer changes the strategy release boundary; otherwise preserve the current no-composite, no-causal-value contract.
+
+| Slice | Status | Deliverable | Verification |
+|---|---|---|---|
+| Slice 0 · Legacy source and definition audit | done | Inventory old cERA/tERA work, source provenance, official field semantics, innings-as-outs handling, multi-team rows and reproducibility gaps | Audited the 103-row static workbook and legacy code/xERA artifacts; documented every field and reconstructable identity, found invalid TOT innings 324.3/252.4 and unsupported SRA/SR annualization, measured 2021–2026 catcher/event coverage over 4,284,184 pitches, verified six official-feed accounting probes, froze dual current/responsibility run fields plus Slice 1 keys/source priority/reconciliation tests, and passed 2 targeted tests |
+| Slice 1 · Canonical pitcher-catcher ledger | done | Create immutable catcher-season and pitcher-catcher rows containing outs, BF, R, ER, HR, BB, HBP and K with explicit numerators and denominators | All 2021–2026 annual jobs completed and the closeout audit passed over 14,577 games, 125,429 official pitcher-game controls and 16,955 ledger rows. Outs/BF/R/ER/HR/BB/IBB/HBP/K, pitcher-team totals and team totals have zero differences in every season; PA/out/ledger keys, responsibility accounting and catcher cross-check hard gates pass. Zero-out appearances remain explicit rather than fabricated. |
+| Slice 2 · Raw descriptive catcher rates | done | Calculate cERA, cRA9 and cFIP directly from the canonical ledger with qualification and display rules | The v3 artifacts cover all six seasons and 660 catcher-seasons. Independent closeout formulas reproduce cERA, cRA9 and cFIP within stored rounding tolerance; raw outs/BF/R/ER/HR/BB/HBP/K roll up exactly from 15,633 season pairs, qualification is exactly outs >= 900, and no small-sample annualization exists. |
+| Slice 3 · Pitcher-mix expected baselines | done | Calculate innings-weighted tERA, tRA9 and tFIP from each handled pitcher's complete official season rates, with leave-catcher-out results retained as separate sensitivity diagnostics | All six seasons passed: complete pitcher-season outs/R/ER reproduce official controls, every positive-out pair has complete ERA/RA9/FIP, catcher pair weights sum to 1, and independently weighted tERA/tRA9/tFIP reproduce the published rows. Zero-out pairs retain unavailable rates and zero weight. LCO remains diagnostic only. Ranking-eligible counts for 2021–2026 are 60/59/63/56/57/57. |
+| Slice 4 · cSaveRun reliability | done | Publish cSaveRun = (tRA9-cRA9)×outs/27 and cSaveRun/IP as observed pitcher-mix associations with transparent reliability and no small-sample annualization | Completed catcher_descriptive_slice4_reliability_v1 across all 660 catcher-seasons. Among 216 adjacent-season pairs with at least 900 outs in both years, pooled cSaveRun/IP Pearson is -0.047704, Spearman -0.051107, sign retention 49.54%, mean absolute change 0.035447 runs/IP and the 2,000-sample catcher-cluster Pearson 95% CI is [-0.208721, 0.115507], so the cross-year release gate fails. Removing the highest-outs pitcher leaves at least 600 outs for all 352 eligible rows; 316 stay within 0.02 runs/IP and 36 are sensitive. Final tiers are 352 limited and 308 unavailable, with zero supported and no annualization. API, Leaderboard and Lab expose reliability and dominant-pair fields; dedicated and regression tests plus Nuxt typecheck pass. |
+| Slice 5 · xERA audit and cxERA/txERA estimation | done | Petehub xERA v1, cxERA/txERA and expected-runs-versus-mix from one PA-additive expected-run numerator with explicit target provenance and fallbacks | Completed catcher_descriptive_slice5_xera_v1. The 5,159-row fingerprinted target has no duplicate season-pitcher keys and exact outs for every ledger match. The frozen two-feature model was trained on 2021–2023 and passed 2024 selection plus 2025 final test (MAE 0.159641, RMSE 0.217482, bias 0.046996, Pearson 0.976579); 2026 external diagnostic MAE is 0.152668. Source-supported BF is 99.710262%. All release gates pass, PA/pitcher/pair/catcher/team totals reconcile at 774,146 outs, 1,097,198 BF and 121,756.737247976 expected runs, and pair outs/BF match the canonical ledger exactly. Legacy cubic and future-trained OLS remain diagnostic only. API, Leaderboard, Lab and Paired Duo integration, targeted tests and Nuxt typecheck pass. |
+| Slice 6 · Defense and park adjustment source gate | done | Publish fingerprinted 2021–2026 Statcast FRV with Throwing/Blocking/Framing as the primary season-catcher defense axis while retaining DRS only for comparison; normalize later park-factor candidates without silently applying them | Completed catcher_descriptive_slice6_defense_v2. The 731-row Statcast FRV and DRS exports match exactly on season-team-catcher keys, source innings and FRV; all 731 canonical keys reconcile after documented team-code normalization. The artifact contains 660 catcher-seasons and 352 ranking-eligible rows. FRV/Throwing/Blocking/Framing are complete; 494 rows have exact displayed component sums and 237 differ by only plus or minus one due to rounded components, so source FRV remains authoritative. Canonical outs remain the denominator and the two 2024 Danny Jansen team exceptions remain audit-only. FRV is labeled runs above source-defined average, is not added to cSaveRun or x Runs versus Mix, and is not allocated to Paired Duo. On 2026-10-20, 59 user-provided three-year park-factor rows were normalized into 177 unique season-team rows in data/park_factors_2021_2026.csv; 2024-2026 Athletics remains unavailable, source URL is unavailable, and no catcher metric was adjusted. |
+| Slice 7 · Catcher dashboard and release audit | done | Present c/t metrics, pitcher-pair detail, qualification, reliability, xERA and the separate defense axis without merging descriptive differences into an unsupported causal catcher grade | Authenticated headless-Chrome release audit passed against the running private site: the 2026 leaderboard loaded all 57 eligible rows; sorting, search, bounded minimum-IP selection, actual/PR and Heat map controls worked; Paired Duo defaulted to 40 IP; catcher and pitcher links, catcher expansion and reverse pitcher-to-catcher expansion worked; Catcher Lab pitcher links worked; narrow-view document overflow stayed contained in table scrollers; and zero severe browser-console errors occurred. The audit found and fixed a real deep-link defect where ?year=2026 was ignored in favor of 2021. Targeted backend tests, UTF-8 and Nuxt typecheck pass. |
+| Slice 8 · Optional strategy bridge | done | Place validated catcher descriptive results beside frozen model-consistent calling and predictability measures as separate axes | Built catcher_descriptive_slice8_strategy_bridge_v1 from fingerprint-verified frozen Slice 6C/6D artifacts without refitting. It reconciles 713,853 total 2026 decisions and 582,185 default-threshold supported-set decisions across 111 catcher contexts; 103 have at least 500 supported decisions and 8 are limited. Catcher Lab shows normalized entropy, effective supported choices, top-choice probability, supported deviation, model-minimum-choice rate, support coverage and four count-tier splits. Other seasons return unavailable without imputation. Release gates explicitly disable a leaderboard, composite score, individual pitch advice and causal caller attribution; no deviation clears the single-pitch noise floor. Dedicated and regression tests, authenticated browser audit, UTF-8 and Nuxt typecheck pass. |
 
 ## Player Health & Availability Research
 

@@ -2,27 +2,35 @@
   <section class="panel-grid">
     <div class="stuff-columns wide-panel">
       <div class="stuff-column">
-        <DataTable title="Movement Summary" :table="movement?.tables.movement_summary" />
-        <DataTable title="Movement vs League" :table="movement?.tables.movement_league_comparison" />
-        <DataTable title="Run Values by Pitch Type" :table="movement?.tables.run_values_by_pitch_type" />
+        <StuffArsenalTable
+          :payload="props.stuffScore"
+          title="Season Stuff+ by Pitch"
+          :loading="props.stuffScoreLoading"
+        />
+        <details class="stuff-details">
+          <summary>
+            <span><b>Movement and outcome tables</b><small>Movement summary, league comparison, and run values</small></span>
+            <strong><i class="when-closed">Expand</i><i class="when-open">Collapse</i></strong>
+          </summary>
+          <div class="stuff-detail-tables">
+            <DataTable title="Movement Summary" :table="withoutPitchOutTable(movement?.tables.movement_summary)" />
+            <DataTable title="Movement vs League" :table="withoutPitchOutTable(movement?.tables.movement_league_comparison)" />
+            <DataTable title="Run Values by Pitch Type" :table="withoutPitchOutTable(movement?.tables.run_values_by_pitch_type)" />
+          </div>
+        </details>
       </div>
       <div class="stuff-column">
         <MovementChart
           v-model:mode="movementChartMode"
-          :scatter-rows="movementScatterRows"
-          :summary-rows="movementUsageRows"
-          :league-rows="movement?.tables.movement_league_comparison.rows || []"
+          :scatter-rows="withoutPitchOutRows(movementScatterRows)"
+          :summary-rows="withoutPitchOutRows(movementUsageRows)"
+          :league-rows="withoutPitchOutRows(movement?.tables.movement_league_comparison.rows || [])"
           allow-stuff-color
           :stuff-color-loading="loading"
           :pitcher-hand="pitcherHand"
           :selected-key="selectedPitchKey"
           @request-stuff-colors="emit('load-pitch-stuff')"
           @select-point="selectMovementPitch"
-        />
-        <StuffArsenalTable
-          :payload="props.stuffScore"
-          title="Season Stuff+ by Pitch"
-          :loading="props.stuffScoreLoading"
         />
         <section class="consistency-panel">
           <header>
@@ -40,7 +48,7 @@
           <p>SD describes pitch-to-pitch variation; SE describes uncertainty around the estimated mean.</p>
           <DataTable
             title="Stuff+ variability by pitch type"
-            :table="props.stuffScore?.tables.stuff_variability"
+            :table="withoutPitchOutTable(props.stuffScore?.tables.stuff_variability)"
             :max-rows="14"
           />
         </section>
@@ -51,7 +59,7 @@
         <HeatmapBlendControl v-model="heatmapBlend" />
         <StrikeZoneScatter
           class="location-main"
-          :points="pitchLocationPoints"
+          :points="withoutPitchOutRows(pitchLocationPoints)"
           :total-pitches="filteredTotal"
           :selected-key="selectedPitchKey"
           :heatmap-blend="heatmapBlend"
@@ -130,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AnalysisResponse, MetricItem } from '~/types/api'
+import type { AnalysisResponse, MetricItem, TablePayload } from '~/types/api'
 
 type SelectOption = { value: string; label: string }
 
@@ -190,6 +198,20 @@ function metricValue(key: string) {
   return typeof value === 'number' ? value.toFixed(1) : String(value)
 }
 
+function isPitchOut(row: Record<string, unknown>) {
+  const value = String(row.pitch_name ?? row.Pitch ?? row.pitch ?? row.pitch_type ?? '').trim().toLowerCase()
+  return value === 'pitch out' || value === 'pitchout' || value === 'po'
+}
+
+function withoutPitchOutRows(rows: Array<Record<string, unknown>>) {
+  return rows.filter(row => !isPitchOut(row))
+}
+
+function withoutPitchOutTable(table: TablePayload | undefined) {
+  if (!table) return table
+  return { ...table, rows: withoutPitchOutRows(table.rows) }
+}
+
 function selectMovementPitch(point: Record<string, unknown>) {
   selectedPitch.value = point
   const videoUrl = String(point.video_url || '').trim()
@@ -206,6 +228,37 @@ function selectMovementPitch(point: Record<string, unknown>) {
   border-radius: var(--radius-md);
   background: var(--color-surface);
 }
+
+.stuff-details {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.stuff-details > summary {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.stuff-details > summary::-webkit-details-marker { display: none; }
+.stuff-details > summary span { display: grid; gap: 4px; }
+.stuff-details > summary b { color: var(--color-foreground); }
+.stuff-details > summary small { color: var(--color-muted-text); }
+.stuff-details > summary strong { color: var(--color-primary); font-size: 12px; text-transform: uppercase; }
+.stuff-details > summary strong i { font-style: normal; }
+.stuff-details > summary .when-open { display: none; }
+.stuff-details[open] > summary .when-open { display: inline; }
+.stuff-details[open] > summary .when-closed { display: none; }
+.stuff-details[open] > summary { border-bottom: 1px solid var(--color-border); }
+.stuff-detail-tables { display: grid; gap: 12px; padding: 12px; }
 
 .consistency-panel > header {
   display: flex;

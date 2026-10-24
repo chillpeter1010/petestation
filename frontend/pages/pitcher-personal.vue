@@ -81,6 +81,7 @@
       :pitcher-name="selectedName"
       :year="filters.year"
       :pitcher-id="filters.pitcherId"
+      @select-pitch="openSelectedPitch"
     />
 
     <PitcherStuffTab
@@ -125,11 +126,13 @@
 
     <PitcherSequenceTab
       v-else-if="activeTab === 'sequence'"
+      v-model:year="sequenceYear"
       v-model:stand="sequenceStand"
       v-model:count="sequenceCount"
       v-model:pitch="sequencePitch"
       v-model:pitch-result="sequencePitchResult"
       v-model:catcher="sequenceCatcher"
+      v-model:use-custom-dates="sequenceUseCustomDates"
       v-model:start-date="sequenceStartDate"
       v-model:end-date="sequenceEndDate"
       v-model:condition-count="sequenceConditionCount"
@@ -137,10 +140,11 @@
       v-model:detail-count="sequenceDetailCount"
       v-model:followup-pitch="sequenceFollowupPitch"
       :sequence="sequence"
-      :stand-options="standOptions"
+      :year-options="sequenceYearOptions"
+      :stand-options="sequenceStandOptions"
       :count-options="countOptions"
       :exact-count-options="exactCountOptions"
-      :pitch-options="pitchOptions"
+      :pitch-options="sequencePitchOptions"
       :pitch-result-options="pitchResultOptions"
       :catcher-options="catcherOptions"
       :loading="sequenceLoading"
@@ -284,11 +288,13 @@ const stuffCatcher = ref('All')
 const stuffLoading = ref(false)
 const stuffScoreLoading = ref(false)
 const pitchStuffColorsEnabled = ref(false)
+const sequenceYear = ref(filters.year)
 const sequenceStand = ref('All')
 const sequenceCount = ref('All')
 const sequencePitch = ref('All')
 const sequencePitchResult = ref('All')
 const sequenceCatcher = ref('All')
+const sequenceUseCustomDates = ref(false)
 const sequenceStartDate = ref('')
 const sequenceEndDate = ref('')
 const sequenceConditionCount = ref('0-0')
@@ -307,12 +313,19 @@ let personalRequestVersion = 0
 const dataRefreshToken = ref(0)
 let outingReportRequestVersion = 0
 let staminaRequestVersion = 0
+let sequenceRequestVersion = 0
 let personalSelectionKey = ''
 let suppressNextRotationReload = false
 let suppressNextOutingReportReload = false
 const tabLoadKeys: Partial<Record<TabKey, string>> = {}
 
 const standOptions = ['All', 'L', 'R']
+const sequenceStandOptions = [
+  { value: 'All', label: 'All Batters' },
+  { value: 'L', label: 'vs LHB' },
+  { value: 'R', label: 'vs RHB' }
+]
+const sequenceYearOptions = computed(() => [...new Set([filters.year, 2026, 2025, 2024, 2023, 2022, 2021])].sort((a, b) => b - a))
 const countOptions = ['All', '0-0', '0-1', '0-2', '1-0', '1-1', '1-2', '2-0', '2-1', '2-2', '3-0', '3-1', '3-2', 'Pitcher Ahead', 'Hitter Ahead', 'Two Strikes']
 const exactCountOptions = ['0-0', '0-1', '0-2', '1-0', '1-1', '1-2', '2-0', '2-1', '2-2', '3-0', '3-1', '3-2']
 const pitchResultOptions = [
@@ -380,11 +393,11 @@ const activeWarnings = computed(() => {
 })
 
 const pitchDistribution = computed(() => {
-  return toRows(pitches.value?.charts.pitch_type_distribution)
+  return toRows(pitches.value?.charts.pitch_type_distribution).filter(row => !isPitchOutRow(row))
 })
 
 const pitchLocationPoints = computed(() => {
-  return toRows(movement.value?.charts.pitch_location_scatter)
+  return toRows(movement.value?.charts.pitch_location_scatter).filter(row => !isPitchOutRow(row))
 })
 
 const selectedStuffPitchKey = computed(() => selectedStuffPitch.value ? pitchPointKey(selectedStuffPitch.value) : null)
@@ -444,6 +457,13 @@ const pitchTotal = computed(() => {
 
 const pitchOptions = computed(() => {
   const options = pitchDistribution.value.map((row) => String(row.pitch || row.Pitch || '')).filter(Boolean)
+  return ['All', ...new Set(options)]
+})
+
+const sequencePitchOptions = computed(() => {
+  const options = toRows(sequence.value?.charts.pitch_location_scatter)
+    .map((row) => String(row.pitch_name || row.Pitch || ''))
+    .filter(Boolean)
   return ['All', ...new Set(options)]
 })
 
@@ -687,9 +707,7 @@ watch(
         timing.value = null
         if (showStuffTiming.value) await reloadTiming()
       } else if (tab === 'sequence') {
-        sequenceLoading.value = true
-        const result = await api.personalSequence(buildSequenceParams())
-        if (filters.year === year && filters.pitcherId === pitcherId) sequence.value = result
+        await reloadSequence()
       } else if (tab === 'discipline') {
         disciplineLoading.value = true
         const result = await api.personalDiscipline(buildDisciplineParams())
@@ -715,8 +733,6 @@ watch(
       if (tab === 'movement') {
         stuffLoading.value = false
         stuffScoreLoading.value = false
-      } else if (tab === 'sequence') {
-        sequenceLoading.value = false
       } else if (tab === 'discipline') {
         disciplineLoading.value = false
       }
@@ -855,11 +871,13 @@ watch(
 
 watch(
   () => [
+    sequenceYear.value,
     sequenceStand.value,
     sequenceCount.value,
     sequencePitch.value,
     sequencePitchResult.value,
     sequenceCatcher.value,
+    sequenceUseCustomDates.value,
     sequenceStartDate.value,
     sequenceEndDate.value,
     sequenceConditionCount.value,
@@ -871,6 +889,17 @@ watch(
     if (filters.pitcherId) {
       void reloadSequence()
     }
+  }
+)
+
+watch(
+  () => [filters.year, filters.pitcherId] as const,
+  ([year, pitcherId], [previousYear, previousPitcherId]) => {
+    if (year === previousYear && pitcherId === previousPitcherId) return
+    sequenceYear.value = Number(year)
+    sequenceUseCustomDates.value = false
+    sequenceStartDate.value = ''
+    sequenceEndDate.value = ''
   }
 )
 
@@ -1102,6 +1131,7 @@ function normalizedPitchName(value: string) {
 
 function clearResponses() {
   outingReportRequestVersion += 1
+  sequenceRequestVersion += 1
   suppressNextRotationReload = false
   suppressNextOutingReportReload = false
   overview.value = null
@@ -1146,15 +1176,15 @@ function buildMovementParams() {
 
 function buildSequenceParams() {
   return {
-    year: filters.year,
+    year: sequenceYear.value,
     pitcherId: Number(filters.pitcherId),
     stand: toFilterParam(sequenceStand.value),
     count: toFilterParam(sequenceCount.value),
     pitch: toFilterParam(sequencePitch.value),
     pitchResult: toFilterParam(sequencePitchResult.value),
     catcher: toFilterParam(sequenceCatcher.value),
-    startDate: sequenceStartDate.value || undefined,
-    endDate: sequenceEndDate.value || undefined,
+    startDate: sequenceUseCustomDates.value ? sequenceStartDate.value || undefined : undefined,
+    endDate: sequenceUseCustomDates.value ? sequenceEndDate.value || undefined : undefined,
     conditionCount: sequenceConditionCount.value,
     conditionPitch: toFilterParam(sequenceConditionPitch.value),
     detailCount: sequenceDetailCount.value,
@@ -1199,13 +1229,20 @@ async function reloadSequence() {
     return
   }
 
+  const requestVersion = ++sequenceRequestVersion
+  const pitcherId = Number(filters.pitcherId)
+  const params = buildSequenceParams()
   sequenceLoading.value = true
   try {
-    sequence.value = await api.personalSequence(buildSequenceParams())
+    const result = await api.personalSequence(params)
+    if (requestVersion !== sequenceRequestVersion || Number(filters.pitcherId) !== pitcherId) return
+    sequence.value = result
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Sequence request failed'
+    if (requestVersion === sequenceRequestVersion) {
+      errorMessage.value = error instanceof Error ? error.message : 'Sequence request failed'
+    }
   } finally {
-    sequenceLoading.value = false
+    if (requestVersion === sequenceRequestVersion) sequenceLoading.value = false
   }
 }
 
@@ -1285,6 +1322,18 @@ function pitchPointKey(point: Record<string, unknown>) {
     point.plate_z,
     point.pitch_name
   ].map((value) => String(value ?? '')).join('|')
+}
+
+function isPitchOutRow(row: Record<string, unknown>) {
+  const value = String(row.pitch_name ?? row.Pitch ?? row.pitch ?? row.pitch_type ?? '').trim().toLowerCase()
+  return value === 'pitch out' || value === 'pitchout' || value === 'po'
+}
+
+function openSelectedPitch(pitch: Record<string, unknown>) {
+  selectedStuffPitch.value = pitch
+  if (selectedPitchVideoUrl.value) {
+    videoModalOpen.value = true
+  }
 }
 
 function syncSelectedRotationGame() {

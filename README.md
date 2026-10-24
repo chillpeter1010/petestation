@@ -30,8 +30,9 @@ docs/           migration notes, workflow docs, API contracts
 design-system/  design notes and page-level UI specifications
 data/           local-only data directory; see data/README.md
 ARCHITECTURE.md high-level architecture notes
-WORKBOARD.md    migration and agent workboard
 ```
+
+Current project and Slice status lives in `docs/PROJECT_TRACKER.json`. New conversations should start from `docs/NEXT_CHAT_HANDOFF.md`; historical workboards and long-form progress are kept under `docs/archive/` and are not current authorities.
 
 ## Local Setup
 

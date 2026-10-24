@@ -63,6 +63,11 @@
       </label>
     </section>
 
+    <section class="display-panel" aria-label="Leaderboard display options">
+      <p>{{ percentileNote }}</p>
+      <LeaderboardDisplayControls v-model:display-mode="displayMode" v-model:heatmap-enabled="heatmapEnabled" />
+    </section>
+
     <aside v-if="activeView !== 'basic' && activeView !== 'stamina' && qualityData" class="data-note">
       <span>Data through {{ qualityData.data_as_of || 'unknown' }}</span>
       <span :class="['status-chip', qualityData.cache_status]">{{ qualityData.cache_status }}</span>
@@ -96,6 +101,7 @@
       link-column="Pitcher"
       headshot-column="Pitcher"
       :link-to="leaderboardPlayerLink"
+      :cell-style-for="leaderboardCellStyle"
     />
     <DataTable
       v-else-if="activeView === 'stamina'"
@@ -106,6 +112,7 @@
       link-column="Name"
       headshot-column="Name"
       :link-to="leaderboardPlayerLink"
+      :cell-style-for="leaderboardCellStyle"
       expandable
       row-key="player_id"
       @row-toggle="toggleStaminaDetail"
@@ -132,12 +139,14 @@
       link-column="Name"
       headshot-column="Name"
       :link-to="leaderboardPlayerLink"
+      :cell-style-for="leaderboardCellStyle"
     />
   </main>
 </template>
 
 <script setup lang="ts">
 import type { PitcherLeaderboardRow, StaminaCommandRetentionResponse, StaminaGameStatesResponse, StaminaPhysicalStabilityResponse, TablePayload } from '~/types/api'
+import { buildLeaderboardPercentiles, leaderboardHeatStyle, leaderboardMetricValue, type LeaderboardDisplayMode } from '~/utils/leaderboardDisplay'
 
 const api = useApi()
 
@@ -151,6 +160,8 @@ const includeRelievers = ref(true)
 const team = ref('All')
 const searchText = ref('')
 const minimumIp = ref(0)
+const displayMode = ref<LeaderboardDisplayMode>('actual')
+const heatmapEnabled = ref(true)
 const staminaDetails = ref<Record<number, StaminaGameStatesResponse>>({})
 const staminaPhysicalDetails = ref<Record<number, StaminaPhysicalStabilityResponse>>({})
 const staminaCommandDetails = ref<Record<number, StaminaCommandRetentionResponse>>({})
@@ -224,14 +235,14 @@ const { data: leaderboardRows, pending, error } = await useAsyncData(
 )
 
 const { data: qualityData, pending: qualityPending, error: qualityError } = await useAsyncData(
-  () => `leaderboard-quality-${year.value}-${selectedRole.value}-${team.value}-${minimumIp.value}`,
+  () => `leaderboard-quality-${year.value}-${selectedRole.value}-${minimumIp.value}`,
   () => api.stuffLeaderboard({
     year: year.value,
     role: selectedRole.value,
-    team: team.value,
+    team: 'All',
     minimumIp: minimumIp.value
   }),
-  { watch: [year, selectedRole, team, minimumIp] }
+  { watch: [year, selectedRole, minimumIp] }
 )
 
 const { data: staminaData, pending: staminaPending, error: staminaError } = await useAsyncData(
@@ -261,6 +272,59 @@ const filteredPitchers = computed(() => {
   })
 })
 
+const basicMetrics = {
+  'Avg GS': { value: (row: PitcherLeaderboardRow) => row.avg_game_score, direction: 'higher' as const },
+  ERA: { value: (row: PitcherLeaderboardRow) => row.era, direction: 'lower' as const },
+  WHIP: { value: (row: PitcherLeaderboardRow) => row.whip, direction: 'lower' as const },
+  'K%': { value: (row: PitcherLeaderboardRow) => row.strikeout_rate, direction: 'higher' as const },
+  'BB%': { value: (row: PitcherLeaderboardRow) => row.walk_rate, direction: 'lower' as const }
+}
+const basicPercentiles = computed(() => buildLeaderboardPercentiles(
+  leaderboardRows.value.filter(row => Number(row.ip || 0) >= 20),
+  row => String(row.player_id),
+  basicMetrics
+))
+const plusMetrics = computed(() => {
+  const metric = activeMetric.value
+  return Object.fromEntries([
+    ...pitchCodes.map(code => [`${metric.prefix} ${code}`, { value: (row: NonNullable<typeof qualityData.value>['rows'][number]) => row[metric.pitchScoresKey]?.[code], direction: 'higher' as const }]),
+    [metric.label, { value: (row: NonNullable<typeof qualityData.value>['rows'][number]) => row[metric.scoreKey], direction: 'higher' as const }]
+  ])
+})
+const plusPercentiles = computed(() => buildLeaderboardPercentiles(
+  qualityData.value?.rows || [],
+  row => String(row.player_id),
+  plusMetrics.value
+))
+const staminaMetrics = {
+  'Stamina+': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.stamina_plus, direction: 'higher' as const },
+  'Q-Stm+': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.quality_game_stamina_plus, direction: 'higher' as const },
+  'Phy-Stb+': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.physical_stability_plus, direction: 'higher' as const },
+  'Cmd-Ret+': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.command_retention_plus, direction: 'higher' as const },
+  'Stm+ FB': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.fastball_stamina_plus, direction: 'higher' as const },
+  'Stm+ BRK': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.breaking_stamina_plus, direction: 'higher' as const },
+  'Stm+ OFF': { value: (row: NonNullable<typeof staminaData.value>['rows'][number]) => row.offspeed_stamina_plus, direction: 'higher' as const }
+}
+const staminaPercentiles = computed(() => buildLeaderboardPercentiles(
+  staminaData.value?.rows || [],
+  row => String(row.pitcher_id),
+  staminaMetrics
+))
+const percentileNote = computed(() => {
+  if (activeView.value === 'basic') return 'PR母體：同年度、同角色且至少 20 IP。只排名 Avg GS、ERA、WHIP、K% 與 BB%；隊伍與搜尋不改變母體。'
+  if (activeView.value === 'stamina') return 'PR母體：2026 正式 Stamina+ 合格榜單。樣本、可靠度與不確定區間不排名；隊伍、搜尋與顯示門檻不改變母體。'
+  return `PR母體：同年度、同角色且至少 ${minimumIp.value} IP 的完整聯盟 ${activeMetric.value.label} 回傳；隊伍與搜尋只影響顯示。所有 Plus 欄位皆為越高越佳。`
+})
+
+function shownMetric(percentiles: Record<string, number>, label: string, actual: string | number | null | undefined) {
+  return leaderboardMetricValue(displayMode.value, percentiles, label, actual)
+}
+
+function leaderboardCellStyle(row: Record<string, unknown>, column: { key: string; label: string }) {
+  const percentile = (row.__percentiles as Record<string, number> | undefined)?.[column.key]
+  return leaderboardHeatStyle(percentile, heatmapEnabled.value)
+}
+
 const leaderboardTable = computed<TablePayload>(() => ({
   columns: [
     { key: 'Pitcher', label: 'Pitcher' },
@@ -283,29 +347,33 @@ const leaderboardTable = computed<TablePayload>(() => ({
     { key: 'K%', label: 'K%' },
     { key: 'BB%', label: 'BB%' }
   ],
-  rows: filteredPitchers.value.map((pitcher) => ({
-    Pitcher: pitcher.name,
-    Team: pitcher.team || '-',
-    Role: pitcher.role,
-    G: pitcher.games,
-    GS: pitcher.starts,
-    'Avg GS': formatNumber(pitcher.avg_game_score, 1),
-    GR: pitcher.relief_games,
-    IP: formatNumber(pitcher.ip, 1),
-    ERA: formatNumber(pitcher.era, 2),
-    WHIP: formatNumber(pitcher.whip, 3),
-    H: formatInteger(pitcher.hits),
-    R: formatInteger(pitcher.runs),
-    ER: formatInteger(pitcher.earned_runs),
-    BB: formatInteger(pitcher.walks),
-    SO: formatInteger(pitcher.strikeouts),
-    HR: formatInteger(pitcher.home_runs),
-    NP: formatInteger(pitcher.pitches),
-    'K%': formatPercent(pitcher.strikeout_rate),
-    'BB%': formatPercent(pitcher.walk_rate),
-    player_id: pitcher.player_id,
-    _role: playerRole(pitcher)
-  }))
+  rows: filteredPitchers.value.map((pitcher) => {
+    const percentiles = basicPercentiles.value.get(String(pitcher.player_id)) || {}
+    return {
+      Pitcher: pitcher.name,
+      Team: pitcher.team || '-',
+      Role: pitcher.role,
+      G: pitcher.games,
+      GS: pitcher.starts,
+      'Avg GS': shownMetric(percentiles, 'Avg GS', formatNumber(pitcher.avg_game_score, 1)),
+      GR: pitcher.relief_games,
+      IP: formatNumber(pitcher.ip, 1),
+      ERA: shownMetric(percentiles, 'ERA', formatNumber(pitcher.era, 2)),
+      WHIP: shownMetric(percentiles, 'WHIP', formatNumber(pitcher.whip, 3)),
+      H: formatInteger(pitcher.hits),
+      R: formatInteger(pitcher.runs),
+      ER: formatInteger(pitcher.earned_runs),
+      BB: formatInteger(pitcher.walks),
+      SO: formatInteger(pitcher.strikeouts),
+      HR: formatInteger(pitcher.home_runs),
+      NP: formatInteger(pitcher.pitches),
+      'K%': shownMetric(percentiles, 'K%', formatPercent(pitcher.strikeout_rate)),
+      'BB%': shownMetric(percentiles, 'BB%', formatPercent(pitcher.walk_rate)),
+      player_id: pitcher.player_id,
+      _role: playerRole(pitcher),
+      __percentiles: percentiles
+    }
+  })
 }))
 
 const plusTable = computed<TablePayload>(() => {
@@ -322,19 +390,22 @@ const plusTable = computed<TablePayload>(() => {
     rows: (qualityData.value?.rows || [])
       .filter((pitcher) => {
         const query = searchText.value.toLowerCase()
-        return !query || [pitcher.name, pitcher.team, pitcher.role].some((value) => String(value).toLowerCase().includes(query))
+        const teamMatch = team.value === 'All' || pitcher.team === team.value
+        return teamMatch && (!query || [pitcher.name, pitcher.team, pitcher.role].some((value) => String(value).toLowerCase().includes(query)))
       })
       .map((pitcher, index) => {
         const pitchScores = pitcher[metric.pitchScoresKey] || {}
+        const percentiles = plusPercentiles.value.get(String(pitcher.player_id)) || {}
         return {
           '#': index + 1,
           Name: pitcher.name,
           Team: pitcher.team || '-',
           IP: pitcher.ip,
-          ...Object.fromEntries(pitchCodes.map((code) => [`${metric.prefix} ${code}`, pitchScores[code]])),
-          [metric.label]: pitcher[metric.scoreKey],
+          ...Object.fromEntries(pitchCodes.map((code) => [`${metric.prefix} ${code}`, shownMetric(percentiles, `${metric.prefix} ${code}`, pitchScores[code])])),
+          [metric.label]: shownMetric(percentiles, metric.label, pitcher[metric.scoreKey]),
           player_id: pitcher.player_id,
-          _role: pitcher.role
+          _role: pitcher.role,
+          __percentiles: percentiles
         }
       })
   }
@@ -375,6 +446,7 @@ const staminaTable = computed<TablePayload>(() => ({
     })
     .map((pitcher) => {
       const basic = basicPitcherLookup.value.get(Number(pitcher.pitcher_id))
+      const percentiles = staminaPercentiles.value.get(String(pitcher.pitcher_id)) || {}
       return {
         '#': pitcher.rank,
         Name: displayPitcherName(pitcher.name),
@@ -383,18 +455,19 @@ const staminaTable = computed<TablePayload>(() => ({
         'Stm G': pitcher.eligible_games,
         IP: formatNumber(basic?.ip ?? null, 1),
         Rel: formatNumber(pitcher.reliability, 3),
-        'Stamina+': formatNumber(pitcher.stamina_plus, 1),
-        'Q-Stm+': formatNumber(pitcher.quality_game_stamina_plus ?? null, 1),
-        'Phy-Stb+': formatNumber(pitcher.physical_stability_plus ?? null, 1),
-        'Cmd-Ret+': formatNumber(pitcher.command_retention_plus ?? null, 1),
+        'Stamina+': shownMetric(percentiles, 'Stamina+', formatNumber(pitcher.stamina_plus, 1)),
+        'Q-Stm+': shownMetric(percentiles, 'Q-Stm+', formatNumber(pitcher.quality_game_stamina_plus ?? null, 1)),
+        'Phy-Stb+': shownMetric(percentiles, 'Phy-Stb+', formatNumber(pitcher.physical_stability_plus ?? null, 1)),
+        'Cmd-Ret+': shownMetric(percentiles, 'Cmd-Ret+', formatNumber(pitcher.command_retention_plus ?? null, 1)),
         'Avg Pit': formatNumber(pitcher.average_pitches, 1),
-        'Stm+ FB': formatNumber(pitcher.fastball_stamina_plus ?? null, 1),
-        'Stm+ BRK': formatNumber(pitcher.breaking_stamina_plus ?? null, 1),
-        'Stm+ OFF': formatNumber(pitcher.offspeed_stamina_plus ?? null, 1),
+        'Stm+ FB': shownMetric(percentiles, 'Stm+ FB', formatNumber(pitcher.fastball_stamina_plus ?? null, 1)),
+        'Stm+ BRK': shownMetric(percentiles, 'Stm+ BRK', formatNumber(pitcher.breaking_stamina_plus ?? null, 1)),
+        'Stm+ OFF': shownMetric(percentiles, 'Stm+ OFF', formatNumber(pitcher.offspeed_stamina_plus ?? null, 1)),
         '80% Low': formatNumber(pitcher.ci_low, 1),
         '80% High': formatNumber(pitcher.ci_high, 1),
         player_id: pitcher.pitcher_id,
-        _role: 'SP'
+        _role: 'SP',
+        __percentiles: percentiles
       }
     })
 }))
@@ -579,6 +652,7 @@ function metricLabel(metric: string) {
 }
 
 .filter-panel,
+.display-panel,
 .leaderboard-table,
 .view-tabs,
 .data-note {
@@ -594,6 +668,23 @@ function metricLabel(metric: string) {
   gap: 14px;
   margin-top: 18px;
   padding: 16px;
+}
+
+.display-panel {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 12px;
+  padding: 12px 14px;
+}
+
+.display-panel p {
+  max-width: 820px;
+  margin: 0;
+  color: var(--color-muted-text);
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .view-tabs {
@@ -847,6 +938,7 @@ td {
 }
 
 @media (max-width: 860px) {
+  .display-panel { align-items: flex-start; flex-direction: column; }
   .column-guide summary {
     align-items: flex-start;
     flex-direction: column;

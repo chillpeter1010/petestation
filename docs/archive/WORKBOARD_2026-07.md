@@ -1,4 +1,6 @@
-# Workboard
+# Workboard（2026-07 封存）
+
+> 文件狀態：**SUPERSEDED / ARCHIVE**。這是 Pitcher Personal migration 的歷史執行紀錄，不是目前工作佇列。現行專案／Slice 狀態只看 `docs/PROJECT_TRACKER.json`。
 
 ## Current Slice
 

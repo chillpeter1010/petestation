@@ -1,5 +1,7 @@
 # Pitcher Personal Migration
 
+> 文件狀態：**HISTORICAL REFERENCE**。此表保存早期endpoint拆分結果；現行欄位與行為以`API_CONTRACTS.md`、目前程式碼與測試為準，專案進度以`PROJECT_TRACKER.json`為準。
+
 ## Migrated API Surface
 
 The Streamlit `26_pitcher_personal.py` page has been split into these backend endpoints:

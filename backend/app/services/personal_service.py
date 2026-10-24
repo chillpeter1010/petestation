@@ -2382,6 +2382,9 @@ def get_personal_outings(year: int, pitcher_id: int) -> AnalysisResponse:
 
 def get_personal_outing_report(year: int, pitcher_id: int, game_pk: int) -> AnalysisResponse:
     pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id)
+    # Keep outing pitch cards on the same enriched contract as Pitch Location
+    # Scatter: cached Stuff+/Location+, Stamina context, and video identifiers.
+    pitch_df = load_pitch_stamina_state(pitch_df, year=year, data_dir=settings.data_dir)
     if pitch_df.empty or "game_pk" not in pitch_df.columns:
         game_df = pd.DataFrame()
     else:
@@ -2428,11 +2431,11 @@ def get_personal_outing_report(year: int, pitcher_id: int, game_pk: int) -> Anal
         charts={
             "pitch_mix": build_pitch_type_distribution(game_df),
             "season_pitch_mix": build_pitch_type_distribution(pitch_df),
-            "pitch_location_scatter": build_pitch_location_scatter(game_df),
+            "pitch_location_scatter": build_pitch_location_scatter(scored_game_df),
             "movement_scatter": build_movement_scatter_rows(scored_game_df),
             "pitcher_hand": pitcher_hand,
             "usage_by_stand": build_outing_usage_by_stand(game_df),
-            "location_by_stand": build_outing_location_by_stand(game_df),
+            "location_by_stand": build_outing_location_by_stand(scored_game_df),
             "primary_fastball": build_primary_fastball_profile(game_df),
         },
         tables={

@@ -360,6 +360,23 @@ Artifacts are rebuilt with `python backend/scripts/build_performance_state.py`; 
 
 The build uses 2025 to freeze empirical-Bayes personal baselines, thresholds, calendar-gap policy and all Slice 3A–6 parameters, then evaluates on 2026. Because Slice 3A was introduced after inspecting the first 2026 diagnostic, 2026 is labeled `test_with_documented_slice3a_amendment`, not pristine untouched validation; 2027 is reserved for prospective untouched validation. RE24 is pitcher-positive, WPA uses the shared plate-appearance boundary contract, and WPA/LI uses a shrunk 2025 empirical leverage table. `game_score_proxy` is explicitly a starter-only Bill James-style proxy, not an official earned-run Game Score.
 
+### Catcher Descriptive Metrics
+
+- `GET /api/catchers/descriptive/leaderboard?year&minimum_outs=0`
+- `GET /api/catchers/descriptive/pairs/leaderboard?year&minimum_outs=120`
+- `GET /api/catchers/descriptive/{catcher_id}?year`
+- `GET /api/catchers/descriptive/{catcher_id}/strategy-bridge?year`
+
+The catcher leaderboard returns the reconciled Slice 2–3 raw counts, cERA/cRA9/cFIP, full-season pitcher-mix tERA/tRA9/tFIP, cSaveRun and cSaveRun/IP. When the Slice 4 artifact is present, catcher rows also include adjacent-season support, a transparent reliability tier, and a dominant-pair sensitivity calculation that removes the pitcher with the most paired outs before recomputing cRA9, tRA9 and cSaveRun/IP. A stable dominant-pair row does not override a failed project-wide cross-year gate. Values remain observed associations and are never annualized or labeled causal catcher value.
+
+When the passed Slice 5 artifact is present, catcher rows additionally expose `cxera`, `txera`, `x_runs_vs_mix`, `x_runs_vs_mix_per_ip`, `xera_expected_runs`, `pitcher_mix_expected_runs`, `xera_source_coverage_pct`, `xera_status` and `xera_model_version`. The response-level `xera` object carries model/contract versions, definitions, source coverage, evaluation periods and warnings. Petehub xERA v1 is a chronological additive calibration of Statcast `estimated_woba_using_speedangle`; it is explicitly not MLB's published xERA formula. `x_runs_vs_mix = pitcher_mix_expected_runs - xera_expected_runs` is an expected-results association, not causal catcher value.
+
+When the passed Slice 6 v2 artifact is present, catcher-season rows additionally expose primary product fields `frv`, `throwing`, `blocking`, `framing`, `frv_status`, `source_innings_status`, `source_display_ip` and `outs_difference`. FRV and each component are source-provided runs above the source-defined average, not absolute runs prevented. Rounded components may differ from total FRV by one run, so `frv` remains authoritative and components must not be added to it again. Comparison-only DRS fields remain in the API/artifact for audit compatibility but are not displayed as the primary defense scale. The response-level `defense` object carries both source fingerprints, cross-source and canonical reconciliation, definitions, cross-year/overlap diagnostics and release-gate status. Canonical catcher outs remain the qualification denominator; source innings are audit-only. Defense fields are not added to cSaveRun or x Runs vs Mix. Park factor is `deferred_by_user`, so no park-adjusted metric is returned.
+
+Paired Duo remains one season-pitcher-catcher row and defaults to 120 outs (40 IP). Its pair cSaveRun uses the pair's shared outs; Slice 4 reliability tiers apply only to the aggregate catcher-season view. Slice 5 adds pair `xera`, full-season `pitcher_xera`, `x_runs_vs_mix`, `x_runs_vs_mix_per_ip`, `xera_expected_runs`, source coverage and status. All expected-run numerators and outs reconcile through PA → pitcher → pair → catcher → team. Slice 6 FRV and components are intentionally unavailable on Paired Duo because a season-catcher total cannot be defensibly allocated to individual pitchers.
+
+The Slice 8 strategy-bridge endpoint is research-only and currently returns model-consistent diagnostics for 2026. A row contains the on-field catcher context, total decisions, supported-set and chosen-support coverage, normalized entropy, effective supported choices, top-choice probability, supported deviation, model-minimum-choice rate, noise-floor count and count-tier splits. For 2021–2025 it returns `status=unavailable` and does not impute. The endpoint never returns a rank, composite catcher score, factual best pitch, true exploitability or causal caller attribution.
+
 ### Batter Comparison
 
 - `GET /api/batter-comparison/period/options`

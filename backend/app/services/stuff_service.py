@@ -542,6 +542,10 @@ def get_stuff_score(
     pitch_df = load_pitcher_cached_season(year=year, pitcher_id=pitcher_id, data_dir=settings.data_dir, start_date=start_date, end_date=end_date)
     if game_pk is not None and not pitch_df.empty and "game_pk" in pitch_df.columns:
         pitch_df = pitch_df.loc[pd.to_numeric(pitch_df["game_pk"], errors="coerce").eq(int(game_pk))].copy()
+    # Pitch outs are administrative pitches, not arsenal shapes.  Exclude them
+    # before every score, total, coverage, and variability calculation rather
+    # than merely hiding their row in the frontend.
+    pitch_df = filter_display_pitch_rows(normalize_pitch_names(pitch_df)).reset_index(drop=True)
     feature_df = build_stuff_feature_table(pitch_df)
     score_df, model_status, generated_at = build_stuff_lab_scores(
         pitch_df, year, pitcher_id, game_pk=game_pk, scoring_mode=scoring_mode
@@ -614,7 +618,8 @@ def build_stuff_variability_table(pitch_df: pd.DataFrame, pitch_stuff: pd.Series
     if pitch_df.empty or pitch_stuff.notna().sum() == 0:
         return pd.DataFrame(columns=columns)
 
-    working = normalize_pitch_names(pitch_df.copy())
+    working = filter_display_pitch_rows(normalize_pitch_names(pitch_df.copy()))
+    pitch_stuff = pd.to_numeric(pitch_stuff, errors="coerce").reindex(working.index)
     raw_names = working.get("pitch_name", pd.Series("Unknown", index=working.index))
     working["Pitch"] = raw_names.map(display_pitch_name)
     working["pitch_stuff_plus"] = pd.to_numeric(pitch_stuff, errors="coerce")

@@ -10,8 +10,13 @@ router = APIRouter()
 
 
 @router.get("")
-def read_games(year: int = 2026, date: str | None = None, limit: int = 100) -> dict[str, Any]:
-    return list_games(year=year, date=date, limit=limit)
+def read_games(
+    year: int = 2026,
+    date: str | None = None,
+    team: str | None = None,
+    limit: int = 100,
+) -> dict[str, Any]:
+    return list_games(year=year, date=date, team=team, limit=limit)
 
 
 @router.get("/{game_pk}")

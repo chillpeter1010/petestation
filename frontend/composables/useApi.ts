@@ -1,5 +1,9 @@
 import type {
   AnalysisResponse,
+  CatcherDescriptiveDetailResponse,
+  CatcherDescriptiveLeaderboardResponse,
+  CatcherDescriptivePairedDuoResponse,
+  CatcherStrategyBridgeResponse,
   BatterLeaderboardRow,
   BatterOption,
   BatterPeriodDateRange,
@@ -309,6 +313,26 @@ export function useApi() {
       }),
     catcherOptions: (year: number) =>
       $fetch<OptionItem[]>(`${apiBase}/catchers/options`, { query: { year } }),
+    catcherDescriptiveLeaderboard: (params: { year: number; minimumOuts?: number }) =>
+      $fetch<CatcherDescriptiveLeaderboardResponse>(`${apiBase}/catchers/descriptive/leaderboard`, {
+        query: { year: params.year, minimum_outs: params.minimumOuts || 0, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    catcherDescriptivePairedDuoLeaderboard: (params: { year: number; minimumOuts?: number }) =>
+      $fetch<CatcherDescriptivePairedDuoResponse>(`${apiBase}/catchers/descriptive/pairs/leaderboard`, {
+        query: { year: params.year, minimum_outs: params.minimumOuts ?? 120, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    catcherDescriptiveDetail: (params: { year: number; catcherId: number }) =>
+      $fetch<CatcherDescriptiveDetailResponse>(`${apiBase}/catchers/descriptive/${params.catcherId}`, {
+        query: { year: params.year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
+    catcherDescriptiveStrategyBridge: (params: { year: number; catcherId: number }) =>
+      $fetch<CatcherStrategyBridgeResponse>(`${apiBase}/catchers/descriptive/${params.catcherId}/strategy-bridge`, {
+        query: { year: params.year, _ts: Date.now() },
+        cache: 'no-store'
+      }),
     catcherPitchers: (params: { year: number; catcherId: string }) =>
       $fetch<OptionItem[]>(`${apiBase}/catchers/pitchers`, {
         query: { year: params.year, catcher_id: params.catcherId }
@@ -724,11 +748,12 @@ export function useApi() {
           pitch_number: params.pitchNumber
         }
       }),
-    gamesList: (params: { year: number; date?: string; limit?: number }) =>
+    gamesList: (params: { year: number; date?: string; team?: string; limit?: number }) =>
       $fetch<Record<string, unknown>>(`${apiBase}/games`, {
         query: {
           year: params.year,
           date: params.date || undefined,
+          team: params.team || undefined,
           limit: params.limit || 100
         }
       }),
@@ -747,6 +772,11 @@ export function useApi() {
       }),
     projectTracker: () =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/project-tracker`),
+    playerArchetypeSlice3: (params: { year: number; population: 'pitcher' | 'batter'; role?: string }) =>
+      $fetch<Record<string, any>>(`${apiBase}/derived/player-archetypes/slice3`, {
+        query: { year: params.year, population: params.population, role: params.role || undefined, _ts: Date.now() },
+        cache: 'no-store'
+      }),
     pitcherDataStatus: (year: number) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/pitcher-data-status`, { query: { year } }),
     videoLookupStatus: (year: number) =>
@@ -790,6 +820,16 @@ export function useApi() {
       }),
     historicalPlusStatus: () =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/historical-plus-status`),
+    buildCatcherDescriptiveLedgerJob: (year: number) =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/catcher-descriptive-ledger`, {
+        method: 'POST',
+        query: { year }
+      }),
+    catcherDescriptiveLedgerStatus: () =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/catcher-descriptive-ledger-status`, {
+        query: { _ts: Date.now() },
+        cache: 'no-store'
+      }),
     adminJob: (jobId: string) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/jobs/${jobId}`)
   }

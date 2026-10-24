@@ -10,7 +10,7 @@ import pandas as pd
 from app.api.schemas.common import AnalysisResponse, MetricItem, ResponseMeta
 from app.core.config import settings
 from app.repositories.pitch_repository import load_pitcher_cached_season
-from app.services.discipline_service import SWING_EVENTS, red_strike_zone_mask
+from app.services.discipline_service import SWING_EVENTS, meatball_zone_mask, red_strike_zone_mask
 from app.services.personal_service import dataframe_to_table_payload, display_pitch_name, normalize_pitch_names
 
 
@@ -29,6 +29,7 @@ ORIGINAL_HEART_BOX = (
 LOCATION_FEATURE_COLUMNS = [
     "zone_pct",
     "heart_pct",
+    "meatball_pct",
     "shadow_pct",
     "chase_pct",
     "waste_pct",
@@ -81,6 +82,7 @@ def add_location_features(data: pd.DataFrame) -> pd.DataFrame:
     working["_plate_z"] = plate_z
     working["_in_zone"] = in_zone
     working["_heart_zone"] = heart.where(has_coordinates, zone_num.isin([1, 3, 5, 7, 9])).fillna(False)
+    working["_meatball_zone"] = meatball_zone_mask(working)
     working["_shadow_zone"] = shadow.where(has_coordinates, zone_num.isin([11, 12, 13, 14])).fillna(False)
     working["_chase_zone"] = chase.where(has_coordinates, zone_num.isin([15, 16, 17, 18, 19])).fillna(False)
     working["_waste_zone"] = waste.fillna(False)
@@ -112,6 +114,7 @@ def _location_row(group: pd.DataFrame, label: str) -> dict[str, Any]:
         "pitches": pitch_count,
         "zone_pct": _rate(group["_in_zone"]) if pitch_count else np.nan,
         "heart_pct": _rate(group["_heart_zone"]) if pitch_count else np.nan,
+        "meatball_pct": _rate(group["_meatball_zone"]) if pitch_count else np.nan,
         "shadow_pct": _rate(group["_shadow_zone"]) if pitch_count else np.nan,
         "chase_pct": _rate(group["_chase_zone"]) if pitch_count else np.nan,
         "waste_pct": _rate(group["_waste_zone"]) if pitch_count else np.nan,

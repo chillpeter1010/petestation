@@ -120,6 +120,7 @@ const props = withDefaults(defineProps<{
   heatmapBlend?: number
   compact?: boolean
   pointScale?: number
+  pointOpacity?: number
   plotScale?: number
   heatmapMode?: 'density' | 'bat-speed' | 'choice'
   heatmapMetricDomain?: [number, number] | null
@@ -272,7 +273,11 @@ const heatmapBlend = computed(() => {
   return Number.isFinite(blend) ? Math.max(0, Math.min(1, blend)) : 0
 })
 
-const pointOpacity = computed(() => Math.max(0.16, 0.78 * (1 - heatmapBlend.value * 0.78)))
+const pointOpacity = computed(() => {
+  const requested = Number(props.pointOpacity)
+  if (Number.isFinite(requested)) return Math.max(0.08, Math.min(1, requested))
+  return Math.max(0.16, 0.78 * (1 - heatmapBlend.value * 0.78))
+})
 
 const heatmapCells = computed(() => {
   if (heatmapBlend.value <= 0 || plottedPoints.value.length < 8) {

@@ -1,0 +1,2 @@
+<template><main class="tag-page"><ComparisonPageHeader eyebrow="Batter Lab · Archetypes" title="Batter Tag Lab" description="Browse season-level decision, contact, damage, and swing-shape profiles with explicit sample support and cross-year validation." back-to="/batters/lab" back-label="Batter Lab" /><PlayerTagLab population="batter" /></main></template>
+<style scoped>.tag-page { display: grid; gap: 18px; }</style>

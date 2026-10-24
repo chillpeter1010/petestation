@@ -69,10 +69,13 @@ const props = withDefaults(defineProps<{
   largeText: false
 })
 
-const rows = computed(() => props.payload?.tables.stuff_scores?.rows || [])
+const rows = computed(() => (props.payload?.tables.stuff_scores?.rows || []).filter((row) => {
+  const pitch = String(row.Pitch ?? row.pitch_name ?? '').trim().toLowerCase()
+  return pitch !== 'pitch out' && pitch !== 'pitchout' && pitch !== 'po'
+}))
 const summary = computed(() => new Map((props.payload?.summary || []).map((metric) => [metric.key, metric.value])))
 const overallScore = computed(() => summary.value.get('stuff_plus'))
-const totalPitches = computed(() => Number(summary.value.get('source_pitches')) || rows.value.reduce((sum, row) => sum + (Number(row.pitches) || 0), 0))
+const totalPitches = computed(() => rows.value.reduce((sum, row) => sum + (Number(row.pitches) || 0), 0) || Number(summary.value.get('source_pitches')) || 0)
 const scoreSource = computed(() => String(rows.value[0]?.score_source || 'Shape proxy'))
 const showLocation = computed(() => props.locationRows.length > 0)
 const locationByPitch = computed(() => new Map(props.locationRows.map(row => [pitchKey(row.pitch_name), row.location_plus])))

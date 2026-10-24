@@ -1,5 +1,7 @@
 # Pitcher Personal Legacy Map
 
+> 文件狀態：**HISTORICAL REFERENCE**。用途是對照舊Streamlit頁面語意，不是目前產品狀態或工作佇列；現行API、UI與tracker優先。
+
 Source reviewed:
 
 - `C:\Users\郭睿承\Desktop\實習個案\abs2025\claude\pages\26_pitcher_personal.py`

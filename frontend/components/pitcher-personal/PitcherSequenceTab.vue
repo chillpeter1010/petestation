@@ -2,7 +2,13 @@
   <section class="panel-grid">
     <section class="stuff-filters wide-panel">
       <label>
-        Stand
+        Year
+        <select v-model="year">
+          <option v-for="option in yearOptions" :key="option" :value="option">{{ option }}</option>
+        </select>
+      </label>
+      <label>
+        Batter Side
         <CheckboxDropdown v-model="stand" :options="standOptions" />
       </label>
       <label>
@@ -21,16 +27,23 @@
         Paired Catcher
         <CheckboxDropdown v-model="catcher" :options="catcherOptions" />
       </label>
+      <label class="date-range-toggle">
+        Date Detail
+        <span class="date-range-toggle__control">
+          <input v-model="useCustomDates" type="checkbox">
+          Use date range
+        </span>
+      </label>
       <label>
         Start Date
-        <input v-model="startDate" type="date">
+        <input v-model="startDate" type="date" :min="`${year}-01-01`" :max="`${year}-12-31`" :disabled="!useCustomDates">
       </label>
       <label>
         End Date
-        <input v-model="endDate" type="date">
+        <input v-model="endDate" type="date" :min="`${year}-01-01`" :max="`${year}-12-31`" :disabled="!useCustomDates">
       </label>
-      <button class="clear-date-button" type="button" @click="clearDateRange">Clear Dates</button>
-      <span class="filter-status">{{ loading ? 'Updating Sequence' : `${filteredTotal || 0} filtered pitches` }}</span>
+      <button class="clear-date-button" type="button" @click="useFullSeason">Full Season</button>
+      <span class="filter-status">{{ loading ? 'Updating Sequence' : `${activeScope} · ${filteredTotal || 0} filtered pitches` }}</span>
     </section>
     <SummaryCards :metrics="snapshotMetrics" />
     <SequenceOutcomeTree
@@ -104,11 +117,13 @@ import type { AnalysisResponse, MetricItem } from '~/types/api'
 
 type SelectOption = { value: string; label: string }
 
+const year = defineModel<number>('year', { required: true })
 const stand = defineModel<string>('stand', { required: true })
 const count = defineModel<string>('count', { required: true })
 const pitch = defineModel<string>('pitch', { required: true })
 const pitchResult = defineModel<string>('pitchResult', { required: true })
 const catcher = defineModel<string>('catcher', { required: true })
+const useCustomDates = defineModel<boolean>('useCustomDates', { required: true })
 const startDate = defineModel<string>('startDate', { required: true })
 const endDate = defineModel<string>('endDate', { required: true })
 const conditionCount = defineModel<string>('conditionCount', { required: true })
@@ -118,7 +133,8 @@ const followupPitch = defineModel<string>('followupPitch', { required: true })
 
 const props = defineProps<{
   sequence: AnalysisResponse | null
-  standOptions: string[]
+  yearOptions: number[]
+  standOptions: SelectOption[]
   countOptions: string[]
   exactCountOptions: string[]
   pitchOptions: string[]
@@ -140,6 +156,14 @@ const sequencePitchRows = computed(() => {
   return Array.isArray(rows) ? rows.filter((row): row is Record<string, unknown> => Boolean(row) && typeof row === 'object' && !Array.isArray(row)) : []
 })
 
+const activeScope = computed(() => {
+  const standLabel = props.standOptions.find((option) => option.value === stand.value)?.label || stand.value
+  const dateLabel = useCustomDates.value && (startDate.value || endDate.value)
+    ? `${startDate.value || `${year.value}-01-01`} to ${endDate.value || `${year.value}-12-31`}`
+    : `${year.value} full season`
+  return `${dateLabel} · ${standLabel}`
+})
+
 function applyBranch(branch: { count: string; pitch: string }) {
   conditionCount.value = branch.count
   conditionPitch.value = branch.pitch
@@ -147,7 +171,8 @@ function applyBranch(branch: { count: string; pitch: string }) {
   followupPitch.value = branch.pitch
 }
 
-function clearDateRange() {
+function useFullSeason() {
+  useCustomDates.value = false
   startDate.value = ''
   endDate.value = ''
 }
@@ -168,5 +193,27 @@ function clearDateRange() {
 .clear-date-button:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
+}
+
+.date-range-toggle__control {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  background: var(--color-plot-bg);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 750;
+  text-transform: none;
+}
+
+.date-range-toggle__control input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--color-primary);
 }
 </style>

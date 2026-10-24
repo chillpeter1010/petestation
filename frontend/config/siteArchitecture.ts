@@ -26,6 +26,7 @@ export const siteGroups: SiteGroup[] = [
       { label: 'Home', path: '/', status: 'Live' },
       { label: 'Team dashboard', path: '/teams/AZ', status: 'Live' },
       { label: 'Games', path: '/games/today', status: 'Live' },
+      { label: 'Lab hub', path: '/lab', status: 'Lab' },
       { label: 'Data operations', path: '/admin/updates', status: 'Live' }
     ]
   },
@@ -48,7 +49,8 @@ export const siteGroups: SiteGroup[] = [
     nodes: [
       { label: 'Stuff lab', path: '/lab/stuff', status: 'Lab' },
       { label: 'Stuff calculator', path: '/lab/stuff-calculator', status: 'Lab' },
-      { label: 'Location lab', path: '/lab/location', status: 'Lab' }
+      { label: 'Location lab', path: '/lab/location', status: 'Lab' },
+      { label: 'Pitcher Tag Lab', path: '/lab/tags', status: 'Lab' }
     ]
   },
   {
@@ -61,8 +63,12 @@ export const siteGroups: SiteGroup[] = [
       { label: 'Batter leaderboard', path: '/batters/leaderboard', status: 'Live' },
       { label: 'Batter lab', path: '/batters/lab', status: 'Lab' },
       { label: 'Stuff Attack', path: '/batters/lab/stuff-attack', status: 'Lab' },
+      { label: 'Batter Tag Lab', path: '/batters/lab/tags', status: 'Lab' },
       { label: 'Batter personal', path: '/batter-personal', status: 'Live' },
       { label: 'Fielders', path: '/fielders', status: 'Lab' },
+      { label: 'Catcher leaderboard', path: '/fielders/catchers/leaderboard', status: 'Lab' },
+      { label: 'Catcher metrics lab', path: '/fielders/catchers/lab', status: 'Lab' },
+      { label: 'Pitcher × Catcher lab', path: '/lab?area=pair', status: 'Lab' },
       { label: 'Catcher sequence', path: '/fielders/catchers/sequence', status: 'Live' }
     ]
   }

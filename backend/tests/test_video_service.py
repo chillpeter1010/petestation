@@ -1,3 +1,5 @@
+import gzip
+
 import duckdb
 import pandas as pd
 
@@ -77,3 +79,13 @@ def test_sync_official_player_names_repairs_unknown_batter():
 
     assert repaired == 1
     assert row == ("Tyler Locklear", "game_player_lookup")
+
+
+def test_read_cached_lookup_treats_interrupted_gzip_as_rebuildable(tmp_path):
+    path = tmp_path / "lookup.csv.gz"
+    payload = gzip.compress(b"game_pk,at_bat_number,pitch_number\n1,2,3\n")
+    path.write_bytes(payload[:-8])
+
+    result = video_service.read_cached_lookup(path)
+
+    assert result.empty

@@ -21,6 +21,8 @@
 
 <script setup lang="ts">
 const modules = [
+  { title: 'Leaderboard', kicker: 'Descriptive', copy: 'cERA, cRA9, cFIP and leave-catcher-out pitcher-mix comparisons.', to: '/fielders/catchers/leaderboard' },
+  { title: 'Metrics Lab', kicker: 'Research', copy: 'Inspect one catcher, raw accounting, pitcher-pair detail, and the 2026 model-consistent strategy bridge.', to: '/fielders/catchers/lab' },
   { title: 'Framing', kicker: 'Receiving', copy: 'Called-strike lift and zone value staging page.', to: '/fielders/catchers/framing' },
   { title: 'Blocking', kicker: 'Control', copy: 'Blocked balls, passed-ball risk, and dirt management staging page.', to: '/fielders/catchers/blocking' },
   { title: 'Throwing', kicker: 'Run Game', copy: 'Pop time, exchange, arm, and caught-stealing staging page.', to: '/fielders/catchers/throwing' },
@@ -95,7 +97,7 @@ p {
 
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 

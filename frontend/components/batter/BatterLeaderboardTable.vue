@@ -5,8 +5,12 @@
         <span class="eyebrow"><ListFilter :size="15" aria-hidden="true" /> Ranked results</span>
         <h2>{{ title }}</h2>
       </div>
-      <span>{{ sortedRows.length.toLocaleString() }} qualified hitters</span>
+      <div class="header-tools">
+        <span>{{ sortedRows.length.toLocaleString() }} qualified hitters</span>
+        <LeaderboardDisplayControls v-model:display-mode="displayMode" v-model:heatmap-enabled="heatmapEnabled" />
+      </div>
     </header>
+    <p class="pr-note">PR母體：同年度且符合目前 Minimum PA 的完整聯盟名單；隊伍與搜尋不改變母體。打擊率與品質欄位越高越佳，K%／Whiff% 越低越佳；PA、G、HR、BB、SO 等樣本或累計欄不排名。</p>
 
     <div v-if="sortedRows.length" class="table-scroll">
       <table :class="{ 'table--combined': view === 'standard' }">
@@ -30,8 +34,8 @@
                 <span><strong>{{ row.name }}</strong><small>{{ row.team }} · {{ row.plate_appearances ?? 0 }} PA</small></span>
               </NuxtLink>
             </td>
-            <td v-for="column in columns" :key="column.key" :class="metricClass(row, column.key)">
-              {{ formatMetric(row[column.key], column.format) }}
+            <td v-for="column in columns" :key="column.key" :class="metricClass(row, column.key)" :style="metricStyle(row, column.key)">
+              {{ displayMetric(row, column) }}
             </td>
           </tr>
         </tbody>
@@ -44,18 +48,23 @@
 <script setup lang="ts">
 import { ArrowDownUp as SortIcon, ListFilter } from '@lucide/vue'
 import type { BatterLeaderboardRow } from '~/types/api'
+import { buildLeaderboardPercentiles, leaderboardHeatStyle, leaderboardMetricValue, type LeaderboardDisplayMode } from '~/utils/leaderboardDisplay'
 
 type MetricKey = keyof BatterLeaderboardRow
 type MetricFormat = 'integer' | 'rate' | 'percent' | 'decimal'
 
 const props = defineProps<{
   rows: BatterLeaderboardRow[]
+  percentileRows: BatterLeaderboardRow[]
+  minimumPa: number
   view: 'standard' | 'contact'
   year: number
 }>()
 
 const sortKey = ref<MetricKey>('ops')
 const sortDirection = ref<'asc' | 'desc'>('desc')
+const displayMode = ref<LeaderboardDisplayMode>('actual')
+const heatmapEnabled = ref(true)
 
 const viewConfig: Record<typeof props.view, { title: string; defaultSort: MetricKey; columns: Array<{ key: MetricKey; label: string; format: MetricFormat }> }> = {
   standard: {
@@ -84,6 +93,19 @@ const viewConfig: Record<typeof props.view, { title: string; defaultSort: Metric
 const config = computed(() => viewConfig[props.view])
 const title = computed(() => config.value.title)
 const columns = computed(() => config.value.columns)
+const metricDirections = computed(() => props.view === 'standard' ? {
+  avg: 'higher', obp: 'higher', slg: 'higher', ops: 'higher', walk_rate: 'higher', strikeout_rate: 'lower', whiff_rate: 'lower'
+} as const : {
+  woba: 'higher', xwoba: 'higher', xba: 'higher', xslg: 'higher', avg_ev: 'higher', hard_hit_rate: 'higher', barrel_rate: 'higher'
+} as const)
+const percentileMap = computed(() => buildLeaderboardPercentiles(
+  props.percentileRows,
+  row => String(row.player_id),
+  Object.fromEntries(Object.entries(metricDirections.value).map(([key, direction]) => [key, {
+    value: (row: BatterLeaderboardRow) => row[key as MetricKey] as number | null | undefined,
+    direction
+  }]))
+))
 
 watch(() => props.view, () => {
   sortKey.value = config.value.defaultSort
@@ -91,8 +113,9 @@ watch(() => props.view, () => {
 })
 
 const sortedRows = computed(() => props.rows.slice().sort((left, right) => {
-  const a = left[sortKey.value]
-  const b = right[sortKey.value]
+  const usePercentile = displayMode.value === 'percentile' && sortKey.value in metricDirections.value
+  const a = usePercentile ? percentileMap.value.get(String(left.player_id))?.[sortKey.value] : left[sortKey.value]
+  const b = usePercentile ? percentileMap.value.get(String(right.player_id))?.[sortKey.value] : right[sortKey.value]
   const direction = sortDirection.value === 'asc' ? 1 : -1
   if (typeof a === 'number' && typeof b === 'number') return (a - b) * direction
   if (a === null || a === undefined) return 1
@@ -115,6 +138,15 @@ function formatMetric(value: unknown, format: MetricFormat) {
   return Math.round(numeric).toLocaleString()
 }
 
+function displayMetric(row: BatterLeaderboardRow, column: { key: MetricKey; format: MetricFormat }) {
+  const actual = formatMetric(row[column.key], column.format)
+  return leaderboardMetricValue(displayMode.value, percentileMap.value.get(String(row.player_id)) || {}, String(column.key), actual)
+}
+
+function metricStyle(row: BatterLeaderboardRow, key: MetricKey) {
+  return leaderboardHeatStyle(percentileMap.value.get(String(row.player_id))?.[String(key)], heatmapEnabled.value)
+}
+
 function metricClass(row: BatterLeaderboardRow, key: MetricKey) {
   if (key !== sortKey.value) return ''
   return row[key] !== null && row[key] !== undefined ? 'sorted-metric' : ''
@@ -129,6 +161,9 @@ function playerLink(row: BatterLeaderboardRow) {
 .leaderboard-shell { min-width: 0; overflow: hidden; border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-surface); box-shadow: var(--shadow-md); }
 .leaderboard-shell > header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 22px; border-bottom: 1px solid var(--color-border); }
 .leaderboard-shell header > span { color: var(--color-muted-text); font-family: inherit; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.header-tools { display: flex; align-items: end; justify-content: flex-end; gap: 14px; flex-wrap: wrap; }
+.header-tools > span { color: var(--color-muted-text); font-size: 12px; font-weight: 700; }
+.pr-note { margin: 0; border-bottom: 1px solid var(--color-border); padding: 10px 22px; color: var(--color-muted-text); font-size: 11px; line-height: 1.5; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--color-primary); font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 h2 { margin: 7px 0 0; color: var(--color-foreground); font-size: 28px; }
 .table-scroll { max-height: 760px; overflow: auto; }
@@ -148,5 +183,5 @@ th.player-column { z-index: 3; background: color-mix(in srgb, var(--color-surfac
 tbody tr:hover td { background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface)); }
 .sorted-metric { color: var(--color-primary); font-weight: 800; }
 .empty { margin: 0; padding: 38px; color: var(--color-muted-text); text-align: center; }
-@media (max-width: 680px) { .leaderboard-shell > header { align-items: flex-start; padding: 17px; } .leaderboard-shell header > span { max-width: 90px; text-align: right; } th, td { padding-inline: 10px; } .player-column { min-width: 195px; } }
+@media (max-width: 680px) { .leaderboard-shell > header { align-items: flex-start; flex-direction: column; padding: 17px; } .header-tools { justify-content: flex-start; } th, td { padding-inline: 10px; } .player-column { min-width: 195px; } }
 </style>

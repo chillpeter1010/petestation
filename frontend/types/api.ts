@@ -16,6 +16,361 @@ export interface TablePayload {
   rows: Record<string, unknown>[]
 }
 
+export interface CatcherDescriptiveRow {
+  rank?: number | null
+  season: number
+  catcher_id: number
+  catcher_name: string
+  team: string
+  teams: string[]
+  games?: number | null
+  pitchers: number
+  outs: number
+  display_ip: string
+  bf: number
+  pitcher_charged_runs: number
+  earned_runs: number
+  home_runs: number
+  walks_total: number
+  hit_by_pitch: number
+  strikeouts: number
+  c_era?: number | null
+  c_ra9?: number | null
+  c_fip?: number | null
+  baseline_supported_outs: number
+  baseline_supported_ip: string
+  baseline_coverage_pct: number
+  baseline_status: 'available' | 'limited' | 'unavailable'
+  t_era?: number | null
+  t_ra9?: number | null
+  t_fip?: number | null
+  c_save_run?: number | null
+  c_save_run_per_ip?: number | null
+  cxera?: number | null
+  txera?: number | null
+  x_runs_vs_mix?: number | null
+  x_runs_vs_mix_per_ip?: number | null
+  xera_expected_runs?: number | null
+  pitcher_mix_expected_runs?: number | null
+  xera_source_coverage_pct?: number | null
+  xera_status?: 'available' | 'limited' | 'unavailable'
+  xera_model_version?: string | null
+  drs?: number | null
+  rsz?: number | null
+  rcera?: number | null
+  rsb?: number | null
+  rgfp?: number | null
+  frm?: number | null
+  frv?: number | null
+  throwing?: number | null
+  blocking?: number | null
+  framing?: number | null
+  defense_value?: number | null
+  drs_status?: 'available' | 'limited' | 'unavailable'
+  frv_status?: 'available' | 'limited' | 'unavailable'
+  source_innings_status?: 'exact' | 'different_official_accounting'
+  source_display_ip?: string | null
+  outs_difference?: number | null
+  lco_supported_c_era?: number | null
+  lco_supported_c_ra9?: number | null
+  lco_t_era?: number | null
+  lco_t_ra9?: number | null
+  lco_t_fip?: number | null
+  lco_c_save_run?: number | null
+  max_pitcher_out_share_pct?: number | null
+  dominant_pitcher_id?: number | null
+  dominant_pitcher_name?: string | null
+  dominant_pair_outs?: number | null
+  dominant_pair_ip?: string | null
+  dominant_pair_out_share_pct?: number | null
+  non_dominant_outs?: number | null
+  non_dominant_ip?: string | null
+  without_dominant_c_ra9?: number | null
+  without_dominant_t_ra9?: number | null
+  without_dominant_c_save_run?: number | null
+  without_dominant_c_save_run_per_ip?: number | null
+  dominant_pair_delta_c_save_run_per_ip?: number | null
+  dominant_pair_sensitivity_status?: 'stable' | 'sensitive' | 'unavailable'
+  adjacent_eligible_seasons?: Array<{
+    season: number
+    c_save_run_per_ip: number
+    absolute_delta: number
+    same_sign: boolean
+  }>
+  adjacent_eligible_season_count?: number
+  reliability_tier?: 'supported' | 'limited' | 'unavailable'
+  reliability_reasons?: string[]
+  sample_status: 'available' | 'limited'
+  ranking_eligible: boolean
+}
+
+export interface CatcherDescriptiveLeaderboardResponse {
+  contract_version: string
+  source_contract_version: string
+  publication_status: 'single_season_preview'
+  year: number
+  generated_at_utc: string
+  fip_constant: number
+  fip_constant_method: string
+  pitcher_mix_method: string
+  lco_diagnostic_method: string
+  qualification: Record<string, number>
+  summary: Record<string, number>
+  reliability?: {
+    contract_version: string
+    generated_at_utc: string
+    release_gate_passed: boolean
+    pooled_cross_year: {
+      adjacent_pairs: number
+      pearson?: number | null
+      spearman?: number | null
+      same_sign_pct?: number | null
+      mean_absolute_change_per_ip?: number | null
+      pearson_cluster_bootstrap_95_ci?: {
+        samples: number
+        seed: number
+        ci_level: number
+        low?: number | null
+        high?: number | null
+      }
+    }
+    tier_counts: Record<string, number>
+  }
+  xera?: {
+    contract_version: string
+    model_version: string
+    built_at_utc: string
+    release_gate_passed: boolean
+    selected_model: string
+    evaluation: Record<string, {
+      rows: number
+      mae?: number | null
+      rmse?: number | null
+      bias?: number | null
+      pearson?: number | null
+      spearman?: number | null
+    }>
+    source_coverage: {
+      rows: number
+      statcast_joined_rows: number
+      direct_expected_woba_rows: number
+      deterministic_fallback_rows: number
+      training_bip_mean_fallback_rows: number
+      woba_denominator_excluded_rows: number
+      fallback_bf: number
+      source_supported_bf_pct: number
+      fallback_policy: string
+    }
+    definitions: Record<string, string>
+    warnings: string[]
+  }
+  defense?: {
+    contract_version: string
+    generated_at_utc: string
+    release_gate_passed: boolean
+    source_snapshot: {
+      path: string
+      sha256: string
+      bytes: number
+      last_modified_utc: string
+      source_name: string
+      source_url?: string | null
+      provenance_status: string
+      publication_rights_status: string
+      grain: string
+      unique_key: string[]
+    }
+    comparison_source_snapshot?: {
+      path: string
+      sha256: string
+      bytes: number
+      last_modified_utc: string
+      source_name: string
+      source_url?: string | null
+      provenance_status: string
+      publication_rights_status: string
+    } | null
+    source_field_coverage: Record<string, {
+      non_null_rows: number
+      null_rows: number
+      status: 'available' | 'unavailable'
+    }>
+    row_counts: {
+      source_team_catcher_rows: number
+      canonical_team_catcher_rows: number
+      catcher_seasons: number
+      ranking_eligible_catcher_seasons: number
+    }
+    reconciliation: Record<string, unknown>
+    cross_source_reconciliation: Record<string, unknown>
+    cross_year_diagnostics: {
+      population: string
+      adjacent_pairs: number
+      metrics: Record<string, { pearson?: number | null, spearman?: number | null }>
+      interpretation: string
+    }
+    overlap_diagnostics: Record<string, unknown>
+    definitions: Record<string, string>
+    park_factor_status: 'deferred_by_user'
+    paired_duo_status: 'unavailable_season_level_only'
+    warnings: string[]
+  }
+  filters: Record<string, number>
+  rows: CatcherDescriptiveRow[]
+  warnings: string[]
+}
+
+export interface CatcherDescriptivePairedDuoRow {
+  rank: number
+  pair_key: string
+  season: number
+  catcher_id: number
+  catcher_name: string
+  pitcher_id: number
+  pitcher_name: string
+  team: string
+  teams: string[]
+  games: number
+  outs: number
+  display_ip: string
+  bf: number
+  pitcher_charged_runs: number
+  earned_runs: number
+  home_runs: number
+  walks_total: number
+  hit_by_pitch: number
+  strikeouts: number
+  c_era?: number | null
+  c_ra9?: number | null
+  c_fip?: number | null
+  t_era?: number | null
+  t_ra9?: number | null
+  t_fip?: number | null
+  c_save_run?: number | null
+  c_save_run_per_ip?: number | null
+  xera?: number | null
+  pitcher_xera?: number | null
+  x_runs_vs_mix?: number | null
+  x_runs_vs_mix_per_ip?: number | null
+  xera_expected_runs?: number | null
+  xera_source_coverage_pct?: number | null
+  xera_status?: 'available' | 'limited' | 'unavailable'
+  lco_outs: number
+  lco_display_ip: string
+  lco_era?: number | null
+  lco_ra9?: number | null
+  lco_fip?: number | null
+  lco_c_save_run?: number | null
+  lco_status: 'available' | 'unavailable'
+}
+
+export interface CatcherDescriptivePairedDuoResponse {
+  contract_version: string
+  publication_status: 'single_season_preview'
+  view: 'paired_duo'
+  year: number
+  generated_at_utc: string
+  fip_constant: number
+  qualification: Record<string, number>
+  summary: { pairs: number }
+  filters: Record<string, number>
+  rows: CatcherDescriptivePairedDuoRow[]
+  warnings: string[]
+}
+
+export interface CatcherDescriptivePairRow {
+  pitcher_id: number
+  pitcher_name: string
+  teams: string
+  outs: number
+  display_ip: string
+  bf: number
+  pitcher_charged_runs: number
+  earned_runs: number
+  c_era?: number | null
+  c_ra9?: number | null
+  c_fip?: number | null
+  pitcher_season_era?: number | null
+  pitcher_season_ra9?: number | null
+  pitcher_season_fip?: number | null
+  lco_outs: number
+  lco_display_ip: string
+  lco_era?: number | null
+  lco_ra9?: number | null
+  lco_fip?: number | null
+  c_save_run?: number | null
+  c_save_run_per_ip?: number | null
+  xera?: number | null
+  pitcher_xera?: number | null
+  x_runs_vs_mix?: number | null
+  x_runs_vs_mix_per_ip?: number | null
+  xera_expected_runs?: number | null
+  xera_source_coverage_pct?: number | null
+  xera_status?: 'available' | 'limited' | 'unavailable'
+  lco_c_save_run?: number | null
+  lco_status: 'available' | 'unavailable'
+}
+
+export interface CatcherDescriptiveDetailResponse {
+  contract_version: string
+  publication_status: 'single_season_preview'
+  year: number
+  catcher: CatcherDescriptiveRow
+  pitcher_pairs: CatcherDescriptivePairRow[]
+  fip_constant: number
+  qualification: Record<string, number>
+  warnings: string[]
+}
+
+export interface CatcherStrategyCountTierRow {
+  count_tier: string
+  decisions: number
+  mean_normalized_entropy?: number | null
+  mean_effective_supported_choices?: number | null
+  mean_supported_deviation_gain?: number | null
+  observed_choice_model_minimum_rate_pct?: number | null
+}
+
+export interface CatcherStrategyBridgeRow {
+  season: number
+  catcher_id: number
+  total_decisions: number
+  pitchers: number
+  supported_set_decisions: number
+  supported_set_coverage_pct?: number | null
+  chosen_supported_decisions: number
+  chosen_supported_coverage_pct?: number | null
+  chosen_support_rate_pct?: number | null
+  mean_normalized_entropy?: number | null
+  mean_effective_supported_choices?: number | null
+  mean_top_supported_probability_pct?: number | null
+  mean_supported_deviation_gain?: number | null
+  mean_chosen_gap_vs_best_supported?: number | null
+  observed_choice_model_minimum_rate_pct?: number | null
+  deviations_exceeding_noise_floor: number
+  sample_status: 'available' | 'limited'
+  count_tiers: CatcherStrategyCountTierRow[]
+}
+
+export interface CatcherStrategyBridgeResponse {
+  contract_version: string
+  publication_status: 'research_only_no_leaderboard'
+  year: number
+  catcher_id: number
+  status: 'available' | 'limited' | 'unavailable'
+  reason?: string | null
+  method?: {
+    propensity_threshold: number
+    minimum_supported_decisions: number
+    grain: string
+    normalized_entropy: string
+    supported_deviation_gain: string
+  }
+  release_gate?: Record<string, boolean | number>
+  row?: CatcherStrategyBridgeRow | null
+  warnings: string[]
+}
+
 export interface OptionItem {
   value: string | number
   label: string

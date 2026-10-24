@@ -24,6 +24,23 @@ SPORTY_TITLE_PATTERN = re.compile(r"<h3>(?P<title>.*?)</h3>", re.IGNORECASE | re
 VIDEO_LOOKUP_COLUMNS = ["game_pk", "at_bat_number", "pitch_number", "play_id", "video_url", "pitcher", "batter"]
 
 
+def read_cached_lookup(path: Path) -> pd.DataFrame:
+    """Read an optional gzip lookup without letting an interrupted prior write block repair."""
+
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except (EOFError, OSError, pd.errors.ParserError):
+        return pd.DataFrame()
+
+
+def write_lookup_atomic(frame: pd.DataFrame, path: Path) -> None:
+    temporary = path.with_name(f"{path.stem}.tmp{path.suffix}")
+    frame.to_csv(temporary, index=False, compression="gzip")
+    temporary.replace(path)
+
+
 def disable_proxies() -> None:
     for key in ["HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"]:
         os.environ[key] = ""
@@ -212,8 +229,8 @@ def persist_video_lookup_outputs(
     target_dir.mkdir(parents=True, exist_ok=True)
     pitch_lookup = normalize_pitch_lookup(pitch_lookup)
     game_player_lookup = normalize_game_player_lookup(game_player_lookup)
-    pitch_lookup.to_csv(pitch_lookup_path, index=False, compression="gzip")
-    game_player_lookup.to_csv(game_player_lookup_path, index=False, compression="gzip")
+    write_lookup_atomic(pitch_lookup, pitch_lookup_path)
+    write_lookup_atomic(game_player_lookup, game_player_lookup_path)
 
     repaired_player_names = 0
     with connect_duckdb_write_with_retry(db_path) as conn:
@@ -352,9 +369,9 @@ def backfill_video_lookup(
     pitch_lookup_path = target_dir / f"mlb_{int(year)}_pitch_play_lookup.csv.gz"
     player_lookup_path = target_dir / f"mlb_{int(year)}_game_player_lookup.csv.gz"
     if pitch_lookup_path.exists():
-        cached_pitch_lookup = pd.concat([cached_pitch_lookup, pd.read_csv(pitch_lookup_path)], ignore_index=True)
+        cached_pitch_lookup = pd.concat([cached_pitch_lookup, read_cached_lookup(pitch_lookup_path)], ignore_index=True)
     if player_lookup_path.exists():
-        cached_player_lookup = pd.concat([cached_player_lookup, pd.read_csv(player_lookup_path)], ignore_index=True)
+        cached_player_lookup = pd.concat([cached_player_lookup, read_cached_lookup(player_lookup_path)], ignore_index=True)
 
     all_game_pks = pd.to_numeric(games_df["game_pk"], errors="coerce").dropna().astype(int).tolist()
     pitch_lookup = normalize_pitch_lookup(cached_pitch_lookup)

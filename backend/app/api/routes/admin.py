@@ -18,13 +18,24 @@ from app.services.admin_service import (
     write_job_log,
 )
 from app.services.game_line_service import get_pitcher_game_line_status
+from app.services.catcher_descriptive_ledger_service import get_slice1_status, run_slice1_year_update
 from app.services.data_freshness_service import get_data_freshness_report, refresh_data_freshness_report
 from app.services.project_tracker_service import get_project_tracker
+from app.services.player_archetype_slice3_service import get_player_archetype_slice3_view
 from app.services.video_service import get_video_lookup_status
 
 
 router = APIRouter()
 JOB_REGISTRY: dict[str, dict[str, Any]] = {}
+
+
+@router.get("/player-archetypes/slice3")
+def read_player_archetype_slice3(
+    year: int = Query(default=2026, ge=2021, le=2026),
+    population: str = Query(default="pitcher", pattern="^(pitcher|batter)$"),
+    role: str | None = None,
+) -> dict[str, Any]:
+    return get_player_archetype_slice3_view(year=year, population=population, role=role)
 
 
 def _run_registered_job(job_id: str, name: str, year: int, fn: Callable[[], dict[str, object]]) -> None:
@@ -149,6 +160,38 @@ def read_historical_plus_status() -> dict[str, object]:
             job
             for job in JOB_REGISTRY.values()
             if job.get("name") == "backfill_historical_plus" and job.get("status") in {"queued", "running"}
+        ),
+        None,
+    )
+    return {**payload, "active_job": active}
+
+
+@router.post("/jobs/catcher-descriptive-ledger")
+def build_catcher_descriptive_ledger_job(
+    background_tasks: BackgroundTasks,
+    year: int = Query(ge=2021, le=2026),
+    workers: int = Query(default=12, ge=1, le=24),
+    force_rebuild: bool = False,
+) -> dict[str, object]:
+    for job in JOB_REGISTRY.values():
+        if job.get("name") == "catcher_descriptive_slice1" and job.get("status") in {"queued", "running"}:
+            return job
+    return _start_job(
+        background_tasks,
+        "catcher_descriptive_slice1",
+        year,
+        lambda: run_slice1_year_update(year=year, workers=workers, force_rebuild=force_rebuild),
+    )
+
+
+@router.get("/jobs/catcher-descriptive-ledger-status")
+def read_catcher_descriptive_ledger_status() -> dict[str, object]:
+    payload = get_slice1_status()
+    active = next(
+        (
+            job
+            for job in JOB_REGISTRY.values()
+            if job.get("name") == "catcher_descriptive_slice1" and job.get("status") in {"queued", "running"}
         ),
         None,
     )

@@ -1,0 +1,2 @@
+<template><main class="tag-page"><ComparisonPageHeader eyebrow="Pitcher Lab · Archetypes" title="Pitcher Tag Lab" description="Browse season-level arsenal, arm-slot, and command profiles, then inspect samples and cross-year validation before deciding whether each label looks reasonable." back-to="/lab" back-label="Pitcher Lab" /><PlayerTagLab population="pitcher" /></main></template>
+<style scoped>.tag-page { display: grid; gap: 18px; }</style>

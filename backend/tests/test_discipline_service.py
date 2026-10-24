@@ -6,6 +6,7 @@ from app.services.discipline_service import (
     build_pitcher_discipline_table,
     build_pitcher_panel_metrics,
     build_starter_style_discipline_payload,
+    meatball_zone_mask,
     red_strike_zone_mask,
 )
 
@@ -64,6 +65,33 @@ def test_zone_metrics_use_red_strike_zone_coordinates_before_statcast_zone():
     assert red_strike_zone_mask(frame).tolist() == [True, False, False]
     assert metrics["Zone%"] == pytest.approx(33.3333333)
     assert metrics["O-Swing%"] == pytest.approx(50.0)
+
+
+def test_meatball_uses_statcast_zone_five_and_coordinate_fallback_only_when_zone_missing():
+    frame = pd.DataFrame(
+        [
+            {"zone": 5, "plate_x": 1.2, "plate_z": 4.0, "sz_bot": 1.5, "sz_top": 3.5},
+            {"zone": 1, "plate_x": 0.0, "plate_z": 2.5, "sz_bot": 1.5, "sz_top": 3.5},
+            {"zone": None, "plate_x": 0.0, "plate_z": 2.5, "sz_bot": 1.5, "sz_top": 3.5},
+            {"zone": None, "plate_x": 0.5, "plate_z": 2.5, "sz_bot": 1.5, "sz_top": 3.5},
+        ]
+    )
+
+    assert meatball_zone_mask(frame).tolist() == [True, False, True, False]
+
+
+def test_discipline_table_exposes_meatball_not_legacy_heart_alias():
+    frame = pd.DataFrame(
+        [
+            {"pitch_name": "Sinker", "description": "called_strike", "zone": 5},
+            {"pitch_name": "Sinker", "description": "called_strike", "zone": 1},
+        ]
+    )
+
+    table = build_pitcher_discipline_table(frame)
+
+    assert table.loc[0, "Meatball%"] == pytest.approx(50.0)
+    assert "Heart Ball%" not in table.columns
 
 
 def test_build_discipline_panel_groups_matches_starter_panel_structure():
