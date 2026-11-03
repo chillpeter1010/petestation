@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.dependencies.auth import require_admin
+from app.api.dependencies.auth import require_backstage_admin
 from app.api.routes import admin, auth, batter_comparison, batters, catchers, comparison, derived, discipline, games, home, leverage, location, models, performance_state, personal, pitchers, pitching, rotation, similarity, stamina, stuff, teams
 from app.api.routes.auth import SESSION_COOKIE, get_auth_store
 from app.core.config import settings
@@ -23,14 +23,17 @@ PUBLIC_PATHS = {"/api/health", "/api/auth/login", "/api/auth/register"}
 @app.middleware("http")
 async def require_private_site_session(request: Request, call_next):
     path = request.url.path.rstrip("/") or "/"
-    if request.method == "OPTIONS" or path in PUBLIC_PATHS:
-        return await call_next(request)
-    if path.startswith("/api/") or path in {"/docs", "/redoc", "/openapi.json"}:
+    if request.method != "OPTIONS" and path not in PUBLIC_PATHS and (
+        path.startswith("/api/") or path in {"/docs", "/redoc", "/openapi.json"}
+    ):
         user = get_auth_store().user_for_session(request.cookies.get(SESSION_COOKIE))
         if user is None:
-            return JSONResponse(status_code=401, content={"detail": "Authentication required."})
+            return JSONResponse(status_code=401, content={"detail": "Authentication required."}, headers={"Cache-Control": "no-store"})
         request.state.auth_user = user
-    return await call_next(request)
+    response = await call_next(request)
+    if path.startswith(("/api/auth/", "/api/admin/")):
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
@@ -51,7 +54,7 @@ app.include_router(comparison.router, prefix="/api/comparison", tags=["compariso
 app.include_router(batter_comparison.router, prefix="/api/batter-comparison", tags=["batter-comparison"])
 app.include_router(rotation.router, prefix="/api/rotation", tags=["rotation"])
 app.include_router(models.router, prefix="/api/models", tags=["models"])
-app.include_router(admin.router, prefix="/api/admin", tags=["admin"], dependencies=[Depends(require_admin)])
+app.include_router(admin.router, prefix="/api/admin", tags=["admin"], dependencies=[Depends(require_backstage_admin)])
 app.include_router(derived.router, prefix="/api/derived", tags=["derived"])
 app.include_router(games.router, prefix="/api/games", tags=["games"])
 app.include_router(teams.router, prefix="/api/teams", tags=["teams"])

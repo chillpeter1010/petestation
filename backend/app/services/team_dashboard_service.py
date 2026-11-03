@@ -28,6 +28,7 @@ from app.api.schemas.teams import (
 )
 from app.core.config import settings
 from app.repositories.pitch_repository import get_season_duckdb_path
+from app.services.active_roster_service import get_team_active_roster
 from app.services.batter_service import list_batter_leaderboard
 from app.services.game_line_service import load_pitcher_game_lines
 from app.services.pitcher_service import list_pitcher_leaderboard
@@ -99,7 +100,6 @@ _live_cache: dict[
     tuple[int, str],
     tuple[float, TeamSeasonRecord | None, TeamNextGame | None, list[TeamStarterGame]],
 ] = {}
-_roster_cache: dict[tuple[int, str], tuple[float, set[int]]] = {}
 
 
 def get_team_dashboard(year: int, team_id: str) -> TeamDashboardResponse:
@@ -503,28 +503,14 @@ def build_team_bullpen(
 
 
 def load_team_active_pitcher_ids(year: int, team_code: str) -> set[int] | None:
-    cache_key = (int(year), team_code)
-    cached = _roster_cache.get(cache_key)
-    now = monotonic()
-    if cached and now - cached[0] < _LIVE_CACHE_TTL_SECONDS:
-        return set(cached[1])
-    try:
-        payload = fetch_json(
-            f"https://statsapi.mlb.com/api/v1/teams/{MLB_TEAM_IDS[team_code]}/roster?"
-            + urlencode({"rosterType": "active", "season": int(year), "hydrate": "person"}),
-            timeout=8,
-        )
-        pitcher_ids = {
-            int(row["person"]["id"])
-            for row in payload.get("roster", [])
-            if (row.get("position") or {}).get("type") == "Pitcher"
-            and (row.get("status") or {}).get("code") == "A"
-            and (row.get("person") or {}).get("id") is not None
-        }
-    except Exception:
+    roster = get_team_active_roster(year, team_code)
+    if roster.freshness == "unavailable":
         return None
-    _roster_cache[cache_key] = (now, pitcher_ids)
-    return pitcher_ids
+    return {
+        player.player_id
+        for player in roster.players
+        if player.position_type == "Pitcher" and player.status_code == "A"
+    }
 
 
 def load_recent_team_starter_ids(year: int, team_code: str, games: int = 15) -> set[int]:

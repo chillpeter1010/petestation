@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 from collections import defaultdict
+import json
+from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import duckdb
 import pandas as pd
 
 from app.core.config import settings
 from app.repositories.pitch_repository import get_season_duckdb_path, resolve_pitch_table
-from app.services.game_line_service import load_pitcher_game_lines
+from app.services.game_line_service import fetch_game_boxscore, load_pitcher_game_lines
 from app.services.pitch_location_score_service import load_pitch_location_scores
 from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
 from app.services.stamina_lab_service import load_pitch_stamina_state
@@ -63,6 +66,14 @@ def _clean_optional(value: object) -> Any:
     return value.item() if hasattr(value, "item") else value
 
 
+def _rate_float(value: object) -> float | None:
+    try:
+        parsed = float(str(value).strip())
+    except (TypeError, ValueError):
+        return None
+    return parsed if pd.notna(parsed) else None
+
+
 def _usable_player_name(value: object) -> str | None:
     text = str(value or "").strip()
     lowered = text.lower()
@@ -71,6 +82,97 @@ def _usable_player_name(value: object) -> str | None:
     if lowered.startswith(("player ", "batter ", "pitcher ")):
         return None
     return text
+
+
+def _boxscore_cache_path(year: int, game_pk: int, data_dir: Path) -> Path:
+    return data_dir / f"MLB{int(year)}" / "game_boxscores" / f"{int(game_pk)}.json"
+
+
+def _load_official_boxscore(
+    year: int,
+    game_pk: int,
+    data_dir: Path,
+    allow_fetch: bool,
+) -> dict[str, Any] | None:
+    path = _boxscore_cache_path(year, game_pk, data_dir)
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            pass
+    if not allow_fetch:
+        return None
+    try:
+        payload = fetch_game_boxscore(game_pk)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_suffix(f".{uuid4().hex}.tmp")
+        temporary.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        temporary.replace(path)
+        return payload
+    except Exception:
+        return None
+
+
+def _official_batting(
+    payload: dict[str, Any],
+    hard_hits_by_batter: dict[int, int],
+) -> list[dict[str, Any]]:
+    teams: list[dict[str, Any]] = []
+    for side in ["away", "home"]:
+        team_payload = ((payload.get("teams") or {}).get(side) or {})
+        team = str(((team_payload.get("team") or {}).get("abbreviation") or "")).strip()
+        hitters: list[dict[str, Any]] = []
+        for player in (team_payload.get("players") or {}).values():
+            raw_order = player.get("battingOrder")
+            try:
+                batting_order = int(raw_order)
+            except (TypeError, ValueError):
+                continue
+            person = player.get("person") or {}
+            player_id = _safe_int(person.get("id"))
+            batting = ((player.get("stats") or {}).get("batting") or {})
+            season_batting = ((player.get("seasonStats") or {}).get("batting") or {})
+            at_bats = _safe_int(batting.get("atBats"))
+            hits = _safe_int(batting.get("hits"))
+            season_average = _rate_float(season_batting.get("avg"))
+            hitters.append({
+                "player_id": player_id,
+                "name": _usable_player_name(person.get("fullName")) or f"Player {player_id}",
+                "team": team,
+                "position": str(((player.get("position") or {}).get("abbreviation") or "—")),
+                "lineup_slot": batting_order // 100,
+                "lineup_sequence": batting_order % 100,
+                "is_substitute": batting_order % 100 > 0,
+                "pa": _safe_int(batting.get("plateAppearances")),
+                "ab": at_bats,
+                "runs": _safe_int(batting.get("runs")),
+                "hits": hits,
+                "doubles": _safe_int(batting.get("doubles")),
+                "triples": _safe_int(batting.get("triples")),
+                "home_runs": _safe_int(batting.get("homeRuns")),
+                "rbi": _safe_int(batting.get("rbi")),
+                "walks": _safe_int(batting.get("baseOnBalls")),
+                "strikeouts": _safe_int(batting.get("strikeOuts")),
+                "hard_hits": int(hard_hits_by_batter.get(player_id, 0)),
+                "average": season_average if season_average is not None else (round(hits / at_bats, 3) if at_bats else None),
+            })
+        hitters.sort(key=lambda hitter: (hitter["lineup_slot"], hitter["lineup_sequence"]))
+        if hitters:
+            teams.append({"team": team, "home_away": side, "hitters": hitters})
+    return teams
+
+
+def _official_pitcher_eras(payload: dict[str, Any]) -> dict[int, str]:
+    eras: dict[int, str] = {}
+    for side in ["away", "home"]:
+        team_payload = ((payload.get("teams") or {}).get(side) or {})
+        players = team_payload.get("players") or {}
+        for pitcher_id in team_payload.get("pitchers") or []:
+            player = players.get(f"ID{int(pitcher_id)}") or {}
+            era = str((((player.get("seasonStats") or {}).get("pitching") or {}).get("era") or "")).strip()
+            if era and era not in {"-.--", ".---"}:
+                eras[int(pitcher_id)] = era
+    return eras
 
 
 def list_games(
@@ -135,7 +237,12 @@ def list_games(
     }
 
 
-def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> dict[str, Any]:
+def get_game_pitching(
+    year: int,
+    game_pk: int,
+    data_dir=settings.data_dir,
+    allow_official_fetch: bool = True,
+) -> dict[str, Any]:
     db_path = get_season_duckdb_path(year, data_dir)
     if not db_path.exists():
         return {"year": int(year), "game_pk": int(game_pk), "teams": [], "warnings": [f"DuckDB not found: {db_path}"]}
@@ -339,6 +446,14 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
         if team and pitcher_id and team not in starters_by_team:
             starters_by_team[team] = pitcher_id
 
+    official_boxscore = _load_official_boxscore(
+        year=int(year),
+        game_pk=int(game_pk),
+        data_dir=Path(data_dir),
+        allow_fetch=allow_official_fetch,
+    )
+    official_pitcher_eras = _official_pitcher_eras(official_boxscore) if official_boxscore else {}
+
     game = game_df.iloc[0].to_dict() if not game_df.empty else {"game_pk": int(game_pk)}
     home_team = str(game.get("home_team") or "")
     away_team = str(game.get("away_team") or "")
@@ -366,7 +481,7 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
             "home_runs": int(hard.get("home_runs") or 0),
             "pitches": pitches,
             "batters_faced": int(row.get("batters_faced") or 0),
-            "era": era_by_pitcher.get(pitcher_id, "-"),
+            "era": official_pitcher_eras.get(pitcher_id, era_by_pitcher.get(pitcher_id, "-")),
             "pitch_mix": mix_by_pitcher.get(pitcher_id, []),
             "hard_hits": int(hard.get("hard_hits") or 0),
             "max_velo": hard.get("max_velo"),
@@ -388,6 +503,8 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
     errors_by_team = {away_team: 0, home_team: 0}
     hit_events = {"single", "double", "triple", "home_run"}
     batting_rows: dict[str, dict[int, dict[str, Any]]] = {away_team: {}, home_team: {}}
+    batting_slots: dict[str, dict[int, list[int]]] = {away_team: defaultdict(list), home_team: defaultdict(list)}
+    team_plate_appearances: dict[str, int] = {away_team: 0, home_team: 0}
     plays: list[dict[str, Any]] = []
     pitches_by_pa: dict[int, list[dict[str, Any]]] = defaultdict(list)
 
@@ -433,6 +550,12 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
         batter_id = _safe_int(row.get("batter"))
         pitcher_id = _safe_int(row.get("pitcher"))
         event = str(row.get("events") or "").lower()
+        team_plate_appearances[batting_team] = team_plate_appearances.get(batting_team, 0) + 1
+        lineup_slot = (team_plate_appearances[batting_team] - 1) % 9 + 1
+        slot_players = batting_slots.setdefault(batting_team, defaultdict(list))[lineup_slot]
+        if batter_id not in slot_players:
+            slot_players.append(batter_id)
+        lineup_sequence = slot_players.index(batter_id)
         if event in hit_events:
             hits_by_team[batting_team] = hits_by_team.get(batting_team, 0) + 1
         if event == "field_error":
@@ -443,6 +566,10 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
             "name": player_names.get(batter_id, f"Player {batter_id}"),
             "team": batting_team,
             "first_pa": _safe_int(row.get("at_bat_number")),
+            "position": "—",
+            "lineup_slot": lineup_slot,
+            "lineup_sequence": lineup_sequence,
+            "is_substitute": lineup_sequence > 0,
             "pa": 0,
             "ab": 0,
             "hits": 0,
@@ -478,11 +605,24 @@ def get_game_pitching(year: int, game_pk: int, data_dir=settings.data_dir) -> di
 
     batting = []
     for code in [away_team, home_team]:
-        hitters = sorted(batting_rows.get(code, {}).values(), key=lambda item: (item["first_pa"], item["name"]))
+        hitters = sorted(
+            batting_rows.get(code, {}).values(),
+            key=lambda item: (item["lineup_slot"], item["lineup_sequence"], item["first_pa"]),
+        )
         for hitter in hitters:
             hitter["average"] = round(hitter["hits"] / hitter["ab"], 3) if hitter["ab"] else None
             hitter.pop("first_pa", None)
         batting.append({"team": code, "home_away": "away" if code == away_team else "home", "hitters": hitters})
+
+    if official_boxscore:
+        hard_hits_by_batter = {
+            player_id: int(row.get("hard_hits") or 0)
+            for team_rows in batting_rows.values()
+            for player_id, row in team_rows.items()
+        }
+        official_batting = _official_batting(official_boxscore, hard_hits_by_batter)
+        if official_batting:
+            batting = official_batting
 
     inning_map: dict[int, dict[str, int | None]] = {}
     for row in inning_rows.to_dict(orient="records"):

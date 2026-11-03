@@ -659,6 +659,7 @@ def load_personal_pitch_df(
     pitcher_id: int,
     start_date: str | None = None,
     end_date: str | None = None,
+    game_pk: int | None = None,
 ) -> pd.DataFrame:
     pitch_df = load_pitcher_cached_season(
         year=year,
@@ -667,7 +668,11 @@ def load_personal_pitch_df(
         start_date=start_date,
         end_date=end_date,
     )
-    return filter_display_pitch_rows(normalize_pitch_names(pitch_df))
+    pitch_df = filter_display_pitch_rows(normalize_pitch_names(pitch_df))
+    if game_pk is not None and not pitch_df.empty and "game_pk" in pitch_df.columns:
+        game_keys = pd.to_numeric(pitch_df["game_pk"], errors="coerce")
+        pitch_df = pitch_df[game_keys.eq(int(game_pk))].copy()
+    return pitch_df
 
 
 def infer_pitcher_hand(data: pd.DataFrame) -> str:
@@ -1005,11 +1010,24 @@ def load_season_catcher_lookup(year: int) -> dict[str, str]:
                 ORDER BY catcher_id
                 """
             ).fetchdf()
+            local_names: dict[str, str] = {}
+            if "player_master" in tables:
+                player_columns = {row[1] for row in conn.execute("PRAGMA table_info('player_master')").fetchall()}
+                if {"player_id", "player_name"}.issubset(player_columns):
+                    local_names = {
+                        str(int(player_id)): str(player_name).strip()
+                        for player_id, player_name in conn.execute(
+                            "SELECT player_id, player_name FROM player_master WHERE player_id IS NOT NULL"
+                        ).fetchall()
+                        if player_name is not None and str(player_name).strip()
+                    }
     except Exception:
         return {}
     ids = tuple(ids_df["catcher_id"].dropna().astype(str).str.strip().tolist()) if not ids_df.empty else tuple()
-    names = load_mlbam_name_lookup(ids)
-    return {catcher_id: names.get(catcher_id, f"Catcher {catcher_id}") for catcher_id in ids}
+    return {
+        catcher_id: local_names.get(catcher_id) or f"Catcher {catcher_id}"
+        for catcher_id in ids
+    }
 
 
 def catcher_lookup_rows(data: pd.DataFrame, year: int | None = None) -> list[dict[str, str]]:
@@ -1020,7 +1038,8 @@ def catcher_lookup_rows(data: pd.DataFrame, year: int | None = None) -> list[dic
         values = data["fielder_2"].dropna().astype(str).map(str.strip)
         ids = values[~values.str.lower().isin(["", "nan", "none", "null", "<na>", "0"])].unique().tolist()
     season_lookup = load_season_catcher_lookup(int(year)) if year is not None else {}
-    local_lookup = load_mlbam_name_lookup(tuple(sorted(ids)))
+    missing_ids = tuple(sorted(catcher_id for catcher_id in ids if catcher_id not in season_lookup))
+    local_lookup = load_mlbam_name_lookup(missing_ids) if missing_ids else {}
     rows = []
     for catcher_id in sorted(ids):
         rows.append(
@@ -1207,7 +1226,7 @@ def apply_sequence_filters(
     return apply_stuff_filters(data, stand=stand, count=count, pitch=pitch, pitch_result=pitch_result, catcher=catcher)
 
 
-def build_catcher_options(data: pd.DataFrame) -> list[str]:
+def build_catcher_options(data: pd.DataFrame, year: int | None = None) -> list[str]:
     if data.empty:
         return []
     if "catcher_name" in data.columns:
@@ -1220,7 +1239,7 @@ def build_catcher_options(data: pd.DataFrame) -> list[str]:
         values = values[~values.str.lower().isin(["", "nan", "none", "null", "<na>"])]
         return sorted(values.unique().tolist())
     if "fielder_2" in data.columns:
-        return sorted({row["catcher_name"] for row in catcher_lookup_rows(data) if row.get("catcher_name")})
+        return sorted({row["catcher_name"] for row in catcher_lookup_rows(data, year=year) if row.get("catcher_name")})
     return []
 
 
@@ -1310,6 +1329,7 @@ def get_personal_movement(
     pitcher_id: int,
     start_date: str | None = None,
     end_date: str | None = None,
+    game_pk: int | None = None,
     stand: str | None = None,
     count: str | None = None,
     pitch: str | None = None,
@@ -1318,8 +1338,15 @@ def get_personal_movement(
     pa_result: str | None = None,
     catcher: str | None = None,
     include_pitch_stuff: bool = False,
+    game_view: bool = False,
 ) -> AnalysisResponse:
-    pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, start_date=start_date, end_date=end_date)
+    pitch_df = load_personal_pitch_df(
+        year=year,
+        pitcher_id=pitcher_id,
+        start_date=start_date,
+        end_date=end_date,
+        game_pk=game_pk,
+    )
     pitch_df = load_pitch_stamina_state(pitch_df, year=year, data_dir=settings.data_dir)
     filtered_df = apply_stuff_filters(
         pitch_df,
@@ -1331,15 +1358,19 @@ def get_personal_movement(
         pa_result=pa_result,
         catcher=catcher,
     )
-    summary_df = build_pitch_movement_summary(filtered_df)
-    run_value_df = build_pitch_type_run_value_table(filtered_df, year=year)
-    league_movement_df = build_league_movement_benchmarks(year)
-    movement_comparison_df = build_movement_comparison_table(filtered_df, infer_pitcher_hand(pitch_df), league_movement_df)
     snapshot = build_filter_snapshot_stats(filtered_df)
-    scatter_df = filtered_df.copy()
-    if include_pitch_stuff:
-        scatter_df = add_pitch_stuff_scores(scatter_df, pitch_df)
-    movement_scatter = build_movement_scatter_rows(scatter_df)
+    summary_df = build_pitch_movement_summary(filtered_df)
+    movement_scatter: list[dict[str, Any]] = []
+    movement_comparison_df = pd.DataFrame()
+    run_value_df = pd.DataFrame()
+    if not game_view:
+        run_value_df = build_pitch_type_run_value_table(filtered_df, year=year)
+        league_movement_df = build_league_movement_benchmarks(year)
+        movement_comparison_df = build_movement_comparison_table(filtered_df, infer_pitcher_hand(pitch_df), league_movement_df)
+        scatter_df = filtered_df.copy()
+        if include_pitch_stuff:
+            scatter_df = add_pitch_stuff_scores(scatter_df, pitch_df)
+        movement_scatter = build_movement_scatter_rows(scatter_df)
 
     return AnalysisResponse(
         meta=ResponseMeta(year=year),
@@ -1352,7 +1383,7 @@ def get_personal_movement(
             "movement_scatter": movement_scatter,
             "pitch_location_scatter": build_pitch_location_scatter(filtered_df),
             "filter_snapshot": snapshot,
-            "catcher_options": build_catcher_options(pitch_df),
+            "catcher_options": build_catcher_options(pitch_df, year=year),
             "catcher_lookup": catcher_lookup_rows(pitch_df, year=year),
         },
         tables={
@@ -1453,7 +1484,7 @@ def get_personal_discipline(
             "pa_result_panels": panel_groups.get("result", {}).get("pa_result", []),
             "batted_ball_panels": panel_groups.get("result", {}).get("batted_ball", []),
             "panel_groups": panel_groups,
-            "catcher_options": build_catcher_options(pitch_df),
+            "catcher_options": build_catcher_options(pitch_df, year=year),
             "catcher_lookup": catcher_lookup_rows(pitch_df, year=year),
         },
     )
@@ -1640,11 +1671,10 @@ def build_conditioned_count_subset(data: pd.DataFrame, anchor_count_key: str | N
     if working.empty:
         return pd.DataFrame()
 
-    anchor_rows = working[
-        working["balls"].eq(anchor_balls)
-        & working["strikes"].eq(anchor_strikes)
-        & working["Pitch"].eq(selected_pitch)
-    ][["game_pk", "at_bat_number", "pitch_number"]].copy()
+    anchor_mask = working["balls"].eq(anchor_balls) & working["strikes"].eq(anchor_strikes)
+    if selected_pitch != "All":
+        anchor_mask &= working["Pitch"].eq(selected_pitch)
+    anchor_rows = working.loc[anchor_mask, ["game_pk", "at_bat_number", "pitch_number"]].copy()
     if anchor_rows.empty:
         return pd.DataFrame()
 
@@ -1818,6 +1848,53 @@ def classify_terminal_pitch_outcome(row: pd.Series) -> str:
     return "Result: Other"
 
 
+def annotate_sequence_context(data: pd.DataFrame) -> pd.DataFrame:
+    """Attach PA-local sequence and immediate-next-pitch fields before filters run.
+
+    Sequence filters select anchor pitches; they must never manufacture adjacency by
+    removing an intervening pitch first.  The annotations stay within game/PA keys,
+    so a terminal pitch cannot point into the next batter or another game.
+    """
+    required_cols = {"game_pk", "at_bat_number", "pitch_number", "balls", "strikes", "pitch_name"}
+    if data.empty or not required_cols.issubset(data.columns):
+        return data.copy()
+
+    working = data.copy()
+    working["_sequence_original_order"] = range(len(working))
+    for column in ["game_pk", "at_bat_number", "pitch_number", "balls", "strikes"]:
+        working[column] = pd.to_numeric(working[column], errors="coerce")
+    working = working.sort_values(["game_pk", "at_bat_number", "pitch_number", "_sequence_original_order"]).copy()
+    group_keys = ["game_pk", "at_bat_number"]
+    working["_next_balls"] = working.groupby(group_keys, dropna=False)["balls"].shift(-1)
+    working["_next_strikes"] = working.groupby(group_keys, dropna=False)["strikes"].shift(-1)
+    working["_next_pitch_name"] = working.groupby(group_keys, dropna=False)["pitch_name"].shift(-1)
+    working["_shallow_sequence_full"] = pd.NA
+    working["_two_strike_sequence_full"] = pd.NA
+
+    for _, group in working.groupby(group_keys, sort=False, dropna=False):
+        cumulative_labels: list[str] = []
+        two_strike_start_pos: int | None = None
+        for position, (index, row) in enumerate(group.iterrows()):
+            cumulative_labels.append(display_pitch_name(str(row.get("pitch_name") or "Unknown")))
+            balls = pd.to_numeric(row.get("balls"), errors="coerce")
+            strikes = pd.to_numeric(row.get("strikes"), errors="coerce")
+            is_shallow = (
+                (balls == 0 and strikes in {0, 1, 2})
+                or (balls == 1 and strikes in {0, 1})
+                or (balls == 2 and strikes == 0)
+            )
+            if is_shallow:
+                working.at[index, "_shallow_sequence_full"] = " -> ".join(cumulative_labels)
+            if two_strike_start_pos is None and strikes == 2:
+                two_strike_start_pos = position
+            if two_strike_start_pos is not None:
+                working.at[index, "_two_strike_sequence_full"] = " -> ".join(
+                    cumulative_labels[two_strike_start_pos:]
+                )
+
+    return working.sort_values("_sequence_original_order").drop(columns=["_sequence_original_order"])
+
+
 def build_count_pitch_followup_table(data: pd.DataFrame, count_key: str | None, selected_pitch: str | None) -> pd.DataFrame:
     required_cols = {"game_pk", "at_bat_number", "pitch_number", "balls", "strikes", "pitch_name"}
     if data.empty or not selected_pitch or not required_cols.issubset(data.columns):
@@ -1839,16 +1916,20 @@ def build_count_pitch_followup_table(data: pd.DataFrame, count_key: str | None, 
         return pd.DataFrame()
 
     working = working.sort_values(["game_pk", "at_bat_number", "pitch_number"]).reset_index(drop=True)
-    group_keys = ["game_pk", "at_bat_number"]
-    working["next_balls"] = working.groupby(group_keys, dropna=False)["balls"].shift(-1)
-    working["next_strikes"] = working.groupby(group_keys, dropna=False)["strikes"].shift(-1)
-    working["next_pitch_name"] = working.groupby(group_keys, dropna=False)["pitch_name"].shift(-1)
+    if {"_next_balls", "_next_strikes", "_next_pitch_name"}.issubset(working.columns):
+        working["next_balls"] = working["_next_balls"]
+        working["next_strikes"] = working["_next_strikes"]
+        working["next_pitch_name"] = working["_next_pitch_name"]
+    else:
+        group_keys = ["game_pk", "at_bat_number"]
+        working["next_balls"] = working.groupby(group_keys, dropna=False)["balls"].shift(-1)
+        working["next_strikes"] = working.groupby(group_keys, dropna=False)["strikes"].shift(-1)
+        working["next_pitch_name"] = working.groupby(group_keys, dropna=False)["pitch_name"].shift(-1)
 
-    selected_rows = working[
-        working["balls"].eq(balls)
-        & working["strikes"].eq(strikes)
-        & working["Pitch"].eq(selected_pitch)
-    ].copy()
+    selected_mask = working["balls"].eq(balls) & working["strikes"].eq(strikes)
+    if selected_pitch != "All":
+        selected_mask &= working["Pitch"].eq(selected_pitch)
+    selected_rows = working[selected_mask].copy()
     if selected_rows.empty:
         return pd.DataFrame()
 
@@ -1897,11 +1978,6 @@ def build_sequence_outcome_tables(pitch_df: pd.DataFrame, current_pitch_filter: 
         return pd.DataFrame(), pd.DataFrame()
 
     working = working.sort_values(["game_date", "game_pk", "at_bat_number", "pitch_number"]).reset_index(drop=True)
-    shallow_count_mask = (
-        (working["balls"].eq(0) & working["strikes"].isin([0, 1, 2]))
-        | (working["balls"].eq(1) & working["strikes"].isin([0, 1]))
-        | (working["balls"].eq(2) & working["strikes"].eq(0))
-    )
     strike_descriptions = SWING_EVENTS | CALLED_STRIKE_EVENTS
     working["is_strike"] = working["description"].isin(strike_descriptions)
     working["is_swing"] = working["description"].isin(SWING_EVENTS)
@@ -1910,22 +1986,13 @@ def build_sequence_outcome_tables(pitch_df: pd.DataFrame, current_pitch_filter: 
     working["is_hit"] = working["events"].isin(HIT_EVENTS)
     working["is_ab_event"] = working["events"].ne("") & ~working["events"].isin(NON_AB_EVENTS)
     working["is_in_play"] = working["description"].isin(IN_PLAY_EVENTS)
-    working["shallow_sequence"] = pd.NA
-    working["two_strike_count_sequence"] = pd.NA
-
-    for _, group in working.groupby(["game_pk", "at_bat_number"], sort=False, dropna=False):
-        indices = group.index.tolist()
-        pitch_labels = [display_pitch_name(name) for name in group["pitch_name"].astype(str)]
-        cumulative_labels: list[str] = []
-        two_strike_start_pos: int | None = None
-        for pos, idx in enumerate(indices):
-            cumulative_labels.append(pitch_labels[pos])
-            if bool(shallow_count_mask.loc[idx]):
-                working.at[idx, "shallow_sequence"] = " -> ".join(cumulative_labels)
-            if two_strike_start_pos is None and float(group.iloc[pos]["strikes"]) == 2.0:
-                two_strike_start_pos = pos
-            if two_strike_start_pos is not None and pos >= two_strike_start_pos:
-                working.at[idx, "two_strike_count_sequence"] = " -> ".join(pitch_labels[two_strike_start_pos : pos + 1])
+    if {"_shallow_sequence_full", "_two_strike_sequence_full"}.issubset(working.columns):
+        working["shallow_sequence"] = working["_shallow_sequence_full"]
+        working["two_strike_count_sequence"] = working["_two_strike_sequence_full"]
+    else:
+        working = annotate_sequence_context(working)
+        working["shallow_sequence"] = working["_shallow_sequence_full"]
+        working["two_strike_count_sequence"] = working["_two_strike_sequence_full"]
 
     if current_pitch_filter != "All":
         working = working[working["pitch_name"].astype(str).eq(current_pitch_filter)].copy()
@@ -1972,6 +2039,7 @@ def get_personal_sequence(
     pitcher_id: int,
     start_date: str | None = None,
     end_date: str | None = None,
+    game_pk: int | None = None,
     current_pitch: str = "All",
     stand: str | None = None,
     count: str | None = None,
@@ -1983,8 +2051,15 @@ def get_personal_sequence(
     detail_count: str | None = "0-0",
     followup_pitch: str | None = None,
 ) -> AnalysisResponse:
-    pitch_df = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, start_date=start_date, end_date=end_date)
+    pitch_df = load_personal_pitch_df(
+        year=year,
+        pitcher_id=pitcher_id,
+        start_date=start_date,
+        end_date=end_date,
+        game_pk=game_pk,
+    )
     pitch_df = add_pitcher_wpa_column(attach_plate_appearance_wpa(pitch_df, year, settings.data_dir))
+    pitch_df = annotate_sequence_context(pitch_df)
     filtered_df = apply_sequence_filters(pitch_df, stand=stand, count=count, pitch=pitch, pitch_result=pitch_result, catcher=catcher)
     shallow_df, two_strike_df = build_sequence_outcome_tables(filtered_df, current_pitch_filter=current_pitch)
     snapshot = build_filter_snapshot_stats(filtered_df)
@@ -2002,7 +2077,7 @@ def get_personal_sequence(
             "conditioned_summary": build_conditioned_summary(conditioned_df, condition_count, condition_pitch),
             "pitch_location_scatter": build_pitch_location_scatter(filtered_df),
             "filter_snapshot": snapshot,
-            "catcher_options": build_catcher_options(pitch_df),
+            "catcher_options": build_catcher_options(pitch_df, year=year),
             "catcher_lookup": catcher_lookup_rows(pitch_df, year=year),
         },
         tables={

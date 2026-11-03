@@ -14,10 +14,16 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 from app.core.config import settings
-from app.services.admin_service import DAILY_PIPELINE_STEPS, run_daily_pipeline_step
+from app.services.admin_service import (
+    DAILY_ALWAYS_PIPELINE_STEPS,
+    DAILY_GAME_PIPELINE_STEPS,
+    DAILY_PIPELINE_STEPS,
+    run_daily_pipeline_step,
+)
 from app.services.pipeline_reliability_service import (
     acquire_daily_lock,
     daily_state_path,
+    read_daily_update_settings,
     read_daily_update_state,
     utc_now,
     write_json_atomic,
@@ -73,7 +79,12 @@ def _result_summary(result: dict[str, object]) -> dict[str, object]:
     return summary
 
 
-def _selected_steps(args: argparse.Namespace, previous: dict[str, Any]) -> list[str]:
+def _selected_steps(
+    args: argparse.Namespace,
+    previous: dict[str, Any],
+    *,
+    game_updates_enabled: bool | None = None,
+) -> list[str]:
     if args.step:
         return list(dict.fromkeys(args.step))
     if args.retry_failed:
@@ -86,7 +97,15 @@ def _selected_steps(args: argparse.Namespace, previous: dict[str, Any]) -> list[
         if selected and "data_freshness" not in selected:
             selected.append("data_freshness")
         return selected
-    return list(DAILY_PIPELINE_STEPS)
+    enabled = (
+        read_daily_update_settings(settings.data_dir)["game_updates_enabled"]
+        if game_updates_enabled is None
+        else bool(game_updates_enabled)
+    )
+    return [
+        *(DAILY_GAME_PIPELINE_STEPS if enabled else ()),
+        *DAILY_ALWAYS_PIPELINE_STEPS,
+    ]
 
 
 def main() -> int:
@@ -127,7 +146,12 @@ def main() -> int:
 
     state_path = daily_state_path(settings.data_dir)
     previous = read_daily_update_state(settings.data_dir)
-    selected = _selected_steps(args, previous)
+    daily_settings = read_daily_update_settings(settings.data_dir)
+    selected = _selected_steps(
+        args,
+        previous,
+        game_updates_enabled=bool(daily_settings["game_updates_enabled"]),
+    )
     state_lock = threading.Lock()
     started = datetime.now(timezone.utc)
     state: dict[str, Any] = {
@@ -138,6 +162,8 @@ def main() -> int:
         "started_at": started.isoformat(timespec="seconds"),
         "heartbeat_at": utc_now(),
         "selected_steps": selected,
+        "game_updates_enabled": bool(daily_settings["game_updates_enabled"]),
+        "transactions_always_enabled": True,
         "stdout_path": str(stdout_path),
         "stderr_path": str(stderr_path),
         "steps": {},

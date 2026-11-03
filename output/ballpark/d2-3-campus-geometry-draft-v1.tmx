@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="53" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="22">
+ <properties>
+  <property name="asset_status" value="approved_visual_reference_geometry_draft"/>
+  <property name="logical_grid_status" value="32px_candidate_not_approved"/>
+  <property name="image_coordinate_size" value="1672x941"/>
+  <property name="reference_sha256" value="5f1ed07083289f62fd9a6d6e3e1003d2160467fe1337285187ed398dd16e4a65"/>
+  <property name="runtime_wired" type="bool" value="false"/>
+  <property name="production_ready" type="bool" value="false"/>
+ </properties>
+ <imagelayer id="1" name="approved_visual_reference" width="53" height="30">
+  <properties><property name="production_art" type="bool" value="false"/></properties>
+  <image source="d2-3-campus-environment-visual-candidate-v1.png" width="1672" height="941"/>
+ </imagelayer>
+ <objectgroup id="2" name="collision_draft">
+  <object id="1" name="batting_cages" x="0" y="0" width="430" height="335"/>
+  <object id="2" name="field_and_perimeter_fence" x="435" y="0"><polygon points="0,0 790,0 900,300 715,420 505,480 305,480 95,420 -95,300"/></object>
+  <object id="3" name="closed_game_gate" x="745" y="477" width="185" height="57"/>
+  <object id="4" name="pitcher_mound" x="1340" y="0" width="332" height="340"/>
+  <object id="5" name="training_lab" x="0" y="380" width="425" height="196"/>
+  <object id="6" name="video_room" x="1420" y="370" width="252" height="206"/>
+  <object id="7" name="clubhouse" x="0" y="615" width="545" height="210"/>
+  <object id="8" name="team_office" x="1130" y="615" width="542" height="210"/>
+  <object id="9" name="west_plaza_garden" x="570" y="580" width="180" height="166"/>
+  <object id="10" name="east_plaza_garden" x="1000" y="580" width="172" height="166"/>
+  <object id="11" name="southwest_landscaping" x="0" y="875" width="760" height="66"/>
+  <object id="12" name="southeast_landscaping" x="1000" y="875" width="672" height="66"/>
+ </objectgroup>
+ <objectgroup id="3" name="entrances_draft">
+  <object id="13" name="game" x="790" y="535" width="100" height="40">
+   <properties><property name="target_route" value="/games/today"/></properties>
+  </object>
+  <object id="14" name="batting_cages" x="330" y="338" width="85" height="40">
+   <properties><property name="target_route" value="/batters"/></properties>
+  </object>
+  <object id="15" name="pitcher_mound" x="1425" y="340" width="110" height="40">
+   <properties><property name="target_route" value="/pitchers"/></properties>
+  </object>
+  <object id="16" name="training_lab" x="165" y="576" width="140" height="40">
+   <properties><property name="target_route" value="/lab"/></properties>
+  </object>
+  <object id="17" name="video_room" x="1500" y="576" width="125" height="40">
+   <properties><property name="target_action" value="open_video_panel"/></properties>
+  </object>
+  <object id="18" name="clubhouse" x="245" y="825" width="165" height="42">
+   <properties><property name="target_room" value="clubhouse"/></properties>
+  </object>
+  <object id="19" name="team_office" x="1335" y="825" width="165" height="42">
+   <properties><property name="target_room" value="team-office"/></properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="spawn_draft">
+  <object id="20" name="arrival" x="840" y="864" width="1" height="1"/>
+ </objectgroup>
+ <objectgroup id="5" name="pointer_only_interactions_draft">
+  <object id="21" name="leaderboard" x="685" y="40" width="310" height="120">
+   <properties><property name="target_route" value="/leaderboards"/></properties>
+  </object>
+ </objectgroup>
+</map>

@@ -64,26 +64,35 @@
         </g>
         <polyline class="plate" :points="platePoints" />
 
-        <g v-if="showPoints">
-          <circle
-            v-for="(point, index) in plottedPoints"
-            :key="index"
-            :cx="scaleX(point.x)"
-            :cy="scaleY(point.z)"
-            :r="(compact ? 5.2 : 4.32) * pointScale"
-            :fill="colorForPitch(point.pitch)"
-            :opacity="pointOpacity"
-            :class="{ selected: selectedKey && selectedKey === point.key }"
-            tabindex="0"
-            role="button"
-            @mouseenter="hoveredPoint = point"
-            @mouseleave="hoveredPoint = null"
-            @focus="hoveredPoint = point"
-            @blur="hoveredPoint = null"
-            @click="emit('select-point', point.raw)"
-            @keydown.enter.prevent="emit('select-point', point.raw)"
-            @keydown.space.prevent="emit('select-point', point.raw)"
-          />
+        <g v-if="showPoints" class="pitch-points">
+          <g v-for="point in plottedPoints" :key="point.key">
+            <circle
+              class="pitch-dot"
+              :class="{ selected: selectedKey && selectedKey === point.key }"
+              :cx="scaleX(point.x)"
+              :cy="scaleY(point.z)"
+              :r="(compact ? 5.2 : 4.32) * pointScale"
+              :fill="colorForPitch(point.pitch)"
+              :opacity="pointOpacity"
+              aria-hidden="true"
+            />
+            <circle
+              class="pitch-hit-area"
+              :cx="scaleX(point.x)"
+              :cy="scaleY(point.z)"
+              :r="Math.max(10, (compact ? 7 : 6) * pointScale)"
+              tabindex="0"
+              role="button"
+              :aria-label="`${point.pitch}, ${point.description || 'result unavailable'}, ${point.velo}`"
+              @mouseenter="hoveredPoint = point"
+              @mouseleave="hoveredPoint = null"
+              @focus="hoveredPoint = point"
+              @blur="hoveredPoint = null"
+              @click="emit('select-point', point.raw)"
+              @keydown.enter.prevent="emit('select-point', point.raw)"
+              @keydown.space.prevent="emit('select-point', point.raw)"
+            />
+          </g>
         </g>
 
         <g v-if="hoveredPoint" class="hover-card">
@@ -661,16 +670,31 @@ svg {
   stroke-width: 4;
 }
 
-circle {
+.pitch-dot {
   stroke: rgba(2, 6, 23, 0.82);
   stroke-width: 0.7;
-  cursor: pointer;
+  pointer-events: none;
 }
 
-circle.selected {
+.pitch-dot.selected {
   opacity: 1;
   stroke: #020617;
   stroke-width: 2;
+}
+
+.pitch-hit-area {
+  fill: transparent;
+  stroke: transparent;
+  cursor: pointer;
+}
+
+.pitch-hit-area:focus-visible {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.hover-card {
+  pointer-events: none;
 }
 
 .legend {

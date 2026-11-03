@@ -1,0 +1,4 @@
+interface:
+  display_name: "Petehub Baseball Motion"
+  short_description: "Protect baseball data across motion and replay work"
+  default_prompt: "Use $petehub-baseball-motion to define this replay or motion event contract."

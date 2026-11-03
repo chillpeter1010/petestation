@@ -1,0 +1,4 @@
+interface:
+  display_name: "Petehub Game Art Pipeline"
+  short_description: "Version Ballpark sprites, models, manifests, and licenses"
+  default_prompt: "Use $petehub-game-art-pipeline to define or audit this Ballpark asset pipeline."

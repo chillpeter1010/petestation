@@ -1,0 +1,105 @@
+{
+  "contract_version": 3,
+  "tile_size": [32, 32],
+  "tile_size_status": "editor_grid_only_not_a_visual_gate",
+  "scene_package_manifest": "data/sample/petehub_ballpark_scene_manifest_v3.json",
+  "scene_package_history": ["data/sample/petehub_ballpark_scene_manifest_v2.json", "data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json"],
+  "human_acceptance": "inherited_user_acceptance_2026-11-02_D2_1_to_D2_5_and_R_exit",
+  "projection": "orthogonal_top_down",
+  "coordinate_origin": "top_left",
+  "layers": ["ground", "decoration_back", "collision", "objects", "actors", "decoration_front", "interactions"],
+  "reference_assets": [
+    {"logical_id":"concept.clubhouse.corridor.v2","path":"frontend/assets/ballpark/clubhouse-corridor-v2.png","sha256":"88da9cc5edcb6c9e9bd4c80f548db1f962a50ba3862f90c968d4ece7eefbb60e","dimensions":[1671,941],"kind":"approved_background_reference","source":"User-approved scene composition; independently authored collision/foreground/portals in d2-scenes-v3","production_eligible":false},
+    {"logical_id":"concept.team_office.clean.v1","path":"frontend/assets/ballpark/team-office-clean-v1.png","sha256":"626ab1765aa2c723ee44e93843f030057ea65b2a2feaf919e054617d5afb113b","dimensions":[1672,941],"kind":"approved_background_reference","source":"User-approved scene composition; independently authored collision/foreground/portals in d2-scenes-v3","production_eligible":false},
+    {"logical_id":"concept.training_lab.interior_candidate.v1","path":"frontend/assets/ballpark/training-lab-v1.png","sha256":"1b272c393a1b47cf026002b4347f1f305ae46cc0c49e348e9d1870d67fe31895","dimensions":[1672,941],"kind":"approved_background_reference","source":"User-approved scene composition; independently authored collision/foreground/portals in d2-scenes-v3","production_eligible":false},
+    {"logical_id":"concept.video_game_room.interior_candidate.v1","path":"frontend/assets/ballpark/video-game-room-v1.png","sha256":"250d94e6de2b3fb287718561dd3f5697b9aa968ead8ce466120bfe88363f333b","dimensions":[1672,941],"kind":"approved_background_reference","source":"User-approved scene composition; independently authored collision/foreground/portals in d2-scenes-v3","production_eligible":false},
+    {
+      "logical_id": "concept.campus.v4",
+      "path": "frontend/assets/ballpark/main-campus-v4.png",
+      "sha256": "330dc2c7559011549bfecbacbcd50f8b7557c4292036cbbab02959ef5a2e428c",
+      "dimensions": [1672, 941],
+      "kind": "reference",
+      "source": "approved AI-assisted B3 concept; derived v4 image",
+      "production_eligible": false
+    },
+    {
+      "logical_id": "concept.game_entrance.visual_study.v1",
+      "path": "output/ballpark/d2-1-game-entrance-visual-study-v1.png",
+      "sha256": "c172ac9f28bee943292ce6d3685e886ce1259407f4b69ae5e282e35f39199130",
+      "dimensions": [1671, 941],
+      "kind": "reference",
+      "source": "Built-in image generation from approved Campus concept; user accepted visual direction on 2026-10-31; flattened image only",
+      "geometry_draft": "output/ballpark/d2-1-game-entrance-geometry-draft-v1.tmx",
+      "production_eligible": false
+    },
+    {
+      "logical_id": "concept.game_entrance.isolated_gate.v1",
+      "path": "output/ballpark/d2-1-game-gate-isolated-concept-v1.png",
+      "sha256": "a75ee346bbf8f727e7f3134edd02f931ef3d6c48ab78c551eb3c39610e3bb936",
+      "dimensions": [1774, 887],
+      "kind": "reference",
+      "source": "Built-in image generation on 2026-11-01 using the approved D2.1 Game-entrance visual study as style/proportion reference; user explicitly accepted the isolated gate visual on 2026-11-01; flattened object image with no editable layers",
+      "visual_approval": "accepted_by_user_2026-11-01",
+      "production_eligible": false
+    },
+    {
+      "logical_id": "concept.campus.environment_candidate.v1",
+      "path": "output/ballpark/d2-3-campus-environment-visual-candidate-v1.png",
+      "runtime_static_path": "frontend/assets/ballpark/main-campus-v5.png",
+      "sha256": "5f1ed07083289f62fd9a6d6e3e1003d2160467fe1337285187ed398dd16e4a65",
+      "dimensions": [1672, 941],
+      "kind": "approved_static_reference",
+      "source": "Built-in image generation on 2026-11-01; overall layout reference concept.campus.v4 and user-accepted style reference concept.game_entrance.visual_study.v1; removes baked HUD, dialogue and actors; user approved the full-scene visual on 2026-11-01",
+      "production_eligible": false
+    },
+    {
+      "logical_id": "concept.clubhouse.v2",
+      "path": "frontend/assets/ballpark/clubhouse-v2.png",
+      "sha256": "4b629d40330c45bf26c4e33d7febb7e0ef6d1fa497398d92141790b6e469023d",
+      "dimensions": [1672, 941],
+      "kind": "reference",
+      "source": "approved AI-assisted B3 concept; HOME TEAM plaque removed in C5",
+      "production_eligible": false
+    },
+    {
+      "logical_id": "concept.team_office.v4",
+      "path": "frontend/assets/ballpark/team-office-v4.png",
+      "sha256": "1da5d0e959bafd26cceb94feedee9eb6c2f1f6966d143ae95d9e42999c33d1dd",
+      "dimensions": [1672, 941],
+      "kind": "reference",
+      "source": "approved AI-assisted B3 concept; HOME TEAM plaque removed in C5; baked mouse cursor removed in v4",
+      "production_eligible": false
+    }
+  ],
+  "scenes": [
+    {"scene_id":"campus","concept_reference":"concept.campus.environment_candidate.v1","render_mode":"layered_background","editable_source":"output/ballpark/scenes-v3/campus-layers.svg","scene_data":"output/ballpark/scenes-v3/campus.json","collision":"output/ballpark/scenes-v3/campus.json#collision","entrances":"output/ballpark/scenes-v3/campus.json#portals","foreground":"output/ballpark/scenes-v3/campus.json#foreground","fallback":{"static_route":"/ballpark","classic_route":"/"}},
+    {"scene_id":"clubhouse","concept_reference":"concept.clubhouse.corridor.v2","render_mode":"layered_background","editable_source":"output/ballpark/scenes-v3/clubhouse-layers.svg","scene_data":"output/ballpark/scenes-v3/clubhouse.json","collision":"output/ballpark/scenes-v3/clubhouse.json#collision","entrances":"output/ballpark/scenes-v3/clubhouse.json#portals","foreground":"output/ballpark/scenes-v3/clubhouse.json#foreground","fallback":{"static_route":"/ballpark","classic_route":"/teams"}},
+    {"scene_id":"team_office","concept_reference":"concept.team_office.clean.v1","render_mode":"layered_background","editable_source":"output/ballpark/scenes-v3/team-office-layers.svg","scene_data":"output/ballpark/scenes-v3/team-office.json","collision":"output/ballpark/scenes-v3/team-office.json#collision","entrances":"output/ballpark/scenes-v3/team-office.json#portals","foreground":"output/ballpark/scenes-v3/team-office.json#foreground","fallback":{"static_route":"/ballpark","classic_route":"/teams"}},
+    {"scene_id":"training_lab","concept_reference":"concept.training_lab.interior_candidate.v1","render_mode":"layered_background","editable_source":"output/ballpark/scenes-v3/training-lab-layers.svg","scene_data":"output/ballpark/scenes-v3/training-lab.json","collision":"output/ballpark/scenes-v3/training-lab.json#collision","entrances":"output/ballpark/scenes-v3/training-lab.json#portals","foreground":"output/ballpark/scenes-v3/training-lab.json#foreground","fallback":{"static_route":"/ballpark","classic_route":"/lab"}},
+    {"scene_id":"video_game_room","concept_reference":"concept.video_game_room.interior_candidate.v1","render_mode":"layered_background","editable_source":"output/ballpark/scenes-v3/video-game-room-layers.svg","scene_data":"output/ballpark/scenes-v3/video-game-room.json","collision":"output/ballpark/scenes-v3/video-game-room.json#collision","entrances":"output/ballpark/scenes-v3/video-game-room.json#portals","foreground":"output/ballpark/scenes-v3/video-game-room.json#foreground","fallback":{"static_route":"/ballpark","classic_route":"/"}}
+  ],
+  "avatar_contract": {
+    "avatar_version": 1,
+    "frame_size": [96, 144],
+    "frame_size_status": "authored_D4_user_accepted_2026-11-02",
+    "character_manifest": "data/sample/petehub_ballpark_character_manifest_v1.json",
+    "character_art_standards": {
+      "player_npc": {"reference": "output/ballpark/character-studies/gabriel-moreno-v2-64x96-concept.png", "target_frame_size": [64, 96], "production_asset": "frontend/assets/ballpark/characters/player-preview-v1.png", "status": "D4_reference_delivered_D5_device_gate_pending"},
+      "user": {"reference": "output/ballpark/character-studies/gabriel-moreno-v3-96x144-modular-concept.png", "target_frame_size": [96, 144], "editable_parts_required": true, "production_asset": "frontend/assets/ballpark/characters/character-kit-v1.json", "status": "D4_user_accepted_2026-11-02"}
+    },
+    "normalized_foot_anchor": [0.5, 1],
+    "foot_anchor": [48, 144],
+    "world_height": 80,
+    "collision_footprint": [18, 10],
+    "directions": ["north", "east", "south", "west"],
+    "clips": {
+      "idle": {"frames_per_direction": 4, "fps": 6, "loop": true},
+      "walk": {"frames_per_direction": 8, "fps": 10, "loop": true}
+    },
+    "neutral_sprite": "frontend/assets/ballpark/characters/user-preview-v1.png",
+    "human_acceptance": "user_accepted_D4_and_all_followups_2026-11-02"
+  },
+  "d5_source_evidence": "data/sample/petehub_ballpark_d5_source_gate_v2.json",
+  "d5_manual_acceptance": {"status":"pending_user","checklist":"data/sample/petehub_ballpark_d5_manual_acceptance_v1.json","items":["team_office_rear_collision","loading_depth_and_atlas_bleed","narrow_real_device","reduced_motion","asset_failure_fallback"],"prior_D4_and_scene_acceptance":"passed_by_user_2026-11-02_not_reopened"},
+  "production_ready": false
+}

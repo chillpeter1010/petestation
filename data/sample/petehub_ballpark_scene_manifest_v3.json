@@ -1,0 +1,381 @@
+{
+  "schema_version": 3,
+  "asset_version": "d2-scenes-v3",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-v3.json",
+  "source_sha256": "a0e4744ae48d45e40e8a59a0dff58f3a73d5592475d1940d3278db7caa863e0f",
+  "exporter": "build_ballpark_scenes.py:v2",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / OpenAI image generation and authored scene geometry",
+    "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
+    "modification_note": "Unified user-accepted v2 and D2.5 interiors; R-exit and Campus net followup accepted 2026-11-02. Backgrounds, masks, spawns and portals preserved. 2026-11-03 D5 followup adds Coach/GM rear-wall equipment collision after user reported walking through boards and monitors; manual acceptance pending. D5 release remains pending.",
+    "reference_manifests": [
+      "data/sample/petehub_ballpark_scene_manifest_v2.json",
+      "data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json"
+    ],
+    "composition_sources": [
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-v2.json",
+        "sha256": "33413d868925345129746a6f535d8c503f32ee503f5fa326e0133d9c4b25a949"
+      },
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-d2-5-v1.json",
+        "sha256": "c65aeec179d8709a3193ac7005b4c58c3ba8e5d37a5e9e79267c553a5ecd7a1b"
+      }
+    ]
+  },
+  "scope": [
+    "D2.1",
+    "D2.2",
+    "D2.3",
+    "D2.4",
+    "D2.5",
+    "D2.6"
+  ],
+  "human_acceptance": "inherited_user_acceptance_2026-11-02_D2_1_to_D2_5_and_R_exit",
+  "scenes": [
+    {
+      "scene_id": "campus",
+      "room": "campus",
+      "background": "frontend/assets/ballpark/main-campus-v5.png",
+      "background_sha256": "5f1ed07083289f62fd9a6d6e3e1003d2160467fe1337285187ed398dd16e4a65",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 3322389,
+      "editable_source": "output/ballpark/scenes-v3/campus-layers.svg",
+      "editable_source_sha256": "fb94097622337a5e9161055b82e575dd0398c1af7a50610d86253da392ecd06f",
+      "runtime_path": "output/ballpark/scenes-v3/campus.json",
+      "runtime_sha256": "31af8a1ee07caf33657ce90564967e531b3fa3dd4abbd762cd9cbc8e595d90b2",
+      "collision_count": 24,
+      "foreground_count": 15,
+      "portal_count": 7,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/"
+      }
+    },
+    {
+      "scene_id": "clubhouse",
+      "room": "clubhouse",
+      "background": "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+      "background_sha256": "88da9cc5edcb6c9e9bd4c80f548db1f962a50ba3862f90c968d4ece7eefbb60e",
+      "image_size": [
+        1671,
+        941
+      ],
+      "world_scale": [
+        1.0005984440454818,
+        1.0
+      ],
+      "background_bytes": 2141596,
+      "editable_source": "output/ballpark/scenes-v3/clubhouse-layers.svg",
+      "editable_source_sha256": "543a5435a7e797e8c5c681259f8394b466af30dd7e8eade954644bcfdec907eb",
+      "runtime_path": "output/ballpark/scenes-v3/clubhouse.json",
+      "runtime_sha256": "4db1e5bd61c103752d580cd1404d7e1eb15bac991d9c37a560c399b48f9a0727",
+      "collision_count": 16,
+      "foreground_count": 9,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6289644,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    },
+    {
+      "scene_id": "team_office",
+      "room": "team-office",
+      "background": "frontend/assets/ballpark/team-office-clean-v1.png",
+      "background_sha256": "626ab1765aa2c723ee44e93843f030057ea65b2a2feaf919e054617d5afb113b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2330257,
+      "editable_source": "output/ballpark/scenes-v3/team-office-layers.svg",
+      "editable_source_sha256": "d4a075f252cc059f9857a1715cab986df531e33a705dffc50438bd0f86c261eb",
+      "runtime_path": "output/ballpark/scenes-v3/team-office.json",
+      "runtime_sha256": "54cf28a4d7a0cde8712bed4690718491cd5e9295838ae6088db889260487973b",
+      "collision_count": 29,
+      "foreground_count": 12,
+      "portal_count": 3,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    },
+    {
+      "scene_id": "training_lab",
+      "room": "training-lab",
+      "background": "frontend/assets/ballpark/training-lab-v1.png",
+      "background_sha256": "1b272c393a1b47cf026002b4347f1f305ae46cc0c49e348e9d1870d67fe31895",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2739518,
+      "editable_source": "output/ballpark/scenes-v3/training-lab-layers.svg",
+      "editable_source_sha256": "76a46c327f6d12bb2076ba54670b3562343adc2adf14995476878ad62089618b",
+      "runtime_path": "output/ballpark/scenes-v3/training-lab.json",
+      "runtime_sha256": "77227bc89d38a94fb14c225e55578ef41d7e1af1b7d80eaae2f39df214a4f883",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/lab"
+      }
+    },
+    {
+      "scene_id": "video_game_room",
+      "room": "video-game-room",
+      "background": "frontend/assets/ballpark/video-game-room-v1.png",
+      "background_sha256": "250d94e6de2b3fb287718561dd3f5697b9aa968ead8ce466120bfe88363f333b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2401716,
+      "editable_source": "output/ballpark/scenes-v3/video-game-room-layers.svg",
+      "editable_source_sha256": "976a74b0b7529b3db4823a19f801b3fe6853c57555b37f19e3452786041f450f",
+      "runtime_path": "output/ballpark/scenes-v3/video-game-room.json",
+      "runtime_sha256": "8f446ac0e84ca6fd02fdf7e203abe52fff16591f214b7e5d1eab518968c69cdb",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/"
+      }
+    }
+  ],
+  "required_scene_ids": [
+    "campus",
+    "clubhouse",
+    "team_office",
+    "training_lab",
+    "video_game_room"
+  ],
+  "collision_additions": {
+    "campus": [
+      {
+        "id": "pitching-west-net",
+        "polygon": [
+          [
+            1320,
+            225
+          ],
+          [
+            1347,
+            225
+          ],
+          [
+            1348,
+            319
+          ],
+          [
+            1320,
+            319
+          ]
+        ]
+      }
+    ],
+    "team-office": [
+      {
+        "id": "coach-rear-wall-equipment",
+        "polygon": [
+          [
+            105,
+            200
+          ],
+          [
+            664,
+            200
+          ],
+          [
+            664,
+            385
+          ],
+          [
+            105,
+            385
+          ]
+        ]
+      },
+      {
+        "id": "manager-rear-wall-equipment",
+        "polygon": [
+          [
+            1010,
+            200
+          ],
+          [
+            1540,
+            200
+          ],
+          [
+            1540,
+            385
+          ],
+          [
+            1010,
+            385
+          ]
+        ]
+      }
+    ]
+  },
+  "collision_overrides": {
+    "team-office": {
+      "coach-table-chairs": {
+        "id": "coach-table-chairs",
+        "polygon": [
+          [
+            204,
+            567
+          ],
+          [
+            287,
+            567
+          ],
+          [
+            287,
+            554
+          ],
+          [
+            321,
+            554
+          ],
+          [
+            321,
+            573
+          ],
+          [
+            353,
+            573
+          ],
+          [
+            353,
+            554
+          ],
+          [
+            400,
+            554
+          ],
+          [
+            400,
+            576
+          ],
+          [
+            505,
+            576
+          ],
+          [
+            536,
+            612
+          ],
+          [
+            536,
+            718
+          ],
+          [
+            499,
+            718
+          ],
+          [
+            499,
+            772
+          ],
+          [
+            433,
+            772
+          ],
+          [
+            433,
+            715
+          ],
+          [
+            397,
+            715
+          ],
+          [
+            397,
+            772
+          ],
+          [
+            338,
+            772
+          ],
+          [
+            338,
+            714
+          ],
+          [
+            291,
+            714
+          ],
+          [
+            291,
+            772
+          ],
+          [
+            235,
+            772
+          ],
+          [
+            235,
+            714
+          ],
+          [
+            204,
+            714
+          ]
+        ]
+      }
+    }
+  },
+  "pending_manual_acceptance": [
+    "2026-11-03: Team Office Coach/GM rear-wall boards, monitors and cabinets block walking; entry areas and central hall remain usable",
+    "2026-11-03: Coach meeting-table right-side aisle widened by trimming oversized chair collision; walking to lower area pending user confirmation"
+  ],
+  "followup_acceptance": "user_accepted_pitching_west_net_and_70vw_width_2026-11-02",
+  "entrance_pilot": "output/ballpark/scenes-v3/game-entrance-pilot.json",
+  "entrance_editable_source": "output/ballpark/scenes-v3/game-entrance-layers.svg",
+  "entrance_editable_sha256": "98bc5fd938a847d7fe177d37d23025166e60aa645afe94bf9a39e2c1316fce33",
+  "totals": {
+    "collision_count": 135,
+    "foreground_count": 82,
+    "portal_count": 16,
+    "background_bytes": 12935476,
+    "decoded_texture_bytes": 31463276
+  }
+}

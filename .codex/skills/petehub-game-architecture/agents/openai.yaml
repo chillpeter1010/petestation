@@ -1,0 +1,4 @@
+interface:
+  display_name: "Petehub Game Architecture"
+  short_description: "Review Ballpark boundaries, routes, saves, and fallbacks"
+  default_prompt: "Use $petehub-game-architecture to review this Ballpark integration boundary."

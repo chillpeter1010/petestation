@@ -13,6 +13,11 @@ import pandas as pd
 
 from app.core.config import settings
 from app.services.player_archetype_challenger_service import batter_tags_path, pitcher_tags_path
+from app.services.player_archetype_practical_tag_service import (
+    get_player_archetype_practical_tags,
+    practical_distribution_path,
+    practical_roster_path,
+)
 from app.services.player_archetype_slice2a_service import slice2a_tags_path
 from app.services.player_archetype_warehouse_service import batter_warehouse_path, pitcher_warehouse_path
 
@@ -414,20 +419,68 @@ def get_player_archetype_slice3_view(
     distribution = pd.read_parquet(slice3_distribution_path(root))
     roster = roster[roster["year"].eq(year) & roster["population"].eq(population)]
     distribution = distribution[distribution["year"].eq(year) & distribution["population"].eq(population)]
+    if population == "pitcher":
+        distribution = distribution[distribution["dimension"].ne("primary_pair")]
+    practical_contract: dict[str, Any] | None = None
+    practical_year = pd.DataFrame()
+    if population == "pitcher" and practical_roster_path(root).exists() and practical_distribution_path(root).exists():
+        practical_contract = get_player_archetype_practical_tags(root)
+        practical = pd.read_parquet(practical_roster_path(root))
+        practical = practical[practical["year"].eq(year)]
+        practical_year = practical.copy()
+        practical["practical_tags"] = practical["practical_tags"].map(
+            lambda value: json.loads(value) if isinstance(value, str) and value else []
+        )
+        roster = roster.merge(
+            practical[["year", "player_id", "role", "practical_tags", "practical_tag_count"]],
+            on=["year", "player_id", "role"],
+            how="left",
+        )
+        roster["practical_tags"] = roster["practical_tags"].map(lambda value: value if isinstance(value, list) else [])
+        roster["practical_tag_count"] = pd.to_numeric(roster["practical_tag_count"], errors="coerce").fillna(0).astype(int)
+        practical_distribution = pd.read_parquet(practical_distribution_path(root))
+        practical_distribution = practical_distribution[practical_distribution["year"].eq(year)]
+        distribution = pd.concat([distribution, practical_distribution], ignore_index=True, sort=False)
+    elif population == "pitcher":
+        roster = roster.copy()
+        roster["practical_tags"] = [[] for _ in range(len(roster))]
+        roster["practical_tag_count"] = 0
     if role:
         roster = roster[roster["role"].eq(role)]
         distribution = distribution[distribution["role"].eq(role)]
     roster_records = roster.replace([np.inf, -np.inf], np.nan).astype(object).where(pd.notna(roster), None).to_dict(orient="records")
     distribution_records = distribution.replace([np.inf, -np.inf], np.nan).astype(object).where(pd.notna(distribution), None).to_dict(orient="records")
+    release_decisions = [item for item in contract["release_decisions"] if item["population"] == population]
+    if population == "pitcher":
+        release_decisions = [item for item in release_decisions if item["dimension"] != "primary_pair"]
+    warnings = list(contract["warnings"])
+    practical_version = None
+    if practical_contract is not None:
+        practical_version = practical_contract["contract_version"]
+        warnings.extend(practical_contract["warnings"])
+        for practical_dimension in ("mechanics", "platoon_strategy"):
+            rows = [item for item in practical_contract["retention"] if item["dimension"] == practical_dimension]
+            pairs = sum(int(item["adjacent_pairs"]) for item in rows)
+            retained = sum(int(item["adjacent_pairs"]) * float(item["retention_pct"]) / 100 for item in rows)
+            status_column = "mechanics_status" if practical_dimension == "mechanics" else "platoon_strategy_status"
+            eligible = int(practical_year[status_column].isin(["supported", "unassigned", "conflict_suppressed"]).sum())
+            assigned = int(practical_year[status_column].eq("supported").sum())
+            release_decisions.append({
+                "population": "pitcher", "source": "practical_v1", "dimension": practical_dimension,
+                "decision": "monitor", "assigned_share_pct": round(assigned * 100 / eligible, 1) if eligible else 0.0,
+                "adjacent_pairs": pairs, "retention_pct": round(retained * 100 / pairs, 1) if pairs else 0.0,
+                "reason": "Lab-first supplemental profile; it does not replace the frozen core tags.",
+            })
     return {
         "contract_version": contract["contract_version"], "year": year, "population": population, "role": role,
+        "practical_contract_version": practical_version,
         "publication_scope": contract["publication_scope"],
         "roster": roster_records,
         "distribution": distribution_records,
-        "release_decisions": [item for item in contract["release_decisions"] if item["population"] == population],
+        "release_decisions": release_decisions,
         "boundary_sensitivity": contract["boundary_sensitivity"] if population == "pitcher" else [],
         "rookie_cold_start": [item for item in contract["rookie_cold_start"] if item["population"] == population],
-        "warnings": contract["warnings"],
+        "warnings": warnings,
     }
 
 

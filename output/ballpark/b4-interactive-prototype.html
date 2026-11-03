@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23ff9900%22/><path d=%22M8 16h16M16 8v16%22 stroke=%22%23070707%22 stroke-width=%223%22/></svg>">
+  <title>Petehub Ballpark · B4 Interactive Prototype</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --orange: #ff9900;
+      --ink: #070707;
+      --surface: #141414;
+      --raised: #242830;
+      --text: #f3efe3;
+      --muted: #aab2bd;
+      --line: #3a414c;
+      --green: #477a4b;
+      --focus: #ffd166;
+      --danger: #f06b62;
+      font-family: "Fira Sans", "Segoe UI", Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; overflow: hidden; color: var(--text); background: var(--ink); }
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .shell { height: 100vh; display: grid; grid-template-rows: 68px 1fr; background: radial-gradient(circle at 70% 10%, #2b1a08, transparent 32rem), var(--ink); }
+    .topbar { min-height: 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); padding: 12px 20px; background: rgb(7 7 7 / 94%); }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand strong { font-size: 23px; letter-spacing: -.04em; }
+    .brand strong span { margin-left: 4px; border-radius: 5px; padding: 2px 6px 3px; color: #111; background: var(--orange); }
+    .brand small, .zone-copy small, .panel-label { color: var(--orange); font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .button { min-height: 42px; border: 1px solid var(--line); border-radius: 9px; padding: 9px 13px; color: var(--text); background: #181b20; font-weight: 850; cursor: pointer; }
+    .button:hover { border-color: var(--orange); }
+    .button.primary { border-color: var(--orange); color: #111; background: var(--orange); }
+    .layout { min-height: 0; display: grid; grid-template-columns: 250px minmax(0, 1fr); }
+    .travel { border-right: 1px solid var(--line); padding: 18px 14px; background: #101114; }
+    .travel h2 { margin: 5px 8px 14px; font-size: 20px; }
+    .travel-list { display: grid; gap: 7px; }
+    .travel button { width: 100%; min-height: 48px; display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 8px; border: 1px solid transparent; border-radius: 9px; padding: 8px 10px; color: var(--muted); background: transparent; text-align: left; cursor: pointer; }
+    .travel button:hover, .travel button[aria-current="true"] { border-color: #57431f; color: var(--text); background: #201b13; }
+    .travel button[aria-current="true"] { box-shadow: inset 3px 0 var(--orange); }
+    .travel button:disabled { color: #777; cursor: not-allowed; }
+    .travel .icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #111; background: var(--orange); font-weight: 950; }
+    .travel button:disabled .icon { color: #aaa; background: #35383e; }
+    .travel em { color: #888; font-size: 9px; font-style: normal; text-transform: uppercase; }
+    .world { position: relative; height: 100%; min-height: 0; overflow: hidden; background: #1a211c; }
+    .world::before { position: absolute; inset: 0; background: linear-gradient(rgb(0 0 0 / 28%), rgb(0 0 0 / 72%)), url("./b3-art-direction-concept-2026-10-30.png") center/cover; content: ""; filter: saturate(.8); }
+    .map { position: absolute; inset: 0; }
+    .map-node { position: absolute; min-width: 136px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 999px; padding: 10px 13px; color: var(--text); background: rgb(7 7 7 / 82%); box-shadow: 0 10px 30px rgb(0 0 0 / 45%); font-size: 12px; font-weight: 900; cursor: pointer; }
+    .map-node:hover, .map-node[aria-pressed="true"] { border-color: var(--orange); color: #111; background: var(--orange); }
+    .map-node[data-zone="main-field"] { left: 44%; top: 15%; }
+    .map-node[data-zone="pitcher-facilities"] { left: 14%; top: 34%; }
+    .map-node[data-zone="batter-facilities"] { right: 10%; top: 36%; }
+    .map-node[data-zone="training-complex"] { right: 14%; bottom: 21%; }
+    .map-node[data-zone="clubhouse"] { left: 17%; bottom: 19%; }
+    .map-node[data-zone="arrival-plaza"] { left: 43%; bottom: 29%; }
+    .map-node[data-zone="video-room"] { left: 47%; top: 29%; }
+    .map-node[data-zone="front-office"] { right: 8%; top: 14%; }
+    .zone-card { position: absolute; z-index: 2; right: 22px; bottom: 20px; width: min(420px, calc(100% - 44px)); border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: rgb(12 14 17 / 95%); box-shadow: 0 24px 60px rgb(0 0 0 / 55%); }
+    .zone-card header { display: flex; align-items: start; justify-content: space-between; gap: 18px; }
+    .zone-card h1 { margin: 4px 0 0; font-size: 27px; }
+    .status { border: 1px solid #59735f; border-radius: 999px; padding: 5px 8px; color: #9cd3a7; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+    .status.unavailable { border-color: #836b3b; color: #f5b84b; }
+    .status.locked { border-color: #755050; color: #f4a4a0; }
+    .zone-card p { margin: 10px 0 15px; color: var(--muted); line-height: 1.5; }
+    .zone-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .route { display: block; margin-top: 12px; color: #91a9c5; font-family: "Fira Code", Consolas, monospace; font-size: 11px; }
+    dialog { width: min(680px, calc(100% - 28px)); border: 1px solid var(--line); border-radius: 16px; padding: 0; color: var(--text); background: #111317; box-shadow: 0 30px 90px #000; }
+    dialog::backdrop { background: rgb(0 0 0 / 72%); backdrop-filter: blur(5px); }
+    .dialog-body { padding: 22px; }
+    .dialog-body h2 { margin: 5px 0 8px; font-size: 28px; }
+    .dialog-body p { color: var(--muted); line-height: 1.55; }
+    .dialog-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+    .prototype-note { border-top: 1px solid var(--line); padding: 12px 22px; color: #89919c; background: #0b0c0f; font-size: 11px; }
+    .sr-only { position: absolute; top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    @media (max-width: 760px) {
+      .topbar { align-items: flex-start; padding: 10px 12px; }
+      .brand small, .top-actions .help { display: none; }
+      .layout { display: block; }
+      .travel { position: fixed; z-index: 5; right: 0; bottom: 0; left: 0; overflow-x: auto; border: 0; border-top: 1px solid var(--line); padding: 8px; }
+      .travel h2, .travel > .panel-label { display: none; }
+      .travel-list { display: flex; width: max-content; gap: 5px; }
+      .travel button { width: 112px; min-height: 50px; grid-template-columns: 24px 1fr; padding: 6px 8px; }
+      .travel .icon { width: 24px; height: 24px; }
+      .travel em { display: none; }
+      .world { min-height: 0; padding-bottom: 68px; }
+      .map-node { display: none; }
+      .zone-card { right: 12px; bottom: 82px; width: calc(100% - 24px); padding: 15px; }
+      .zone-card h1 { font-size: 23px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><strong>Pete<span>hub</span></strong><small>Ballpark prototype · v0.1 concept</small></div>
+      <div class="top-actions">
+        <button class="button help" id="helpButton" type="button">Help</button>
+        <a class="button" href="/" id="classicLink">Classic UI</a>
+      </div>
+    </header>
+    <div class="layout">
+      <nav class="travel" aria-label="Fast travel">
+        <span class="panel-label">Navigate</span>
+        <h2>Fast travel</h2>
+        <div class="travel-list" id="travelList"></div>
+      </nav>
+      <section class="world" aria-label="Ballpark overview">
+        <div class="map" id="map" aria-label="Conceptual ballpark map"></div>
+        <article class="zone-card" aria-live="polite">
+          <header><div class="zone-copy"><small id="zoneEyebrow">Home</small><h1 id="zoneTitle">Arrival Plaza</h1></div><span class="status" id="zoneStatus">Ready</span></header>
+          <p id="zoneDescription"></p>
+          <div class="zone-actions">
+            <button class="button primary" id="enterButton" type="button">Open Classic destination</button>
+            <button class="button" id="simulateButton" type="button">Show loading state</button>
+          </div>
+          <code class="route" id="zoneRoute"></code>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="zoneDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-body">
+      <span class="panel-label">Nuxt DOM overlay contract</span>
+      <h2 id="dialogTitle"></h2>
+      <p id="dialogCopy"></p>
+      <code class="route" id="dialogRoute"></code>
+      <div class="dialog-actions">
+        <button class="button primary" id="continueButton" type="button">Continue to Classic route</button>
+        <button class="button" id="closeDialog" type="button">Back to Ballpark</button>
+      </div>
+    </div>
+    <div class="prototype-note">Prototype only: no game runtime, authentication request, API call or persistent save is created.</div>
+  </dialog>
+
+  <dialog id="helpDialog" aria-labelledby="helpTitle">
+    <div class="dialog-body">
+      <span class="panel-label">Prototype controls</span>
+      <h2 id="helpTitle">Two equal ways to navigate</h2>
+      <p>Use the map prompts or Fast travel. Both select the same zone and would open the same canonical Nuxt route. Tab moves through controls; Escape closes dialogs; Classic UI always remains available.</p>
+      <button class="button primary" id="closeHelp" type="button">Got it</button>
+    </div>
+  </dialog>
+
+  <span class="sr-only" id="announcement" aria-live="assertive"></span>
+  <script>
+    const zones = [
+      { id: 'arrival-plaza', icon: 'H', label: 'Home', title: 'Arrival Plaza', route: '/', state: 'ready', description: 'Central arrival point with player search, fast travel and the permanent Classic UI exit.' },
+      { id: 'main-field', icon: 'G', label: 'Game', title: 'Main Field', route: '/games/today', state: 'ready', description: 'Scoreboard and Game Center entrance for today’s schedule, feed and box score.' },
+      { id: 'pitcher-facilities', icon: 'P', label: 'Pitcher', title: 'Pitcher Facilities', route: '/pitchers', state: 'ready', description: 'Mound and bullpen entrance for pitcher profiles, comparisons, rotation and pitching labs.' },
+      { id: 'batter-facilities', icon: 'B', label: 'Batter', title: 'Batter Facilities', route: '/batters', state: 'ready', description: 'Batting cages for batter profiles, comparisons, leaderboards and approach labs.' },
+      { id: 'video-room', icon: 'V', label: 'Video', title: 'Video Room', route: '/games/today', state: 'unavailable', description: 'Standalone video identity is not frozen until E4. Game Center remains the honest fallback.' },
+      { id: 'training-complex', icon: 'T', label: 'Training', title: 'Training Complex', route: '/lab', state: 'ready', description: 'Research labs, fielding, catcher facilities and leaderboards share this practice campus.' },
+      { id: 'clubhouse', icon: 'C', label: 'Clubhouse', title: 'Clubhouse', route: '/', state: 'ready', description: 'Team and roster context. A Nuxt team picker appears when no team is selected.' },
+      { id: 'front-office', icon: 'A', label: 'Front Office', title: 'Front Office', route: '/admin/updates', state: 'locked', description: 'Admin-only accounts and data operations. Locked state never prefetches sensitive data.' }
+    ];
+    let selected = zones[0];
+    let simulatedLoading = false;
+    const travelList = document.querySelector('#travelList');
+    const map = document.querySelector('#map');
+    const status = document.querySelector('#zoneStatus');
+    const enterButton = document.querySelector('#enterButton');
+    const dialog = document.querySelector('#zoneDialog');
+
+    function renderNavigation() {
+      travelList.innerHTML = zones.map(zone => `<button type="button" data-zone="${zone.id}" aria-current="${zone.id === selected.id}"><span class="icon">${zone.icon}</span><span>${zone.label}</span><em>${zone.state}</em></button>`).join('');
+      map.innerHTML = zones.map(zone => `<button type="button" class="map-node" data-zone="${zone.id}" aria-pressed="${zone.id === selected.id}">${zone.label}</button>`).join('');
+      document.querySelectorAll('[data-zone]').forEach(button => button.addEventListener('click', () => selectZone(button.dataset.zone)));
+    }
+
+    function selectZone(id) {
+      selected = zones.find(zone => zone.id === id) || zones[0];
+      simulatedLoading = false;
+      document.querySelector('#zoneEyebrow').textContent = selected.label;
+      document.querySelector('#zoneTitle').textContent = selected.title;
+      document.querySelector('#zoneDescription').textContent = selected.description;
+      document.querySelector('#zoneRoute').textContent = `Canonical route: ${selected.route}`;
+      status.textContent = selected.state;
+      status.className = `status ${selected.state}`;
+      enterButton.textContent = selected.state === 'unavailable' ? 'Open Game Center fallback' : selected.state === 'locked' ? 'Admin required' : 'Open Classic destination';
+      enterButton.disabled = selected.state === 'locked';
+      document.querySelector('#simulateButton').textContent = 'Show loading state';
+      document.querySelector('#announcement').textContent = `${selected.title}, ${selected.state}`;
+      renderNavigation();
+    }
+
+    enterButton.addEventListener('click', () => {
+      document.querySelector('#dialogTitle').textContent = selected.title;
+      document.querySelector('#dialogCopy').textContent = `This DOM overlay preserves keyboard focus, browser history and direct-link behavior before opening ${selected.route}.`;
+      document.querySelector('#dialogRoute').textContent = selected.route;
+      dialog.showModal();
+    });
+    document.querySelector('#simulateButton').addEventListener('click', event => {
+      simulatedLoading = !simulatedLoading;
+      if (!simulatedLoading) {
+        selectZone(selected.id);
+        return;
+      }
+      status.textContent = 'loading';
+      status.className = 'status';
+      event.currentTarget.textContent = 'Restore zone state';
+      document.querySelector('#announcement').textContent = `${selected.title} loading. Cancel and Classic navigation remain available.`;
+    });
+    document.querySelector('#closeDialog').addEventListener('click', () => dialog.close());
+    document.querySelector('#continueButton').addEventListener('click', () => { document.querySelector('#dialogCopy').textContent = `Prototype stopped before navigation. Production would push exactly one history entry for ${selected.route}.`; });
+    document.querySelector('#helpButton').addEventListener('click', () => document.querySelector('#helpDialog').showModal());
+    document.querySelector('#closeHelp').addEventListener('click', () => document.querySelector('#helpDialog').close());
+    document.querySelector('#classicLink').addEventListener('click', event => { event.preventDefault(); document.querySelector('#announcement').textContent = 'Classic UI destination is always available at slash.'; });
+    selectZone(selected.id);
+  </script>
+</body>
+</html>

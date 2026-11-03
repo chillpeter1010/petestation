@@ -5,6 +5,7 @@ import app.services.personal_service as personal_service
 from app.services.personal_service import (
     apply_stuff_filters,
     apply_sequence_filters,
+    annotate_sequence_context,
     build_count_pitch_mix,
     build_conditioned_count_subset,
     build_conditioned_wpa_summary_table,
@@ -219,6 +220,18 @@ def test_apply_sequence_filters_can_filter_catcher_id_fallback(monkeypatch):
     assert int(filtered.iloc[0]["fielder_2"]) == 543510
 
 
+def test_catcher_options_use_season_player_master_before_external_lookup(monkeypatch):
+    monkeypatch.setattr(personal_service, "load_season_catcher_lookup", lambda year: {"543510": "James McCann"})
+    monkeypatch.setattr(
+        personal_service,
+        "load_mlbam_name_lookup",
+        lambda player_ids: (_ for _ in ()).throw(AssertionError("external lookup should not run")),
+    )
+    frame = pd.DataFrame([{"fielder_2": 543510}])
+
+    assert build_catcher_options(frame, year=2026) == ["James McCann"]
+
+
 def test_build_discipline_panels_return_location_payloads():
     frame = pd.DataFrame(
         [
@@ -357,6 +370,25 @@ def test_build_count_pitch_followup_table_summarizes_next_events():
 
     assert set(followup["followup_event"]) == {"Next Count: 0-1", "PA Ends: Ball in Play Out"}
     assert followup["pitches"].sum() == 2
+
+
+def test_sequence_annotations_preserve_true_next_pitch_after_anchor_filter():
+    frame = pd.DataFrame(
+        [
+            {"game_pk": 1, "at_bat_number": 1, "pitch_number": 1, "balls": 0, "strikes": 0, "pitch_name": "Sinker", "description": "called_strike", "events": ""},
+            {"game_pk": 1, "at_bat_number": 1, "pitch_number": 2, "balls": 0, "strikes": 1, "pitch_name": "Changeup", "description": "ball", "events": ""},
+            {"game_pk": 1, "at_bat_number": 1, "pitch_number": 3, "balls": 1, "strikes": 1, "pitch_name": "Slider", "description": "swinging_strike", "events": ""},
+            {"game_pk": 1, "at_bat_number": 2, "pitch_number": 1, "balls": 0, "strikes": 0, "pitch_name": "Slider", "description": "hit_into_play", "events": "field_out"},
+        ]
+    )
+
+    annotated = annotate_sequence_context(frame)
+    filtered = annotated[annotated["pitch_name"].isin(["Sinker", "Slider"])].copy()
+    followup = build_count_pitch_followup_table(filtered, "0-0", "Sinker")
+
+    assert followup.iloc[0]["followup_event"] == "Next Count: 0-1"
+    assert followup.iloc[0]["next_pitch"] == "Changeup"
+    assert "Slider" not in followup["next_pitch"].tolist()
 
 
 def test_build_movement_comparison_table_compares_same_hand_league():

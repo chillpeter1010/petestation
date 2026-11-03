@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="53" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="9">
+ <properties>
+  <property name="asset_status" value="reference_geometry_draft_not_production"/>
+  <property name="logical_grid_status" value="32px_candidate_not_approved"/>
+  <property name="image_coordinate_size" value="1671x941"/>
+  <property name="runtime_wired" type="bool" value="false"/>
+ </properties>
+ <imagelayer id="1" name="approved_visual_reference" width="53" height="30">
+  <properties><property name="production_art" type="bool" value="false"/></properties>
+  <image source="d2-1-game-entrance-visual-study-v1.png" width="1671" height="941"/>
+ </imagelayer>
+ <objectgroup id="2" name="collision_draft" visible="1">
+  <object id="1" name="left_fence_and_field" x="0" y="0"><polygon points="0,0 650,0 675,398 670,634 520,634 470,480 0,355"/></object>
+  <object id="2" name="right_fence_and_field" x="1000" y="0"><polygon points="0,0 671,0 671,355 201,480 151,634 0,634"/></object>
+  <object id="3" name="closed_game_gate" x="672" y="520" width="327" height="114"/>
+  <object id="4" name="left_bench_and_planter" x="174" y="510" width="420" height="153"/>
+  <object id="5" name="right_bench_and_planter" x="1077" y="510" width="420" height="153"/>
+ </objectgroup>
+ <objectgroup id="3" name="entrances_draft" visible="1">
+  <object id="6" name="game_gate_approach" x="770" y="635" width="130" height="50">
+   <properties>
+    <property name="activation" value="interact"/>
+    <property name="target_route" value="/games/today"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="spawn_draft" visible="1">
+  <object id="7" name="arrival_from_campus" x="835" y="710" width="1" height="1"/>
+ </objectgroup>
+</map>

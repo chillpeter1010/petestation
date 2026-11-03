@@ -57,6 +57,25 @@ import type {
   StuffCalculatorResponse
 } from '~/types/api'
 
+const gameAnalysisRequests = new Map<string, { expiresAt: number; request: Promise<unknown> }>()
+
+function cachedGameAnalysis<T>(key: string, requestFactory: () => Promise<T>): Promise<T> {
+  if (import.meta.server) return requestFactory()
+  const now = Date.now()
+  const cached = gameAnalysisRequests.get(key)
+  if (cached && cached.expiresAt > now) return cached.request as Promise<T>
+  const request = requestFactory().catch((error) => {
+    gameAnalysisRequests.delete(key)
+    throw error
+  })
+  gameAnalysisRequests.set(key, { expiresAt: now + 5 * 60 * 1000, request })
+  if (gameAnalysisRequests.size > 120) {
+    const oldestKey = gameAnalysisRequests.keys().next().value
+    if (oldestKey) gameAnalysisRequests.delete(oldestKey)
+  }
+  return request
+}
+
 export function useApi() {
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
@@ -761,8 +780,64 @@ export function useApi() {
       $fetch<Record<string, unknown>>(`${apiBase}/games/${params.gamePk}`, {
         query: { year: params.year }
       }),
+    gamePitcherLocation: (params: { year: number; gamePk: number; pitcherId: number; stand?: string; count?: string; pitch?: string; pitchResult?: string; inPlayResult?: string; paResult?: string; catcher?: string }) => {
+      const key = `location:${JSON.stringify(params)}`
+      return cachedGameAnalysis(key, () => $fetch<AnalysisResponse>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/location`, {
+        query: {
+          year: params.year,
+          stand: params.stand,
+          count: params.count,
+          pitch: params.pitch,
+          pitch_result: params.pitchResult,
+          in_play_result: params.inPlayResult,
+          pa_result: params.paResult,
+          catcher: params.catcher
+        }
+      }))
+    },
+    gamePitcherSequence: (params: { year: number; gamePk: number; pitcherId: number; currentPitch?: string; stand?: string; count?: string; pitch?: string; pitchResult?: string; catcher?: string; conditionCount?: string; conditionPitch?: string; detailCount?: string; followupPitch?: string }) => {
+      const key = `sequence:${JSON.stringify(params)}`
+      return cachedGameAnalysis(key, () => $fetch<AnalysisResponse>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/sequence`, {
+        query: {
+          year: params.year,
+          current_pitch: params.currentPitch || 'All',
+          stand: params.stand,
+          count: params.count,
+          pitch: params.pitch,
+          pitch_result: params.pitchResult,
+          catcher: params.catcher,
+          condition_count: params.conditionCount,
+          condition_pitch: params.conditionPitch,
+          detail_count: params.detailCount,
+          followup_pitch: params.followupPitch
+        }
+      }))
+    },
+    gamePitcherShape: (params: { year: number; gamePk: number; pitcherId: number }) => {
+      const key = `shape:${JSON.stringify(params)}`
+      return cachedGameAnalysis(key, () => $fetch<AnalysisResponse>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/shape`, {
+        query: { year: params.year }
+      }))
+    },
+    gamePitcherReplay: (params: { year: number; gamePk: number; pitcherId: number }) => {
+      const key = `replay:${JSON.stringify(params)}`
+      return cachedGameAnalysis(key, () => $fetch<AnalysisResponse>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/replay`, {
+        query: { year: params.year }
+      }))
+    },
+    gamePitcherTags: (params: { year: number; gamePk: number; pitcherId: number; role: 'SP' | 'RP' | string }) => {
+      const key = `tags:${JSON.stringify(params)}`
+      return cachedGameAnalysis(key, () => $fetch<Record<string, unknown>>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/tags`, {
+        query: { year: params.year, role: params.role }
+      }))
+    },
     adminStatus: (year: number) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/status`, { query: { year } }),
+    updateDailySettings: (gameUpdatesEnabled: boolean) =>
+      $fetch<Record<string, unknown>>(`${apiBase}/admin/daily-update-settings`, {
+        method: 'PUT',
+        query: { game_updates_enabled: gameUpdatesEnabled }
+      }),
     dataFreshness: (year: number) =>
       $fetch<Record<string, unknown>>(`${apiBase}/admin/data-freshness`, { query: { year } }),
     refreshDataFreshness: (year: number) =>

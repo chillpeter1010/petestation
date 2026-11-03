@@ -1,12 +1,11 @@
 <template>
   <main class="site-home" :class="isPetehub ? 'site-home--petehub' : 'site-home--peteclub'">
     <header class="site-home__top">
-      <NuxtLink class="site-home__brand" :class="{ 'site-home__brand--petehub': isPetehub }" to="/" :aria-label="`${brandName} home`">
-        <template v-if="isPetehub"><span>Pete</span><strong>hub</strong></template>
-        <span v-else>Peteclub</span>
-      </NuxtLink>
+      <PetehubLogo v-if="isPetehub" size="home" :aria-label="`${brandName} home`" />
+      <NuxtLink v-else class="site-home__brand" to="/" :aria-label="`${brandName} home`">Peteclub</NuxtLink>
       <div class="site-home__actions">
         <nav class="site-home__nav" aria-label="Site sections">
+          <NuxtLink class="site-home__ballpark-entry" to="/ballpark">Ballpark</NuxtLink>
           <HomeTeamMenu />
           <NuxtLink to="/pitchers">Pitchers</NuxtLink>
           <NuxtLink to="/batters">Batters</NuxtLink>
@@ -46,7 +45,7 @@
 
     <footer class="site-home__footer">
       <div class="site-home__footer-notes">
-        <NuxtLink class="site-home__maintenance-entry" to="/admin/updates">Per aspera ad astra</NuxtLink>
+        <NuxtLink v-if="auth.isBackstageAdmin.value" class="site-home__maintenance-entry" to="/admin/updates">Per aspera ad astra</NuxtLink>
         <StatcastFieldNote />
       </div>
       <span>{{ brandName }} · Baseball Analysis Platform</span>
@@ -68,6 +67,7 @@ interface SearchDestination {
 }
 
 const api = useApi()
+const auth = useAuth()
 const { isPetehub, brandName } = useSiteBrand()
 const recommendations = ref<HomeRecommendationsResponse | null>(null)
 const recommendationsLoading = ref(false)
@@ -206,26 +206,6 @@ function refreshVideos() {
   border-radius: 2px;
   background: linear-gradient(90deg, #c88a2f, rgba(200, 138, 47, 0));
   content: "";
-}
-
-.site-home__brand--petehub {
-  color: var(--home-text);
-  background: none;
-  letter-spacing: -1.4px;
-  -webkit-text-fill-color: currentColor;
-}
-
-.site-home__brand--petehub::after {
-  display: none;
-}
-
-.site-home__brand--petehub strong {
-  margin-left: 5px;
-  border-radius: 7px;
-  padding: 1px 9px 5px;
-  color: #111;
-  background: var(--home-orange);
-  -webkit-text-fill-color: #111;
 }
 
 .site-home__nav {
@@ -412,14 +392,6 @@ function refreshVideos() {
 }
 
 .site-home--petehub .site-home__actions { gap: 16px; }
-
-.site-home--petehub .site-home__brand {
-  padding-bottom: 0;
-  font-family: inherit;
-  font-size: clamp(34px, 5vw, 62px);
-  font-weight: 950;
-  line-height: normal;
-}
 
 .site-home--petehub .site-home__nav { gap: 10px; }
 

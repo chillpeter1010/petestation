@@ -18,6 +18,10 @@
     </button>
 
     <div v-show="isOpen" id="home-team-menu" class="home-team-menu__panel" role="menu">
+      <NuxtLink to="/teams" role="menuitem" @click="isOpen = false">
+        <strong>My team</strong>
+        <span>{{ favoriteTeam || 'Choose a team' }}</span>
+      </NuxtLink>
       <NuxtLink
         v-for="team in teams"
         :key="team.code"
@@ -33,41 +37,13 @@
 </template>
 
 <script setup lang="ts">
+import { MLB_TEAMS, normalizeMlbTeamCode } from '~/config/mlbTeams'
+
 const isOpen = ref(false)
 const { isPetehub } = useSiteBrand()
-
-const teams = [
-  { code: 'ATH', name: 'Athletics' },
-  { code: 'AZ', name: 'Diamondbacks' },
-  { code: 'ATL', name: 'Braves' },
-  { code: 'BAL', name: 'Orioles' },
-  { code: 'BOS', name: 'Red Sox' },
-  { code: 'CHC', name: 'Cubs' },
-  { code: 'CIN', name: 'Reds' },
-  { code: 'CLE', name: 'Guardians' },
-  { code: 'COL', name: 'Rockies' },
-  { code: 'CWS', name: 'White Sox' },
-  { code: 'DET', name: 'Tigers' },
-  { code: 'HOU', name: 'Astros' },
-  { code: 'KC', name: 'Royals' },
-  { code: 'LAA', name: 'Angels' },
-  { code: 'LAD', name: 'Dodgers' },
-  { code: 'MIA', name: 'Marlins' },
-  { code: 'MIL', name: 'Brewers' },
-  { code: 'MIN', name: 'Twins' },
-  { code: 'NYM', name: 'Mets' },
-  { code: 'NYY', name: 'Yankees' },
-  { code: 'PHI', name: 'Phillies' },
-  { code: 'PIT', name: 'Pirates' },
-  { code: 'SD', name: 'Padres' },
-  { code: 'SEA', name: 'Mariners' },
-  { code: 'SF', name: 'Giants' },
-  { code: 'STL', name: 'Cardinals' },
-  { code: 'TB', name: 'Rays' },
-  { code: 'TEX', name: 'Rangers' },
-  { code: 'TOR', name: 'Blue Jays' },
-  { code: 'WSH', name: 'Nationals' }
-]
+const auth = useAuth()
+const favoriteTeam = computed(() => normalizeMlbTeamCode(auth.user.value?.favorite_team_code))
+const teams = MLB_TEAMS
 
 function handleFocusOut(event: FocusEvent) {
   const container = event.currentTarget as HTMLElement

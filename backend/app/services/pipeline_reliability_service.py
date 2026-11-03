@@ -21,11 +21,53 @@ def daily_lock_path(data_dir: Path | None = None) -> Path:
     return Path(data_dir or settings.data_dir) / "admin_job_logs" / "daily_update.lock"
 
 
+def daily_settings_path(data_dir: Path | None = None) -> Path:
+    return Path(data_dir or settings.data_dir) / "admin_job_logs" / "daily_update_settings.json"
+
+
 def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
     temporary.replace(path)
+
+
+def read_daily_update_settings(data_dir: Path | None = None) -> dict[str, Any]:
+    path = daily_settings_path(data_dir)
+    defaults = {
+        "schema_version": 1,
+        "game_updates_enabled": True,
+        "transactions_always_enabled": True,
+        "settings_path": str(path),
+    }
+    if not path.exists():
+        return defaults
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {**defaults, "status": "invalid", "error": str(exc)}
+    if not isinstance(payload, dict):
+        return {**defaults, "status": "invalid", "error": "Daily settings are not an object."}
+    return {
+        **defaults,
+        "game_updates_enabled": bool(payload.get("game_updates_enabled", True)),
+        "updated_at": payload.get("updated_at"),
+    }
+
+
+def write_daily_update_settings(
+    game_updates_enabled: bool,
+    data_dir: Path | None = None,
+) -> dict[str, Any]:
+    path = daily_settings_path(data_dir)
+    payload = {
+        "schema_version": 1,
+        "game_updates_enabled": bool(game_updates_enabled),
+        "transactions_always_enabled": True,
+        "updated_at": utc_now(),
+    }
+    write_json_atomic(path, payload)
+    return {**payload, "settings_path": str(path)}
 
 
 def process_is_alive(pid: int | None) -> bool:

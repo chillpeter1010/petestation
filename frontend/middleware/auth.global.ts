@@ -14,4 +14,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (to.path.startsWith('/admin') && auth.user.value.role !== 'admin') {
     return navigateTo('/')
   }
+  if (to.path.startsWith('/admin/updates') && !auth.isBackstageAdmin.value) {
+    return navigateTo('/')
+  }
 })

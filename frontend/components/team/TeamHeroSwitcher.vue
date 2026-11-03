@@ -14,7 +14,7 @@
       >
         <header>
           <div><strong>Switch team</strong><span>2026 command centers</span></div>
-          <NuxtLink to="/" @click="isOpen = false">All teams</NuxtLink>
+          <NuxtLink :to="favoriteTeam ? `/teams/${favoriteTeam}` : '/teams'" @click="isOpen = false">My team</NuxtLink>
         </header>
         <div class="team-switcher__grid">
           <NuxtLink
@@ -37,18 +37,13 @@
 <script setup lang="ts">
 import { ChevronDown, LayoutGrid } from '@lucide/vue'
 import { PopoverArrow, PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
+import { MLB_TEAMS, normalizeMlbTeamCode } from '~/config/mlbTeams'
 
 defineProps<{ currentTeam: string; primaryColor: string }>()
 const isOpen = ref(false)
-
-const teams = [
-  ['ATH', 'Athletics'], ['AZ', 'Diamondbacks'], ['ATL', 'Braves'], ['BAL', 'Orioles'], ['BOS', 'Red Sox'],
-  ['CHC', 'Cubs'], ['CIN', 'Reds'], ['CLE', 'Guardians'], ['COL', 'Rockies'], ['CWS', 'White Sox'],
-  ['DET', 'Tigers'], ['HOU', 'Astros'], ['KC', 'Royals'], ['LAA', 'Angels'], ['LAD', 'Dodgers'],
-  ['MIA', 'Marlins'], ['MIL', 'Brewers'], ['MIN', 'Twins'], ['NYM', 'Mets'], ['NYY', 'Yankees'],
-  ['PHI', 'Phillies'], ['PIT', 'Pirates'], ['SD', 'Padres'], ['SEA', 'Mariners'], ['SF', 'Giants'],
-  ['STL', 'Cardinals'], ['TB', 'Rays'], ['TEX', 'Rangers'], ['TOR', 'Blue Jays'], ['WSH', 'Nationals']
-].map(([code, name]) => ({ code, name }))
+const auth = useAuth()
+const favoriteTeam = computed(() => normalizeMlbTeamCode(auth.user.value?.favorite_team_code))
+const teams = MLB_TEAMS
 </script>
 
 <style scoped>

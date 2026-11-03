@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "project": "petehub-ballpark-game-system",
+  "scope": ["D2.1", "D2.2", "D2.3"],
+  "status": "krita_and_libresprite_portable_extracted_tiled_download_only_no_production_art",
+  "downloads": [
+    {
+      "name": "Krita",
+      "version": "5.3.4",
+      "role": "editable layered high-detail 2D scene art",
+      "source_url": "https://download.kde.org/stable/krita/5.3.4/krita-x64-5.3.4.zip",
+      "file": ".codex/toolchain-downloads/krita-x64-5.3.4.zip",
+      "size_bytes": 227868616,
+      "sha256": "4bf5b51100b30fa68edd12b995932b82f8a0080ef115b5461941fa2d186d126c",
+      "hash_source": "https://download.kde.org/stable/krita/5.3.4/krita-x64-5.3.4.zip.mirrorlist"
+    },
+    {
+      "name": "LibreSprite",
+      "version": "1.3",
+      "role": "pixel-aligned tile and sprite editing",
+      "source_url": "https://github.com/LibreSprite/LibreSprite/releases/download/v1.3/libresprite-v1.3-windows-x86_64.zip",
+      "file": ".codex/toolchain-downloads/libresprite-v1.3-windows-x86_64.zip",
+      "size_bytes": 43595037,
+      "sha256": "8408d2f962121948e9fbee053756b5e1e7e88d6d645120574d13fca66d475874",
+      "hash_source": "https://api.github.com/repos/LibreSprite/LibreSprite/releases/latest"
+    },
+    {
+      "name": "Tiled",
+      "version": "1.12.2",
+      "role": "tilemap, object, entrance and collision editing",
+      "source_url": "https://github.com/mapeditor/tiled/releases/download/v1.12.2/Tiled-1.12.2_Windows-10%2B_x86_64.msi",
+      "file": ".codex/toolchain-downloads/Tiled-1.12.2_Windows-10+_x86_64.msi",
+      "size_bytes": 23425024,
+      "sha256": "11a0e6c97cc105e07a57ea9995f2704617986722de4ab699d286dab0d2becc3f",
+      "hash_source": "https://api.github.com/repos/mapeditor/tiled/releases/tags/v1.12.2"
+    }
+  ],
+  "already_available": ["Node.js 20.20.2", "npm 11.12.1", "Nuxt", "Phaser", "Python Pillow 12.2.0"],
+  "not_downloaded": ["Paid Aseprite", "Blender (not needed for Section D 2D art)"],
+  "portable_extracted": {
+    "Krita": ".codex/toolchain/krita/krita-x64-5.3.4/bin/krita.exe",
+    "LibreSprite": ".codex/toolchain/libresprite/libresprite.exe"
+  },
+  "production_art_ready": false
+}

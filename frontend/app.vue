@@ -17,8 +17,14 @@
         <span>Home</span>
       </template>
     </NuxtLink>
-    <AuthUserMenu v-if="auth.user.value && !isAuthPage" />
-    <div class="app-page-shell" :class="{ 'global-home-offset': reserveGlobalHomeSpace }">
+    <AuthUserMenu v-if="auth.user.value && !isAuthPage && !isBallparkPage" />
+    <div
+      class="app-page-shell"
+      :class="{
+        'global-home-offset': reserveGlobalHomeSpace,
+        'app-page-shell--ballpark': isBallparkPage
+      }"
+    >
       <NuxtPage />
     </div>
   </NuxtLayout>
@@ -32,7 +38,8 @@ const route = useRoute()
 const auth = useAuth()
 const { isPetehub, brandName } = useSiteBrand()
 const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
-const showGlobalHomeLink = computed(() => !isAuthPage.value && route.path !== '/' && route.path !== '/pitchers')
+const isBallparkPage = computed(() => route.path.replace(/\/+$/, '') === '/ballpark' || route.path.startsWith('/ballpark/play'))
+const showGlobalHomeLink = computed(() => !isAuthPage.value && !isBallparkPage.value && route.path !== '/' && route.path !== '/pitchers')
 const showBrandHomeLink = computed(() => isPetehub.value)
 const reserveGlobalHomeSpace = computed(() => showGlobalHomeLink.value)
 

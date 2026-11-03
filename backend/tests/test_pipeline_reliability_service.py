@@ -63,6 +63,29 @@ def test_retry_selection_keeps_only_retryable_steps_and_freshness() -> None:
     ]
 
 
+def test_offseason_daily_selection_keeps_transactions_and_freshness() -> None:
+    args = argparse.Namespace(step=None, retry_failed=False)
+
+    assert daily_update._selected_steps(
+        args,
+        {},
+        game_updates_enabled=False,
+    ) == ["transactions", "data_freshness"]
+
+
+def test_daily_update_settings_are_atomic_and_keep_transactions_enabled(tmp_path: Path) -> None:
+    defaults = reliability.read_daily_update_settings(tmp_path)
+    assert defaults["game_updates_enabled"] is True
+    assert defaults["transactions_always_enabled"] is True
+
+    updated = reliability.write_daily_update_settings(False, tmp_path)
+    reloaded = reliability.read_daily_update_settings(tmp_path)
+
+    assert updated["game_updates_enabled"] is False
+    assert reloaded["game_updates_enabled"] is False
+    assert reloaded["transactions_always_enabled"] is True
+
+
 def test_daily_pipeline_continues_unrelated_steps_after_failure(monkeypatch, tmp_path: Path) -> None:
     executed: list[str] = []
 

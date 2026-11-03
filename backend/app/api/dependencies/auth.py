@@ -15,3 +15,10 @@ def require_admin(request: Request) -> UserRecord:
     if user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Administrator access required.")
     return user
+
+
+def require_backstage_admin(request: Request) -> UserRecord:
+    user = require_admin(request)
+    if user.username != "peter1010":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Backstage access required.")
+    return user

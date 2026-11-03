@@ -30,7 +30,7 @@ type LabStation = { value: LabArea; label: string; kicker: string; title: string
 const route = useRoute()
 const stations: LabStation[] = [
   { value:'pitcher',label:'Pitcher',kicker:'Pitch design & state',title:'Pitcher Lab',description:'Pitch quality, command, workload, leverage, archetypes, and performance-state research.',modules:[
-    {kicker:'Player archetypes',title:'Pitcher Tag Lab',description:'Arsenal depth, primary pairs, arm slots, command profiles, and sample support.',to:'/lab/tags',accent:'tags'},
+    {kicker:'Player archetypes',title:'Pitcher Tag Lab',description:'Arsenal, arm slot, command, Pronation/Supination, batter-side usage, and sample support.',to:'/lab/tags',accent:'tags'},
     {kicker:'Cross-metric research',title:'Pitcher Metric Explorer',description:'Compare compatible pitcher-season metrics with coverage-aware descriptive analysis.',to:'/lab/pitcher-metrics'},
     {kicker:'Starter',title:'Starter Fatigue Lab',description:'Pregame readiness, inning fatigue, PA trends, and starter game trials.',to:'/rotation/fatigue-lab'},
     {kicker:'Reliever',title:'Bullpen Fatigue Lab',description:'Recent workload, rest context, leverage, and bullpen readiness.',to:'/rotation/reliever-fatigue-lab'},

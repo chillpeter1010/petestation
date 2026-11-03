@@ -18,6 +18,12 @@
         <input id="password" v-model="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required />
         <label for="confirmation">Confirm password</label>
         <input id="confirmation" v-model="confirmation" type="password" autocomplete="new-password" minlength="10" maxlength="128" required :aria-invalid="Boolean(errorMessage)" />
+        <label for="home-team">Home team <small>(optional)</small></label>
+        <select id="home-team" v-model="favoriteTeamId">
+          <option :value="null">Choose later</option>
+          <option v-for="team in MLB_TEAMS" :key="team.id" :value="team.id">{{ team.code }} · {{ team.name }}</option>
+        </select>
+        <small>You can change this later. Choosing later never blocks Classic UI.</small>
         <p v-if="errorMessage" class="form-error" role="alert">{{ errorMessage }}</p>
         <button type="submit" :disabled="submitting">{{ submitting ? 'Submitting…' : 'Request access' }}</button>
         <p class="switch-copy">Already approved? <NuxtLink to="/login">Sign in</NuxtLink></p>
@@ -27,11 +33,14 @@
 </template>
 
 <script setup lang="ts">
+import { MLB_TEAMS } from '~/config/mlbTeams'
+
 const auth = useAuth()
 const { isPetehub, brandName } = useSiteBrand()
 const username = ref('')
 const password = ref('')
 const confirmation = ref('')
+const favoriteTeamId = ref<number | null>(null)
 const submitting = ref(false)
 const completed = ref(false)
 const errorMessage = ref('')
@@ -46,7 +55,7 @@ async function submit() {
   }
   submitting.value = true
   try {
-    await auth.register(username.value, password.value)
+    await auth.register(username.value, password.value, favoriteTeamId.value)
     completed.value = true
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'Unable to register.'
@@ -57,5 +66,5 @@ async function submit() {
 </script>
 
 <style scoped>
-.register-page{min-height:100vh;display:grid;place-items:center;padding:86px 22px 42px;background:radial-gradient(circle at 50% 0,rgb(255 153 0 / 16%),transparent 34rem),var(--color-background)}.brand{position:absolute;top:26px;left:30px;color:#e8ddce;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;font-size:25px;font-weight:680;letter-spacing:-.025em;text-decoration:none}.brand--petehub{color:var(--color-text);font-family:inherit;font-weight:950;letter-spacing:normal}.brand--petehub strong{margin-left:4px;border-radius:5px;padding:2px 8px 4px;color:#111;background:#ff9900}.register-card{width:min(100%,570px);border:1px solid var(--color-border);border-radius:18px;padding:clamp(26px,5vw,48px);background:var(--color-surface);box-shadow:0 28px 80px rgb(0 0 0 / 22%)}form{display:grid;gap:9px}.eyebrow{margin:0 0 10px;color:var(--color-primary);font-size:10px;font-weight:900;letter-spacing:.15em}h1{margin:0;color:var(--color-text);font-size:36px;letter-spacing:-.035em}.register-card header>p:last-child,.register-card>p{color:var(--color-muted-text);line-height:1.6}label{margin-top:9px;color:var(--color-text);font-size:12px;font-weight:850}input{height:50px;border:1px solid var(--color-border-strong);border-radius:9px;padding:0 14px;color:var(--color-text);background:var(--color-background)}input[aria-invalid=true]{border-color:var(--color-destructive)}small{color:var(--color-muted-text);font-size:10px}button,.primary-link{min-height:50px;display:grid;place-items:center;margin-top:14px;border:0;border-radius:9px;color:#111;background:var(--color-primary);font-weight:900;text-decoration:none;cursor:pointer}button:disabled{opacity:.6}.form-error{margin:5px 0 0;color:var(--color-destructive);font-size:12px}.switch-copy{margin:13px 0 0;color:var(--color-muted-text);font-size:13px;text-align:center}.switch-copy a{color:var(--color-primary);font-weight:850}.status-mark{width:58px;height:58px;display:grid;place-items:center;margin-bottom:25px;border-radius:50%;color:#111;background:var(--color-primary);font-size:29px;font-weight:950}
+.register-page{min-height:100vh;display:grid;place-items:center;padding:86px 22px 42px;background:radial-gradient(circle at 50% 0,rgb(255 153 0 / 16%),transparent 34rem),var(--color-background)}.brand{position:absolute;top:26px;left:30px;color:#e8ddce;font-family:"Aptos Display","Segoe UI Variable Display","Segoe UI",sans-serif;font-size:25px;font-weight:680;letter-spacing:-.025em;text-decoration:none}.brand--petehub{color:var(--color-text);font-family:inherit;font-weight:950;letter-spacing:normal}.brand--petehub strong{margin-left:4px;border-radius:5px;padding:2px 8px 4px;color:#111;background:#ff9900}.register-card{width:min(100%,570px);border:1px solid var(--color-border);border-radius:18px;padding:clamp(26px,5vw,48px);background:var(--color-surface);box-shadow:0 28px 80px rgb(0 0 0 / 22%)}form{display:grid;gap:9px}.eyebrow{margin:0 0 10px;color:var(--color-primary);font-size:10px;font-weight:900;letter-spacing:.15em}h1{margin:0;color:var(--color-text);font-size:36px;letter-spacing:-.035em}.register-card header>p:last-child,.register-card>p{color:var(--color-muted-text);line-height:1.6}label{margin-top:9px;color:var(--color-text);font-size:12px;font-weight:850}label small{font-weight:600}input,select{height:50px;border:1px solid var(--color-border-strong);border-radius:9px;padding:0 14px;color:var(--color-text);background:var(--color-background)}input[aria-invalid=true]{border-color:var(--color-destructive)}small{color:var(--color-muted-text);font-size:10px}button,.primary-link{min-height:50px;display:grid;place-items:center;margin-top:14px;border:0;border-radius:9px;color:#111;background:var(--color-primary);font-weight:900;text-decoration:none;cursor:pointer}button:disabled{opacity:.6}.form-error{margin:5px 0 0;color:var(--color-destructive);font-size:12px}.switch-copy{margin:13px 0 0;color:var(--color-muted-text);font-size:13px;text-align:center}.switch-copy a{color:var(--color-primary);font-weight:850}.status-mark{width:58px;height:58px;display:grid;place-items:center;margin-bottom:25px;border-radius:50%;color:#111;background:var(--color-primary);font-size:29px;font-weight:950}
 </style>

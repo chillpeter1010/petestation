@@ -54,6 +54,7 @@ def read_personal_pitches(
 def read_personal_movement(
     year: int,
     pitcher_id: int,
+    game_pk: int | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
     stand: str | None = None,
@@ -68,6 +69,7 @@ def read_personal_movement(
     return get_personal_movement(
         year=year,
         pitcher_id=pitcher_id,
+        game_pk=game_pk,
         start_date=start_date,
         end_date=end_date,
         stand=stand,
@@ -108,6 +110,7 @@ def read_personal_discipline(
 def read_personal_sequence(
     year: int,
     pitcher_id: int,
+    game_pk: int | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
     current_pitch: str = "All",
@@ -124,6 +127,7 @@ def read_personal_sequence(
     return get_personal_sequence(
         year=year,
         pitcher_id=pitcher_id,
+        game_pk=game_pk,
         start_date=start_date,
         end_date=end_date,
         current_pitch=current_pitch,

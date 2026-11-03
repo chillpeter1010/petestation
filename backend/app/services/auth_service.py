@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import re
 import secrets
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from app.core.mlb_teams import MLB_TEAM_ID_TO_CODE, validate_mlb_team_id
+from app.core.ballpark_avatar import BallparkAvatarV1, default_ballpark_avatar
 
 
 USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+$")
@@ -31,6 +35,10 @@ class UserRecord:
     status: str
     created_at: str
     approved_at: str | None
+    favorite_team_id: int | None
+    avatar_setup_status: str
+    avatar: dict[str, object]
+    avatar_recovery_needed: bool
 
     def as_dict(self) -> dict[str, object]:
         return {
@@ -40,6 +48,11 @@ class UserRecord:
             "status": self.status,
             "created_at": self.created_at,
             "approved_at": self.approved_at,
+            "favorite_team_id": self.favorite_team_id,
+            "favorite_team_code": MLB_TEAM_ID_TO_CODE.get(self.favorite_team_id),
+            "avatar_setup_status": self.avatar_setup_status,
+            "avatar": self.avatar,
+            "avatar_recovery_needed": self.avatar_recovery_needed,
         }
 
 
@@ -79,10 +92,32 @@ class AuthStore:
                 CREATE INDEX IF NOT EXISTS sessions_expires_at_idx ON sessions(expires_at);
                 """
             )
+            user_columns = {row["name"] for row in connection.execute("PRAGMA table_info(users)").fetchall()}
+            if "favorite_team_id" not in user_columns:
+                connection.execute("ALTER TABLE users ADD COLUMN favorite_team_id INTEGER")
+            if "avatar_setup_status" not in user_columns:
+                connection.execute(
+                    "ALTER TABLE users ADD COLUMN avatar_setup_status TEXT NOT NULL DEFAULT 'pending' "
+                    "CHECK (avatar_setup_status IN ('pending', 'default'))"
+                )
+            if "avatar_json" not in user_columns:
+                connection.execute("ALTER TABLE users ADD COLUMN avatar_json TEXT")
 
-    def create_user(self, username: str, password: str, *, role: str = "user", status: str = "pending") -> UserRecord:
+    def create_user(
+        self,
+        username: str,
+        password: str,
+        *,
+        role: str = "user",
+        status: str = "pending",
+        favorite_team_id: int | None = None,
+    ) -> UserRecord:
         clean_username = validate_username(username)
         validate_password(password)
+        try:
+            favorite_team_id = validate_mlb_team_id(favorite_team_id)
+        except ValueError as exc:
+            raise AuthServiceError("invalid_favorite_team", str(exc)) from exc
         if role not in {"admin", "user"} or status not in {"pending", "active", "disabled"}:
             raise AuthServiceError("invalid_account", "Invalid account settings.")
         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -90,8 +125,9 @@ class AuthStore:
         try:
             with self._connect() as connection:
                 cursor = connection.execute(
-                    "INSERT INTO users(username, password_hash, role, status, created_at, approved_at) VALUES (?, ?, ?, ?, ?, ?)",
-                    (clean_username, hash_password(password), role, status, now, approved_at),
+                    "INSERT INTO users(username, password_hash, role, status, created_at, approved_at, favorite_team_id) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (clean_username, hash_password(password), role, status, now, approved_at, favorite_team_id),
                 )
                 row = connection.execute("SELECT * FROM users WHERE id = ?", (cursor.lastrowid,)).fetchone()
         except sqlite3.IntegrityError as exc:
@@ -192,6 +228,41 @@ class AuthStore:
             row = connection.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
         return row_to_user(row)
 
+    def update_profile(
+        self,
+        user_id: int,
+        *,
+        favorite_team_id: int | None,
+        avatar_setup_status: str,
+    ) -> UserRecord:
+        try:
+            favorite_team_id = validate_mlb_team_id(favorite_team_id)
+        except ValueError as exc:
+            raise AuthServiceError("invalid_favorite_team", str(exc)) from exc
+        if avatar_setup_status not in {"pending", "default"}:
+            raise AuthServiceError("invalid_avatar_setup_status", "Invalid avatar setup status.")
+        with self._connect() as connection:
+            cursor = connection.execute(
+                "UPDATE users SET favorite_team_id = ?, avatar_setup_status = ? WHERE id = ?",
+                (favorite_team_id, avatar_setup_status, user_id),
+            )
+            if cursor.rowcount == 0:
+                raise AuthServiceError("user_not_found", "Account not found.")
+            row = connection.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        return row_to_user(row)
+
+    def update_avatar(self, user_id: int, avatar: BallparkAvatarV1) -> UserRecord:
+        payload = avatar.model_dump_json()
+        with self._connect() as connection:
+            cursor = connection.execute(
+                "UPDATE users SET avatar_json = ?, avatar_setup_status = 'default' WHERE id = ?",
+                (payload, user_id),
+            )
+            if cursor.rowcount == 0:
+                raise AuthServiceError("user_not_found", "Account not found.")
+            row = connection.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        return row_to_user(row)
+
 
 def validate_username(username: str) -> str:
     clean = username.strip()
@@ -234,6 +305,13 @@ def digest_token(raw_token: str) -> str:
 
 
 def row_to_user(row: sqlite3.Row) -> UserRecord:
+    avatar = default_ballpark_avatar()
+    avatar_recovery_needed = False
+    if row["avatar_json"] is not None:
+        try:
+            avatar = BallparkAvatarV1.model_validate(json.loads(row["avatar_json"])).model_dump()
+        except (ValueError, TypeError):
+            avatar_recovery_needed = True
     return UserRecord(
         id=int(row["id"]),
         username=str(row["username"]),
@@ -241,4 +319,8 @@ def row_to_user(row: sqlite3.Row) -> UserRecord:
         status=str(row["status"]),
         created_at=str(row["created_at"]),
         approved_at=str(row["approved_at"]) if row["approved_at"] else None,
+        favorite_team_id=int(row["favorite_team_id"]) if row["favorite_team_id"] is not None else None,
+        avatar_setup_status=str(row["avatar_setup_status"]),
+        avatar=avatar,
+        avatar_recovery_needed=avatar_recovery_needed,
     )

@@ -1,0 +1,162 @@
+{
+  "schema_version": "petehub_ballpark_a4_baseline_v1",
+  "measured_at": "2026-10-30T11:25:00+08:00",
+  "scope": "Current Classic UI production build before any Ballpark runtime dependency",
+  "repository": {
+    "commit": "d5f3ad1fed5010635b522f7fa9d0c0bc011ba523",
+    "dirty_worktree": true,
+    "note": "Measurements include the user's existing uncommitted Game Center, Pitch Replay, Tags, Daily Update and documentation work."
+  },
+  "environment": {
+    "os": "Microsoft Windows 11 Home 10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "logical_processors": 8,
+    "memory_bytes": 33804771328,
+    "node": "20.20.2",
+    "npm": "11.12.1",
+    "nuxt": "3.21.8",
+    "nitro": "2.13.4",
+    "vite": "7.3.6",
+    "frontend_url": "http://127.0.0.1:3100",
+    "backend_url": "http://127.0.0.1:8000/api",
+    "network": "local loopback; no throttling",
+    "power_mode": "not recorded",
+    "display_scale": "not recorded"
+  },
+  "build": {
+    "command": "npm run build",
+    "mode": "Nuxt production node-server",
+    "status": "pass",
+    "wall_time_ms": 187734,
+    "client_modules": 3061,
+    "server_modules": 756,
+    "client_assets": {
+      "javascript": {
+        "files": 96,
+        "raw_bytes": 1203362,
+        "gzip_bytes": 419025
+      },
+      "css": {
+        "files": 73,
+        "raw_bytes": 520259,
+        "gzip_bytes": 112390
+      },
+      "total": {
+        "files": 169,
+        "raw_bytes": 1723621,
+        "gzip_bytes": 531415
+      }
+    },
+    "nitro_server_total": {
+      "raw_display": "9.76 MB",
+      "gzip_display": "2.33 MB"
+    },
+    "warnings": [
+      "Node DEP0155 warnings from trailing slash export mappings in Vue/VueUse dependencies"
+    ]
+  },
+  "route_loading": {
+    "route": "/login",
+    "method": "SSR HTML followed by hashed Nuxt client assets; route CSS and the register route are separate/preloaded resources",
+    "cold_context_resource_count": 8,
+    "cold_context_transfer_bytes": 263455,
+    "cold_context_encoded_body_bytes": 260755,
+    "warm_context_transfer_bytes": 13618,
+    "note": "Warm transferSize excludes browser-cached asset bodies."
+  },
+  "cold_load_samples": {
+    "definition": "Fresh browser context, 1280x720, wait for load then 750 ms, local loopback, three repetitions",
+    "chrome": {
+      "browser_version": "153.0.8010.48",
+      "samples": [
+        { "ttfb_ms": 20.5, "dom_content_loaded_ms": 175.1, "load_ms": 184.2, "fcp_ms": 168, "lcp_ms": 168 },
+        { "ttfb_ms": 19.8, "dom_content_loaded_ms": 165.7, "load_ms": 185.5, "fcp_ms": 164, "lcp_ms": 164 },
+        { "ttfb_ms": 23.1, "dom_content_loaded_ms": 166.4, "load_ms": 174.0, "fcp_ms": 164, "lcp_ms": 164 }
+      ],
+      "median": { "ttfb_ms": 20.5, "dom_content_loaded_ms": 166.4, "load_ms": 184.2, "fcp_ms": 164, "lcp_ms": 164 }
+    },
+    "edge": {
+      "browser_version": "155.0.4283.62",
+      "samples": [
+        { "ttfb_ms": 23.1, "dom_content_loaded_ms": 186.2, "load_ms": 191.1, "fcp_ms": 196, "lcp_ms": 196 },
+        { "ttfb_ms": 25.8, "dom_content_loaded_ms": 182.6, "load_ms": 193.6, "fcp_ms": 164, "lcp_ms": 164 },
+        { "ttfb_ms": 22.7, "dom_content_loaded_ms": 170.9, "load_ms": 177.7, "fcp_ms": 168, "lcp_ms": 168 }
+      ],
+      "median": { "ttfb_ms": 23.1, "dom_content_loaded_ms": 182.6, "load_ms": 191.1, "fcp_ms": 168, "lcp_ms": 168 }
+    },
+    "firefox": {
+      "browser_version": "156.0",
+      "samples": [
+        { "ttfb_ms": 44, "dom_content_loaded_ms": 206, "load_ms": 218, "fcp_ms": 169, "lcp_ms": 169 },
+        { "ttfb_ms": 25, "dom_content_loaded_ms": 166, "load_ms": 175, "fcp_ms": 128, "lcp_ms": 128 },
+        { "ttfb_ms": 28, "dom_content_loaded_ms": 231, "load_ms": 250, "fcp_ms": 177, "lcp_ms": 177 }
+      ],
+      "median": { "ttfb_ms": 28, "dom_content_loaded_ms": 206, "load_ms": 218, "fcp_ms": 169, "lcp_ms": 169 }
+    }
+  },
+  "memory": {
+    "browser": "Chrome 153.0.8010.48",
+    "idle_login_used_js_heap_bytes": 5620091,
+    "route_pair": "/login <-> /register",
+    "method": "performance.memory after a 1 second settle and CDP HeapProfiler.collectGarbage",
+    "checkpoints": [
+      { "cycles": 0, "used_js_heap_bytes": 2511545 },
+      { "cycles": 10, "used_js_heap_bytes": 4263057 },
+      { "cycles": 20, "used_js_heap_bytes": 4452577 },
+      { "cycles": 30, "used_js_heap_bytes": 4554677 }
+    ],
+    "delta_0_to_10_bytes": 1751512,
+    "delta_10_to_30_bytes": 291620,
+    "interpretation": "The first block includes lazy loading/register-route retention. The additional 20 cycles retained 291620 bytes after forced GC. This is a baseline observation, not proof of a leak or listener cleanup."
+  },
+  "frame_sample": {
+    "browser": "Chrome 153.0.8010.48",
+    "scope": "Static unauthenticated login page; no authenticated Pitch Replay scene was available",
+    "duration_ms": 2999.9,
+    "frames": 180,
+    "median_frame_ms": 16.7,
+    "p95_frame_ms": 17.0,
+    "approximate_fps": 60.002,
+    "frames_over_20_ms": 0,
+    "status": "limited"
+  },
+  "compatibility": {
+    "common_assertions": {
+      "desktop_viewport": "1280x720 production cold-load executed",
+      "narrow_viewport": "390x844 production route executed",
+      "reduced_motion": true,
+      "horizontal_overflow_at_390px": false,
+      "keyboard_focus_order": ["username", "password", "Sign in", "Request access"],
+      "unauthenticated_protected_route": "/games/today redirects to /login?redirect=/games/today",
+      "severe_console_errors": 0
+    },
+    "chrome": { "status": "pass", "version": "153.0.8010.48" },
+    "edge": { "status": "pass", "version": "155.0.4283.62" },
+    "firefox": { "status": "pass", "version": "156.0" },
+    "authenticated_routes": { "status": "blocked", "reason": "No approved credentials or existing authenticated session were available." },
+    "pitch_replay": { "status": "blocked", "reason": "The representative scene is behind authentication; no credentials were created or guessed." },
+    "real_mobile_device": { "status": "unavailable", "reason": "Only a narrow desktop-browser viewport was tested." },
+    "real_low_end_device": { "status": "unavailable", "reason": "No representative low-end hardware was attached; no CPU/network emulation was used." },
+    "listener_count": { "status": "unavailable", "reason": "No cross-browser supported listener-count API; route-cycle heap is retained as limited cleanup evidence." },
+    "input_latency": { "status": "limited", "reason": "Keyboard reachability was executed, but no authenticated representative interaction latency was measured." }
+  },
+  "future_budgets_not_yet_passed": {
+    "classic_ui_initial_transfer_bytes": 300000,
+    "classic_ui_rule": "No Phaser, Babylon, WebGL runtime, or Ballpark asset request on non-Ballpark initial routes.",
+    "lcp_p75_ms": 2500,
+    "interaction_p75_ms": 200,
+    "runtime_desktop_p95_frame_ms": 20,
+    "runtime_fallback_p95_frame_ms": 33.3,
+    "post_warmup_route_cycle_retained_heap_delta_bytes_max": 1048576,
+    "note": "These are future release budgets, not A4 measured passes. Re-test on deployed networking and representative low-end hardware."
+  },
+  "artifacts": [
+    "output/playwright/a4-login-narrow-reduced.png"
+  ],
+  "reproduction": [
+    "cd frontend && npm run build",
+    "cd backend && .venv\\Scripts\\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000",
+    "cd frontend && set PORT=3100 && set NUXT_API_INTERNAL_BASE=http://127.0.0.1:8000/api && node .output/server/index.mjs",
+    "Run Playwright CLI cold-load, compatibility, interaction and memory scripts recorded by the A4 evidence workflow."
+  ]
+}

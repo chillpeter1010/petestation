@@ -23,7 +23,7 @@ from app.services.payroll.importer import (
     write_payroll_snapshot,
 )
 from app.services.payroll.team_slugs import TEAM_PAYROLL_SLUGS
-from app.services.pipeline_reliability_service import read_daily_update_state
+from app.services.pipeline_reliability_service import read_daily_update_settings, read_daily_update_state
 from app.services.pitch_refresh_service import (
     audit_pitch_coverage,
     classify_source_pending,
@@ -302,7 +302,7 @@ def run_pitcher_data_refresh(year: int = 2026, include_pitch_stuff: bool = False
         return result
 
 
-DAILY_PIPELINE_STEPS = (
+DAILY_GAME_PIPELINE_STEPS = (
     "pitch_data",
     "video_lookup",
     "pitcher_game_lines",
@@ -314,9 +314,12 @@ DAILY_PIPELINE_STEPS = (
     "stamina_dataset",
     "batter_lineup_scenarios",
     "batter_timing",
-    "roster_data",
+)
+DAILY_ALWAYS_PIPELINE_STEPS = (
+    "transactions",
     "data_freshness",
 )
+DAILY_PIPELINE_STEPS = DAILY_GAME_PIPELINE_STEPS + DAILY_ALWAYS_PIPELINE_STEPS
 
 
 def run_daily_pipeline_step(name: str, year: int = 2026) -> dict[str, object]:
@@ -355,8 +358,8 @@ def run_daily_pipeline_step(name: str, year: int = 2026) -> dict[str, object]:
     if target == "batter_timing":
         with _DUCKDB_WRITE_LOCK:
             return _run_optional_refresh_child({"job": "batter_timing", "year": season})
-    if target == "roster_data":
-        return run_roster_reference_refresh(year=season)
+    if target == "transactions":
+        return run_transaction_refresh(year=season)
     if target == "data_freshness":
         from app.services.data_freshness_service import refresh_data_freshness_report
 
@@ -820,6 +823,7 @@ def get_admin_status(year: int = 2026) -> dict[str, object]:
     return {
         "year": int(year),
         "daily_update": read_daily_update_state(settings.data_dir),
+        "daily_settings": read_daily_update_settings(settings.data_dir),
         "pitcher_data": get_pitcher_data_status(year=year),
         "video_lookup": get_video_lookup_status(year=year, data_dir=settings.data_dir),
         "pitcher_game_lines": get_pitcher_game_line_status(year=year, data_dir=settings.data_dir),

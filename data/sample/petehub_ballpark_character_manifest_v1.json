@@ -1,0 +1,202 @@
+{
+  "asset_version": "d4-characters-v1",
+  "source_path": "frontend/assets/ballpark/characters/avatar-source-v1.json",
+  "source_sha256": "3013588444d32ccaaca5bd7a3379b8c17ac94201e16eceab06c9d96067463efb",
+  "source_script_sha256": "966907bba75f0f7a0400b576a2f47b908620ceacb754938bf09e818d76407603",
+  "author": "Petehub project / independently authored pixel polygons and joint poses",
+  "license": "Project-authored source; generated concept boards and MLB headshot are visual references only, no reference pixels copied",
+  "exporter": "build_ballpark_characters.py:v1/Pillow-12.2.0",
+  "exported_at": "2026-11-02 09:11:56 UTC",
+  "references": [
+    {
+      "path": "output/ballpark/character-studies/gabriel-moreno-v2-64x96-concept.png",
+      "sha256": "796fc0ee1415b9022497e9f9f051ec18c4ff0ef7b3f31158bd0bb69890f68027"
+    },
+    {
+      "path": "output/ballpark/character-studies/gabriel-moreno-v3-96x144-modular-concept.png",
+      "sha256": "753b87d6041400c4dd708ba5c67fa7aeab14c137c886c8cdeafd3f3886b9011d"
+    },
+    {
+      "path": "output/ballpark/character-studies/_reference-gabriel-moreno-672515.png",
+      "sha256": "e06d123cff7b36ee6f9b6a8428472f6b37b2f37eb69b352a85d2c78b82e1e0cb"
+    }
+  ],
+  "assets": [
+    {
+      "logical_id": "character.user.detail",
+      "path": "frontend/assets/ballpark/characters/user-detail-v1.png",
+      "sha256": "2a136d6e53d055ce418a0fb97e6b646d2ff015da8bff8a02999af47c98d1d03f",
+      "dimensions": [
+        576,
+        1152
+      ],
+      "bytes": 19860
+    },
+    {
+      "logical_id": "character.user.skin",
+      "path": "frontend/assets/ballpark/characters/user-skin-v1.png",
+      "sha256": "a679dee4d801247f3ee09493b844775e83f44d117357916d0ce26afdfbf44f8a",
+      "dimensions": [
+        576,
+        1152
+      ],
+      "bytes": 10818
+    },
+    {
+      "logical_id": "character.user.uniform",
+      "path": "frontend/assets/ballpark/characters/user-uniform-v1.png",
+      "sha256": "b93d319b3cf5afaa4b69926b736ec455d221dccf3ac3360b5e5e9421b8d35f5f",
+      "dimensions": [
+        576,
+        1152
+      ],
+      "bytes": 11071
+    },
+    {
+      "logical_id": "character.user.accent",
+      "path": "frontend/assets/ballpark/characters/user-accent-v1.png",
+      "sha256": "fdce1de22dce5f1cc3d49bd39eecf66bd372d081c16ea7b42d36f1489a53968f",
+      "dimensions": [
+        576,
+        1152
+      ],
+      "bytes": 6570
+    },
+    {
+      "logical_id": "character.user.preview",
+      "path": "frontend/assets/ballpark/characters/user-preview-v1.png",
+      "sha256": "ad2c5f788f8ee5168df50bc2d76e83de6bb2f3f01466de6aaa91fb0c7f3d4980",
+      "dimensions": [
+        576,
+        1152
+      ],
+      "bytes": 32141
+    },
+    {
+      "logical_id": "character.player.preview",
+      "path": "frontend/assets/ballpark/characters/player-preview-v1.png",
+      "sha256": "1c5728775a345407de09170d913093e4e240b748fba02e8b79025b092e0a0eb3",
+      "dimensions": [
+        384,
+        768
+      ],
+      "bytes": 25855
+    },
+    {
+      "logical_id": "character.numbers",
+      "path": "frontend/assets/ballpark/characters/numbers-v1.png",
+      "sha256": "3e3e35398eb0bcc25ebe3f9b4311bc3bda6668d2e6eec3e1e2cacd523b71ec8a",
+      "dimensions": [
+        120,
+        100
+      ],
+      "bytes": 820
+    }
+  ],
+  "editable_parts": [
+    {
+      "path": "output/ballpark/characters-v1/player-east-parts.svg",
+      "sha256": "2bd15972aea3f8d154b73f7968004554093ed653c4df959445a4037f91a24796"
+    },
+    {
+      "path": "output/ballpark/characters-v1/player-north-parts.svg",
+      "sha256": "ce6820ca655f6be84f251d644249bdf523e2fef3a847eefd62f0d0b4d8223fc9"
+    },
+    {
+      "path": "output/ballpark/characters-v1/player-south-parts.svg",
+      "sha256": "fff4b0f4af438366ebf5f0051e49e47a5eb104de743f641708a772bffc64eedf"
+    },
+    {
+      "path": "output/ballpark/characters-v1/player-west-parts.svg",
+      "sha256": "7195a54c6e50892eeda07ba3699e8c36e93813be25a1f1c82ae323714040865f"
+    },
+    {
+      "path": "output/ballpark/characters-v1/user-east-parts.svg",
+      "sha256": "e05267339837f73fdc99d9a4af009b01542197556003436d11e77f554cc3f1bd"
+    },
+    {
+      "path": "output/ballpark/characters-v1/user-north-parts.svg",
+      "sha256": "2fa931d8f21afd2e7b597bc07aaf9ef9e824dae39cc0d70aea51689aaf012daf"
+    },
+    {
+      "path": "output/ballpark/characters-v1/user-south-parts.svg",
+      "sha256": "d4c935219ceba33f1651507b7ca282d1335db0a87b83d1ac4283f25c6277138d"
+    },
+    {
+      "path": "output/ballpark/characters-v1/user-west-parts.svg",
+      "sha256": "f751adbd30b6d727cc18c6a5ccb997992c241b926b218ab3cc21258f3ca83573"
+    }
+  ],
+  "roles": {
+    "user": {
+      "frame_size": [
+        96,
+        144
+      ],
+      "world_height": 80,
+      "head_scale": 1,
+      "modular": true,
+      "default_number": null,
+      "frames": 48,
+      "files": {
+        "detail": "user-detail-v1.png",
+        "skin": "user-skin-v1.png",
+        "uniform": "user-uniform-v1.png",
+        "accent": "user-accent-v1.png",
+        "preview": "user-preview-v1.png"
+      },
+      "anchor": [
+        0.5,
+        1
+      ],
+      "collision_footprint": [
+        18,
+        10
+      ]
+    },
+    "player": {
+      "frame_size": [
+        64,
+        96
+      ],
+      "world_height": 80,
+      "head_scale": 1.08,
+      "modular": false,
+      "mlbam_id": 672515,
+      "name": "Gabriel Moreno",
+      "default_number": 14,
+      "frames": 48,
+      "files": {
+        "preview": "player-preview-v1.png"
+      },
+      "anchor": [
+        0.5,
+        1
+      ],
+      "collision_footprint": [
+        18,
+        10
+      ]
+    }
+  },
+  "clips": {
+    "idle": {
+      "frames": 4,
+      "fps": 6
+    },
+    "walk": {
+      "frames": 8,
+      "fps": 10
+    }
+  },
+  "directions": [
+    "north",
+    "east",
+    "south",
+    "west"
+  ],
+  "runtime_kit": "frontend/assets/ballpark/characters/character-kit-v1.json",
+  "runtime_kit_sha256": "a6f1b4d51e90f4cb4d62131f55cbb19f279ac4732522b565ec40e9921a5fb0ba",
+  "human_acceptance": "user_accepted_D4_and_all_followups_2026-11-02",
+  "production_ready": false
+}

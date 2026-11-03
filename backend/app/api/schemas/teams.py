@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 from app.api.schemas.common import BatterLeaderboardRow, PitcherLeaderboardRow, ResponseMeta
@@ -69,6 +71,34 @@ class TeamRosterPlayer(BaseModel):
     role: str
     games: int = 0
     starts: int = 0
+
+
+class ActiveRosterPlayer(BaseModel):
+    player_id: int
+    name: str
+    jersey_number: str | None = None
+    position_code: str | None = None
+    position_name: str | None = None
+    position_type: str | None = None
+    status_code: str | None = None
+    status_description: str | None = None
+
+
+class ActiveRosterResponse(BaseModel):
+    meta: ResponseMeta
+    contract_version: Literal["official_active_roster_v1"] = "official_active_roster_v1"
+    team_id: int
+    team_code: str
+    season: int
+    roster_type: Literal["active"] = "active"
+    source: Literal["MLB StatsAPI"] = "MLB StatsAPI"
+    source_url: str
+    retrieved_at: str | None = None
+    source_as_of: str | None = None
+    freshness: Literal["fresh", "stale", "unavailable"]
+    cache_age_seconds: int | None = None
+    stale_after_seconds: int
+    players: list[ActiveRosterPlayer] = Field(default_factory=list)
 
 
 class TeamImpactPlay(BaseModel):

@@ -6,5 +6,5 @@ $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/d /c `"$command
 $trigger = New-ScheduledTaskTrigger -Daily -At "03:00"
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -WakeToRun -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Hours 6)
 $principal = New-ScheduledTaskPrincipal -UserId ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "Run the complete Petehub data pipeline every day at 03:00 Asia/Taipei local time." -Force | Out-Null
+Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "Run Petehub at 03:00 Asia/Taipei; game stages follow the admin switch while transactions remain daily." -Force | Out-Null
 Get-ScheduledTask -TaskName $taskName | Select-Object TaskName, State

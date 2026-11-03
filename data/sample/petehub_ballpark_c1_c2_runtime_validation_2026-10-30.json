@@ -1,0 +1,71 @@
+{
+  "schema_version": "petehub_ballpark_runtime_validation_v1",
+  "validated_at": "2026-10-30",
+  "product_milestone": "0.2.0-runtime-preview",
+  "scope": ["C1", "C2"],
+  "runtime": {
+    "route": "/ballpark",
+    "phaser_version": "4.2.1",
+    "world_size": [1600, 1000],
+    "spawn": [800, 690],
+    "fixed_step_hz": 60,
+    "movement_speed": 260,
+    "input_precedence": ["keyboard", "gamepad", "touch"]
+  },
+  "build": {
+    "utf8_and_nuxt_typecheck": "pass",
+    "nuxt_production_build": "pass",
+    "phaser_lazy_chunk": {
+      "file": "frontend/.output/public/_nuxt/lfjrd5S3.js",
+      "raw_bytes": 1388183,
+      "gzip_bytes": 371836,
+      "classic_login_requested_chunk": false,
+      "ballpark_requested_chunk": true
+    }
+  },
+  "browser": {
+    "engine": "installed Google Chrome through Playwright CLI",
+    "isolated_auth_database": true,
+    "unauthenticated_redirect": "/login?redirect=/ballpark",
+    "authenticated_runtime": {
+      "renderer": "webgl",
+      "initial_canvas_count": 1,
+      "canvas_count_after_route_leave": 0,
+      "canvas_count_after_remount": 1,
+      "console_errors": 0
+    },
+    "desktop_keyboard": {
+      "viewport": [1280, 720],
+      "start": [800, 690],
+      "after_w": [800, 337],
+      "safe_reset": [800, 690],
+      "result": "pass"
+    },
+    "narrow_touch": {
+      "viewport": [390, 844],
+      "reduced_motion": true,
+      "start": [800, 690],
+      "after_move_right": [917, 690],
+      "result": "pass"
+    },
+    "screenshots": [
+      "output/playwright/c1-c2-ballpark-runtime-desktop.png",
+      "output/playwright/c1-c2-ballpark-runtime-narrow-reduced-motion.png"
+    ]
+  },
+  "implemented_contracts": [
+    "SSR-safe ClientOnly and nested dynamic import boundary",
+    "Classic UI route and DOM fallback remain available",
+    "game.destroy(true), listener removal and canvas cleanup on unmount",
+    "keyboard, gamepad and touch input precedence",
+    "window blur stops velocity and touch input",
+    "camera follow, world bounds, static collision fixtures and safe reset"
+  ],
+  "limitations": [
+    "No physical gamepad validation",
+    "No physical mobile or low-end device validation",
+    "The measured lazy chunk size is not a C5 performance-budget pass",
+    "The code-native scene is a runtime foundation, not production art",
+    "npm reported dependency audit findings; no force fix was performed"
+  ]
+}

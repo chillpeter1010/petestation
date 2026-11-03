@@ -1,0 +1,1 @@
+{"source_scene":"campus","world_region":[550,410,650,450],"foreground_ids":["game-gate","west-front-lamp","east-front-lamp","entrance-lamp-west","entrance-lamp-east"],"collision_ids":["field-fence","gate-lamp-west","gate-lamp-east"],"portal_ids":["game"],"visual_direction":"user_approved","human_acceptance":"inherited_user_acceptance_2026-11-02_D2_1_to_D2_5_and_R_exit"}

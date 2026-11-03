@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-02",
+  "tool": "built-in image_gen",
+  "model": "not_exposed_by_tool",
+  "purpose": "Clean approved interior backgrounds for separate runtime player, UI and independently authored depth masks; source originals retained.",
+  "edits": [
+    {
+      "input": "frontend/assets/ballpark/clubhouse-v2.png",
+      "output": "frontend/assets/ballpark/clubhouse-clean-v1.png",
+      "generated_source": "C:/Users/郭睿承/.codex/generated_images/01a18ac7-9ac6-7443-8af6-a435355d126b/exec-5eaeb32a-ea24-4f4e-b480-5426b4a9a6b1.png",
+      "prompt": "Edit target: supplied approved Petehub Clubhouse interior pixel-art image. Precise cleanup only, preserve its detailed pixel RPG style, camera, exact room layout, wall and furniture coordinates. Output the same 1672x941 canvas. Remove ALL baked user interface: top full-width navigation bar (top 50px, continue the dark wall instead), entire right PLAYER LIST panel (x1390 onward; fill with plain matching dark room wall, no extra furniture), bottom character stats/dialogue overlay (x400-1240 y800-935; continue the existing floor/bottom wall seamlessly). Remove ALL human characters and portraits, interaction speech bubbles A, yellow exclamation marks, floor character shadows. Restore the lockers/furniture/floor behind them. Keep every locker, sofa, table, rug with crossed baseball bats, coffee machine, walls, lighting and original proportions in exactly the same positions. Do not add, enlarge, rearrange or redesign furniture. Keep all jersey numbers on lockers. No new UI, no text panel, no characters, no mouse cursor. This is a clean static base for a separately rendered player and independently authored masks.",
+      "actual_image_size": [1671, 941],
+      "world_size": [1672, 941],
+      "note": "Tool returned one pixel less width; original raster retained. Explicit 1672/1671 horizontal world transform is shared by runtime, SVG and manifest."
+    },
+    {
+      "input": "frontend/assets/ballpark/team-office-v4.png",
+      "output": "frontend/assets/ballpark/team-office-clean-v1.png",
+      "generated_source": "C:/Users/郭睿承/.codex/generated_images/01a18ac7-9ac6-7443-8af6-a435355d126b/exec-fac943cc-318e-47fc-8e69-d6bf264fc929.png",
+      "prompt": "Edit target: supplied approved Petehub Team Office interior pixel-art image. Precise cleanup only, preserve detailed pixel RPG style, exact camera and exact room coordinates, both offices and central hallway. Output the same 1672x941 canvas. Remove baked top navigation bar (top 50px; continue dark wall), bottom full-width character dialogue overlay (x420-1250 y800-935; continue original lower wall/floor). Remove all three human characters: coach behind left desk, manager behind right desk, player in middle hall; remove their shadows and both white speech bubbles A. Restore chair/desk/hall floor beneath them. Preserve every furniture item, rug, door, monitors, whiteboards, sign 'COACH OFFICE', sign 'GENERAL MANAGER OFFICE', central framed motto 'Per aspera ad astra' above orange jersey. Keep layout and all object positions EXACTLY as original, no additions/rearrangement. No new UI, no characters, no mouse cursor. Clean base image for independently authored depth masks and separate player.",
+      "actual_image_size": [1672, 941]
+    },
+    {
+      "input": "frontend/assets/ballpark/clubhouse-clean-v1.png",
+      "output": "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+      "generated_source": "C:/Users/郭睿承/.codex/generated_images/01a18ac7-9ac6-7443-8af6-a435355d126b/exec-51241ca4-0b93-47fe-b34c-20d1541d4ddf.png",
+      "prompt": "Edit the supplied Petehub Clubhouse pixel-art image for a walkable game scene. Remove only the dark sofa, its two orange towels, the low coffee table, objects on that table and their brown rug in the lower-center passage between the two locker banks (approximately x=610–895, y=610–785). Replace those objects with continuous gray square tile FLOOR matching the open floor immediately above and below, creating one unobstructed north-south corridor. Preserve the two potted plants, walls and lockers on both sides, the central baseball rug above, all other furniture, lighting, framing, camera perspective, colors and detailed pixel-art style EXACTLY as they are. Do not create new doors, signs, furniture, characters, UI or text. Retain original image dimensions and composition.",
+      "actual_image_size": [1671, 941]
+    }
+  ]
+}

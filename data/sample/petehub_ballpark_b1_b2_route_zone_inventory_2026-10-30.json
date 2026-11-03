@@ -1,0 +1,248 @@
+{
+  "project_id": "petehub-ballpark-game-system",
+  "slices": ["B1", "B2"],
+  "captured_at": "2026-10-30",
+  "status": "contract_complete_runtime_not_started",
+  "source_of_truth": {
+    "routes": "frontend/pages",
+    "authentication": "frontend/middleware/auth.global.ts",
+    "site_navigation": "frontend/config/siteArchitecture.ts",
+    "canonical_contract": "docs/PETEHUB_BALLPARK_GAME_SYSTEM.md"
+  },
+  "route_contract": {
+    "classic_default_route": "/",
+    "future_ballpark_route": "/ballpark",
+    "future_ballpark_route_available_now": false,
+    "default_entry_may_change_only_at_slice": "H5",
+    "canonical_router_owner": "Nuxt",
+    "core_task_requires_walking": false,
+    "world_movement_creates_history_entries": false,
+    "zone_activation_creates_history_entries": true,
+    "brand_cookie_is_ballpark_preference": false
+  },
+  "journey_assertions": [
+    {
+      "id": "unauthenticated_direct_classic",
+      "start": "Protected Classic URL",
+      "expected": "Redirect to /login?redirect=<exact fullPath>; successful same-origin login returns to that URL"
+    },
+    {
+      "id": "unauthenticated_direct_ballpark_future",
+      "start": "/ballpark after C1 exists",
+      "expected": "Redirect to /login?redirect=/ballpark; successful login may enter Ballpark without changing the default / route"
+    },
+    {
+      "id": "first_login_without_redirect",
+      "start": "/login",
+      "expected": "Open / Classic home; Ballpark remains an optional CTA only after C1"
+    },
+    {
+      "id": "first_ballpark_entry_future",
+      "start": "Optional Ballpark CTA",
+      "expected": "Default avatar is always available; Customize now and Later/Skip are equivalent valid paths to the plaza"
+    },
+    {
+      "id": "return_visit_before_h5",
+      "start": "Normal login without redirect",
+      "expected": "Open / Classic home; never force Ballpark"
+    },
+    {
+      "id": "zone_activation_future",
+      "start": "Walk prompt or fast-travel item",
+      "expected": "Both invoke the same bridge to one canonical Nuxt URL and add one browser-history entry"
+    },
+    {
+      "id": "browser_back_future",
+      "start": "Classic page opened from Ballpark",
+      "expected": "Return to /ballpark; focus restoration is owned by the Nuxt-to-runtime bridge"
+    },
+    {
+      "id": "refresh_classic",
+      "start": "Any canonical Classic URL",
+      "expected": "Render that page independently; no hidden Canvas state is required"
+    },
+    {
+      "id": "refresh_ballpark_future",
+      "start": "/ballpark",
+      "expected": "Reconstruct a safe plaza or last valid versioned state; invalid state falls back to plaza with a repair message"
+    },
+    {
+      "id": "runtime_failure_future",
+      "start": "/ballpark runtime load or crash",
+      "expected": "Offer the matching Classic destination or / without a reload loop or loss of core functionality"
+    },
+    {
+      "id": "session_expiry_future",
+      "start": "Active Ballpark session",
+      "expected": "Pause and unmount runtime, redirect through login with /ballpark, then restore only a safe valid state"
+    }
+  ],
+  "zones": [
+    {
+      "id": "arrival-plaza",
+      "label": "Arrival Plaza",
+      "conceptual_location": "central hub",
+      "classic_fallback": "/",
+      "access": "active_user",
+      "routes": ["/"],
+      "functions": ["home", "global player search", "fast travel", "Ballpark/Classic switch"]
+    },
+    {
+      "id": "pitcher-facilities",
+      "label": "Pitcher Facilities",
+      "conceptual_location": "west mound and bullpen",
+      "classic_fallback": "/pitchers",
+      "access": "active_user",
+      "routes": [
+        "/comparison",
+        "/comparison/period",
+        "/comparison/personal",
+        "/pitcher-personal",
+        "/pitcher-similarity",
+        "/pitch-spin-breakdown",
+        "/pitchers",
+        "/rotation",
+        "/rotation/fatigue-lab",
+        "/rotation/reliever",
+        "/rotation/reliever-fatigue-lab",
+        "/rotation/starter",
+        "/starter-discipline",
+        "/starter-stuff"
+      ],
+      "functions": ["pitcher directory", "pitcher personal", "pitch comparison", "rotation", "starter and reliever labs"]
+    },
+    {
+      "id": "batter-facilities",
+      "label": "Batter Facilities",
+      "conceptual_location": "east batting cages",
+      "classic_fallback": "/batters",
+      "access": "active_user",
+      "routes": [
+        "/batter-personal",
+        "/batters",
+        "/batters/comparison",
+        "/batters/comparison/lineup",
+        "/batters/comparison/period",
+        "/batters/comparison/team",
+        "/batters/lab",
+        "/batters/lab/stuff-attack",
+        "/batters/lab/swing-timing",
+        "/batters/lab/tags",
+        "/batters/lab/vision",
+        "/batters/leaderboard",
+        "/comparison/batter-period"
+      ],
+      "functions": ["batter directory", "batter personal", "batter comparison", "leaderboard", "swing and approach labs"]
+    },
+    {
+      "id": "main-field",
+      "label": "Main Field",
+      "conceptual_location": "north field and scoreboard",
+      "classic_fallback": "/games/today",
+      "access": "active_user",
+      "routes": ["/games", "/games/today"],
+      "functions": ["game list", "Game Center", "scoreboard"]
+    },
+    {
+      "id": "video-room",
+      "label": "Video Room",
+      "conceptual_location": "behind the main-field grandstand",
+      "classic_fallback": "/games/today",
+      "access": "active_user",
+      "routes": [],
+      "standalone_route_status": "unavailable_until_E4",
+      "functions": ["future video identity entry", "existing Nuxt DOM video modal"]
+    },
+    {
+      "id": "training-complex",
+      "label": "Training Complex",
+      "conceptual_location": "south-east practice campus",
+      "classic_fallback": "/lab",
+      "access": "active_user",
+      "routes": [
+        "/fielders",
+        "/fielders/catchers",
+        "/fielders/catchers/abs",
+        "/fielders/catchers/blocking",
+        "/fielders/catchers/framing",
+        "/fielders/catchers/lab",
+        "/fielders/catchers/leaderboard",
+        "/fielders/catchers/sequence",
+        "/fielders/catchers/throwing",
+        "/lab",
+        "/lab/leverage",
+        "/lab/location",
+        "/lab/performance-state",
+        "/lab/pitcher-metrics",
+        "/lab/pitching",
+        "/lab/stamina",
+        "/lab/stuff",
+        "/lab/stuff-calculator",
+        "/lab/tags",
+        "/leaderboards"
+      ],
+      "functions": ["research labs", "fielding", "catcher facilities", "leaderboards"]
+    },
+    {
+      "id": "clubhouse",
+      "label": "Clubhouse",
+      "conceptual_location": "south-west team wing",
+      "classic_fallback": "/",
+      "access": "active_user",
+      "routes": ["/teams/{teamId}"],
+      "functions": ["team dashboard", "roster context", "team selection"]
+    },
+    {
+      "id": "front-office",
+      "label": "Front Office",
+      "conceptual_location": "upper concourse",
+      "classic_fallback": "/admin/updates",
+      "access": "admin",
+      "routes": ["/admin/accounts", "/admin/updates"],
+      "functions": ["account approval", "data operations and updates"]
+    }
+  ],
+  "outside_world_routes": [
+    {
+      "route": "/login",
+      "owner": "Nuxt auth",
+      "access": "public"
+    },
+    {
+      "route": "/register",
+      "owner": "Nuxt auth",
+      "access": "public"
+    }
+  ],
+  "zone_state_contract": {
+    "availability_states": ["available", "loading", "ready", "empty", "limited", "locked", "unavailable", "error"],
+    "interaction_states": ["idle", "nearby", "focused", "activating", "open", "returning"],
+    "requirements": {
+      "loading": "Nuxt DOM status is announced and cancel/back remains available",
+      "empty": "Explain why no data is present and preserve navigation",
+      "limited": "Name the missing coverage or capability and keep the Classic route",
+      "locked": "Show the required role without prefetching sensitive data",
+      "unavailable": "Offer the closest valid Classic fallback",
+      "error": "Offer retry and Classic fallback without a reload loop"
+    }
+  },
+  "fast_travel_order": [
+    "arrival-plaza",
+    "main-field",
+    "pitcher-facilities",
+    "batter-facilities",
+    "video-room",
+    "training-complex",
+    "clubhouse",
+    "front-office"
+  ],
+  "coverage": {
+    "nuxt_page_routes": 55,
+    "mapped_authenticated_routes": 53,
+    "outside_world_public_routes": 2,
+    "unmapped_routes": [],
+    "duplicate_route_assignments": [],
+    "current_standalone_video_route": false,
+    "every_current_route_assigned": true
+  }
+}

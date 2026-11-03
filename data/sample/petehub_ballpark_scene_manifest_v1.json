@@ -1,0 +1,102 @@
+{
+  "schema_version": 2,
+  "asset_version": "d2-scenes-v1",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-v1.json",
+  "source_sha256": "14354763af932696a70d5eb12495af491d37aaedd2da3ed96b3bf50d424f6327",
+  "exporter": "build_ballpark_scenes.py:v1",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / OpenAI image generation and authored scene geometry",
+    "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
+    "modification_note": "Approved backgrounds retained; interior baked UI and humans removed by image generation. Collision, foreground silhouettes, anchors and entrances authored independently as editable geometry. No generated animation atlas."
+  },
+  "scope": [
+    "D2.1",
+    "D2.2",
+    "D2.3",
+    "D2.4"
+  ],
+  "human_acceptance": "pending_new_layered_three_scene_delivery",
+  "scenes": [
+    {
+      "scene_id": "campus",
+      "room": "campus",
+      "background": "frontend/assets/ballpark/main-campus-v5.png",
+      "background_sha256": "5f1ed07083289f62fd9a6d6e3e1003d2160467fe1337285187ed398dd16e4a65",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 3322389,
+      "editable_source": "output/ballpark/scenes-v1/campus-layers.svg",
+      "editable_source_sha256": "eb00641b34cc3df163b25829a9a7494ea81c90c147a1953b1e514e138a43145f",
+      "runtime_path": "output/ballpark/scenes-v1/campus.json",
+      "runtime_sha256": "965bcad53080abb2625fbdd4eabaa7c59ad1ed1f77e2ac1a8198e2cfbf430e6c",
+      "collision_count": 23,
+      "foreground_count": 15,
+      "portal_count": 7,
+      "decoded_texture_bytes": 6293408
+    },
+    {
+      "scene_id": "clubhouse",
+      "room": "clubhouse",
+      "background": "frontend/assets/ballpark/clubhouse-clean-v1.png",
+      "background_sha256": "a2729148645a30da16321ee8c7168cc15cbe46ebf30bf2081cdb85d2308c59ae",
+      "image_size": [
+        1671,
+        941
+      ],
+      "world_scale": [
+        1.0005984440454818,
+        1.0
+      ],
+      "background_bytes": 2246499,
+      "editable_source": "output/ballpark/scenes-v1/clubhouse-layers.svg",
+      "editable_source_sha256": "c8ec16582067c478ee343d966056ddcc5aed396f40e0bf8a353160862aa6fe84",
+      "runtime_path": "output/ballpark/scenes-v1/clubhouse.json",
+      "runtime_sha256": "c78b3ad7154e8bc2c458d9ca372760a270aed6aa900839c5daae5ba6fa2fddbf",
+      "collision_count": 18,
+      "foreground_count": 11,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6289644
+    },
+    {
+      "scene_id": "team_office",
+      "room": "team-office",
+      "background": "frontend/assets/ballpark/team-office-clean-v1.png",
+      "background_sha256": "626ab1765aa2c723ee44e93843f030057ea65b2a2feaf919e054617d5afb113b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2330257,
+      "editable_source": "output/ballpark/scenes-v1/team-office-layers.svg",
+      "editable_source_sha256": "12d673b65755fee0f69cd19d79a91520c00b1d26fbac98376af4814fdcb90d89",
+      "runtime_path": "output/ballpark/scenes-v1/team-office.json",
+      "runtime_sha256": "cad01a9938d0febd276502c82bdddc4fc09eb14f0a2578071ac68f333b560228",
+      "collision_count": 27,
+      "foreground_count": 12,
+      "portal_count": 3,
+      "decoded_texture_bytes": 6293408
+    }
+  ],
+  "entrance_pilot": "output/ballpark/scenes-v1/game-entrance-pilot.json",
+  "entrance_editable_source": "output/ballpark/scenes-v1/game-entrance-layers.svg",
+  "entrance_editable_sha256": "5a88c281b74adc4da108c728aa776dc34f9374a0f852db97271291e9a36cd94e"
+}

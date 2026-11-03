@@ -8,12 +8,16 @@
       <div>
         <span class="eyebrow"><Settings2 :size="16" /> Maintenance console</span>
         <h1>Data operations</h1>
-        <p>Pitch data, videos, official game lines, transactions, injuries, and contract snapshots live here. Automatic update: daily at 03:00 Asia/Taipei.</p>
+        <p>Pitch data, videos, official game lines, transactions, injuries, and contract snapshots live here. The scheduler checks in daily at 03:00 Asia/Taipei.</p>
       </div>
       <div class="operations-controls">
         <button class="brand-switch" type="button" role="switch" :aria-checked="isPetehub" @click="toggleBrand">
           <span class="brand-switch__track" aria-hidden="true"><span /></span>
           <span><small>Site identity</small><strong>{{ brandName }}</strong></span>
+        </button>
+        <button class="daily-switch" type="button" role="switch" :aria-checked="dailyGameUpdatesEnabled" :disabled="settingsSaving" @click="toggleDailyGameUpdates">
+          <span class="daily-switch__track" aria-hidden="true"><span /></span>
+          <span><small>Daily game refresh</small><strong>{{ dailyGameUpdatesEnabled ? 'Enabled' : 'Off-season pause' }}</strong><em>Transactions stay daily</em></span>
         </button>
         <label>
           Season
@@ -127,6 +131,8 @@
         <div><span>Location+</span><strong>{{ statusValue('pitcher_data.latest_location_plus_date') || '—' }}</strong></div>
         <div><span>Video lookup</span><strong>{{ statusValue('video_lookup.latest_source_game_date') || statusValue('video_lookup.latest_game_date') || '—' }}</strong></div>
         <div><span>Pitcher lines</span><strong>{{ statusValue('pitcher_game_lines.latest_source_game_date') || statusValue('pitcher_game_lines.latest_game_date') || '—' }}</strong></div>
+        <div><span>Daily game refresh</span><strong>{{ dailyGameUpdatesEnabled ? 'enabled' : 'paused' }}</strong></div>
+        <div><span>Daily transactions</span><strong>enabled</strong></div>
         <div><span>Daily update</span><strong>{{ statusValue('daily_update.status') || '—' }}</strong></div>
         <div><span>Last heartbeat</span><strong class="status-time">{{ statusValue('daily_update.heartbeat_at') || '—' }}</strong></div>
       </div>
@@ -150,7 +156,7 @@
       <p v-else class="empty-jobs">No update jobs have been started in this session.</p>
     </section>
 
-    <footer>Hidden entry, visible operations. This page is not an authentication boundary.</footer>
+    <footer>Backstage operations are restricted by server-side authorization.</footer>
   </main>
 </template>
 
@@ -171,6 +177,8 @@ const message = ref('')
 const jobs = ref<Record<string, any>[]>([])
 const status = ref<Record<string, unknown> | null>(null)
 const statusLoading = ref(false)
+const dailyGameUpdatesEnabled = ref(true)
+const settingsSaving = ref(false)
 const historicalStatus = ref<Record<string, any> | null>(null)
 const catcherStatus = ref<Record<string, any> | null>(null)
 const freshnessPanel = ref<InstanceType<typeof AdminDataFreshness> | null>(null)
@@ -358,9 +366,32 @@ function upsertJob(job: Record<string, any>) {
 
 async function refreshStatus() {
   statusLoading.value = true
-  try { status.value = await api.adminStatus(year.value) }
+  try {
+    status.value = await api.adminStatus(year.value)
+    dailyGameUpdatesEnabled.value = statusValue('daily_settings.game_updates_enabled') !== 'false'
+  }
   catch { status.value = null }
   finally { statusLoading.value = false }
+}
+
+async function toggleDailyGameUpdates() {
+  if (settingsSaving.value) return
+  settingsSaving.value = true
+  const nextValue = !dailyGameUpdatesEnabled.value
+  try {
+    const result = await api.updateDailySettings(nextValue)
+    dailyGameUpdatesEnabled.value = Boolean(result.game_updates_enabled)
+    message.value = dailyGameUpdatesEnabled.value
+      ? 'Daily game refresh enabled for the next 03:00 run. Transactions remain daily.'
+      : 'Daily game refresh paused for the off-season. Transactions remain enabled every day.'
+    failed.value = false
+    await refreshStatus()
+  } catch (error) {
+    failed.value = true
+    message.value = error instanceof Error ? error.message : 'Could not update the daily schedule.'
+  } finally {
+    settingsSaving.value = false
+  }
 }
 
 async function refreshHistoricalPlusStatus() {
@@ -450,7 +481,7 @@ async function clearClientCache() {
 .operations-hero { display:flex; align-items:end; justify-content:space-between; gap:30px; border:1px solid var(--line); border-radius:18px; padding:clamp(25px,4vw,46px); background:linear-gradient(110deg,rgba(255,255,255,.035),rgba(245,163,50,.08)); }
 .eyebrow { color:var(--orange); font-size:11px; font-weight:950; letter-spacing:.09em; text-transform:uppercase; }.operations-hero h1{margin:10px 0 8px;font-size:clamp(38px,5vw,62px);font-weight:750;line-height:1.06;letter-spacing:-.012em}.operations-hero p{max-width:690px;margin:0;color:#aaa;font-size:16px;line-height:1.55}
 .operations-hero label{display:grid;gap:8px;min-width:150px;color:#aaa;font-size:11px;font-weight:900;text-transform:uppercase}.operations-hero select{min-height:44px;border:1px solid #444;border-radius:10px;padding:0 12px;color:#fff;background:#111;font-weight:850}
-.operations-controls{display:flex;align-items:end;gap:12px}.brand-switch{min-height:58px;display:flex;align-items:center;gap:11px;border:1px solid #444;border-radius:10px;padding:8px 12px;color:#fff;background:#080808;cursor:pointer}.brand-switch:hover,.brand-switch:focus-visible{border-color:var(--orange)}.brand-switch>span:last-child{display:grid;gap:2px;text-align:left}.brand-switch small{color:#888;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.brand-switch strong{font-size:13px}.brand-switch__track{width:36px;height:20px;display:flex;align-items:center;border-radius:999px;padding:2px;background:#444;transition:background 140ms ease}.brand-switch__track>span{width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 140ms ease}.brand-switch[aria-checked="true"] .brand-switch__track{background:var(--orange)}.brand-switch[aria-checked="true"] .brand-switch__track>span{transform:translateX(16px)}
+.operations-controls{display:flex;align-items:end;gap:12px}.brand-switch,.daily-switch{min-height:58px;display:flex;align-items:center;gap:11px;border:1px solid #444;border-radius:10px;padding:8px 12px;color:#fff;background:#080808;cursor:pointer}.brand-switch:hover,.brand-switch:focus-visible,.daily-switch:hover,.daily-switch:focus-visible{border-color:var(--orange)}.brand-switch>span:last-child,.daily-switch>span:last-child{display:grid;gap:2px;text-align:left}.brand-switch small,.daily-switch small{color:#888;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.brand-switch strong,.daily-switch strong{font-size:13px}.daily-switch em{color:#aaa;font-size:9px;font-style:normal}.brand-switch__track,.daily-switch__track{width:36px;height:20px;display:flex;align-items:center;flex:0 0 auto;border-radius:999px;padding:2px;background:#444;transition:background 140ms ease}.brand-switch__track>span,.daily-switch__track>span{width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 140ms ease}.brand-switch[aria-checked="true"] .brand-switch__track,.daily-switch[aria-checked="true"] .daily-switch__track{background:var(--orange)}.brand-switch[aria-checked="true"] .brand-switch__track>span,.daily-switch[aria-checked="true"] .daily-switch__track>span{transform:translateX(16px)}.daily-switch:disabled{cursor:wait;opacity:.6}
 .command-bar { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; border:1px solid #292929;border-radius:14px;padding:12px;background:rgba(17,17,17,.92)}.command-bar button{min-height:44px;display:inline-flex;align-items:center;gap:8px;border:1px solid #393939;border-radius:10px;padding:0 15px;color:#eee;background:#181818;font-weight:900;cursor:pointer}.command-bar button:hover{border-color:var(--orange)}.command-bar .primary-action{color:#111;border-color:var(--orange);background:var(--orange)}.command-bar .cache-action{margin-left:auto;color:#aaa}.command-bar button:disabled{cursor:wait;opacity:.55}
 .operations-message{max-width:1280px;margin:14px auto 0;border-left:3px solid #64c77a;padding:9px 13px;color:#d8f5df;background:rgba(70,150,88,.1)}.operations-message.error{border-color:#e3544d;color:#ffd8d4;background:rgba(190,58,50,.1)}
 .historical-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;margin-top:16px;border:1px solid var(--line);border-radius:14px;padding:22px;background:linear-gradient(115deg,rgba(245,163,50,.09),#121212 48%)}.historical-copy h2{margin:7px 0 8px;font-size:24px}.historical-copy p{max-width:780px;margin:0;color:#aaa;font-size:14px;line-height:1.55}.historical-copy .historical-note{margin-top:8px;color:#d9bd91}.historical-action{display:flex;align-items:flex-end;flex-direction:column;gap:10px}.historical-state{border:1px solid #444;border-radius:999px;padding:5px 9px;color:#aaa;font-size:10px;font-weight:950;letter-spacing:.07em}.historical-state.running{color:#111;border-color:var(--orange);background:var(--orange)}.historical-state.completed{color:#9ae8ac;border-color:#397648}.historical-state.partial,.historical-state.invalid{color:#ffc0b8;border-color:#98483f}.historical-years{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid #292929;border-radius:10px;overflow:hidden}.historical-years>button{display:grid;gap:4px;border:0;border-right:1px solid #292929;padding:13px 15px;color:inherit;background:rgba(0,0,0,.2);font:inherit;text-align:left;cursor:pointer}.historical-years>button:last-child{border-right:0}.historical-years>button:hover,.historical-years>button:focus-visible{background:rgba(245,163,50,.12);outline:0}.historical-years>button:disabled{cursor:wait;opacity:.58}.historical-years span{color:#eee;font-size:16px;font-weight:900}.historical-years strong{color:#888;font-size:10px;text-transform:uppercase}.historical-years strong.is-completed{color:#79db91}.historical-years strong.is-running{color:var(--orange)}.historical-years strong.is-failed{color:#ff8c80}.historical-years small{color:#777;font-size:10px}.historical-years em{margin-top:5px;color:var(--orange);font-size:10px;font-style:normal;font-weight:900;text-transform:uppercase}.historical-progress{grid-column:1/-1;margin:0;color:#bbb;font-size:12px}

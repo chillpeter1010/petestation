@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Query
 
 from app.api.schemas.common import AnalysisResponse
-from app.api.schemas.teams import TeamDashboardResponse, TeamHittingIntelligenceResponse, TeamPayrollResponse, TeamPitchVideoResponse, TeamTransactionsResponse
+from app.api.schemas.teams import ActiveRosterResponse, TeamDashboardResponse, TeamHittingIntelligenceResponse, TeamPayrollResponse, TeamPitchVideoResponse, TeamTransactionsResponse
+from app.services.active_roster_service import get_team_active_roster
 from app.services.team_dashboard_service import (
     MLB_TEAM_IDS,
     TEAM_CONFIG,
@@ -15,6 +16,18 @@ from app.services.payroll import get_team_payroll
 from app.services.team_hitting_intelligence_service import get_team_hitting_intelligence
 
 router = APIRouter()
+
+
+@router.get("/{team_id}/active-roster", response_model=ActiveRosterResponse)
+def read_team_active_roster(
+    team_id: str,
+    year: int = Query(2026),
+    refresh: bool = Query(False),
+) -> ActiveRosterResponse:
+    try:
+        return get_team_active_roster(year, team_id, force_refresh=refresh)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @router.get("/media/video-direct")

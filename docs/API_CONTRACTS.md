@@ -16,6 +16,27 @@ Most pitcher analysis endpoints should share these parameters where possible:
 | `counts` | string[] | Count buckets or exact counts |
 | `results` | string[] | Pitch or PA result buckets |
 
+## Authentication and Ballpark profile
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+- `PATCH /api/auth/profile`
+
+Registration accepts the existing `username` and `password` fields plus optional `favorite_team_id`. The value is either `null` or one of the 30 official MLB team IDs; unsupported IDs return validation error `422`. Authentication responses add `favorite_team_id`, derived `favorite_team_code`, and `avatar_setup_status` (`pending` or `default`).
+
+`PATCH /api/auth/profile` is authenticated and partial. Sending `favorite_team_id: null` clears the home-team preference; omitting it preserves the current value. Sending `avatar_setup_status: "default"` records completion of the C1 neutral-avatar bootstrap, while omitting it preserves the current state. Full avatar appearance remains a D4 concern and is not stored by this contract.
+
+## Official active roster
+
+- `GET /api/teams/{team_code}/active-roster?year=2026`
+- Optional `refresh=true` bypasses a fresh cache and attempts an official refresh.
+
+Contract `official_active_roster_v1` reads only MLB StatsAPI `rosterType=active`; season participants, leaderboards and local pitch tables are never roster fallbacks. Each player exposes MLBAM ID, name, jersey number, position code/name/type and official status code/description. The response includes `retrieved_at`, nullable `source_as_of`, `cache_age_seconds`, a 30-minute `stale_after_seconds` threshold and explicit `fresh`, `stale` or `unavailable` freshness.
+
+MLB StatsAPI does not publish a roster revision timestamp in this response, so `source_as_of` remains `null`; Petehub reports the honest retrieval time instead. A failed refresh returns a version-compatible disk cache as `stale` with a warning. With no valid cache it returns `unavailable` and an empty player list, never a reconstructed season roster.
+
 ## Recommended Endpoints
 
 ### Pitchers
@@ -66,6 +87,24 @@ The first release joins traditional results/workload, standard estimator fields,
 - `GET /api/personal/rotation`
 - `GET /api/personal/videos`
 - `GET /api/personal/timing`
+
+### Game Center
+
+- `GET /api/games`
+- `GET /api/games/{game_pk}/pitching`
+- `GET /api/games/{game_pk}/pitchers/{pitcher_id}/location`
+- `GET /api/games/{game_pk}/pitchers/{pitcher_id}/sequence`
+- `GET /api/games/{game_pk}/pitchers/{pitcher_id}/shape`
+- `GET /api/games/{game_pk}/pitchers/{pitcher_id}/replay`
+- `GET /api/games/{game_pk}/pitchers/{pitcher_id}/tags`
+
+The game-detail response returns the line score, plate-appearance feed, batting box and pitching box for one local Statcast game. Batting rows use the official MLB boxscore `battingOrder` when available: the hundreds digit is the lineup slot and the remainder is the substitution sequence, so a `401` player is displayed under the `400` starter and a zero-PA defensive replacement is retained. `AVG` and `ERA` use the official boxscore `seasonStats` snapshot, which represents the cumulative season through that game; PA／AB／H／HR and the remaining box-score counting fields stay game-only. Official boxscores are cached atomically under the year-scoped local data directory. If that source is temporarily unavailable, the service falls back to completed-PA batting rotation and local through-date ERA; the batting fallback preserves lineup-slot grouping for players with a plate appearance but cannot invent a zero-PA substitute.
+
+Location and Sequence are loaded from top-level Game Center tabs beside Feed and Box Score; both use a dropdown limited to pitchers who appeared in the selected game. They are restricted to the requested `game_pk` and pitcher and reuse the Personal analysis payload shapes and filters without allowing filtered rows to create artificial pitch adjacency. Requests are prefetched for the initially selected pitcher and deduplicated/cached briefly in the browser. The Tags endpoint is loaded only when a pitcher name receives hover or keyboard focus. It adapts the released Slice 3 season-role roster and may append versioned `practical_v1` Lab-first profiles (`Pronation`, `Supination`, and LHB/RHB More Breaking Balls or More Offspeed). Primary Pair remains in the frozen research artifact but is omitted from the read view and hover card. Every displayed item remains a full-season descriptive snapshot, not a through-game-date view; if the requested season has no assigned tag, the endpoint may return a separately labeled most-recent prior same-role reference and never presents that reference as current. Practical profiles do not alter the frozen Slice 3 data or downstream research artifacts. Pitch Out is excluded from Location and Sequence analysis.
+
+`shape` is the lazy-loaded read path for the top-level Movement tab. One response contains game-only HB／IVB, compatible release X／Z fields, pitch/result/count/batter-side/catcher filter fields, Plus/Stamina context when cached, and the existing PA/pitch/video identity. The browser caches this unfiltered pitcher-game payload and applies Movement filters locally. Movement values are inches using the existing Petehub convention (`-pfx_x * 12`, `pfx_z * 12`); release position remains in the payload for compatibility, but Game Center no longer exposes a standalone Release Point tab. Pitch Out remains excluded.
+
+`replay` is a separate lazy-loaded game/pitcher payload using contract `pitch_trajectory_statcast_v1`. It returns the same local filter fields and pitch/video identity plus a 31-point release-to-plate path for each valid pitch: `progress`, `time_seconds`, `x_ft`, `y_ft`, and `z_ft`. The backend first reconciles Statcast's actual `release_pos_*` with the velocity/acceleration state defined at 50 feet, then integrates to the front of home plate (`y = 17/12 ft`). Each pitch is explicitly labeled `supported`, `limited_trajectory`, or `unavailable`; a closure difference greater than three inches stays visible as limited data and is never pulled artificially to `plate_x/z`, while missing release/velocity/acceleration fields produce no path. Pitch Out and pitchless events are excluded. The browser caches the unfiltered response for five minutes and applies Replay filters locally. This is a ball-path reconstruction only—not body motion capture or full fluid-physics simulation.
 
 ### Batter Lab
 
@@ -398,6 +437,8 @@ Arbitrary-date X/Y/Z timing is not available locally. `timing_reference` therefo
 - `GET /api/admin/data-freshness?year=2026` reads the latest generated freshness manifest. If no manifest exists for the requested year, it builds a non-persisted local snapshot without an external coverage request.
 - `POST /api/admin/data-freshness/refresh?year=2026` rebuilds official coverage, dataset cutoffs, automation state and page-impact mappings, then writes the latest JSON, Markdown and timestamped history snapshot under `data/admin_job_logs`.
 - `GET /api/admin/project-tracker` reads the Git-tracked `docs/PROJECT_TRACKER.json`, calculates project and portfolio progress from slice statuses, and returns handoff-ready Markdown.
+- `GET /api/admin/daily-update-settings` reads the atomic daily scheduler settings.
+- `PUT /api/admin/daily-update-settings?game_updates_enabled=false` pauses or enables the heavy game-data stages for future scheduled runs. It never disables the scheduled task itself: the transaction refresh and freshness report continue every day. Explicit `daily_update.py --step ...` commands remain available for manual maintenance even while the automatic game stages are paused.
 
 The freshness manifest is the runtime authority for data cutoff reporting. `docs/PROJECT_TRACKER.json` is the planning authority for project, slice, verification and next-step status.
 
@@ -422,3 +463,6 @@ The freshness manifest is the runtime authority for data cutoff reporting. `docs
 ## Versioning Rule
 
 Keep URLs stable during MVP. If a breaking response change is needed, add a new field first, migrate frontend, then remove the old field later.
+# Ballpark D4 avatar profile (draft, not D5-released)
+
+`PATCH /api/auth/avatar` requires the existing authenticated session and accepts `{ "avatar": { "avatar_version": 1, "body_id": "tone_2", "uniform_id": "neutral_home", "palette_id": "orange", "number": null, "bats": "R", "throws": "R" } }`. `body_id` is `tone_1`–`tone_4`; uniform is `neutral_home` or `neutral_away`; palette is `orange`, `teal` or `slate`; number is null or 0–99. Both bats and throws accept `R`/`L`/`S`; `unknown` remains accepted only for old-save compatibility. New defaults and legacy-unknown creator drafts use `R`; opening/cancelling does not overwrite the saved profile. Unknown versions and invalid values are rejected with 422. The response is the existing `AuthResponse`, whose `user.avatar` contains the saved v1 appearance and `user.avatar_recovery_needed` reports an unreadable stored payload. `GET /api/auth/me` and login return the same fields. Favorite-team identity colors are derived from `user.favorite_team_code` at render time in the creator and walk runtime, never from temporary Viewing team; no avatar-version migration or saved-team mutation is required. Uniform home/away remains the saved colorway selection; a chosen favorite team overrides the manual accent, retaining the saved palette for neutral fallback. These are pixel team-color uniforms, not official jersey/logo replicas. Invalid stored data is preserved server-side while the API shows a neutral fallback. The avatar has no MLB logo, player identity, or client-side authoritative game state. Auth responses remain `Cache-Control: no-store`.

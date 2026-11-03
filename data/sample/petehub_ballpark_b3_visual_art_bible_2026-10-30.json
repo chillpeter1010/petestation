@@ -1,0 +1,116 @@
+{
+  "project_id": "petehub-ballpark-game-system",
+  "slice": "B3",
+  "captured_at": "2026-10-30",
+  "status": "art_direction_contract_complete",
+  "runtime_or_production_assets_complete": false,
+  "concept_reference": {
+    "path": "output/ballpark/b3-art-direction-concept-2026-10-30.png",
+    "provenance": "OpenAI built-in image generation, generated 2026-10-30 for Petehub",
+    "usage": "concept_only",
+    "prohibited_uses": [
+      "production sprite atlas",
+      "animation frames",
+      "final UI screenshot",
+      "evidence of runtime implementation"
+    ]
+  },
+  "projection": {
+    "name": "fixed_oblique_2_5d",
+    "camera_rotation": false,
+    "world_grid": "2:1 diamond",
+    "logical_tile_px_1x": [64, 32],
+    "camera_zoom_range_target": [0.85, 1.2],
+    "north_orientation": "upper-left",
+    "indoor_rule": "same projection, scale and light direction as exterior"
+  },
+  "density_and_scale": {
+    "render_style": "crisp illustrated shapes with restrained texture; not pixel art",
+    "runtime_density_targets": ["1x", "2x"],
+    "filtering": "linear with authored edge clarity",
+    "character_logical_height_px": 48,
+    "character_collision_footprint_px": [20, 12],
+    "door_clearance_tiles": 1.5,
+    "minimum_interaction_target_css_px": 44,
+    "unsupported_claims": ["2K character coverage", "full 3D avatar", "production asset memory pass"]
+  },
+  "palette": {
+    "brand_primary": "#FF9900",
+    "ink": "#070707",
+    "charcoal": "#141414",
+    "surface": "#1E2229",
+    "surface_raised": "#292F38",
+    "field_green": "#477A4B",
+    "field_green_light": "#6D9A61",
+    "clay": "#B86B3D",
+    "chalk": "#F3EFE3",
+    "data_blue_gray": "#7F94AE",
+    "success": "#72CD8B",
+    "warning": "#F5B84B",
+    "danger": "#F06B62",
+    "focus": "#FFD166",
+    "contrast_rule": "DOM text and controls target WCAG AA; orange is accent/focus, not body copy on white"
+  },
+  "typography": {
+    "display": ["Segoe UI Variable Display", "Segoe UI", "Arial", "sans-serif"],
+    "body": ["Fira Sans", "Segoe UI", "Arial", "sans-serif"],
+    "data": ["Fira Code", "Consolas", "monospace"],
+    "minimum_hud_text_css_px": 14,
+    "canvas_text_policy": "decorative or duplicated only; essential copy stays in Nuxt DOM"
+  },
+  "lighting": {
+    "default_time": "early_evening",
+    "key_direction": "upper-left",
+    "shadow_direction": "lower-right",
+    "shadow_opacity_max": 0.28,
+    "interior_temperature": "neutral-warm",
+    "rule": "lighting may distinguish zones but cannot encode availability alone"
+  },
+  "avatar": {
+    "proportion": "approximately 5.5 heads tall",
+    "silhouette": "readable cap, torso, glove/bat or neutral hands, compact footwear",
+    "authored_facings": ["north", "east", "south", "west"],
+    "runtime_mirroring": false,
+    "diagonal_input": "map to nearest authored facing",
+    "default_avatar_required": true,
+    "uniform_rule": "brand-neutral Petehub uniform; no real-team trademarks"
+  },
+  "motion": {
+    "idle": {"frames": 4, "fps": 6, "loop": true},
+    "walk": {"frames": 8, "fps": 10, "loop": true},
+    "run_optional": {"frames": 8, "fps": 12, "loop": true},
+    "interaction": {"frames_range": [6, 10], "fps": 10, "loop": false},
+    "reduced_motion": "static idle, no camera easing/parallax, DOM state changes without travel animation",
+    "baseball_motion_boundary": "pitching and batting mechanics are not part of this contract and remain gated by Section F"
+  },
+  "hud": {
+    "owner": "Nuxt DOM",
+    "desktop": "top status bar, left fast-travel rail, bottom-right contextual prompt",
+    "narrow": "compact top bar, bottom-sheet fast travel, full-width contextual action",
+    "persistent_actions": ["Classic UI", "Fast travel", "Help", "Account"],
+    "state_labels": ["loading", "ready", "empty", "limited", "locked", "unavailable", "error"],
+    "focus_rule": "3px high-contrast focus indicator with 2px offset",
+    "world_pause_rule": "world input pauses while modal, menu or Classic overlay owns focus"
+  },
+  "asset_pipeline": {
+    "editable_sources": ["Aseprite", "Blender only after approved 3D gate"],
+    "runtime_outputs": ["PNG/WebP atlas", "versioned manifest"],
+    "required_metadata": [
+      "logical_id",
+      "asset_version",
+      "source_identity",
+      "runtime_hash",
+      "dimensions",
+      "density",
+      "directions",
+      "clips",
+      "anchor",
+      "license",
+      "author_or_source",
+      "modification_note",
+      "export_tool_version"
+    ],
+    "missing_asset_fallback": "neutral placeholder silhouette plus Nuxt DOM explanation; never invisible collision",
+    "production_gate_owner": "D2"
+  }
+}

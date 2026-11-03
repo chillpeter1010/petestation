@@ -8,7 +8,7 @@
       <nav aria-label="Account menu">
         <p><small>Signed in as</small>{{ auth.user.value?.username }}</p>
         <NuxtLink v-if="auth.user.value?.role === 'admin'" to="/admin/accounts">Manage accounts</NuxtLink>
-        <NuxtLink v-if="auth.user.value?.role === 'admin'" to="/admin/updates">Data operations</NuxtLink>
+        <NuxtLink v-if="auth.isBackstageAdmin.value" to="/admin/updates">Data operations</NuxtLink>
         <button type="button" @click="signOut">Sign out</button>
       </nav>
     </details>

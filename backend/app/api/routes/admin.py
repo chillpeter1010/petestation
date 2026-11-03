@@ -22,6 +22,10 @@ from app.services.catcher_descriptive_ledger_service import get_slice1_status, r
 from app.services.data_freshness_service import get_data_freshness_report, refresh_data_freshness_report
 from app.services.project_tracker_service import get_project_tracker
 from app.services.player_archetype_slice3_service import get_player_archetype_slice3_view
+from app.services.pipeline_reliability_service import (
+    read_daily_update_settings,
+    write_daily_update_settings,
+)
 from app.services.video_service import get_video_lookup_status
 
 
@@ -221,6 +225,16 @@ def read_pitcher_game_line_status(year: int = 2026) -> dict[str, object]:
 @router.get("/status")
 def read_admin_status(year: int = 2026) -> dict[str, object]:
     return get_admin_status(year=year)
+
+
+@router.get("/daily-update-settings")
+def read_daily_settings() -> dict[str, object]:
+    return read_daily_update_settings()
+
+
+@router.put("/daily-update-settings")
+def update_daily_settings(game_updates_enabled: bool) -> dict[str, object]:
+    return write_daily_update_settings(game_updates_enabled=game_updates_enabled)
 
 
 @router.get("/data-freshness")

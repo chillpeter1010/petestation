@@ -3,7 +3,7 @@ from functools import lru_cache
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
 
 from app.api.dependencies.auth import require_admin, require_user
-from app.api.schemas.auth import AuthResponse, AuthUser, LoginRequest, RegisterRequest, RegisterResponse, UserListResponse, UserStatusRequest
+from app.api.schemas.auth import AuthResponse, AuthUser, AvatarUpdateRequest, LoginRequest, RegisterRequest, RegisterResponse, UserListResponse, UserProfileRequest, UserStatusRequest
 from app.core.config import settings
 from app.services.auth_service import AuthServiceError, AuthStore, UserRecord
 
@@ -33,7 +33,11 @@ def auth_error(exc: AuthServiceError) -> HTTPException:
 @router.post("/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED)
 def register(payload: RegisterRequest) -> RegisterResponse:
     try:
-        user = get_auth_store().create_user(payload.username, payload.password)
+        user = get_auth_store().create_user(
+            payload.username,
+            payload.password,
+            favorite_team_id=payload.favorite_team_id,
+        )
     except AuthServiceError as exc:
         raise auth_error(exc) from exc
     return RegisterResponse(user=auth_user(user), message="Registration received. An administrator must approve this account before sign-in.")
@@ -70,6 +74,30 @@ def logout(request: Request, response: Response, session: str | None = Cookie(de
 @router.get("/me", response_model=AuthResponse)
 def me(user: UserRecord = Depends(require_user)) -> AuthResponse:
     return AuthResponse(user=auth_user(user))
+
+
+@router.patch("/profile", response_model=AuthResponse)
+def update_profile(payload: UserProfileRequest, user: UserRecord = Depends(require_user)) -> AuthResponse:
+    favorite_team_id = payload.favorite_team_id if "favorite_team_id" in payload.model_fields_set else user.favorite_team_id
+    avatar_setup_status = payload.avatar_setup_status or user.avatar_setup_status
+    try:
+        updated = get_auth_store().update_profile(
+            user.id,
+            favorite_team_id=favorite_team_id,
+            avatar_setup_status=avatar_setup_status,
+        )
+    except AuthServiceError as exc:
+        raise auth_error(exc) from exc
+    return AuthResponse(user=auth_user(updated))
+
+
+@router.patch("/avatar", response_model=AuthResponse)
+def update_avatar(payload: AvatarUpdateRequest, user: UserRecord = Depends(require_user)) -> AuthResponse:
+    try:
+        updated = get_auth_store().update_avatar(user.id, payload.avatar)
+    except AuthServiceError as exc:
+        raise auth_error(exc) from exc
+    return AuthResponse(user=auth_user(updated))
 
 
 @router.get("/users", response_model=UserListResponse)

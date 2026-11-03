@@ -1,0 +1,55 @@
+{
+  "status": "visual_review_pilot_not_production",
+  "tile_size": [
+    32,
+    32
+  ],
+  "source_path": "backend/scripts/build_ballpark_tile_pilot.py",
+  "source_sha256": "33253f35886c81176140da6ffb943a9df57d86429771b385b4c2e7d6f484e8f0",
+  "author": "Petehub project / Codex-authored procedural study",
+  "license": "internal review only; release rights not yet cleared",
+  "exporter": "Pillow deterministic nearest-neighbor export",
+  "atlas_path": "frontend/assets/ballpark/pilot/campus-tiles-v1.png",
+  "atlas_sha256": "eaed088b4e8aa0615dc20df346b9753476c1191bfad9d953ddbc83ada721535c",
+  "atlas_dimensions": [
+    128,
+    64
+  ],
+  "preview_path": "output/ballpark/d2-campus-tile-pilot-v1.png",
+  "preview_sha256": "4b2183cc4b97fa5a88ba8c7449398ff192c9a4492196ca81476e7dc814843647",
+  "tiles": {
+    "grass": [
+      0,
+      0
+    ],
+    "stripe": [
+      1,
+      0
+    ],
+    "clay": [
+      2,
+      0
+    ],
+    "chalk": [
+      3,
+      0
+    ],
+    "stone": [
+      0,
+      1
+    ],
+    "edge": [
+      1,
+      1
+    ],
+    "fence": [
+      2,
+      1
+    ],
+    "shrub": [
+      3,
+      1
+    ]
+  },
+  "collision_and_entrances": "not authored; visual pilot only"
+}

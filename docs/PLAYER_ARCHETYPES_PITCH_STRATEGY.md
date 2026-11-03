@@ -1,7 +1,7 @@
 # Player Archetypes & Pitch Strategy
 
-更新日期：2026-10-19
-狀態：Slice 0–6D 完成；研究成果可用於描述性 profile 與 aggregate strategy diagnostics，不支援單球 best-pitch 或因果宣稱
+更新日期：2026-10-26
+狀態：Slice 0–6D 與 3B practical profiles 完成；研究成果可用於描述性 profile 與 aggregate strategy diagnostics，不支援單球 best-pitch、投球建議、biomechanics 或因果宣稱
 
 ## 文件規則
 
@@ -26,6 +26,7 @@
 | 2 | 完成 | Learned challenger tags |
 | 2A | 完成 | 透明 arm-slot、arsenal depth／concentration／primary-pair tags |
 | 3 | 完成 | 跨年穩定度、retention、邊界敏感度與 release decision |
+| 3B | 完成 | Lab-first Pronation／Supination 與左右打 pitch-family usage profiles |
 | prework | 完成 | 捕手配球資料稀疏度與層級 backoff 契約 |
 | 4 | 完成 | 逐球 pre-pitch decision-state warehouse |
 | 5 | 完成 | Hierarchical belief update challenger |
@@ -75,7 +76,7 @@ Pitcher role key 與 batter-season key 無重複。Season Plus 來源不是 role
 
 Slice 2 以可驗證的 challenger clustering 建立多維 profile，保存 selected `k`、silhouette、membership、stability、rule/GMM agreement 與 minimum support；玩家可有多個 tag，沒有足夠證據時不勉強分類。
 
-Slice 2A 增加透明、可手算的 arm-slot 與 arsenal tags，包括 arsenal depth、concentration、primary pair。這些 tag 用於說明 repertoire 形狀，不是成績評分，也不可拿同季完整資料洩漏到同季逐球預測。
+Slice 2A 增加透明、可手算的 arm-slot 與 arsenal tags，包括 arsenal depth、concentration、primary pair。這些 tag 用於說明 repertoire 形狀，不是成績評分，也不可拿同季完整資料洩漏到同季逐球預測。Primary Pair 仍保留在 frozen artifact 供研究追溯，但因產品解讀不直觀，已從 Pitcher Tag Lab、Game Center hover 與 read API distribution 隱藏。
 
 ## Slice 3：Validation
 
@@ -83,6 +84,36 @@ Slice 2A 增加透明、可手算的 arm-slot 與 arsenal tags，包括 arsenal 
 - 具至少三個 core tags 的 player-season 共 7,477 列。
 - 驗證涵蓋 same-role adjacent-year retention、跨角色比較、邊界擾動與 tag balance。
 - Release decision 只允許達到樣本、穩定度與可解釋門檻的 profile；未通過者保持 research-only 或 withheld。
+
+## Slice 3B：Practical profiles v1
+
+這批標籤另存為 `player_archetype_practical_tags_v1`，只補充 Lab 與 Game Center 的完整球季描述，不覆寫 Slice 3 四個 core tags，也不回寫 Slice 4–6D 的既有研究資料。正式拼字使用 `Supination`；Pronation／Supination 在此只代表手別標準化後的橫向位移形狀，不是實際手腕動作、傷害風險或 mechanics 測量。
+
+### Pronation／Supination 規則
+
+- 橫向位移先轉成投手視角：RHP 使用 `-pfx_x × 12`、LHP 使用 `pfx_x × 12`，arm-side 為正、glove-side 為負。
+- 每個球種至少 20 球、占該 role-season 至少 5%，並只和同年、同角色、同投球手、同一球種且至少 20 人的 cohort 比較。
+- Pronation family 為 FF／FA／SI／CH／FS／FO；至少一個有支持球種達到 `+0.5 SD`，且該 family 依投球數加權後仍達 `+0.5 SD`，才成為 `Pronation` candidate。
+- Supination family 為 SL／ST／CU／KC／SV；使用完全對稱的規則，至少一個有支持球種與加權 glove-side family profile 都達 `+0.5 SD`，才成為 `Supination` candidate。
+- 若兩個 candidate 同時通過則依 XOR 規則全部隱藏；證據不足維持 unassigned／insufficient，不用 generic tag 補滿。這取代「每個 family 至少兩種強球」的不對稱規則，避免因常見 repertoire 結構讓 Pronation 被系統性放大。
+
+### 左右打策略規則
+
+- 左右打各至少 40 球；分別計算 Breaking Balls（SL／ST／CU／KC／SV）與 Offspeed（CH／FS／FO）的完整球季使用率。
+- 某一打者側的 family usage 至少 25%，且比面對另一側高至少 12 個百分點，才標示 `LHB/RHB More Breaking Balls` 或 `LHB/RHB More Offspeed`；不再用單一 Slider／Changeup pair 描述整體策略。
+- 同一投手可各有一個 LHB 與 RHB profile；它只描述球種 family 使用差異，不代表該配球有效、是捕手決策或應採取的策略。
+
+### 實際覆蓋與穩定度
+
+2021–2026 共 6,564 個 pitcher-role-season rows，Pronation 1,078、Supination 841；左右打策略有 2,445 列至少一個標籤。2026 的結果如下：
+
+| Role | Movement eligible | Pronation | Supination | XOR suppressed | Movement tagged | Platoon eligible | Platoon tagged |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| SP | 275 | 62 | 49 | 21 | 111（40.4%） | 271 | 122（45.0%） |
+| RP | 555 | 119 | 103 | 36 | 222（40.0%） | 541 | 264（48.8%） |
+| Total | 830 | 181 | 152 | 57 | 333（40.1%） | 812 | 386（47.5%） |
+
+同角色相鄰球季 retention：Pronation 63.1%（648 pairs）、Supination 58.3%（489）；LHB More Breaking Balls 53.7%、LHB More Offspeed 54.9%、RHB More Breaking Balls 51.8%、RHB More Offspeed 68.8%。穩定度仍只屬中等，因此 release decision 為 `monitor`，不得升格成固定身分類型。
 
 ## Pitch-calling prework
 
@@ -154,6 +185,7 @@ Player Archetype roster／Tag Lab 應位於 Pitcher Lab 研究區，而不是 Ca
 ## Artifacts 與重建入口
 
 - Slice 0–3 contracts：`data/derived/player_archetype_slice0_audit.json`、`player_archetype_slice1_warehouse.json`、`player_archetype_slice2_challenger.json`、`player_archetype_slice2a.json`、`player_archetype_slice3.json`
+- Slice 3B practical profiles：`data/derived/player_archetype_practical_tags_v1.json`、`player_archetype_practical_tags_v1.parquet`、`player_archetype_practical_tag_distribution_v1.parquet`
 - Pitch-calling prework：`data/derived/catcher_pitch_calling_prework.json`
 - Slice 4–6D：`data/derived/player_archetype_slice4*` 至 `player_archetype_slice6d*`
 - 2026 Arm Angle repair：`data/derived/arm_angle_backfill_2026*`

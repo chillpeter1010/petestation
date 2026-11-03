@@ -1,0 +1,4 @@
+interface:
+  display_name: "Petehub Game Performance Audit"
+  short_description: "Measure Ballpark loading, frames, memory, and fallbacks"
+  default_prompt: "Use $petehub-game-performance-audit to collect a reproducible Petehub baseline."

@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-03T08:12:46.543060+00:00",
+  "scope": "D5 source-only gate",
+  "source_status": "pass",
+  "findings": [],
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3",
+    "server": "not_started",
+    "browser": "not_used_by_user_rule"
+  },
+  "measurements": {
+    "characters": {
+      "textures": [
+        {
+          "path": "frontend/assets/ballpark/characters/user-detail-v1.png",
+          "bytes": 19860,
+          "rgba8_bytes": 2654208
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/user-skin-v1.png",
+          "bytes": 10818,
+          "rgba8_bytes": 2654208
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/user-uniform-v1.png",
+          "bytes": 11071,
+          "rgba8_bytes": 2654208
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/user-accent-v1.png",
+          "bytes": 6570,
+          "rgba8_bytes": 2654208
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/user-preview-v1.png",
+          "bytes": 32141,
+          "rgba8_bytes": 2654208
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/player-preview-v1.png",
+          "bytes": 25855,
+          "rgba8_bytes": 1179648
+        },
+        {
+          "path": "frontend/assets/ballpark/characters/numbers-v1.png",
+          "bytes": 820,
+          "rgba8_bytes": 48000
+        }
+      ],
+      "frames_per_role": 48,
+      "total_frames": 96,
+      "numbers": 100,
+      "editable_sources": 8,
+      "header_only": true,
+      "appearance_contracts": {
+        "neutral_combinations": 2424,
+        "favorite_team_combinations": 24240,
+        "meaning": "Available palette/material/number combinations, not rendered image or visual acceptance count"
+      },
+      "padding_pixels": 0,
+      "filtering": "nearest/roundPixels",
+      "limitation": "Frame allocations and editable parts checked, not rendered pose quality or bleed."
+    },
+    "backgrounds": [
+      {
+        "path": "frontend/assets/ballpark/main-campus-v5.png",
+        "bytes": 3322389,
+        "rgba8_bytes": 6293408
+      },
+      {
+        "path": "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+        "bytes": 2141596,
+        "rgba8_bytes": 6289644
+      },
+      {
+        "path": "frontend/assets/ballpark/team-office-clean-v1.png",
+        "bytes": 2330257,
+        "rgba8_bytes": 6293408
+      },
+      {
+        "path": "frontend/assets/ballpark/training-lab-v1.png",
+        "bytes": 2739518,
+        "rgba8_bytes": 6293408
+      },
+      {
+        "path": "frontend/assets/ballpark/video-game-room-v1.png",
+        "bytes": 2401716,
+        "rgba8_bytes": 6293408
+      }
+    ],
+    "total_png_bytes": 13042611,
+    "all_texture_rgba8_bytes": 45961964,
+    "one_room_user_rgba8_bytes": 19612448,
+    "memory_definition": "Width*height*4 RGBA8 estimate only, not browser/GPU/heap measurement; one room shares its background texture across masks. Excludes driver/CPU copies and mipmaps."
+  },
+  "release_status": "pending_user_D5_device_loading_depth_fallback_acceptance",
+  "not_measured": [
+    "FPS/frame time",
+    "navigation/loading",
+    "browser/GPU memory",
+    "input latency",
+    "post-unmount resources",
+    "real low-end device",
+    "failure-mode rendering"
+  ],
+  "prior_acceptance": "User accepted D2 scenes, D4 functionality and all favorite-team/RLS/net/width followups on 2026-11-02; do not repeat those approvals.",
+  "future_budgets": {
+    "atlas_target_px": 1024,
+    "candidate_page_cap_px": 2048,
+    "extrusion_candidate_px": 2
+  },
+  "limitations": [
+    "Source-only PASS is not visual or runtime performance PASS",
+    "Zero-padding nearest-filter atlases require user bleed review; no texture repacking performed",
+    "Full E6 performance gate remains separate"
+  ],
+  "input_hashes": {
+    "data/sample/petehub_ballpark_d1_d3_asset_inventory_v1.json": "8e1d8ea15ca0393f54e9c382a5dfd9224140cee50da0a8fccf7e7397890fac2b",
+    "backend/scripts/audit_ballpark_assets.py": "76aea5be289e83f0eea2777381f9fae69699ff07f80e823c80d64b4ef8b95f63",
+    "backend/scripts/audit_ballpark_characters.py": "65c1de8d8ee532f1df0634ed69d6e7e1b95c55d47b8a84c2ed01d90b6a0ab8d4",
+    "frontend/config/ballparkUniform.ts": "fe167c2b7d58fa8f0ee0436e7bc743c3c5be41e86a08f7ef05b860fdde4a9958",
+    "frontend/components/ballpark/runtime/ballparkCharacter.ts": "a332abd42525af70d8358f14b50a25094abfc9bff93e2ca953f80ef52a0debb4",
+    "frontend/components/ballpark/runtime/createBallparkGame.ts": "3d94bae2bbe0375be6b7ed1c1af0d40570e990936eae29ca6fdcd7f053ac4753",
+    "frontend/components/ballpark/BallparkRuntime.client.vue": "e57af03f2136d7a7301a713f7b94a30e108bd205c11767397889e602621c715c",
+    "data/sample/petehub_ballpark_character_manifest_v1.json": "3eb8af0ff1e4872b4f3b5e74c91187844a254b1bf5b898504cbfb58f0244072e",
+    "data/sample/petehub_ballpark_scene_manifest_v3.json": "1ff092f0c0b3122b233a501577448f3fdbab37a53d9c8f4a007b5396c13ea8d7"
+  },
+  "fallback_source_review": {
+    "neutral_atlas": "present_and_hash_checked",
+    "silhouette_and_saved_appearance": "implemented_in_ballparkCharacter.ts_not_failure_injected",
+    "scene_static_and_classic_links": "implemented_in_BallparkRuntime.client.vue_not_failure_injected",
+    "actual_fallback_rendering": "pending_user"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 2,
+  "asset_version": "d2-5-interiors-v1",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-d2-5-v1.json",
+  "source_sha256": "c65aeec179d8709a3193ac7005b4c58c3ba8e5d37a5e9e79267c553a5ecd7a1b",
+  "exporter": "build_ballpark_scenes.py:v1",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / OpenAI image generation and authored scene geometry",
+    "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
+    "modification_note": "Both D2.5 interior compositions explicitly approved by the user on 2026-11-02. Original artwork copied byte-for-byte; independent collision, foreground silhouettes and portals authored as editable geometry. No new generated art or characters.",
+    "reference_manifest": "data/sample/petehub_ballpark_d2_5_design_candidates_v1.json"
+  },
+  "scope": [
+    "D2.5"
+  ],
+  "human_acceptance": "accepted_by_user_2026-11-02_scene_art_collision_depth_and_transitions",
+  "scenes": [
+    {
+      "scene_id": "training_lab",
+      "room": "training-lab",
+      "background": "frontend/assets/ballpark/training-lab-v1.png",
+      "background_sha256": "1b272c393a1b47cf026002b4347f1f305ae46cc0c49e348e9d1870d67fe31895",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2739518,
+      "editable_source": "output/ballpark/scenes-d2-5-v1/training-lab-layers.svg",
+      "editable_source_sha256": "76a46c327f6d12bb2076ba54670b3562343adc2adf14995476878ad62089618b",
+      "runtime_path": "output/ballpark/scenes-d2-5-v1/training-lab.json",
+      "runtime_sha256": "e7e85ab20caed5525cc07289c3d4921662fd01390651bfdf8c1476c83cb0cee5",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408
+    },
+    {
+      "scene_id": "video_game_room",
+      "room": "video-game-room",
+      "background": "frontend/assets/ballpark/video-game-room-v1.png",
+      "background_sha256": "250d94e6de2b3fb287718561dd3f5697b9aa968ead8ce466120bfe88363f333b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2401716,
+      "editable_source": "output/ballpark/scenes-d2-5-v1/video-game-room-layers.svg",
+      "editable_source_sha256": "976a74b0b7529b3db4823a19f801b3fe6853c57555b37f19e3452786041f450f",
+      "runtime_path": "output/ballpark/scenes-d2-5-v1/video-game-room.json",
+      "runtime_sha256": "5580a0e9d99e868fc28352eb4bd8e437e3aad6239cb2baf60620416d88a1efbe",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408
+    }
+  ],
+  "portal_overrides": {
+    "campus": {
+      "training": {
+        "room": "training-lab"
+      },
+      "video": {
+        "room": "video-game-room"
+      }
+    }
+  }
+}

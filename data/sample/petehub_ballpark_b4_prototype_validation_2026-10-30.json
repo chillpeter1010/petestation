@@ -1,0 +1,64 @@
+{
+  "project_id": "petehub-ballpark-game-system",
+  "slice": "B4",
+  "captured_at": "2026-10-30",
+  "recommended_product_version": "0.1.0-design-preview",
+  "prototype": "output/ballpark/b4-interactive-prototype.html",
+  "status": "local_interactive_prototype_pass_figma_and_approval_pending",
+  "implemented_flows": [
+    "persistent Classic UI exit",
+    "desktop and narrow fast travel",
+    "map prompt and fast-travel shared zone selection",
+    "canonical Classic route display",
+    "Nuxt DOM overlay model",
+    "Escape returns focus path to Ballpark",
+    "loading state demonstration",
+    "Video Room unavailable with Game Center fallback",
+    "Front Office locked with no sensitive request",
+    "reduced-motion CSS path"
+  ],
+  "browser_validation": {
+    "tool": "Playwright CLI with Chromium",
+    "desktop": {
+      "viewport": [1440, 900],
+      "state": "Front Office locked",
+      "horizontal_overflow": false,
+      "vertical_overflow": false,
+      "console_errors": 0,
+      "screenshot": "output/playwright/b4-desktop-front-office.png"
+    },
+    "narrow": {
+      "viewport": [390, 844],
+      "reduced_motion": true,
+      "state": "Video Room unavailable",
+      "horizontal_overflow": false,
+      "vertical_overflow": false,
+      "console_errors": 0,
+      "screenshot": "output/playwright/b4-narrow-video-reduced.png"
+    },
+    "interaction_checks": {
+      "video_fast_travel": "pass",
+      "fallback_route": "/games/today",
+      "overlay_open": "pass",
+      "escape_close": "pass",
+      "admin_locked_button": "pass",
+      "keyboard_accessible_controls_in_snapshot": "pass"
+    }
+  },
+  "non_claims": [
+    "no Phaser runtime",
+    "no authenticated backend request",
+    "no persistent avatar or world save",
+    "no Figma write",
+    "no user usability approval",
+    "no real mobile or low-end-device pass"
+  ],
+  "remaining_gate": {
+    "figma_plugin_connected": false,
+    "figma_target_file_provided": false,
+    "figma_design_system_discovered": false,
+    "figma_screen_written": false,
+    "user_design_approval": false,
+    "required_next_action": "Connect Figma, provide or select the target file, sync the approved local prototype as editable design-system layers, then obtain user sign-off"
+  }
+}

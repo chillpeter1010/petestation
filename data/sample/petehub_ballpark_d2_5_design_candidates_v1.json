@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-02",
+  "slice": "D2.5",
+  "tool": "built-in image_gen",
+  "model": "not_exposed_by_tool",
+  "status": "accepted_by_user_2026-11-02",
+  "production_eligible": false,
+  "runtime_wired": true,
+  "user_approval": "2026-11-02: both D2.5 interior candidates accepted; proceed with scene production",
+  "runtime_acceptance": "2026-11-02: user explicitly reported all five D2.5 operational acceptance items passed",
+  "followup": "User explicitly accepted the R-exit shortcut on 2026-11-02. Existing room artwork/geometry acceptance remains valid.",
+  "layered_source": "frontend/assets/ballpark/scenes/scene-kit-d2-5-v1.json",
+  "layered_manifest": "data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json",
+  "reference_images": [
+    "frontend/assets/ballpark/main-campus-v5.png",
+    "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+    "frontend/assets/ballpark/team-office-clean-v1.png"
+  ],
+  "candidates": [
+    {
+      "scene_id": "training_lab",
+      "logical_id": "concept.training_lab.interior_candidate.v1",
+      "path": "output/ballpark/d2-5-training-lab-interior-candidate-v1.png",
+      "sha256": "1b272c393a1b47cf026002b4347f1f305ae46cc0c49e348e9d1870d67fe31895",
+      "dimensions": [1672, 941],
+      "bytes": 2739518,
+      "generated_source": "C:/Users/郭睿承/.codex/generated_images/01a19b15-8e83-7bf3-8753-d11432fede90/exec-72acf352-2a7c-41ab-b63c-3d518b703170.png",
+      "prompt_summary": "Approved Petehub top-down pixel-RPG interior style. Clean Training & Lab base with bottom-center entrance, unobstructed central aisle, physical training on the left and baseball analytics lab on the right. No people, baked UI, cursor, watermark, MLB logos or legible interface text."
+    },
+    {
+      "scene_id": "video_game_room",
+      "logical_id": "concept.video_game_room.interior_candidate.v1",
+      "path": "output/ballpark/d2-5-video-game-room-interior-candidate-v1.png",
+      "sha256": "250d94e6de2b3fb287718561dd3f5697b9aa968ead8ce466120bfe88363f333b",
+      "dimensions": [1672, 941],
+      "bytes": 2401716,
+      "generated_source": "C:/Users/郭睿承/.codex/generated_images/01a19b15-8e83-7bf3-8753-d11432fede90/exec-7212f232-88e7-4aff-a43f-05c4eed95e19.png",
+      "prompt_summary": "Approved Petehub top-down pixel-RPG interior style. Clean Video/Game Room base with bottom-center entrance, unobstructed central aisle, video-review lounge on the left and reserved future game/simulator area on the right. No people, baked UI, cursor, watermark, MLB logos or legible interface text."
+    }
+  ],
+  "approval_note": "Both visual compositions, all five operational acceptance items and the R-exit followup were explicitly accepted by the user on 2026-11-02. Artwork is copied byte-for-byte into the layered room package; concept references remain non-atlas assets. D2.5 is done. D5 production release is not approved."
+}
