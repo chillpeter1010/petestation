@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-03",
+  "updated_at": "2026-11-04",
   "owner": "user_only",
-  "status": "pending_user",
+  "status": "user_accepted",
+  "acceptance_evidence": "User explicitly reported D5 acceptance passed on 2026-11-04; aggregate user report, no agent UI test.",
+  "device_browser_details": "not_provided; do not infer named browsers, real hardware or measured performance; E6 remains pending",
   "scene_asset_version": "d2-scenes-v3",
-  "source_evidence": "data/sample/petehub_ballpark_d5_source_gate_v2.json",
+  "source_evidence": "data/sample/petehub_ballpark_d5_release_gate_v1.json",
   "prior_acceptance": "D4 functions, favorite-team uniforms, R/L/S, Campus net and page width already accepted; do not repeat those approvals.",
   "rules": [
     "Only explicit user results can change these statuses.",
@@ -16,35 +18,35 @@
   "checks": [
     {
       "id": "team_office_rear_collision",
-      "status": "pending_user",
+      "status": "user_accepted",
       "url": "http://127.0.0.1:3000/ballpark/play?room=team-office",
       "steps": ["Reload the current scene", "Walk toward Coach rear boards/cabinets and GM rear monitors/cabinets", "Walk in front of both areas and through the entry areas and central hall"],
       "pass_criteria": "Neither rear equipment area is walkable; front areas, both entries and the central hall remain usable. Coach meeting-table right-side aisle must allow walking to the lower aisle without walking through furniture. No new website interaction is expected here."
     },
     {
       "id": "loading_depth_and_atlas_bleed",
-      "status": "pending_user",
+      "status": "user_accepted",
       "url": "http://127.0.0.1:3000/ballpark/play",
       "steps": ["Visit Campus, Clubhouse, Team Office, Training & Lab and Video/Game Room", "Observe the character while walking in front of and behind foreground objects"],
       "pass_criteria": "All scenes and character layers load; no unexpected clipping, white edges, neighboring atlas cells, flicker or incorrect front/back occlusion. Existing approved background design is not being resubmitted."
     },
     {
       "id": "narrow_real_device",
-      "status": "pending_user",
+      "status": "user_accepted",
       "url": "http://127.0.0.1:3000/ballpark/play",
       "steps": ["Use a narrow browser window", "If an existing accessible deployment and real device are available, inspect the same scenes on that device; do not use a phone's 127.0.0.1 as the PC address", "Report device/browser or explicitly say no real device was tested"],
       "pass_criteria": "Artwork and controls remain visible and usable. Narrow desktop is not equivalent to a real-device pass; unavailable real-device coverage is recorded separately."
     },
     {
       "id": "reduced_motion",
-      "status": "pending_user",
+      "status": "user_accepted",
       "urls": ["http://127.0.0.1:3000/ballpark", "http://127.0.0.1:3000/ballpark/play"],
       "steps": ["Enable the system or browser reduced-motion preference before reloading", "Open Character preview, then walk in the runtime"],
       "pass_criteria": "Preview/runtime use static direction poses rather than cyclic idle/walk animation, while movement and navigation remain available."
     },
     {
       "id": "asset_failure_fallback",
-      "status": "pending_user",
+      "status": "user_accepted",
       "url": "http://127.0.0.1:3000/ballpark/play?room=team-office",
       "steps": ["In your own browser DevTools request blocking, temporarily block *user-skin-v1* and reload: a neutral character and warning should appear", "Instead block *user-*-v1* and reload: a temporary silhouette and warning should appear", "Clear those blocks, temporarily block *team-office-clean-v1* and reload: startup error offers Static Ballpark and Classic UI links", "Remove all request blocks and reload to restore normal assets"],
       "pass_criteria": "Missing art never silently clears saved appearance; character fallback or a usable scene-error fallback appears. Static/Classic links remain usable and normal assets return after unblocking. Do not delete or overwrite local PNGs."

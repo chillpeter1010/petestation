@@ -8,13 +8,21 @@ const source = fs.readFileSync(new URL('../components/ballpark/runtime/sceneGeom
 const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } }).outputText
 const { canStand, moveOnScene } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'))
 const version = process.argv[2] || 'v1'
-if (!['v1', 'v2', 'd2-5-v1', 'v3'].includes(version)) throw new Error('Unknown scene-kit version')
+if (!['v1', 'v2', 'd2-5-v1', 'v3', 'e2-2-v1', 'e2-3-4-v1', 'clubhouse-annex-v1'].includes(version)) throw new Error('Unknown scene-kit version')
 const kit = JSON.parse(fs.readFileSync(new URL(`../assets/ballpark/scenes/scene-kit-${version}.json`, import.meta.url), 'utf8'))
 const foot = kit.footprint, world = kit.world_size
 const failures = [], evidence = []
 const check = (ok, message) => { if (!ok) failures.push(message) }
-const base = version === 'd2-5-v1' ? JSON.parse(fs.readFileSync(new URL('../assets/ballpark/scenes/scene-kit-v2.json', import.meta.url), 'utf8')) : kit
+const baseVersion = version === 'd2-5-v1' ? 'v2' : ['e2-2-v1', 'e2-3-4-v1', 'clubhouse-annex-v1'].includes(version) ? 'v3' : null
+const base = baseVersion ? JSON.parse(fs.readFileSync(new URL(`../assets/ballpark/scenes/scene-kit-${baseVersion}.json`, import.meta.url), 'utf8')) : kit
 const scenes = { ...base.scenes, ...kit.scenes }
+for (const [room, additions] of Object.entries(kit.portal_additions || {})) {
+  scenes[room] = { ...scenes[room], portals: [...scenes[room].portals, ...additions] }
+  for (const portal of additions) {
+    check(canStand(...portal.arrival, scenes[room].collision, foot, world), room + ': clear added door arrival')
+    check(Boolean(scenes[portal.target.room]), room + ': added door destination exists')
+  }
+}
 check(JSON.stringify(kit.world_size) === JSON.stringify(base.world_size), 'package world size agrees with runtime')
 check(JSON.stringify(kit.footprint) === JSON.stringify(base.footprint), 'package footprint agrees with runtime')
 for (const [room, overrides] of Object.entries(kit.portal_overrides || {})) {
@@ -41,6 +49,11 @@ for (const [room, scene] of Object.entries(kit.scenes)) {
   }
   for (const p of scene.checks.walkable) check(stand(...p), room + ': expected clear ' + p)
   for (const p of scene.checks.blocked) check(!stand(...p), room + ': expected blocked ' + p)
+  for (const object of scene.objects || []) {
+    check(stand(...object.approach), room + ': clear object approach ' + object.id)
+    check(object.collision_refs.every(id => scene.collision.some(shape => shape.id === id)), room + ': object collision refs ' + object.id)
+    check(object.foreground_refs.every(id => scene.foreground.some(shape => shape.id === id)), room + ': object foreground refs ' + object.id)
+  }
   // Six-pixel grid; every edge uses the SAME swept foot solver as runtime.
   const step = 6, key = (x, y) => `${x},${y}`, spawn = scene.spawn.map(v => Math.round(v / step) * step)
   const queue = [spawn], seen = new Set([key(...spawn)]), portals = new Set()
@@ -67,6 +80,9 @@ for (const [room, scene] of Object.entries(kit.scenes)) {
       check(Boolean(destination), room + ': destination room exists ' + portal.id)
       check(!target.spawn || Boolean(destination?.portals.some(p => p.id === target.spawn)), room + ': return arrival exists ' + portal.id)
     }
+  }
+  for (const object of scene.objects || []) {
+    check([...seen].some(value => { const [x, y] = value.split(',').map(Number); return Math.hypot(x - object.approach[0], y - object.approach[1]) <= step }), room + ': reachable object approach ' + object.id)
   }
   evidence.push({ room, reachable_portals: [...portals], tested_positions: seen.size, collision_shapes: scene.collision.length, foreground_masks: scene.foreground.length })
 }

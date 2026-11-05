@@ -317,6 +317,17 @@ def get_video_lookup_status(year: int, data_dir: Path | None = None) -> dict[str
             latest_game = conn.execute("SELECT MAX(game_date) FROM games").fetchone()[0]
             status["season_games"] = int(games or 0)
             status["latest_game_date"] = str(latest_game)[:10] if latest_game is not None else None
+            complete_games = 0
+            if {"pitch_play_lookup", "game_player_lookup"}.issubset(tables):
+                complete_games = conn.execute(
+                    """
+                    SELECT COUNT(*) FROM games g
+                    WHERE EXISTS (SELECT 1 FROM pitch_play_lookup p WHERE p.game_pk = g.game_pk)
+                      AND EXISTS (SELECT 1 FROM game_player_lookup q WHERE q.game_pk = g.game_pk)
+                    """
+                ).fetchone()[0]
+            status["complete_games"] = int(complete_games)
+            status["missing_games"] = int(games or 0) - int(complete_games)
         if "pitch_play_lookup" in tables:
             lookup = conn.execute(
                 """

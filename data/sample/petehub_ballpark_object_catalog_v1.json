@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "catalog_id": "ballpark-object-catalog-v1",
+  "updated_at": "2026-11-05",
+  "status": "mapping_and_annex_accepted_by_user_2026-11-05; business_bindings_remain_planned",
+  "source": "frontend/assets/ballpark/scenes/scene-kit-v3.json",
+  "source_sha256": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+  "unified_runtime_source":"frontend/assets/ballpark/scenes/scene-kit-v4.json",
+  "generated_view": "output/ballpark/object-catalog-v1.md",
+  "inventory_rule": "Enumerate every collision, foreground, portal and hotspot by scene/layer/id from the pinned source; these are geometry records, not a count of distinct visual objects. Semantic objects below may share parent geometry. Neither this source inventory nor the proposed map certifies visual completeness.",
+  "defaults": {
+    "access": "active_user",
+    "binding_status": "planned_not_runtime_wired",
+    "planned_trigger": "nearby_E_or_pointer_with_equivalent_direct_menu",
+    "bounds": null,
+    "bounds_note": "Parent geometry is a reference envelope only, not an authored interaction zone. Null means unlocated; do not infer coordinates or readiness.",
+    "data_owner": "existing_backend_services_via_Nuxt",
+    "acceptance": "pending_user",
+    "blocked_feature_policy": "Show unavailable/limited and a canonical direct fallback; never expose unreleased research as production."
+  },
+  "return_contract": {"facility_exit":"near_exit_R_to_matching_Campus_arrival", "panel_close":"E4_to_origin_scene_and_object", "unmount_restore":"E5_versioned_safe_position_or_safe_arrival", "classic_R":"not_globally_intercepted"},
+  "limitations": [
+    "No agent browser or movement acceptance testing performed. Source artwork may be read for authoring; visual/object completeness and function mapping require user review.",
+    "Raw source records retain actual runtime targets. Planned semantic actions do not change those targets or prove that a feature is connected.",
+    "Walls, furniture, nets, vegetation and lamps are blockers/decoration unless explicitly assigned a candidate function. Repeated background trim, plants and lighting without independent geometry form a declared per-scene group awaiting user additions.",
+    "NPC points are future placeholders, not current actors or official roster identities. Random appearance and patrol behavior remain unspecified.",
+    "User accepted original E2 and E2.1-E2.4, including the new Clubhouse C-door, ninth smoking courtyard and 59-object catalog on 2026-11-05. E2.1 is done as inventory/mapping, not all business actions connected. NPC smoking/chat remains future E3.3/F4; base source pin unchanged. Other daily/social/training action ideas are under discussion, not existing clips or automatically scheduled implementation.",
+    "Context names below are semantic requirements, not frozen API query parameter names. Existing API/schema and auth remain authoritative."
+  ],
+  "shared_hud": [
+    {"id":"home-search", "label":"首頁／球員搜尋", "feature":"首頁與全站球員搜尋", "fallback":"/", "owner":"E3.1/F6"},
+    {"id":"recent-recommended-notices", "label":"最近瀏覽／今日推薦／系統通知", "feature":"沿用既有首頁內容；不存在的能力標示待實作，不杜撰通知系統", "fallback":"/", "owner":"F6"},
+    {"id":"travel-classic", "label":"快速移動／返回 Classic", "feature":"各站選單與 Classic 永久可達，不要求走路", "fallback":"/", "owner":"E3.3/E4"}
+  ],
+  "scenes": [
+    {
+      "id":"campus", "label":"Campus / Arrival Plaza", "source_key":"campus", "status":"existing", "fallback":"/", "binding_owner":"E3.1",
+      "objects": [
+        {"id":"game-entry", "label":"GAME 入口", "refs":["portals/game","foreground/game-gate"], "feature":"未來進 Game 新場景；目前仍直連今日賽事", "fallback":"/games/today", "owner":"E2.2/F1", "context":["selected_game_optional"]},
+        {"id":"batting-entry", "label":"Batting Cages 入口", "refs":["portals/batting","collision/cages"], "feature":"未來進打擊場景；目前仍直連打者站", "fallback":"/batters", "owner":"E2.3/F2", "context":["selected_player_optional"]},
+        {"id":"pitching-entry", "label":"Pitcher Mound 入口", "refs":["portals/pitching","collision/pitching-field"], "feature":"未來進投手場景；目前仍直連投手站", "fallback":"/pitchers", "owner":"E2.4/F2", "context":["selected_player_optional"]},
+        {"id":"training-entry", "label":"Training & Lab 入口", "refs":["portals/training"], "feature":"進既有 Training & Lab 場景", "fallback":"/lab", "owner":"F3", "context":[]},
+        {"id":"video-entry", "label":"Video Room 入口", "refs":["portals/video"], "feature":"進既有 Video / Game Room", "fallback":"/", "owner":"F6", "context":[]},
+        {"id":"clubhouse-entry", "label":"Clubhouse 入口", "refs":["portals/clubhouse"], "feature":"進主隊休息室；Viewing team 可暫時切隊", "fallback":"/teams", "owner":"F4", "context":["viewing_team"]},
+        {"id":"office-entry", "label":"Team Office 入口", "refs":["portals/team-office"], "feature":"進主隊辦公室", "fallback":"/teams", "owner":"F5", "context":["viewing_team"]},
+        {"id":"scoreboard", "label":"外野 Leaderboard 記分板", "refs":["hotspots/leaderboard"], "feature":"排行榜；保留排名母體、as-of 及直接入口", "fallback":"/leaderboards", "owner":"F1", "context":["season","ranking_filters"]}
+      ]
+    },
+    {
+      "id":"clubhouse", "label":"Clubhouse", "source_key":"clubhouse", "status":"existing", "fallback":"/teams", "binding_owner":"E3.1", "supplemental_package":"frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json", "supplemental_acceptance":"user_accepted_2026-11-05",
+      "objects": [
+        {"id":"player-list", "label":"PLAYER LIST／完整名單", "refs":["portals/roster"], "feature":"官方 active roster 與直接選人；fresh/stale/unavailable", "fallback":"/teams", "owner":"F4", "context":["viewing_team","official_roster_retrieved_at"]},
+        {"id":"north-lockers", "label":"北側球員置物櫃群", "refs":["collision/north-wall-lockers"], "feature":"預留選定球員資料／對話；不能把櫃上數字推定為真實名單", "fallback":"/teams", "owner":"F4", "context":["viewing_team","official_roster_player"]},
+        {"id":"south-lockers", "label":"南側球員置物櫃群", "refs":["collision/south-west-lockers","collision/south-east-lockers","foreground/bottom-locker-row","foreground/bottom-locker-row-east"], "feature":"同北側；畫面群組可依核准 NPC 站位再拆穩定子 ID", "fallback":"/teams", "owner":"F4", "context":["viewing_team","official_roster_player"]},
+        {"id":"smoking-door","label":"????????","refs":[],"location":"??????????????? bounds [1318,292,42,52]","feature":"??? C ?????Enter / Exit ??????????????????????????????????","fallback":"/ballpark/play?room=clubhouse-smoking-area","owner":"E2.1 user-requested annex","context":["viewing_team"],"planned_trigger":"nearby_C_or_equivalent_button_menu","binding_status":"runtime_wired_user_accepted","runtime_ref":"scene-kit-clubhouse-annex-v1.portal_additions.clubhouse/smoking-door"},
+        {"id":"npc-lounge-points", "label":"代表球員 NPC 互動點（未定位）", "refs":[], "location":"可走動空地／休息區外緣，避免中央通道", "feature":"8–10 名代表球員，走近對話／個人數據；不是本輪新增角色", "fallback":"/teams", "owner":"E3.3/F4", "context":["viewing_team","official_roster_player"]},
+        {"id":"tv-cabinet", "label":"電視／上方櫃體", "refs":["collision/tv-upper-cabinet","collision/tv-plant"], "feature":"本期裝飾／阻擋，暫不新增獨立影片功能", "fallback":"/teams", "owner":"E2", "context":[], "planned_trigger":"none"},
+        {"id":"lounge-dining", "label":"沙發／茶几／餐桌群", "refs":["collision/north-sofa","collision/lounge-table","collision/east-sofa","collision/south-sofa","collision/dining-set"], "feature":"本期裝飾／阻擋；NPC 不可因布置堵住中央通道", "fallback":"/teams", "owner":"E2", "context":[], "planned_trigger":"none"}
+      ]
+    },
+    {
+      "id":"team-office", "label":"Team Office", "source_key":"team-office", "status":"existing", "fallback":"/teams", "binding_owner":"E3.1",
+      "objects": [
+        {"id":"coach-rotation", "label":"Coach 輪值看板", "refs":["collision/coach-rear-wall-equipment"], "location":"Coach 後牆看板群內；待獨立互動框", "feature":"主隊輪值", "fallback":"/teams", "owner":"F5", "context":["viewing_team","season"]},
+        {"id":"coach-lineup", "label":"Coach 打線看板", "refs":["collision/coach-rear-wall-equipment"], "location":"Coach 後牆看板群內；待獨立互動框", "feature":"主隊打線；資料未提供時顯示 unavailable", "fallback":"/teams", "owner":"F5", "context":["viewing_team","selected_game_optional"]},
+        {"id":"coach-bullpen", "label":"Coach 牛棚看板", "refs":["collision/coach-rear-wall-equipment"], "location":"Coach 後牆看板群內；待獨立互動框", "feature":"主隊牛棚", "fallback":"/teams", "owner":"F5", "context":["viewing_team","season"]},
+        {"id":"coach-workspace", "label":"Coach 工作桌／白板", "refs":["collision/coach-desk","foreground/coach-whiteboard"], "feature":"球隊 Coach 面板直接選單，三看板相同來源", "fallback":"/teams", "owner":"F5", "context":["viewing_team"]},
+        {"id":"gm-trades", "label":"GM 交易螢幕", "refs":["collision/manager-rear-wall-equipment"], "location":"GM 後牆螢幕群內；待獨立互動框", "feature":"球隊交易／異動紀錄，不是執行真實交易", "fallback":"/teams", "owner":"F5", "context":["viewing_team","as_of"]},
+        {"id":"gm-payroll", "label":"GM 薪資螢幕", "refs":["collision/manager-rear-wall-equipment"], "location":"GM 後牆螢幕群內；待獨立互動框", "feature":"薪資資料；資料來源／功能未發布前不可用", "fallback":"/teams", "owner":"F5", "context":["viewing_team","season","salary_source"]},
+        {"id":"gm-contracts", "label":"GM 合約螢幕", "refs":["collision/manager-rear-wall-equipment"], "location":"GM 後牆螢幕群內；待獨立互動框", "feature":"合約資料；無可靠資料時明示 unavailable", "fallback":"/teams", "owner":"F5", "context":["viewing_team","contract_source"]},
+        {"id":"gm-workspace", "label":"GM 工作桌", "refs":["collision/manager-desk","foreground/manager-desk"], "feature":"球隊 GM 面板直接選單", "fallback":"/teams", "owner":"F5", "context":["viewing_team"]},
+        {"id":"admin-frame", "label":"Per aspera ad astra 畫框", "refs":["hotspots/admin-frame"], "feature":"既有後台熱區；不得另加浮動彩蛋按鈕", "fallback":"/admin/updates", "owner":"C4/E3.1", "context":[], "access":"admin_and_exact_username_peter1010_server_enforced", "planned_trigger":"existing_pointer_only", "binding_status":"existing_runtime_hotspot"},
+        {"id":"alcove-cabinet", "label":"中央雙門壁龕／入口盆栽櫃", "refs":["collision/central-door-alcove","collision/manager-entry-plant-cabinet"], "feature":"本期裝飾／阻擋，不新增假門功能", "fallback":"/teams", "owner":"E2", "context":[], "planned_trigger":"none"},
+        {"id":"meeting-lounge", "label":"會議桌椅／GM 休息區", "refs":["collision/coach-table-chairs","collision/manager-sofa","collision/manager-coffee-table"], "feature":"本期裝飾／阻擋，保留既有側邊通道", "fallback":"/teams", "owner":"E2", "context":[], "planned_trigger":"none"}
+      ]
+    },
+    {
+      "id":"training-lab", "label":"Training & Lab", "source_key":"training-lab", "status":"existing", "fallback":"/lab", "binding_owner":"E3.1",
+      "objects": [
+        {"id":"lab-directory", "label":"Lab 工作區入口／工具選單", "refs":["portals/lab"], "feature":"完整研究工具選單與直接入口", "fallback":"/lab", "owner":"F3", "context":["research_release_status"]},
+        {"id":"stuff-location", "label":"分析桌：Stuff+／Location+ 終端", "refs":["collision/analytics-desk","foreground/analytics-desk"], "feature":"跨球員分析；共用既有 Lab，保留版本與研究標示", "fallback":"/lab", "routes":["/lab/stuff","/lab/location"], "owner":"F3", "context":["season","selected_players","metric_version"]},
+        {"id":"stamina-performance", "label":"追蹤螢幕：Stamina／Performance State", "refs":["collision/tracking-screen","foreground/tracking-screen"], "feature":"兩條獨立研究／狀態工具；不捏造合成分數", "fallback":"/lab", "routes":["/lab/stamina","/lab/performance-state"], "owner":"F3", "context":["selected_player","as_of","research_release_status"]},
+        {"id":"comparison-calculator", "label":"工作台：比較工具／計算器", "refs":["collision/lab-workbench","foreground/lab-workbench"], "feature":"共用比較入口、Stuff calculator 與其限制", "fallback":"/lab", "routes":["/comparison/personal","/lab/stuff-calculator"], "owner":"F3", "context":["selected_players","metric_version"]},
+        {"id":"cross-domain-directory", "label":"Lab 工作區跨領域選單", "refs":["collision/lab-workbench"], "feature":"其他已發布研究、捕手／守備等工具由選單提供，不要求每工具重畫一物件", "fallback":"/lab", "owner":"F3", "context":["research_release_status"]},
+        {"id":"training-equipment", "label":"重量／練習網／攝影設備群", "refs":["collision/batting-net","collision/weight-rack","collision/tracking-camera","collision/tracking-net"], "feature":"本期裝飾／阻擋；不把測量器材畫面說成實際生理檢測或新模擬", "fallback":"/lab", "owner":"E2", "context":[], "planned_trigger":"none"}
+      ]
+    },
+    {
+      "id":"video-game-room", "label":"Video / Game Room", "source_key":"video-game-room", "status":"existing", "fallback":"/", "binding_owner":"E3.1",
+      "objects": [
+        {"id":"recommended-screen", "label":"推薦影片主螢幕", "refs":["portals/recommendations","foreground/television"], "feature":"沿用首頁推薦影片；目前 runtime action 只開推薦說明／首頁連結，未直接嵌入完整影片功能", "fallback":"/", "owner":"F6", "context":["video_identity","availability"]},
+        {"id":"video-library", "label":"影片櫃／工作站", "refs":["collision/video-library","collision/review-workstation"], "feature":"同一推薦影片清單的次入口，不另外建立不相干的影片庫", "fallback":"/", "owner":"F6", "context":["video_identity","availability"]},
+        {"id":"future-minigames", "label":"遊戲機／Game bay 群", "refs":["collision/arcade-west","collision/arcade-east","collision/game-bay-west","collision/game-bay-east"], "feature":"僅預留未來小遊戲空間，本輪不製作遊戲", "fallback":"/", "owner":"F6", "context":[], "planned_trigger":"none_until_separately_scoped"},
+        {"id":"lounge-vending", "label":"休息座椅／販賣機", "refs":["collision/lounge-sofa","collision/lounge-south-sofa","collision/lounge-armchair","collision/vending"], "feature":"本期裝飾／阻擋，不新增經濟系統", "fallback":"/", "owner":"E2", "context":[], "planned_trigger":"none"}
+      ]
+    },
+    {
+      "id":"game-center", "label":"Game 新場景", "source_key":null, "status":"user_accepted_scene_object_actions_pending", "fallback":"/games/today", "binding_owner":"E3.2", "asset_owner":"E2.2",
+      "runtime_package":"frontend/assets/ballpark/scenes/scene-kit-e2-2-v1.json",
+      "concept_candidate":"output/ballpark/e2-facilities-v1/game-center-concept-v1.png",
+      "design_brief":{"setting":"球場觀賽／比賽分析控制區，能辨識棒球場，而非另一間 Team Office", "layout":"南側中央入口及開放主走道；北側賽程看板，側邊分析台與回放螢幕，所有互動點有可站立空間", "world":[1672,941], "style":"沿用已核准俯視像素 RPG、暖光與 Petehub 黑橘；無角色／HUD／烘入游標", "approval":"功能配置先核准；新背景另由使用者核准後才製作幾何與 runtime 包"},
+      "objects": [
+        {"id":"schedule-board", "label":"賽程／比分看板", "refs":[], "location":"北側主看板", "feature":"今日賽事、比分與選定比賽", "fallback":"/games/today", "owner":"F1", "context":["date","selected_game"]},
+        {"id":"game-analysis-console", "label":"比賽分析控制台", "refs":[], "location":"側邊工作台，從主走道可達", "feature":"Box Score／Location／Sequence／Movement 以同一場比賽與球員選擇切頁", "fallback":"/games/today", "owner":"F1", "context":["selected_game","selected_player","selected_pitch_optional"]},
+        {"id":"replay-screen", "label":"Pitch Replay／影片螢幕", "refs":[], "location":"另一側觀賽螢幕", "feature":"同一比賽／球路的 Historical Pitch Replay 與影片；不可改成 synthetic simulation", "fallback":"/games/today", "owner":"F1", "context":["selected_game","selected_pitch","video_identity_optional"]},
+        {"id":"return", "label":"返回 Campus 出口", "refs":[], "location":"南側中央", "feature":"靠近按 R 到 Campus GAME 入口外", "fallback":"/ballpark/play", "owner":"E2.2/E4", "context":["origin_arrival"], "planned_trigger":"near_exit_R"}
+      ]
+    },
+    {
+      "id":"batting-cages", "label":"Batting Cages 新場景", "source_key":null, "status":"user_accepted_scene_object_actions_pending", "runtime_package":"frontend/assets/ballpark/scenes/scene-kit-e2-3-4-v1.json", "fallback":"/batters", "binding_owner":"E3.2", "asset_owner":"E2.3",
+      "concept_candidate":"output/ballpark/e2-facilities-v1/batting-cages-concept-v1.png",
+      "design_brief":{"setting":"有網籠、打擊墊與器材的室內打擊訓練區，不用 Training & Lab 背景替代", "layout":"南側中央入口／開放主走道；北側練習網籠，兩側名冊、數據與比較站，網子外留通道", "world":[1672,941], "style":"沿用已核准俯視像素 RPG；無人物／HUD／烘入游標／實際揮棒動畫", "approval":"功能配置先核准；新背景另由使用者核准後才製作幾何與 runtime 包"},
+      "objects": [
+        {"id":"batter-directory", "label":"打者名冊／選人終端", "refs":[], "location":"入口側邊", "feature":"打者搜尋與選定球員；完整站內工具選單", "fallback":"/batters", "owner":"F2", "context":["selected_player","season"]},
+        {"id":"batter-analysis", "label":"個人數據螢幕", "refs":[], "location":"練習網外側工作台", "feature":"打者個人分析及排行榜；先選人，不能打開無身分的個人頁", "fallback":"/batters", "routes":["/batter-personal","/batters/leaderboard"], "owner":"F2", "context":["selected_player","season","filters"]},
+        {"id":"batter-comparison", "label":"打者比較看板", "refs":[], "location":"側邊看板", "feature":"球員／期間／球隊／打線比較共用選單", "fallback":"/batters/comparison", "owner":"F2", "context":["selected_players","period","viewing_team_optional"]},
+        {"id":"batter-lab", "label":"打擊研究終端", "refs":[], "location":"另一側設備台", "feature":"既有 Batter Lab，保留 Lab／來源／缺資料限制，不自行發布候選指標", "fallback":"/batters/lab", "owner":"F2", "context":["selected_player","research_release_status"]},
+        {"id":"practice-cage", "label":"練習網籠／器材群", "refs":[], "location":"北側練習區", "feature":"場景裝飾與阻擋，不代表已實作打擊小遊戲", "fallback":"/batters", "owner":"E2.3", "context":[], "planned_trigger":"none"},
+        {"id":"return", "label":"返回 Campus 出口", "refs":[], "location":"南側中央", "feature":"靠近按 R 到 Campus Batting 入口外", "fallback":"/ballpark/play", "owner":"E2.3/E4", "context":["origin_arrival"], "planned_trigger":"near_exit_R"}
+      ]
+    },
+    {
+      "id":"pitcher-mound", "label":"Pitcher Mound 新場景", "source_key":null, "status":"user_accepted_scene_object_actions_pending", "runtime_package":"frontend/assets/ballpark/scenes/scene-kit-e2-3-4-v1.json", "current_art":"frontend/assets/ballpark/pitcher-mound-v2.png", "layout_revision":"data/sample/petehub_ballpark_pitcher_in_game_layout_v2.json", "fallback":"/pitchers", "binding_owner":"E3.2", "asset_owner":"E2.4",
+      "concept_candidate":"output/ballpark/e2-facilities-v1/pitcher-mound-concept-v1.png",
+      "design_brief":{"setting":"牛棚／投球練習區，可見投手丘、捕手目標與保護網，具投手設施辨識", "layout":"南側中央入口及寬走道；北側投球道，側邊名冊、球路／位置螢幕與比較站，避免把網子畫在必經通道", "world":[1672,941], "style":"沿用已核准俯視像素 RPG；無人物／HUD／烘入游標／虛構實測儀表值", "approval":"功能配置先核准；新背景另由使用者核准後才製作幾何與 runtime 包"},
+      "objects": [
+        {"id":"pitcher-directory", "label":"投手名冊／選人終端", "refs":[], "location":"入口側邊", "feature":"投手搜尋／選人及完整站內工具選單", "fallback":"/pitchers", "owner":"F2", "context":["selected_player","season"]},
+        {"id":"pitch-analysis", "label":"Shape／球路與位置分析螢幕", "refs":[], "location":"左側分析台（移除原 In game 區）", "feature":"僅保留個人球路、位置與 spin；In game 移至兩條牛棚道，不在此重複提供入口", "fallback":"/pitchers", "routes":["/pitcher-personal","/pitch-spin-breakdown"], "owner":"F2", "context":["selected_player","season","filters"]},
+        {"id":"pitcher-comparison", "label":"投手比較／相似度看板", "refs":[], "location":"側邊看板", "feature":"個人／期間比較與相似投手工具", "fallback":"/comparison/personal", "routes":["/comparison/period","/pitcher-similarity"], "owner":"F2", "context":["selected_players","period"]},
+        {"id":"pitcher-tools", "label":"投手工具／輪值牛棚選單", "refs":[], "location":"另一側工作台", "feature":"保留既有投手工具與輪值／牛棚 direct links；球隊管理主入口仍在 Team Office，跨領域研究主入口仍 Training", "fallback":"/pitchers", "routes":["/rotation/starter","/rotation/reliever"], "owner":"F2", "context":["selected_player_optional","viewing_team_optional","research_release_status"]},
+        {"id":"in-game-west", "supersedes":"bullpen-lanes", "label":"左牛棚 In game", "refs":[], "location":"西側投球道，站在網外操作", "feature":"未來隨機刷新所屬球隊投手在道內投球；可用等價 DOM 選單選投手及出賽場次，共用 Personal In game 逐球／影片。預設球隊為 favorite team，Viewing team 切換時跟隨瀏覽球隊；以官方 active roster 的投手候選為準。投球人體動作為明示 generic 展示，不宣稱歷史 mechanics 重建。尚未實作 actor／動畫或業務接線", "fallback":"/pitchers", "routes":["/pitcher-personal"], "owner":"E3.2/E4/F2", "context":["viewing_team","favorite_team_default","official_active_roster","selected_player","season","selected_game","selected_pitch_optional"], "planned_trigger":"nearby_E_or_pointer_with_equivalent_direct_menu"},
+        {"id":"in-game-east", "supersedes":"bullpen-lanes", "label":"右牛棚 In game", "refs":[], "location":"東側投球道，站在網外操作", "feature":"與左牛棚相同的所屬球隊投手隨機刷新／投球展示及投手、場次選單；兩道各有穩定物件 ID。隨機不覆蓋使用者手動選擇；無 roster／無出賽資料須有明確 unavailable，不能造球員／場次。刷新頻率、兩道去重與動畫規格在 F2 實作前細化，現在未執行", "fallback":"/pitchers", "routes":["/pitcher-personal"], "owner":"E3.2/E4/F2", "context":["viewing_team","favorite_team_default","official_active_roster","selected_player","season","selected_game","selected_pitch_optional"], "planned_trigger":"nearby_E_or_pointer_with_equivalent_direct_menu"},
+        {"id":"return", "label":"返回 Campus 出口", "refs":[], "location":"南側中央", "feature":"靠近按 R 到 Campus Pitcher 入口外", "fallback":"/ballpark/play", "owner":"E2.4/E4", "context":["origin_arrival"], "planned_trigger":"near_exit_R"}
+      ]
+    },
+    {
+      "id":"clubhouse-smoking-area",
+      "label":"Clubhouse ?????",
+      "source_key":null,
+      "status":"user_accepted_scene_object_actions_pending",
+      "runtime_package":"frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json",
+      "fallback":"/teams",
+      "binding_owner":"E3.3/F4",
+      "asset_owner":"E2.1 user-requested annex",
+      "design_brief":{"setting":"?????????????????????????? Clubhouse","layout":"???????????????????? R ?? Clubhouse ???","style":"?????? RPG??????????????","approval":"??????C/R ?????????? 2026-11-05 ???NPC??????????"},
+      "objects":[
+        {"id":"bench-west","label":"???????","refs":[],"location":"??? bounds [181, 350, 354, 132]","feature":"?????????????? action","fallback":"/teams","owner":"E2.1 annex","context":[],"planned_trigger":"none","binding_status":"user_accepted_decoration_geometry"},
+        {"id":"bench-east","label":"???????","refs":[],"location":"??? bounds [1137, 350, 357, 132]","feature":"?????????????? action","fallback":"/teams","owner":"E2.1 annex","context":[],"planned_trigger":"none","binding_status":"user_accepted_decoration_geometry"},
+        {"id":"ashtray","label":"?????","refs":[],"location":"??? bounds [1258, 526, 65, 132]","feature":"?????????????? action","fallback":"/teams","owner":"E2.1 annex","context":[],"planned_trigger":"none","binding_status":"user_accepted_decoration_geometry"},
+        {"id":"chat-spot-west","label":"????????????","refs":[],"location":"??? bounds [560, 480, 80, 80]","feature":"???????????????????????????????????????????????? NPC??????????????????? F4 ??","fallback":"/teams","owner":"E3.3/F4","context":["viewing_team","official_active_roster","npc_dialogue_state"],"planned_trigger":"future_nearby_chat_with_equivalent_menu","binding_status":"planned_not_runtime_wired"},
+        {"id":"chat-spot-east","label":"????????????","refs":[],"location":"??? bounds [1030, 480, 80, 80]","feature":"???????????????????????????????????????????????? NPC??????????????????? F4 ??","fallback":"/teams","owner":"E3.3/F4","context":["viewing_team","official_active_roster","npc_dialogue_state"],"planned_trigger":"future_nearby_chat_with_equivalent_menu","binding_status":"planned_not_runtime_wired"},
+        {"id":"return","label":"?? Clubhouse ??","refs":[],"location":"???????? portals/return","feature":"??? R ? Clubhouse smoking-door ??????????","fallback":"/ballpark/play?room=clubhouse&spawn=smoking-door","owner":"E2.1 annex","context":["viewing_team","origin_arrival"],"planned_trigger":"near_exit_R","binding_status":"runtime_wired_user_accepted"}
+      ]
+    }
+  ]
+}

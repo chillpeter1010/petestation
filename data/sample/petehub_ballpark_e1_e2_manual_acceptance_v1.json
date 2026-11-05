@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-04",
+  "status": "user_accepted_original_E1_E2_scope",
+  "slice_acceptance": {"E1":"user_accepted_2026-11-04","E2":"user_accepted_aggregate_scope"},
+  "user_report": "2026-11-04 user explicitly said E1可以 and authorized E2.1-E2.4. E1 accepted as an aggregate slice result; no device/browser model or measured leak/performance evidence supplied. Earlier E2 no-major-issue feedback does not fabricate per-check results. Latest user explicitly reported E2 and E2.3 both passed. E2 accepted as a whole; exact touch/gamepad/browser hardware coverage not supplied. New Clubhouse annex acceptance is separate.",
+  "owner": "user_only",
+  "url": "http://127.0.0.1:3000/ballpark/play",
+  "source_evidence": "data/sample/petehub_ballpark_e1_e2_source_gate_v1.json",
+  "scope": "E1/E2 only; reuse D5 artwork with three explicit E2 collision additions; no E3 NPC or new facility UI",
+  "checks": [
+    {"id":"mount_cancel_retry","status":"user_accepted","acceptance_basis":"Aggregate E1 acceptance, 2026-11-04; not a new assistant test","steps":"Rapidly switch the five rooms; leave for Static map during loading and return. Confirm no overlapping old/new scene, stale loading/error state or duplicated character/control response."},
+    {"id":"classic_cleanup","status":"user_accepted","acceptance_basis":"Aggregate E1 acceptance, 2026-11-04; exact position and standalone Classic R remain E4/E5 work","steps":"Leave the walk page for a direct Classic facility link, then return using Back or the Ballpark entry. Confirm Classic stays usable and the returned scene has only one active set of controls; no retained old input."},
+    {"id":"blur_pause_and_form_focus","status":"user_accepted_aggregate_scope","steps":"While moving, switch window/tab, release the key outside and return. Open/close Recommended videos and use the Viewing team selector. Confirm movement stops while unfocused/paused/in forms and does not resume from stale input."},
+    {"id":"movement_camera_safe_reset","status":"user_accepted_aggregate_scope","steps":"Use WASD/arrows, camera, E/Enter entry, R exit and Safe reset. Specifically confirm Team Office central door/plant alcove and manager-entry plant cabinet, plus Clubhouse upper-TV cabinet, now block passage without blocking adjacent walkways or entries. Report specific collisions only; do not reapprove D5 artwork."},
+    {"id":"touch_gamepad_release","status":"user_accepted_aggregate_scope","steps":"On available touch/gamepad hardware, confirm release/cancel stops movement. Hold gamepad A during scene transitions or pause: it must not repeatedly enter/exit; center the stick and release A before resuming. Mark unavailable hardware untested, not passed."}
+  ],
+  "limitations": ["All real browser/interaction results are user-owned", "No measured production bundle/GPU cleanup/FPS certification; E6 remains separate"]
+}

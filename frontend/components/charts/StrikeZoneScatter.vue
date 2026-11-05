@@ -121,6 +121,7 @@
 </template>
 
 <script setup lang="ts">
+import { heatColor, heatStroke, contourLevel } from '~/utils/heatmapPalette'
 const props = withDefaults(defineProps<{
   points: Array<Record<string, unknown>>
   totalPitches?: number | null
@@ -422,34 +423,6 @@ function scaleY(value: number) {
 
 function colorForPitch(pitch: string) {
   return pitchColors[pitch] || defaultPitchColor
-}
-
-function heatColor(value: number) {
-  const clamped = Math.max(0, Math.min(1, value))
-  if (clamped < 0.33) {
-    return interpolateColor([15, 23, 96], [37, 99, 235], clamped / 0.33)
-  }
-  if (clamped < 0.55) {
-    return interpolateColor([37, 99, 235], [239, 246, 255], (clamped - 0.33) / 0.22)
-  }
-  if (clamped < 0.75) {
-    return interpolateColor([255, 237, 213], [239, 68, 68], (clamped - 0.55) / 0.2)
-  }
-  return interpolateColor([239, 68, 68], [127, 29, 29], (clamped - 0.75) / 0.25)
-}
-
-function heatStroke(value: number) {
-  return value < 0.55 ? 'rgb(30, 64, 175)' : 'rgb(153, 27, 27)'
-}
-
-function contourLevel(value: number) {
-  const levels = [0.16, 0.28, 0.4, 0.52, 0.64, 0.76, 0.88, 1]
-  return levels.find((level) => value <= level) || 1
-}
-
-function interpolateColor(from: [number, number, number], to: [number, number, number], t: number) {
-  const channels = from.map((value, index) => Math.round(value + (to[index] - value) * t))
-  return `rgb(${channels[0]}, ${channels[1]}, ${channels[2]})`
 }
 
 function pitchPointKey(point: Record<string, unknown>) {

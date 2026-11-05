@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-05T08:17:11.339Z",
+  "slices": [
+    "E5",
+    "E6"
+  ],
+  "status": "source_contracts_pass",
+  "manual_acceptance": "pending_user",
+  "release_decision": "not_released",
+  "world_revision": "e2-scenes-v4",
+  "storage_policy": "browser-local per-account v1; no server/cross-device sync; unsupported versions recover to safe spawn",
+  "checks": [
+    "account-scoped round trip includes room/position/facing/team, excludes unexpected payload",
+    "malformed/unknown-version saves safely recover without deleting avatar data",
+    "all nine scenes resolve safe defaults and current collision invalidates wall/out-of-world saves",
+    "valid pose retained; explicit portal wins; invalid pose can use safe object-adjacent point",
+    "separate account keys; storage errors never prevent fallback; no cross-account writes",
+    "frame recorder excludes paused intervals, caps samples and never certifies idle-only or dev samples",
+    "runtime error and owned-resource cleanup hooks remain wired and engine stays lazy"
+  ],
+  "input_hashes": {
+    "frontend/components/ballpark/runtime/worldState.ts": "1e1164c14a102600902d361b52cebdf005c71626a40f24042a2fc6a20807f597",
+    "frontend/composables/useBallparkWorld.ts": "048fd9857391462ad6f4af7a96c627501817e223a254e308efb0dab070fb0ce8",
+    "frontend/components/ballpark/runtime/runtimeTelemetry.ts": "bea939c6e512c0876584c7c0005ea672c5679c4c2d3cf1e589803ed017de1f3b",
+    "frontend/components/ballpark/runtime/createBallparkGame.ts": "4769cb8cc8eba45977557f9f24cb17a94f0501255fb86d66215d277beca918cc",
+    "frontend/components/ballpark/runtime/ballparkCharacter.ts": "71ce28e4f663d213c06257960040dd2cf9fe755b942dc0f6d9180ee5824d144a",
+    "frontend/components/ballpark/BallparkRuntime.client.vue": "2eaa2bd7cada9e1f187286b3947465621c7f202c9e2d6a6e8c69ed848ce670fb",
+    "frontend/pages/ballpark/play.vue": "fba76da1f7f5c0c6a11008571227562f1296b816bfdf963db7938b834250a6e9"
+  },
+  "measurements": {
+    "browser": "not_run_by_agent",
+    "frames": "await_user_recording",
+    "heap": "await_user_or_unavailable",
+    "production_bundle": "not_measured",
+    "production_lcp": "not_measured",
+    "input_latency": "not_measured",
+    "forced_gc_retained_heap": "not_measured",
+    "real_low_end": "await_user_or_unavailable",
+    "gpu_resources": "not_measured"
+  },
+  "limitations": [
+    "Source contracts are not browser/visual/collision/input acceptance",
+    "Lifecycle counters describe owned game instances, not a global leak/GPU certificate",
+    "20-second user sample in dev mode cannot certify deployed performance budgets",
+    "All browser/device checks belong to user; no automation or extra servers"
+  ],
+  "manual_checklist": [
+    "Refresh/relogin and Classic return preserve room/pose/team for same account; other account separate",
+    "Portal/C/R arrivals, room travel, Safe reset and safe invalid-save recovery",
+    "Desktop/narrow/available real hardware, keyboard/touch/gamepad and reduced motion",
+    "User 20-second walking recording/JSON, repeat room/Classic transitions and idle; report unavailable devices/APIs",
+    "Canvas/error/Classic fallback, form/panel focus/back and no duplicate runtime after repeated navigation"
+  ]
+}

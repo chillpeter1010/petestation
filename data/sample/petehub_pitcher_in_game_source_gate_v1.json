@@ -1,0 +1,25 @@
+{
+  "updated_at": "2026-11-04",
+  "scope": "source_only_not_visual_acceptance",
+  "status": "pass",
+  "checks": [
+    "latest outing default, deterministic same-date ordering and no source mutation",
+    "valid explicit game deep link, invalid game fallback and empty season",
+    "all eligible rows including unavailable trajectory remain selectable",
+    "exact/multi-count and ahead/two-strike filters preserve existing semantics",
+    "Game and Personal delegate to the same lazy panel and unchanged game-scoped API",
+    "In game label/direct tab, lazy fetch and keyed context are wired",
+    "pending response and unmount source guards clear previous context",
+    "chart change is title-only and historical trajectory contract remains named"
+  ],
+  "files": {
+    "frontend/utils/pitcherInGame.ts": "c578700b504ddb7580ee8e158aa95df34efeb6e598714a72e43924deaba847d3",
+    "frontend/components/charts/PitchReplayPanel.vue": "91af3d3b3d5ed2e3f88251358853b26b2e5d2b14602b543109d4710f9d4b0155",
+    "frontend/components/pitcher-personal/PitcherInGameTab.vue": "245a30af719e2f4f8314258d8f6ebf5a671675298e1f35d9a38a429289e41a93",
+    "frontend/components/games/GamePitcherAnalysisPanel.vue": "58ada9f15d7504c4e29e189e829d1a3a658b486d2b0ae740dc8e2a402d9e5b60",
+    "frontend/pages/pitcher-personal.vue": "045ecbdf5b3e65c138030b9be1a673b67e29d2e68d727cf15946ff467c7813fb",
+    "frontend/components/charts/PitchReplayChart.vue": "6016089b44a5024b2118c78dd055e406f31628adcc841fd2f06ed8a0dff85670",
+    "backend/app/services/game_pitcher_analysis_service.py": "eb5b3f9b9be287bc3946a29df90a27415c27772cf2acd9a72ce0ecb92a06d971"
+  },
+  "manual_acceptance": "pending_user; no browser/DOM/image/API interaction tests performed"
+}

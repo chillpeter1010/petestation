@@ -1,9 +1,103 @@
 # Petehub Ballpark Game System
 
-更新日期：2026-11-03
+更新日期：2026-11-06
 
 專案 ID：`petehub-ballpark-game-system`
-狀態：In progress（Section A–C、D1、D2.1–D2.6、D3、D4 已完成；D5 進行中）
+狀態：In progress（Section A–D、E1～E5 與其子項已完成，36／66；新增七個 F2 Planned 子項，並非已完成進度退回；E6 效能／裝置 gate 尚未放行）
+
+## 2026-11-06 F2 重排與開工前盤點（只規劃，未授權實作）
+
+使用者明確否決母站 Catcher 的整張照片 pan／zoom、獨立前景 translate 與固定 PNG 打者；先前 v4／下移／白線框不能記為接受。這是共用 In game 呈現層的待替換方案，不重開已接受的 3H 資料／影片／PR，也不重開 D／E1–E5 或重畫園區背景。新三維場景屬 F2，僅供母站 Game／Pitcher Personal 與設施入口共用；Ballpark 園區仍為核准的 2D Phaser，V2 球員／V3 User 標準及 F4 roster NPC 不因本計畫自動重製。
+
+F2.1–F2.7 狀態一律 Planned。原 G1–G6 已涵蓋動作來源／rig／投打事件，本次把「通用歷史 In game 所需的最小三維能力」提前分配 F2；G 保留球員專屬、擴充 Motion Lab 與 synthetic simulation 的後期工作，消費 F2 成果，不重做 renderer／rig／clock，也不因文字重排標 done。
+
+### 現在未收尾的範圍
+
+| 項目 | 現況 | 開始重建前的處理 |
+|---|---|---|
+| E1–E5、直接功能入口／舊 R 返回 | 使用者已接受 | 保留 done，不重問舊清單 |
+| 移除浮動 R 提示、保留鍵盤 R | source 已完成；尚無針對最新移除版本的明確回報 | 可由使用者簡短確認；不重開 E5，也不是球場幾何原型的硬性前置 |
+| 真名連結、收合說明、exact-count 投打資料卡 | 已有程式與前批 12 項後端測試；新增 UI 未整體結案 | F2.1 凍結原 API／分母／選球／影片與 UI 行為；不為重建重算已接受 PR，不為舊貼圖再請驗收 |
+| 母站 Catcher 圖片場景 | 使用者否決；現行程式仍在，尚未撤接或 rollback | 停止疊補位置與生成站姿 PNG；F2.2 起由新 renderer 逐步替換，保留來源與可回退入口 |
+| E6 數值／裝置 release gate | 操作已接受；production loading／input／frame／retained heap／GPU／裝置資料未提供 | 先保留量測缺口；可先做隔離開發原型，不假稱 E6 done。重建前建議由使用者保存現況樣本；完整認證不必先跑完再因新 renderer 重跑，正式放行仍需 E6＋F2.6 |
+| Git 安全點 | 2026-11-06 讀到 HEAD 3761955，已追蹤 upstream ahead/behind 0/0；工作樹仍大量修改／未追蹤 | 未提交工作不在上述 commit／push 中。重構前建議按功能分批審閱並建立含必要素材的 checkpoint；本輪不 stage／commit／push／清理 |
+| 影片補抓、Game Location／Sequence／Tags／Movement | 補抓按鈕已交付，但沒有這輪全季完成／播放證據；Game Center 四項仍 in_progress | 分開列帳，不把缺影片歸因 renderer，也不要求先結完所有母站功能才能做 F2；不自行啟動全季補抓 |
+
+舊 JSON gate／hash 是當時的 snapshot，未覆蓋後續畫面修改；最新人工結論與 tracker 優先，不覆寫歷史為通過。
+
+### F2 分批交付與人工 exit gates
+
+| Slice | 交付範圍（全部 Planned） | 前置與驗收重點 |
+|---|---|---|
+| F2.1 · 現況封存、來源／座標與架構決策 | 列保留／待替換清單、實測與 generic 資料 coverage、座標／單位／時間／鏡頭／fallback 契約；核對現有 assets、工具與來源授權；Three.js 為首選候選，依局部載入／資產成本決策後才安裝 | 不動 Statcast／PR 公式；區分照片概念稿與可動模型。確認重構安全點與最小第一批，先前 source tests 不冒充新量測 |
+| F2.2 · 同一世界的球場、相機與歷史球路 | 真正地面、本壘板、左右打擊框、投手丘／踏板、17 吋好球帶及 source ball path；捕手／投手／側面 preset，拖曳 orbit、滾輪 dolly、範圍／穿地限制與 reset | 依 F2.1；使用者驗透視／視差、相機轉動、地面線框、手部出手標記與進壘。不用整張照片 pan／前景像素位移；角色暫用明示定位標記，不能當正式美術 |
+| F2.3 · 可編輯的通用投打骨架與資產 | 正常人體比例的投／打模型、Blender 或其他可編輯來源、glTF／GLB、骨架／球棒／握點／足底／左右側／材質契約、授權、版本、LOD 與尺寸預算 | 依 F2.1–F2.2 場地尺度；先交可繞看的通用模型與 ready／idle 動作供使用者驗外觀、握棒與腳落地，再製作其餘 clips；不是全隊真人建模，也不拉伸 PNG 冒充 rig |
+| F2.4 · 投打動作與共用時鐘 | ready／load／stride／swing／follow-through／recover／take，加通用投球／release；pre-pitch、release、plate／contact、post-pitch 命名事件；固定時間取樣支援 pause／seek／speed／replay | 依 F2.2–F2.3；投手手部對每球 release_pos_x/y/z 定位，球不吸附丘中心或改軌跡；接觸點／揮棒時機不足則明示 generic／unknown，不強制假接觸；使用者驗左右投打、看球／揮空、重播同步 |
+| F2.5 · 真實揮棒資料盤點與疊圖介面 | 分清逐幀球棒位置、單次 scalar 指標、整季平均姿態與 generic clip；以同一 pitch identity 定義 bat-tip／handle、時間基準、座標／來源／coverage；有資料才畫實測軌跡，無資料有 unavailable | 依 F2.1 與 F2.4 時鐘；bat speed／length／attack angle 等不足以唯一還原整次揮棒。首批可交來源稽核＋adapter＋明確缺資料狀態；無來源不造軌跡，不把此項 source audit 當真實 bat-path 功能已完成 |
+| F2.6 · 共用接線、fallback 與新 renderer gate | 同一按需載入的三維元件供母站 Game／Pitcher Personal 使用；Ballpark 物件沿用 canonical 入口與 R 來源；原熱圖／資料卡／影片／鍵盤 DOM；錯誤／低效能／無 WebGL 的可用 fallback、unmount 資源釋放與 rollout/rollback | F2.2–F2.4 與 F2.5 資料狀態契約可用；實測 bat-path 為條件擴充，不阻擋有明確 unavailable 的核心版本。使用者驗兩母站入口／選球／影片／返回／裝置；效能證據與 E6 分開記錄，缺量測不得 production-ready |
+| F2.7 · 設施業務 parity 與牛棚角色 | 保留 F2 原任務：投打分析／比較／released Lab、兩牛棚官方主隊 roster 隨機 eligible 投手、通用投球、手動投手／場次優先、前後網遮擋 | 使用既有 E3/E4 bridge 與 F2 共用面板；真實球員特製外觀／跨園區巡遊對話由 F4 負責，不為本子項重建所有 NPC。不以三維面板完成冒充設施 parity 完成 |
+
+建議順序：先收好既有資料／UI 與 Git checkpoint → 另獲實作指示後 F2.1 → F2.2 幾何人工驗收 → F2.3 外觀／ready 人工驗收 → F2.4 動作 → F2.5 資料介面 → F2.6 整合／release。F2.7 可後續獨立排程，F1／其他設施不必先全部做完才做局部 F2 原型。各實作短批如超過 10 分鐘，開工前說明範圍，不預估為幾分鐘即可交付完整商業遊戲品質。
+
+研究依據：官方 [MLB The Show 動作更新](https://blog.playstation.com/2026/02/03/mlb-the-show-26-gameplay-revealed/)、[KONAMI 三維場地與動作介紹](https://www.konami.com/games/prospi/2024-2025/)、[Savant 整季平均 swing 視覺說明](https://baseballsavant.mlb.com/changelog/2025-05-20-swing-path-attack-angle)。這些支援設計方向，不代表 Petehub 已具備其資產／資料或效能。
+
+## 最新操作接受與入口／文字小修
+
+2026-11-05 後續接受與新要求優先：使用者已驗收所有功能物件直接進母站、前段 R 返回；不再限單連結，也不再要求在中繼面板選人。母站路徑保留 Ballpark 來源 token／checkpoint，多工具可由各自直接入口前往。依最新要求已移除浮動 R 按鍵／banner，只保留受帳號、來源、輸入與彈窗防護的鍵盤 R 返回。這次移除視覺元件待使用者確認；以下較舊限制與 pending 文字為歷史。E6 的數值與裝置 gate 未因此完成。
+
+最新人工結果：使用者回覆「都通過」，已接受單一目的地直接進功能、正確球隊／返回位置及放大文字，不重問。新增使用者要求：從 Ballpark 進 Classic 後，當有效來源 token 屬目前帳號，按 R 可回來源房間及 E5 保存位置；僅條件式 Classic 返回元件註冊按鍵並於卸載移除，無來源不觸發。忽略輸入框／選單／可編輯區／對話框、IME、修飾組合鍵、長按與已被頁面處理的事件；不搶既有輸入。這是使用者明確授權的快捷返回，取代舊「Classic 不註冊 R」的絕對敘述；原意的表單不被攔截仍保留。新 R 快捷鍵待人工驗收，未跑瀏覽器或為小修重跑 typecheck／build／audit。
+
+使用者回報「操作上都沒問題」：E5 保存／恢復操作以整體人工回報結案，36／59；E6 操作獲接受，但未提供效能 JSON／裝置型號／部署與 retained-heap 數值，這些不補記通過，E6 保持 In progress。下方 E5 待驗與 35／59 為此前交付快照。
+
+使用者要求移除 Coach workspace 截圖中的單連結中繼頁：`play.vue` 對 `kind=links` 且只有一個目的地的物件，點擊／E／Enter／直接選單即導向原功能，保留 season／team、位置 checkpoint 和 Classic 返回；舊 object deep link 也直接導向，不閃中繼面板。多工具選擇、真正有內容的 Game／In game／選人／對話面板與 admin 精確帳號限制保留。
+
+`createBallparkGame.ts` 把靠近互動提示 13→20px、guide 標籤 11→18px、出口 12→20px、地面方向 16→22px；粗體、高對比底色／描邊與雙倍文字材質解析度，出口文字在提示層顯示。未改背景／碰撞／角色素材。這兩項新 UI 修改待使用者人工驗收；未因小修重跑 typecheck／build／完整 audit 或任何瀏覽器／畫面檢查，先前 source gate hash 為當時快照。
+
+## 2026-11-05 E3～E4 全數接受；E5～E6 接續交付
+
+使用者明確釐清「E3-4 都通過」，E3、E3.1、E3.2、E3.3、E4 全部 Done，35／59，不再重問舊清單。先前把接受範圍縮成 Campus 兩項是代理判讀錯誤；下方 pending／30／59／局部回報文字保留作歷史，以上述釐清與 tracker 為準。此接受不包含未製作的 F4 真實球隊 NPC，也不補造裝置／數值效能測量。
+
+**E5 實作：** `worldState.ts` 定義 version 1 本機世界存檔，`useBallparkWorld.ts` 由 Nuxt 保存／恢復；key 為 `petehub.ballpark.world.v1:{account_id}`。只保存最後場景、Viewing team、各房間 x／y／facing／物件來源 ID、world revision 與 timestamp；不保存 auth secrets、Phaser instance、逐幀狀態或複製 avatar profile。使用本瀏覽器 localStorage，可跨同瀏覽器重登入，不提供伺服器／跨裝置同步。移動時最多每秒排一次寫入，另於離開、pagehide、切入背景、Classic 開啟前以當前 snapshot checkpoint；儲存失敗保留本次記憶體狀態並提示，Classic 不受阻。
+
+URL 的明確 room 先於上次場景，無 room 時恢復 last_room；明確 Portal 到達點先於該房間舊位置。spawn query 在首次 ready 後消耗，但本次 runtime key 保留到達身分，避免開關面板重建場景；之後重新整理使用已存 pose。房間固定導覽可恢復該房間位置，Portal／C／R 仍落在指定到達點。無合法舊 world schema 可遷移，未知 schema／帳號不符／壞欄位回新存檔；世界包變更或非法位置以目前 collision／footprint 重驗，必要時依目前物件 approach／場景 spawn 安全恢復，不出生在牆內。Safe reset 回安全入口而非任意舊存點。離開 Classic 返回仍使用 E4 的帳號隔離來源 token，加上 E5 的有效位置恢復。
+
+**E6 交付與限制：** runtime 下方 `Runtime options / E6 recording` 提供 Reduced motion、Canvas renderer；切換保留當前 pose，跟隨系統 reduced-motion 變動。背景載入／逾時沿既有 fallback，新增 graphics-context loss 的 Retry／Static／Classic，清理 recorder timer、media change、context-loss、visibility/pagehide、ResizeObserver 及原 runtime。沒有為本輪另開 server、登入 fixture 或控制瀏覽器。
+
+使用者按 `Record 20 seconds` 才紀錄 frame deltas（上限 3600）、moving samples、median／p95、約略 FPS、長幀與可用的 performance.memory，隱藏／paused 段落排除；可下載 JSON。報告含 dev／production、viewport／DPR、browser、renderer、reduced motion、load-to-first-state 及 owned created／destroyRequested／destroyed 計數。它不是 navigation LCP、forced-GC retained heap、GPU 或全瀏覽器 listener 認證；純 idle／少量移動列 limited，p95 >33.3ms 提供 Classic／Canvas 建議。原 A4 的部署 LCP／input／transfer、20 cycles retained-heap、實體低階裝置與多瀏覽器 budgets 尚未量測，不能由 local dev sample 推定通過。
+
+來源證據：`data/sample/petehub_ballpark_e5_e6_source_gate_v1.json`（七組 focused contract tests）、`petehub_ballpark_e5_e6_release_gate_v1.json`（保存策略、人工 checklist、未量測 matrix／budget 與 release pending）。單次直接 vue-tsc PASS，只代表編譯。E5／E6 保持 In progress；E6 是驗收準備已交付，尚未正式效能放行，不宣稱 production-ready。F 區與球員美術未開工；核准背景／幾何未改。
+
+人工網址：`http://127.0.0.1:3000/ballpark/play`，只驗新 E5／E6：
+
+1. 在房內走動／轉向後重新整理、離開 Classic 返回及登出重登入，位置／方向／房間／Viewing team 恢復；另一帳號不串檔。
+2. 九場景進出／固定導覽、Clubhouse C／庭院 R、各房間 R 回 Campus 指定入口及 Safe reset；有條件時測壞存檔／儲存受限，否則如實列未測。
+3. 目前桌面、窄視窗、可取得的實機與 keyboard／touch／gamepad；Reduced motion／系統偏好與 Canvas 切換保留 pose。沒有的實機／輸入裝置列 unavailable。
+4. 展開 runtime options，按 Record 20 seconds 並實際走動，下載 JSON；可重複房間／Classic 往返後觀察計數、卡頓、閒置／切背景。dev、無法取得的 API 與設備不得冒充部署量測。
+5. 錯誤或低效能時 Retry／Static／Classic 可用，往返後無重複角色／卡鍵，面板與表單仍可操作；E6 數值認證未滿足時保留 pending／limited。
+
+## 2026-11-05 E3／E4 互動交付（人工待驗）
+
+**最新人工接受範圍：** 使用者對 Campus 導覽員「完整顯示」與「靠近 E／Enter 或點擊開啟對話」兩項回覆「兩個都可以」，這兩項已通過，不再重問。這次回覆沒有涵蓋其餘房間物件、Game／牛棚 context、面板／Classic 返回、mini-map／快速移動及權限等完整 E3／E4 清單；E3／E3.1–E3.3／E4 仍為 In progress，30／59 不變。程式實作到 E4，E5／E6 未開始；真實球隊 NPC 是 F4。下段「修正待確認」只描述該回覆之前的交付狀態。
+
+**使用者後續釐清／缺陷：** 使用者所指 NPC 是所屬球隊的真實球員，應可隨機出現在園區與各房間；通用 guide 只代表互動基礎，不能當成這項球員需求已完成。目前只有 V3 User 與 V2 Gabriel Moreno 樣本，沒有全隊球員美術／動畫。F4 應承接官方 active roster 身分、代表球員 V2 素材、全園區與各房間的可用生成點及對話，再細化數量／刷新時機／去重／巡遊與場景活動規則；先前 8–10 名 Clubhouse 代表只是一個範圍，不能解讀成只會出現在 Clubhouse。本次不開始建模或隨機球員實作。使用者另回報 Campus guide 只見標籤，來源定位為原站位 [770,811] 被 west-entry-fence 前景（depth 815）遮住；改為中央廣場 [850,745]，保留正常足底排序，不修改核准背景／遮罩／碰撞。這是待使用者確認的修正，E3.3 與 E4 等人工狀態不變。
+
+使用者授權 E3＋E4，包含 E3.1–E3.3。五個 Slice 保持 In progress，done 仍為 30／59。未操作瀏覽器、截圖、DOM 視覺檢查或角色／碰撞；來源檢查不代表畫面／互動通過。下方舊「E3 未開工」文字屬歷史快照。
+
+- **E3：** `frontend/components/ballpark/runtime/interactionCatalog.ts` 以 v4 穩定 ID 建立 44 個物件／guide 綁定。獨立 bounds／approach、最近距離及穩定 ID prompt、400ms debounce，E／Enter、點擊與房間 DOM 選單走同一 typed intent。房間出口與 C 門優先；裝飾保留。環境包既有 pending-binding 描述保留為環境製作快照，現行接線以上述目錄為準。
+- **E3.1：** 舊五場景物件有命名入口；Clubhouse 使用官方 active roster，保留 fresh／stale／unavailable、retrieved_at、source_as_of；Video Room 共用首頁推薦影片 API。Coach／GM／Lab 目前為命名橋接面板及既有 Classic 工具，完整房內業務面板仍屬 F3–F6，不以連結冒充完成。記分板可點及用直接選單；admin 畫框維持 pointer-only、admin＋精確 username peter1010，沒有額外彩蛋按鈕，server 授權不變。
+- **E3.2：** Game 可選賽事／投手，Box Score 只轉接既有資料，Location／Sequence／Movement／In game 重用 GamePitcherAnalysisPanel。Batting／Shape 可選人並開對應 Classic personal。左右牛棚均使用 PitcherInGameTab，從瀏覽隊官方 roster 選投手及出賽場次（預設最後一場），影片跟隨實際球；無資料不造球員／場次。Shape 不重複 In game。原元件只加 optional select-game event，母站原使用方式不變；完整 F1／F2 parity 不在本輪。
+- **E3.3：** 10 位虛構 stationary idle guide 使用既有角色素材，含八位新增 room guide、兩個沿用 courtyard chat-spot ID。九場景背景物件基準仍為 59，不把新增 runtime 身分當成核准背景變動。提供 DOM 對話分支／travel、目前房間小地圖、玩家位置及九場景快速移動。真實 roster／8–10 位代表、隨機刷新巡遊、個別對話、抽菸／坐下等活動動畫仍為 F4／後續動作工作；未重製角色或凍結隨機政策。
+- **E4：** Nuxt 擁有 object／year／player／game／date／mode query、表單與權限。runtime key 只依 room／spawn；面板開關保留原場景，暫停並釋放遊戲鍵盤 capture，具 focus trap／返回、scroll lock／cleanup、Close／Escape／Back／forward／直接 URL。每隊／功能選人 context 只在本頁暫存；refresh 由 URL 重建面板並使用安全 spawn，精確位置保存仍 E5。Classic 入口記錄來源房間／team／spawn，app.vue 只加條件式返回連結；帳號／tab 隔離並驗證本地路徑，不引入全域引擎或 Classic R 攔截。既有 auth middleware 與 server 授權保留，C／R 房間出口沿用。
+
+Source-only：`node frontend/scripts/check-ballpark-interactions.mjs --report` 與直接 vue-tsc PASS。來源證據與 44 個接線／bounds／anchor／hash 在 `data/sample/petehub_ballpark_e3_e4_source_gate_v1.json`。合法足底 anchor 不等於實走可達性；沒有重跑完整 build／舊 audit／效能矩陣，E5／E6／F 未開始。
+
+人工網址：`http://127.0.0.1:3000/ballpark/play`。使用者驗收五項：
+
+1. 各房間物件靠近 E／Enter、點擊與下方直接選單等價；連按不重複開啟。
+2. Game 選比賽／投手及分析／影片；左右牛棚官方投手／場次與選球影片 context；Batting／Shape personal 保留所選人。
+3. 面板暫停移動、表單可輸入；Close／Escape／上一頁／下一頁／帶 query 重新整理、focus／捲動恢復；Classic 返回正確設施。重載精確原位置不屬本輪。
+4. generic guide 對話、小地圖／玩家位置、九場景快速移動保留 Viewing team；C 庭院門與 R 出口仍正確。
+5. 普通帳號看不到 admin 入口，符合權限者點原畫框能進更新區；未開放、無名單／場次／影片、API 錯誤與 roster freshness 提示明確。
 
 ## 1. 產品目標與邊界
 
@@ -57,7 +151,7 @@ Petehub Ballpark 是現有分析網站上方的可選遊戲化入口，而不是
 
 ## 3. Section 與 Slice Roadmap
 
-狀態定義沿用 `PROJECT_TRACKER.json`。A1–A4、B1–B4、C1–C5、D1、D2.1–D2.6、D3 與 D4 已完成（22／51）；D5 來源檢查通過，人工資產 release gate 待驗。D2 的 2026-10-31 試作已遭使用者否決；不得沿用其畫風、當作正式地圖或當作 tile 尺寸已驗收。D2 拆為六個可獨立驗收的 Slice，完成數以拆分後的 51 個 Slice 計。
+狀態定義沿用 `PROJECT_TRACKER.json`。Section A–D、E1 已完成；使用者於 2026-11-04 接受 Game 介面，E2.2 Done，現為 25／59，並授權 Batting／Pitcher 製作。先前重排新增八個分項，總數由 51 變為 59，不是既有進度退回。D2 的 2026-10-31 試作已遭否決，不得沿用畫風或視為格尺寸已核准；已完成 D1–D5 不因本次擴充重開。
 
 ### Section A · Programme、Skills 與安全邊界
 
@@ -102,31 +196,82 @@ Petehub Ballpark 是現有分析網站上方的可選遊戲化入口，而不是
 | D2.6 · Five-scene asset package | Done | `d2-scenes-v3` 統一五場景、manifest、fallback、可重現 SVG／JSON 輸出及 inventory | 現行 135 collision／82 foreground／16 portals，含已驗收圍網及 D5 待驗的兩側辦公室後牆追加；不代替 D5 |
 | D3 · Versioned avatar and NPC contract | Done | avatar v1 外觀欄位、四方向 idle／walk、NPC identity、預設與 migration／隱私 | 規格已凍結；sprite、creator、移動與對話仍屬後續 Slice |
 | D4 · Creator UX and persistence | Done | V3 User 分件及 V2 Moreno 樣本、四方向 idle／walk、creator／保存／runtime 外觀對應 | 使用者於 2026-11-02 確認功能與全部 followup 通過，含 favorite-team 隊色、R／L／S、樣本按鈕移除 |
-| D5 · Pixel asset/avatar release gate | In progress · 待人工 gate | atlas memory、組合覆蓋、方向、載入、depth sorting 與 provenance 稽核 | 五場景＋角色 source-only PASS；素材載入／遮擋／邊緣、窄版／實機、reduced-motion／缺圖 fallback 由使用者補驗 |
+| D5 · Pixel asset/avatar release gate | Done | atlas memory、組合覆蓋、方向、載入、depth sorting 與 provenance 稽核 | 2026-11-04 使用者明確回報 D5 通過；最終資產 gate PASS，device／效能細節不推定，完整 E6 仍獨立 |
 
 ### Section E · Ballpark Runtime Foundation
 
+2026-11-04 E2 穿模 followup：依使用者黃框，在 Team Office 中央雙門／盆栽壁龕與右側入口盆栽櫃、Clubhouse 左側電視上方櫃體補三個獨立碰撞；`collision_additions`、SVG／JSON／manifest 同步。現行 **138 collision／82 foreground／16 portals**，已驗收背景與 18×10 足底尺寸不變。針對性來源幾何檢查覆蓋三處阻擋、門前橫向走道、右側櫃旁繞行、電視旁走道、出生點／入口與來源差異／輸出一致，PASS 不是人工手感通過；新三處只列 E2 待驗，不重開 D5，也不重跑 typecheck／build／全 audit。
+
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
-| E1 · Layered scene runtime integration | Planned | 沿用 V0 lazy Phaser，載入 D 區核准分層場景包 | `/ballpark` 仍為 optional；Classic 初始 bundle 不載入 runtime；unmount 無殘留；V0 不因已有預覽自動算通過 |
-| E2 · Movement, camera and tile collision | Planned | 四方向 keyboard／gamepad／touch、camera、spawn、門與 collision layer | 無穿牆／卡死／focus-loss stuck input；safe reset 可復原 |
-| E3 · Interaction zones, NPC and fast travel | Planned | prompt、對話、入口、NPC、mini-map、fast travel | 走路與直接選單等價；不得把核心功能藏成只能探索的彩蛋 |
-| E4 · Nuxt portal and overlay bridge | Planned | DOM overlay、URL、focus、scroll、auth、close/back 與 world pause | direct URL／refresh／Back 一致；Canvas 不擁有表格、表單或權限 |
-| E5 · World/session state | Planned | last valid zone／position、version migration、offline/error recovery | refresh／relogin／upgrade 不壞檔；無敏感資料放 client save |
-| E6 · Runtime release gate | Planned | desktop／narrow／keyboard／reduced-motion／低階裝置／long-idle 稽核 | 達 A4 loading、FPS、memory、input、cleanup 與 crash-fallback budgets |
+| E1 · Layered scene runtime integration | Done | 沿用 V0，補 latest-only／可取消載入、錯誤／卸載清理及 canvas ownership | 使用者於 2026-11-04 明確回報「E1可以」；正式 bundle／GPU／效能仍為 E6，無代理瀏覽器測試 |
+| E2 · Movement, camera and tile collision | Done | 原五場景移動／碰撞及失焦／暫停／表單輸入防護、手把中立復位／按下沿觸發 | 使用者明確回報 E2 通過；不推定未提供的裝置型號／逐裝置結果，不因新附屬區重開 |
+| E2.1 · 全場景物件盤點與功能配置 | Done | 九場景／59 語意物件，包含 Clubhouse C 後門、吸菸庭院長椅／煙灰缸／兩個未來聊天點及 R 回門旁 | 2026-11-05 使用者明確回報「都可以 通過」，包含新增區五項清單及盤點；NPC／抽菸／聊天與業務接線仍未實作 |
+| E2.2 · Game 新場景 | Done | 獨立包 21 collision／19 foreground／1 return portal，三個物件定位；Campus GAME／固定按鍵進入及 R 返回 | 2026-11-04 使用者明確回報 Game 介面驗證通過；物件功能仍 E3.2／F1，不推定特定裝置通過 |
+| E2.3 · Batting Cages 新場景 | Done | 16 collision／14 foreground／1 R 出口／5 物件定位；Campus Batting 與固定導覽已接線 | 使用者明確回報 E2.3 通過；物件功能仍 E3.2／F2 |
+| E2.4 · Pitcher Mound 新場景 | Done | 兩牛棚改 IN GAME、左分析台只留 Shape；19 collision／17 foreground／1 R 出口／6 物件定位；Campus／固定導覽已接線 | 2026-11-04 使用者以「都可以」接受新配置及三項人工清單；不推定裝置／效能。投手隨機出現／投球及選單仍屬 E3.2／E4／F2 |
+| E2.5 · 九場景統一包與物件對齊 | Done | `scene-kit-v4.json`／manifest／九場景可編輯 SVG／JSON，59 物件 index；211 collision／147 foreground／21 portals；runtime 單一包 | 2026-11-05 使用者回報「都可以」，接受統一包五項人工清單；原 source-only PASS 保留，不推定裝置／效能測量 |
+| E3 · 共用物件互動框架 | Done | 靠近／焦點／啟動提示、按鍵／點擊／選單等價、優先序／防連發及 Nuxt action dispatch | 框架本身驗收；不與 E3.1–E3.3 的實際物件／NPC 接線重複計工 |
+| E3.1 · 既有五場景物件接線 | Done | Campus／Clubhouse／Team Office／Training／Video 物件綁定；保留 admin 畫框權限 | 盤點 ID、範圍、提示／action 一致；不強迫裝飾可點，業務面板仍屬 F |
+| E3.2 · 三個新增設施物件接線 | Done | Game／Batting／Pitcher 物件及 game／player／team context 接 E4 bridge | 功能未接時明示不可用；接 E4 後人工驗證開啟／關閉／選單等價，完整業務 parity 為 F1／F2 |
+| E3.3 · 通用 NPC／對話／快速移動 | Done | generic NPC、對話、mini-map、走路／直接選單等價 | 真實 roster 仍 F4；隨機生成／巡遊規格不自動視為已核准 |
+| E4 · Nuxt portal and overlay bridge | Done | 既有 Vue 面板／獨立頁、URL、focus、scroll、auth、close/back、world pause 與來源場景／物件返回契約 | 關閉回原設施；R 出口到 Campus 對應入口，不全域攔截 Classic 輸入；Canvas 不擁有表格／表單／權限 |
+| E5 · World/session state | Done | last valid scene／position／facing／return context、account isolation、version migration 與復原 | refresh／relogin／Classic 往返安全恢復；壞位置回安全點，不只依賴 browser history；無 client secrets |
+| E6 · Runtime release gate | In progress | desktop／narrow／keyboard／reduced-motion／低階裝置／long-idle 稽核 | 達 A4 loading、FPS、memory、input、cleanup 與 crash-fallback budgets |
+
+#### E 分項執行與驗收界線（2026-11-04 重排）
+
+**最新 E2.5 人工結案（2026-11-05）：** 使用者對統一包五項清單回報「都可以」，E2.5 Done，總進度 30／59；E2 原項與 E2.1–E2.5 全數完成，不再重問同一批畫面／接線。下一個 Planned 為 E3 共用物件互動框架，尚未自行開工。另已確認 In game 後端 replay scalar columns 保留 `p_throws`，Selected Pitch 前端以 Throws 顯示，Batter Personal 原始 rows／hand split 也有該欄。熱圖不是缺投手手別資料；待擴充的是獨立 pitcher_hand 查詢與各格比率分子／分母。相關需求在 Game Center 主文件 6.1，本次未改母站功能或執行畫面測試。下方 v4 pending 文字是人工通過前快照。
+
+**最新 E2.5 統一包（2026-11-05）：** 使用者明確要求開始 E2.5。`build_ballpark_scene_package.py` 將 v3＋Game＋Batting/Pitcher＋Clubhouse annex 依原 runtime 的合併次序製成 v4，原 authoring 包／背景保留；不重新產圖或修改碰撞座標。runtime 與 play fallback 改讀單一 `scene-kit-v4.json`，共 9 場景／59 個穩定物件 ID、211 collision／147 foreground／21 portals／2 hotspots。`object_index` 分開已定位 bounds／實際 portal target 與未定位候選／未接線業務，不把盤點功能文字當已啟用 action。`petehub_ballpark_scene_manifest_v4.json`、`output/ballpark/scenes-v4/` 留背景 hash、原來源 hash、image_size／world_scale、物件 refs、體積與可重現匯出；九張背景合計 22,587,524 bytes，decoded RGBA 合計 56,633,144 bytes 是資產估計，不是同時 GPU 使用或效能測量。數值／source-only 來源及單次直接 vue-tsc 通過，沒有重跑舊場景 BFS、完整 build／audit 或任何瀏覽器測試。E2.5 保持 in_progress，人工只驗統一包的固定導覽／入口／C-R／team／fallback 接線，不重審已接受畫風。E3、NPC 或母站熱區圖本輪未實作。
+
+**NPC 美術／對話順序：** 現有 D4 V2 球員樣本不是完整隊伍 NPC。E3.3 開始通用 NPC identity、靠近／選單互動與對話觸發、取消／focus／pause 基礎；E3.1 為既有場景物件接線。F4 再製作／映射所屬隊伍 8–10 名代表球員 V2 外觀（可參考既有官方大頭照來源），綁官方 active roster、個人數據與各自對話；吸菸區的出現／抽菸／聊天亦於 F4 細化。F2 負責牛棚投手與其 generic 投球及 In game，非整個 roster 一次重製；正式人體 mechanics／揮棒仍 G3–G5。實際新增角色美術與對話內容須在對應 Slice 開工後逐批交使用者驗收，不因 E2.5 組包開始而自動製作。
+
+**最新結案（2026-11-05）：** 使用者對新增後門／吸菸區及含盤點的五項清單回報「都可以 通過」，E2.1 Done，總進度 29／59。E2 原項及 E2.1–E2.4 全部完成；E2.5 九場景統一包仍 Planned，未自動開工。環境／盤點通過不代表未來 NPC、角色動作或業務物件已接線；不重開 D4、D5 或重新驗收已接受場景。下方待驗文字屬先前快照。
+
+**User／NPC 動作盤點（2026-11-05，需求釐清，不是動畫開工）：** 可沿現有 2D runtime 擴充角色動作，但現有 V3 User／V2 NPC 素材正式 clip 只有四方向 idle／walk；NPC 代表樣本有素材，完整 roster actor 尚待 F4。吸菸／聊天為 E3.3／F4 預留，牛棚 generic 投球為 F2 預留；正式 motion pipeline／投球／揮棒另為 G3／G4／G5。蹲下、坐下、碰拳、臥推、傳接球，以及 User 與 NPC 各可執行哪些動作、主動選單或自動情境觸發，尚無完整 clip／狀態／驗收清單，記為本次詢問的候選需求，不宣稱已排定或已製作。坐下／臥推需要座椅及器材接點、遮擋與離開動作；碰拳／傳接球需要雙角色站位、同步事件及可取消復原；每個角色外觀／方向／道具／reduced-motion 都須有素材與 fallback。日常情境動作可以是 generic 像素動畫，不必等待或冒充 Section G 的精確棒球 mechanics；投打左右側及 release/contact、歷史球路／影片 identity 仍遵守原契約。後續需另列 User/NPC 共用動作規格並獲開工指示，不用重做已完成 D4，也不由本次問答新增自動執行的 Slice。
+
+**最新 E2／E2.3 通過與 Clubhouse 附屬區（2026-11-05 接續中斷工作）：** 使用者明確接受 E2、E2.3，兩項 Done，總進度 28／59；E2.1 須等新增物件完成且使用者盤點後才能結案。依黃框於 Clubhouse 餐飲區右牆增小門，`clubhouse-backdoor-v1.png` 為局部編修，原素材不覆寫；靠近 C 進 `clubhouse-smoking-area`，南門 R 返回 `clubhouse/smoking-door` 到達點。新吸菸庭院 1672×941、17 collision／15 foreground／1 return portal；長椅、煙灰缸與兩個未來球員抽菸／聊天候選點已列盤點，現為九場景／59 物件。完整提示詞、圖片 hash、明確 1670→1672 的 Clubhouse 背景座標縮放與來源檢查在 `petehub_ballpark_clubhouse_annex_v1.json`；可編輯包 `scene-kit-clubhouse-annex-v1.json` 與 SVG／manifest 另存，v3 base 不改。新增 C 鍵有靠近／失焦／表單／暫停防護，保留等價按鈕／固定導覽；資料與型別檢查不是人工畫面通過。新門／庭院／往返待使用者驗收。偶爾刷新球員抽菸與聊天屬後續 E3.3／F4：遊戲虛構情境，不推論真人習慣；名單、頻率、動畫及對話內容待實作時細化，本次沒有 NPC、煙霧動畫或聊天功能。E2.5 整合範圍擴為九場景，仍 Planned；下方較舊的 26／59、八場景與 E2／E2.3 待驗文字均屬歷史快照，不再重問已通過項目。
+
+**最新人工結案與剩餘項目：** 使用者以「都可以」接受 Pitcher v2 兩牛棚 In game、左台 Shape 及通道／遮擋／R 出口三項清單，E2.4 Done，總進度 26／59；Game E2.2 已完成，不再重問。未明確結案的是 E2 原本失焦／暫停／表單輸入防護、移動／Safe reset 與可用 touch/gamepad 操作（無裝置記未測，不造 pass）；E2.1 的 52 物件盤點完整性／功能分配；E2.3 Batting 入口、走道／圍網／遮擋、R 返回、team／direct fallback。E2.5 八場景統一包尚未製作，不是現成待驗項目。本次只同步使用者回報，沒有代理畫面測試或新 Slice 開工；下方 Pitcher pending 文字屬結案前快照。
+
+**最新 Pitcher In game 配置（2026-11-04）：** 依使用者要求，兩條牛棚道均改為 In game，穩定 ID 為 `in-game-west`／`in-game-east`，取代舊 `bullpen-lanes` 群，盤點總數由 51 成為 52。`pitcher-mound-v2.png` 由內建 image_gen 局部修改，左分析台移除原 In game 螢幕，只留 Shape；原 v1 保留。來源、完整 prompt／hash 與規格在 `petehub_ballpark_pitcher_in_game_layout_v2.json`。碰撞／遮擋／出口座標未變；新圖與兩區配置待使用者驗收，未由代理進行畫面或操作測試，也不重跑完整 typecheck／build。
+
+**未來牛棚功能已納入：** E3.2 為兩區提供同等的投手／場次 DOM 選單及 team／player／game／pitch intent，E4 處理面板開關、pause／focus 與返回原牛棚。F2 再製作球員隨機刷新與道內投球展示：帳號 favorite team 為預設，切 Viewing team 跟隨瀏覽隊伍，投手候選遵守官方 active-roster contract；手動選擇不被隨機刷新覆蓋，無名單／無出賽須顯示 unavailable。場次沿用共用 Personal In game（預設所選年度最近出賽，保留明確選擇），逐球資料與影片不另寫一套。人體投球為明示 generic 動作，不能宣稱重建該球員歷史 mechanics，不能改 Statcast 軌跡；需獨立動畫及牛棚前／後網遮擋分層，確保道內角色可見。刷新頻率、兩道去重與動畫規格在 F2 實作前細化。本次只交配置與規劃，尚無投手 actor、隨機刷新、投球動畫或選單功能；也未開始 E3／E4／F2。
+
+**最新 Game 結案與 Batting／Pitcher 交付：** 使用者明確回報「game區的介面驗證通過 然後batter pitcher區也開始做」，E2.2 Done，25／59。新兩站沿用已核准原圖，分別複製至 `batting-cages-v1.png`／`pitcher-mound-v1.png`，不重畫。`scene-kit-e2-3-4-v1.json` 獨立追加 Batting 16 collision／14 foreground、Pitcher 19 collision／17 foreground；每站一個 R 出口與五個物件 bounds／approach，練習網籠／牛棚道目前為裝飾與阻擋。可編輯 SVG／compact JSON 在 `output/ballpark/scenes-e2-3-4-v1/`，manifest 與來源證據同步。Campus Batting／Pitcher 入口及固定按鍵進房，南側 R 回各自 Campus 到達點；Nuxt 保留 URL／Viewing team／Static／Classic ownership，原五場景 v3 不變。只做新包數值幾何／來源與一次直接 vue-tsc，不執行瀏覽器或操作驗收；E2.3／E2.4 保持 in_progress，等使用者人工回報。Directory／Stats／Compare／Lab／Shape／In game 等業務物件仍未接線，留 E3.2／F2；不開始 E2.5 統一包或 E3 之後。以下 Game 待驗、Batting／Pitcher 未製作等文字只屬先前快照，現況以本段及表格／tracker 為準。
+
+**最新核准與 E2.2 短批交付：** 使用者明確回覆「三張都可以接受」，三站背景設計已核准，不再重審。為控制單批耗時，先交 Game 可走動版：核准原圖原樣複製為 `game-center-v1.png`，新增 `scene-kit-e2-2-v1.json`、`petehub_ballpark_scene_manifest_e2-2-v1.json` 與 `output/ballpark/scenes-e2-2-v1/` 可編輯 SVG／compact JSON。含 21 碰撞、19 遮擋、1 R 出口及三個未啟用功能的物件 bounds／approach。runtime 在 v3 外加獨立補充包，只 override Campus GAME target，原五場景 source hash 不變，未開始 E2.5 統一包。Nuxt 仍管 URL／Viewing team，Phaser 只在既有 lazy runtime 使用新房間；Static／Classic 直接入口保留。數值入口／站位可達、匯出可重現、單次直接 vue-tsc PASS，證據／五項人工清單為 `petehub_ballpark_e2_2_source_gate_v1.json`；未開瀏覽器／截圖／走角色。新房間在 `/ballpark/play?room=game-center` 待使用者驗收，E2.2 不標 done。Batting／Pitcher 只核准美術，待後續短批分層，不推定操作通過；E2.1 仍未明確結案。
+
+下方「候選待核准／未改 runtime」為本次使用者核准前的歷史交付，現況以上段及 tracker 為準。
+
+2026-11-04 使用者後續明確回報「E1可以，開始E2.1–2.4」，E1 因而 Done，這四項開始第一個短批次；E2.5／E3 之後不在本次授權內。第一批建立盤點與三站設計 brief；其後使用者再次要求開始 E2.2–E2.4，已沿用配置產三張新圖候選，仍未改 runtime，且不能把開工指示當作 E2.1 完整盤點或新圖的人工核准。E2 原項是既有五場景的移動／相機／碰撞與輸入防護，不是子項總括；E3 收斂共用框架，NPC／travel 移到 E3.3。八份獨立交付不以父項自動帶入完成，亦不阻止原 E1／E2 依原範圍結案。
+
+**E2.2–E2.4 新背景候選交付：** `output/ballpark/e2-facilities-v1/` 的 `game-center-concept-v1.png`、`batting-cages-concept-v1.png`、`pitcher-mound-concept-v1.png` 均為 1672×941；內建 image_gen 以既有 Team Office clean v1 作畫風參考產生新場景，沒有修改或重新送審舊背景。完整提示詞、原始生成路徑、參考 hash、PNG 大小與 hash 存在 `data/sample/petehub_ballpark_e2_facility_concepts_v1.json`。素材規範要求先以 concept candidate 交付，`production_eligible=false`／`runtime_wired=false`，碰撞／foreground／觸發範圍仍未製作；檔頭尺寸與 hash 紀錄不是畫面驗收。使用者確認三張新設計的物件配置、通道和南側出口後，才製作可編輯場景包並接入既有 runtime。投手分析台預留共用 Personal In game，母站模組已存在不代表 Ballpark 物件已接線。E2.1、E2.2–E2.4 維持 in_progress；未開始 E2.5／E3 之後。
+
+- **E1／E2 現況：** E1 已由使用者整體接受，人工清單同步；不推定特定裝置／數值認證，不重問 E1。E2「目前沒大問題」仍只記正向整體回饋，未補造每一輸入裝置／碰撞的逐項通過。正式 bundle／GPU／效能留 E6，不要求本次重跑。
+- **E2.1 第一批交付：** 權威 `data/sample/petehub_ballpark_object_catalog_v1.json` 由 `backend/scripts/build_ballpark_object_catalog.py` 生成 `output/ballpark/object-catalog-v1.md`。51 個語意物件／候選及三站 layout brief，另逐一列出目前 138 collision／82 foreground／16 portals／2 hotspots；幾何列數不等於實體物件數。程式只讀 JSON／座標／hash，未看圖／瀏覽器。父層 bounds 只是參考外框，看板／螢幕仍須單獨定位互動框；未獨立建模的背景裝飾群及 NPC 點明列待補。草案不是已完成畫面物件盤點或業務接線，待使用者確認配置／補漏後才可關 E2.1。
+- **返回問題歸屬：** 三站 Campus 入口現均進各自可走動房間，R 回對應 Campus 到達點；Game 已由使用者接受，新 Batting／Pitcher 待驗。直接 `/games/today`／`/batters`／`/pitchers` 保留，Classic 不全域攔截 R。未來功能面板關閉／history／focus 仍由 E4 負責，卸載／refresh 的安全位置恢復仍為 E5；不能以本次房間出口宣稱所有 Classic 返回問題已解決。
+- **E2.1 盤點規格：** 單一 versioned JSON 及由其生成的可讀表，包含 scene/object ID、名稱／位置或 bounds、裝飾／阻擋／互動標記、collision／foreground refs、觸發方式、action／canonical fallback、game/player/team context、權限／資料依賴、負責 Slice、實作／驗收狀態。既有五場景完整列主要設施／家具／可互動候選，重複植栽／燈具可明確分組；三新站先列 planned，核准設計後補實際範圍。不把碰撞清單冒充完整盤點，不為盤點重畫或切割全部背景。
+- **三站功能配置：** Game 預留賽程看板、選定比賽分析控制台、回放／影片螢幕；Box Score／Location／Sequence／Movement／Pitch Replay 共用選定比賽／投手脈絡，影片附屬比賽／球路。Batting 預留選人、個人分析、比較及已發布 Lab；Pitcher 預留選人、個人球路／位置分析及比較。先由 E2.1 確認物件功能再產新背景；研究未發布或資料 unavailable 不能假裝可用。
+- **素材交付：** 新場景沿用核准畫風、1672×941 世界／現行足底契約及同一 lazy runtime；新設計由使用者核准後才生產獨立碰撞／foreground／portal、可編輯來源與可重現輸出，manifest 留來源／生成與修改紀錄／hash。現有五場景不重畫；D5 done 僅覆蓋已接受素材，新素材驗收落 E2.2–E2.5，完整 runtime gate 仍 E6。
+- **接線不等於業務完成：** E3／子項是物件、prompt、typed intent、context 與直接選單；E4 後才完成 Vue 面板關閉／返回。F1–F6 負責對應既有功能的實際資料／權限／freshness／Classic parity，不重寫分析公式，也不以 placeholder 冒充完成。Nuxt 仍是 URL、auth、DOM owner，FastAPI 是資料 owner；不靠 iframe 複製另一套網站。
+- **建議順序：** 原 E1／E2 完成人工結案 → 另獲開工指示後 E2.1 → E2.2／E2.3／E2.4 逐站設計核准與製作 → E2.5；E3 框架依盤點規格定義，先接 E4 的最小 bridge 再交 E3.1／E3.2 實際開關返回驗收，避免依編號假設所有 E3 子項先於 E4 完成。E3.3 不提前做真實 roster；E5／E6 依擴充後場景與返回情境驗收，之後 F 完整功能接線。
 
 ### Section F · Petehub World Facilities
 
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
 | F1 · Main field, Game and Leaderboard | Planned | GAME gate 連 Game Center；外野記分板呈現 Leaderboard | canonical route／game identity／ranking as-of 一致；記分板不是唯一入口 |
-| F2 · Pitching and Batting facilities | Planned | Bullpen／mound／cages 連個人頁與已發布 Labs | Classic 同資料同權限；sample／tracking limitations 保留 |
+| F2 · Pitching and Batting facilities | Planned | 七個子項 F2.1–F2.7：母站共用三維歷史 In game、rig／clock／揮棒資料介面與 gate，以及原兩牛棚／投打設施 parity | 詳見最上方 2026-11-06 分項；不改 2D 園區／原始軌跡，不把 generic 動作當真實量測；parent 需完成其實際範圍，不因規劃先 done |
 | F3 · Training & Lab | Planned | 集中 Stuff+、Location+、Stamina、Performance State、比較與計算器 | 研究與 production 標示清楚；不複製公式 |
-| F4 · Clubhouse active-roster experience | Planned | 主隊休息室、8–10 名場景 NPC、完整 PLAYER LIST、球員互動與個人數據 | official active roster／as-of 顯示；選單永遠可直接選人 |
+| F4 · Clubhouse active-roster experience | Planned | 主隊休息室、8–10 名場景 NPC、完整 PLAYER LIST、球員互動與個人數據；吸菸附屬區預留偶爾刷新球員抽菸與聊天 | official active roster／as-of 顯示；選單永遠可直接選人；附屬區刷新頻率、虛構情境動畫／聊天及通道不阻擋待實作 |
 | F5 · Team Office | Planned | 主隊預設；Coach Office 放輪值／牛棚／打線，GM Office 放交易／薪資／合約 | 球隊切換、資料 freshness、權限與 Classic Team page 一致 |
 | F6 · Video／Game Room and parity gate | Planned | 現階段推薦影片；保留未來 mini-game 空間；完成全設施 route parity audit | video unavailable 誠實 fallback；所有核心 route 可 direct-link／Classic 到達 |
 
 ### Section G · Baseball Motion Lab（Post-MVP）
+
+2026-11-06 責任調整：下表保留 Planned，專指 F2 之後的球員專屬資料／動作、擴充 Lab 與 simulation event bridge；通用歷史場景 renderer、基本 rig、投打 clock 與首批相機 gate 改由 F2.1–F2.6 唯一實作。G1 延伸 player bio／stance coverage，G2 只在 F2 有實測限制時比較進階 engine，G3 擴充專屬 clips／retarget，G4/G5 擴充專屬動作與未來 H 的事件適配，G6 認證擴充 Motion Lab；不重做已交付通用能力，不自動授權 synthetic simulation。
 
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
@@ -173,13 +318,15 @@ MVP 主路徑：`A → B → C → D → E → F`。C 先凍結主隊、roster �
 - 未完成 C5 不讓 Clubhouse／Team Office 消費未版本化的 profile／roster／權限資料。
 - 未完成 D5 不把 AI 示意圖當 production asset。
 - 未完成 E6 不把 Phaser 放進全域 app shell。
-- 未完成 G1 不加入 Babylon／其他 3D production dependency。
+- 三維分析限定在 F2：F2.1 的來源／單位／引擎／載入與預算決策完成並另獲實作授權後，才可加入該局部 renderer dependency；不提前放進 production／全域 app shell。G 的進階 engine 擴充仍須先完成 G1，不能藉 F2 規劃自動安裝 Babylon／Havok。
 - 未完成 H1 不混用 historical Replay 與 Simulation event vocabulary。
 - 未完成 I4 不把 Ballpark 設為預設登入入口。
 
 ## 5. MVP 與明確非目標
 
 第一個可發布 MVP 到 F6 為止：俯視像素 RPG Ballpark、主隊／active roster、角色、自由移動、fast travel、設施入口、Nuxt overlay 與 Classic parity。Motion Lab、完整 simulation、3D 捏臉、多人與遊戲經濟均不是 MVP 必要條件。
+
+2026-11-06 規劃擴充僅將「局部共用歷史 In game 三維分析」與基本可動投打模型納入 F2；不把整個 Ballpark、User creator、所有真實 NPC 改成 3D，也不代表已滿足 F2.6／E6 的 production gate。
 
 不接受的捷徑：
 
@@ -720,6 +867,14 @@ D2.1–D2.4 的人工驗收已由使用者於 2026-11-02 完成。驗收入口�
 已通過：角色匯出、`build_ballpark_characters.py --check` 及 Nuxt typecheck。只代表來源／可重現／型別檢查；未開啟瀏覽器、截圖、比較圖片或代替使用者操作。人工清單最多五項：User／Moreno 四方向與動畫、外觀設定與保存／Undo／Reset／Cancel、走動停止與外觀一致、五場景比例／腳底／遮擋、桌面／窄版與 reduced-motion。`production_ready=false` 保留，D5 不在本輪自動開始或完成。
 
 ### D5 · Asset／avatar release gate
+
+**2026-11-04 最終狀態：Done，Section D 關閉，23／51。** 使用者明確回報「目前 D5 驗收通過」，人工清單及場景／角色 acceptance metadata 已同步，含兩側後牆、Coach 會議桌右側／下方通道 followup。`petehub_ballpark_d5_release_gate_v1.json` 記錄更新 metadata 後的 D5 asset gate PASS、零 findings；沒有代做瀏覽器或畫面測試，也沒有重跑不受影響的 build/typecheck。使用者未提供瀏覽器／硬體型號或數值效能，不推定特定實機認證；E6 仍須另驗。inventory／角色 manifest 的 `production_ready=true` 僅表示 D5 素材可交給下一階段整合，**不是整個網站／runtime production-ready**。以下待驗文字保留作歷史，現況以本段和 tracker 為準；Section E 尚未授權實作。
+
+本輪規劃確認：背景在 E／F 階段仍可修改，不需要推翻整個 D。純色彩／裝飾微調只重驗影響區；改家具、門或可走區，須同步 versioned source、hash／manifest、collision、foreground、portal，並在 E5 對舊存檔座標做安全復原。substantial art change 才重新審外觀，不重複核准相同入口。
+
+NPC 文件現況：E3 是通用互動／NPC 機制，F4 是官方主隊 active roster 的 8–10 名代表 NPC、PLAYER LIST 及球員資料。**全園區／所有室內隨機刷新、隨機巡遊的生成區域、密度、路線、時機與互動暫停規則尚未凍結**，不能將既有 NPC 規劃解讀成這些已承諾。建議後續先於 E3 定義通用機制，再於 F4 接真實球員；此處僅記錄規格缺口，未擴增 tracker deliverable 或開始製作。
+
+E5 範圍說明：定義有版本的最後有效場景／位置、session 與重登入恢復策略、依帳號隔離、舊版／壞存檔 migration、安全 spawn 及離線／儲存不可用 fallback；不保存 Phaser instance、認證秘密或逐幀狀態，不複製 D4 avatar profile。驗證方向為重新整理／離開返回的一致性、帳號切換不串檔、改版／背景碰撞更新後不出生在牆內、壞座標／未知版本安全復原、儲存失敗仍可進 Classic。具體哪些欄位留本機或伺服器、是否跨裝置，須在 E5 實作前凍結，不能由本段推定已有跨裝置保存。
 
 2026-11-03 會議桌通道 followup：使用者回報 Coach 會議桌下方無法抵達。原桌椅右緣 x556 與文件櫃左緣 x575 僅餘 19px，18px 足底幾乎無繞行空間。只將桌椅過寬的右側碰撞外緣收至 x536，間隔改為 39px；不縮角色、不改櫃體／背景／遮擋／入口或其他房間。`collision_overrides` 明列版本差異，匯出及 manifest 同步；數量仍 135／82／16。針對性來源 swept geometry 檢查重現舊阻擋、核對修正後可沿右側到下方橫向通道，並保留桌椅／後牆阻擋及入口到達點；不是畫面／手感通過。D5 source gate v2 是這次新座標前的歷史證據，本次沒有重跑全 audit/typecheck/build。人工清單第 1 項補上右側／下方繞行，仍待使用者確認。
 

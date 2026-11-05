@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "clubhouse-annex-v1",
+  "updated_at": "2026-11-05",
+  "authorization": "User accepted original E2/E2.3 and requested the marked Clubhouse back door opened with C, smoking area behind it, future occasional player smoking/chat, and catalog inclusion. E2.1 closes only after their catalog review.",
+  "source_files": [
+    {
+      "path": "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+      "sha256": "88da9cc5edcb6c9e9bd4c80f548db1f962a50ba3862f90c968d4ece7eefbb60e",
+      "bytes": 2141596,
+      "image_size": [
+        1671,
+        941
+      ]
+    },
+    {
+      "path": "frontend/assets/ballpark/clubhouse-backdoor-v1.png",
+      "sha256": "45eac2fa0471eacb9c0c2f08abf23685486602e400c9ccc8220f54bd43b41bcb",
+      "bytes": 1958145,
+      "image_size": [
+        1670,
+        941
+      ]
+    },
+    {
+      "path": "frontend/assets/ballpark/clubhouse-smoking-area-v1.png",
+      "sha256": "bac0f046c161abf04b20cdc9d7d9a5393621ebcd317a44ac9403afde41daf16c",
+      "bytes": 1913967,
+      "image_size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "path": "frontend/assets/ballpark/scenes/scene-kit-v3.json",
+      "sha256": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+      "bytes": 32893
+    },
+    {
+      "path": "frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json",
+      "sha256": "7f6372fcfa36c7f108e05a2f23cc8bad38d2bea538baf3541f92d34ea11ef52e",
+      "bytes": 5991
+    }
+  ],
+  "generation": {
+    "tool": "built-in image_gen.imagegen",
+    "model": "not_exposed_by_tool",
+    "reference": "frontend/assets/ballpark/clubhouse-corridor-v2.png",
+    "door": {
+      "role": "local edit target",
+      "prompt": "Use case: precise-object-edit. Asset type: existing Petehub Clubhouse pixel-RPG background.\nEdit ONLY a tiny service door at the exact far-right room wall gap immediately BELOW the potted plant beside the drinks refrigerator and ABOVE the dining nook's orange right-side border. In the supplied full image this gap is around x=1350..1388, y=282..348 in a 1672x941 canvas. Create a narrow vertical dark wood/charcoal side-wall door with an orange brass handle and discreet cigarette pictogram plaque, facing into the room from the right wall. It must read as a small back door, not a huge frontal gate. Keep all room floor/furniture silhouettes and positions unchanged, including snack counter, fridge, plant, table, sofa, lockers, central aisle. Keep the large black empty area OUTSIDE the east wall completely black. No new hallway in the black area. Preserve full-room view, original warm pixel-RPG textures/colors, framing and world proportions. Output 1672x941. No people, NPCs, smoke, HUD, C key graphic, extra furniture or other text. Do not redesign or repaint the Clubhouse.",
+      "original_tool_file": "C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90\\exec-c6c94ba5-6c4c-4ccd-8c5f-a592483aa32c.png"
+    },
+    "courtyard": {
+      "role": "new scene, existing Clubhouse is style reference only",
+      "prompt": "Use case: stylized-concept. Asset type: a new Petehub Ballpark Clubhouse rear smoking terrace background, empty scene for a walking pixel RPG. Input image is STYLE REFERENCE ONLY.\nCreate one modest outdoor smoking courtyard behind a baseball clubhouse. Exact canvas 1672x941, parallel top-down RPG Maker style matching reference: crisp chunky pixels, charcoal brick walls, warm amber lamps, muted orange trim, gray stone paving, green potted shrubs. No vanishing point or isometric diamond.\nStrict spatial layout for independent geometry: north brick boundary occupies y=0..190 across full width, with a discreet SMOKING AREA physical sign centered. West/east boundary walls occupy x=0..110 and x=1560..1672. West bench and its plant bed occupy x=170..520,y=300..430; east bench x=1150..1500,y=300..430. A slim standing metal ashtray receptacle occupies x=1240..1320,y=530..660. A few shrubs remain against walls, not in aisles. The center and southern paving is open walking space, no tables/chairs/rails across x=560..1110,y=220..800. Two small orange floor markers on free paving near x=610,y=510 and x=1050,y=510 reserve future optional NPC standing spots; absolutely no people now. South edge is the clubhouse exterior brick wall, y=830..941, with one small open doorway centered x=750..920, and discreet CLUBHOUSE lintel. Keep the doorway unobstructed and broad floor approach x=700..970,y=700..880. Boundary wall to each side of doorway, warm lamp on each doorpost. Enclosed/private rear courtyard feel; a faint dark evening sky beyond north wall is okay, no stadium panorama or extra rooms. No glass ceiling, no large central furniture, no cigarettes brands/products, no fake live data, no baked smoke, people, player portraits, HUD, key graphics, mouse cursor, watermark or additional entrance. Empty ashtray and quiet benches; future player/NPC smoking/chat animation is a separate sprite, never baked into art.",
+      "original_tool_file": "C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90\\exec-1571faf9-4e68-494c-82ec-1819aab4d0d3.png"
+    },
+    "rights": "Project-generated art subject to tool terms; no third-party pack or MLB licensing claim",
+    "modification": "Generated bytes copied into new sibling files; originals retained, no resampling or screenshot/image comparison."
+  },
+  "runtime": {
+    "package": "frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json",
+    "world_size": [
+      1672,
+      941
+    ],
+    "clubhouse_image_size": [
+      1670,
+      941
+    ],
+    "clubhouse_world_scale": [
+      1.0011976047904192,
+      1
+    ],
+    "courtyard_image_size": [
+      1672,
+      941
+    ],
+    "door": "Clubhouse right wall below drinks/fridge plant; nearby C, equivalent Enter/Exit button and fixed room navigation",
+    "return": "Near south courtyard door R -> clubhouse, spawn smoking-door [1341,320]; no arbitrary browser history",
+    "collision": 17,
+    "foreground": 15,
+    "portals": 1,
+    "planned_scene_objects": 5,
+    "base_v3": "unchanged, original five-scene source/geometry retained",
+    "annex_actions": "entry/exit only; no NPC actor, smoking animation or dialogue yet"
+  },
+  "future_npc": {
+    "owner": [
+      "E3.3",
+      "F4"
+    ],
+    "requirement": "Occasionally show team-player NPCs smoking and available to chat at the two reserved spots. Fictional game vignette, not a statement about real players' personal habits. Finalize official roster identity, appearance cadence, density, animation, conversation content and selection before F4 implementation; avoid blocking circulation/door. Do not bake people or smoke into environment PNG."
+  },
+  "catalog": {
+    "path": "data/sample/petehub_ballpark_object_catalog_v1.json",
+    "generated_view": "output/ballpark/object-catalog-v1.md",
+    "scenes": 9,
+    "semantic_objects": 59,
+    "added": [
+      "clubhouse/smoking-door",
+      "clubhouse-smoking-area/bench-west",
+      "clubhouse-smoking-area/bench-east",
+      "clubhouse-smoking-area/ashtray",
+      "clubhouse-smoking-area/chat-spot-west",
+      "clubhouse-smoking-area/chat-spot-east",
+      "clubhouse-smoking-area/return"
+    ]
+  },
+  "verification": {
+    "source_only": [
+      {
+        "command": "node frontend/scripts/check-ballpark-scenes.mjs clubhouse-annex-v1",
+        "status": "PASS",
+        "note": "Numeric checks only: 18914 courtyard grid positions, return reachability, object approaches, added Clubhouse door arrival. Not player movement testing."
+      },
+      {
+        "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json",
+        "cwd": "frontend",
+        "status": "PASS_after_fixing_JSON_tuple_assertions",
+        "note": "One initial failed attempt, then corrected Point/Portal conversions and rerun successfully. No Nuxt build/prepare or browser."
+      }
+    ],
+    "browser": "not_performed_by_agent",
+    "visual_collision_interaction": "user_accepted_2026-11-05",
+    "user_acceptance_basis": "User replied ??? ?? to the five-item annex/catalog checklist; E2.1 done. No device-specific or measured performance evidence inferred.",
+    "production_ready": false
+  },
+  "manual_urls": [
+    "http://127.0.0.1:3000/ballpark/play?room=clubhouse",
+    "http://127.0.0.1:3000/ballpark/play?room=clubhouse-smoking-area"
+  ],
+  "manual_checks": [
+    "Small door is at marked right-wall spot; nearby C opens courtyard, C elsewhere does nothing.",
+    "New courtyard layout, benches/ashtray/plants blocking and avatar depth are acceptable; central aisle stays clear.",
+    "Near south door R returns to Clubhouse same back door; repeated C/R works without immediate re-entry.",
+    "Viewing team retained, focus/form/pause do not trigger C; equivalent fixed navigation and Enter/Exit remain available.",
+    "Review the 59-object catalog, especially new door, furniture, two future smoking/chat spots and return."
+  ]
+}

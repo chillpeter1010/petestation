@@ -1,5 +1,6 @@
 <template>
-  <section class="game-analysis" :aria-label="`${pitcherName} ${mode} analysis`">
+  <LazyPitchReplayPanel v-if="mode === 'replay'" :year="year" :game-pk="gamePk" :pitcher-id="pitcherId" :pitcher-name="pitcherName" @select-pitch="emit('select-pitch', $event)" />
+  <section v-else class="game-analysis" :aria-label="`${pitcherName} ${mode} analysis`">
     <header class="analysis-header">
       <div>
         <span>{{ modeLabel }}</span>
@@ -128,35 +129,6 @@
       <p v-if="analysis && !filteredMovementRows.length" class="state-message">No pitches with movement coordinates match these filters.</p>
     </template>
 
-    <template v-else-if="mode === 'replay'">
-      <div class="analysis-filters" aria-label="Pitch Replay filters">
-        <label>Batter Side<CheckboxDropdown v-model="stand" :options="standOptions" /></label>
-        <label>Count<CheckboxDropdown v-model="count" :options="countOptions" /></label>
-        <label>Pitch<CheckboxDropdown v-model="pitch" :options="pitchOptions" /></label>
-        <label>Pitch Result<CheckboxDropdown v-model="pitchResult" :options="pitchResultOptions" /></label>
-        <label>In Play Result<CheckboxDropdown v-model="inPlayResult" :options="inPlayResultOptions" /></label>
-        <label>PA Result<CheckboxDropdown v-model="paResult" :options="paResultOptions" /></label>
-        <label>Paired Catcher<CheckboxDropdown v-model="catcher" :options="catcherOptions" /></label>
-        <button type="button" class="clear-button" @click="clearFilters">Clear filters</button>
-      </div>
-      <p class="sample-note">Game {{ gamePk }} only. This is a ball-path reconstruction, not body motion capture or complete fluid physics.</p>
-      <div v-if="analysis" class="replay-layout" :aria-busy="loading">
-        <PitchReplayChart :rows="filteredReplayRows" @select-pitch="setSelectedPitch" />
-        <aside class="analysis-summary">
-          <div v-for="metric in replaySummaryMetrics" :key="metric.label">
-            <span>{{ metric.label }}</span><strong>{{ metric.value }}</strong>
-          </div>
-          <section class="selected-pitch">
-            <span>Selected pitch</span>
-            <strong>{{ selectedPitchLabel }}</strong>
-            <p v-if="selectedPitch">{{ replayStatusLabel }} · Flight {{ displayNumber(selectedPitch.flight_time_seconds, 3) }} s · Closure X {{ displayNumber(selectedPitch.closure_error_x_in, 2) }}″ / Z {{ displayNumber(selectedPitch.closure_error_z_in, 2) }}″</p>
-            <button v-if="selectedPitchVideoUrl" type="button" @click="emit('select-pitch', selectedPitch!)">Open Savant video</button>
-          </section>
-        </aside>
-      </div>
-      <p v-if="analysis && !filteredReplayRows.length" class="state-message">No replay pitches match these filters.</p>
-    </template>
-
   </section>
 </template>
 
@@ -212,13 +184,11 @@ const locationPoints = computed(() => asRows(analysis.value?.charts.pitch_locati
 const shapeRows = computed(() => asRows(analysis.value?.charts.pitch_shape_scatter))
 const filteredShapeRows = computed(() => shapeRows.value.filter(matchesShapeFilters))
 const filteredMovementRows = computed(() => filteredShapeRows.value.filter(row => finitePair(row.h_break, row.v_break)))
-const replayRows = computed(() => asRows(analysis.value?.charts.pitch_replay))
-const filteredReplayRows = computed(() => replayRows.value.filter(matchesShapeFilters))
 const filteredMovementSummary = computed(() => summarizeMovement(filteredMovementRows.value))
 const countPitchMixRows = computed(() => asRows(analysis.value?.charts.count_pitch_mix))
 const conditionedCountPitchMixRows = computed(() => asRows(analysis.value?.charts.conditioned_count_pitch_mix))
 const filterSnapshot = computed(() => (analysis.value?.charts.filter_snapshot || {}) as Record<string, unknown>)
-const filteredPitchCount = computed(() => props.mode === 'movement' ? filteredShapeRows.value.length : props.mode === 'replay' ? filteredReplayRows.value.length : Number(filterSnapshot.value.pitches || locationPoints.value.length || 0))
+const filteredPitchCount = computed(() => props.mode === 'movement' ? filteredShapeRows.value.length : Number(filterSnapshot.value.pitches || locationPoints.value.length || 0))
 const summaryMetrics = computed(() => [
   { label: 'Pitches', value: String(filteredPitchCount.value) },
   { label: 'Zone%', value: formatPercent(filterSnapshot.value.zone_pct) },
@@ -239,18 +209,6 @@ const shapeSummaryMetrics = computed(() => {
     { label: 'Coverage', value: filteredShapeRows.value.length ? `${(rows.length / filteredShapeRows.value.length * 100).toFixed(1)}%` : '—' },
   ]
 })
-const replaySummaryMetrics = computed(() => {
-  const supported = filteredReplayRows.value.filter(row => row.trajectory_status === 'supported').length
-  const limited = filteredReplayRows.value.filter(row => row.trajectory_status === 'limited_trajectory').length
-  const unavailable = filteredReplayRows.value.filter(row => row.trajectory_status === 'unavailable').length
-  return [
-    { label: 'Pitches', value: String(filteredReplayRows.value.length) },
-    { label: 'Supported', value: String(supported) },
-    { label: 'Limited', value: String(limited) },
-    { label: 'Unavailable', value: String(unavailable) },
-  ]
-})
-const replayStatusLabel = computed(() => ({ supported: 'Supported trajectory', limited_trajectory: 'Limited trajectory', unavailable: 'Replay unavailable' } as Record<string, string>)[String(selectedPitch.value?.trajectory_status || '')] || 'Select a pitch')
 const selectedPitchLabel = computed(() => selectedPitch.value ? `${selectedPitch.value.pitch_name || 'Pitch'} · ${displayNumber(selectedPitch.value.release_speed)} mph · ${selectedPitch.value.balls ?? '—'}-${selectedPitch.value.strikes ?? '—'}` : 'Click a pitch in the chart')
 
 function queryValue(value: string) { return value && value !== 'All' ? value : undefined }
@@ -260,7 +218,6 @@ function formatAverage(value: unknown) { const number = Number(value); return Nu
 function displayNumber(value: unknown, digits = 1) { if (value === null || value === undefined || value === '') return '—'; const number = Number(value); return Number.isFinite(number) ? number.toFixed(digits) : '—' }
 function pitchVideoUrl(value: Record<string, unknown> | null) { if (!value) return ''; const direct = String(value.video_url || ''); if (direct) return direct; const playId = String(value.play_id || ''); return playId ? `https://baseballsavant.mlb.com/sporty-videos?playId=${encodeURIComponent(playId)}` : '' }
 function selectPitch(value: Record<string, unknown>) { selectedPitch.value = value; if (pitchVideoUrl(value)) emit('select-pitch', value) }
-function setSelectedPitch(value: Record<string, unknown>) { selectedPitch.value = value }
 function applyBranch(branch: { count: string; pitch: string }) { detailCount.value = branch.count; followupPitch.value = branch.pitch; conditionCount.value = branch.count; conditionPitch.value = branch.pitch }
 function selectedValues(value: string) { return value === 'All' || !value ? [] : value.split(',').map(item => item.trim()).filter(Boolean) }
 function finitePair(left: unknown, right: unknown) { return Number.isFinite(Number(left)) && Number.isFinite(Number(right)) }
@@ -310,11 +267,9 @@ function average(rows: Array<Record<string, unknown>>, key: string) {
 }
 
 function updateOptions(payload: AnalysisResponse) {
-  const rows = asRows(payload.charts.pitch_replay).length
-    ? asRows(payload.charts.pitch_replay)
-    : asRows(payload.charts.pitch_shape_scatter).length
-      ? asRows(payload.charts.pitch_shape_scatter)
-      : asRows(payload.charts.pitch_location_scatter)
+  const rows = asRows(payload.charts.pitch_shape_scatter).length
+    ? asRows(payload.charts.pitch_shape_scatter)
+    : asRows(payload.charts.pitch_location_scatter)
   const pitches = rows.map(row => String(row.pitch_name || '')).filter(Boolean)
   availablePitches.value = [...new Set([...availablePitches.value, ...pitches])].sort()
   const catcherOptions = Array.isArray(payload.charts.catcher_options) ? payload.charts.catcher_options.map(String).filter(Boolean) : []
@@ -324,6 +279,7 @@ function updateOptions(payload: AnalysisResponse) {
 }
 
 async function loadPanel() {
+  if (props.mode === 'replay') return
   const version = ++requestVersion
   loading.value = true
   errorMessage.value = ''
@@ -333,13 +289,11 @@ async function loadPanel() {
       ? await api.gamePitcherLocation({ ...shared, inPlayResult: queryValue(inPlayResult.value), paResult: queryValue(paResult.value) })
       : props.mode === 'sequence'
         ? await api.gamePitcherSequence({ ...shared, conditionCount: conditionCount.value, conditionPitch: conditionPitch.value, detailCount: detailCount.value, followupPitch: followupPitch.value })
-        : props.mode === 'replay'
-          ? await api.gamePitcherReplay({ year: props.year, gamePk: props.gamePk, pitcherId: props.pitcherId })
-          : await api.gamePitcherShape({ year: props.year, gamePk: props.gamePk, pitcherId: props.pitcherId })
+        : await api.gamePitcherShape({ year: props.year, gamePk: props.gamePk, pitcherId: props.pitcherId })
     if (version !== requestVersion) return
     analysis.value = result
     updateOptions(result)
-    const visibleRows = props.mode === 'movement' ? shapeRows.value : props.mode === 'replay' ? replayRows.value : locationPoints.value
+    const visibleRows = props.mode === 'movement' ? shapeRows.value : locationPoints.value
     if (selectedPitch.value && !visibleRows.some(row => `${row.game_pk}-${row.at_bat_number}-${row.pitch_number}` === selectedPitchKey.value)) selectedPitch.value = null
   } catch (error) {
     if (version === requestVersion) errorMessage.value = error instanceof Error ? error.message : `${modeLabel.value} request failed`

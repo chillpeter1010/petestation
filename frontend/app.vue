@@ -18,6 +18,7 @@
       </template>
     </NuxtLink>
     <AuthUserMenu v-if="auth.user.value && !isAuthPage && !isBallparkPage" />
+    <BallparkClassicReturn v-if="!isAuthPage && !isBallparkPage" />
     <div
       class="app-page-shell"
       :class="{
@@ -36,6 +37,8 @@ type ThemeMode = 'light' | 'dark'
 const theme = useState<ThemeMode>('theme-mode', () => 'dark')
 const route = useRoute()
 const auth = useAuth()
+// Capture explicit Ballpark origin before individual Classic pages normalize their own query.
+useBallparkReturn()
 const { isPetehub, brandName } = useSiteBrand()
 const isAuthPage = computed(() => route.path === '/login' || route.path === '/register')
 const isBallparkPage = computed(() => route.path.replace(/\/+$/, '') === '/ballpark' || route.path.startsWith('/ballpark/play'))

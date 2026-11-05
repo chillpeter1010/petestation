@@ -1,0 +1,88 @@
+{
+  "schema_version": 2,
+  "asset_version": "clubhouse-annex-v1",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json",
+  "source_sha256": "aa9c15feb0f0100858113c5bf310bc78d3de8a7dbb2939173800b59e731a46f9",
+  "exporter": "build_ballpark_scenes.py:v1",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / built-in image_gen and independently authored geometry",
+    "model": "not_exposed_by_tool",
+    "license": "Project-generated artwork subject to tool terms; no third-party pack or MLB licensing claim",
+    "reference_manifest": "data/sample/petehub_ballpark_clubhouse_annex_v1.json",
+    "modification_note": "User requested a small side door and smoking courtyard. Clubhouse edit and new courtyard saved as siblings, v3 base source/art retained. Geometry is an independent supplement; NPC smoking/chat is future E3.3/F4, not implemented."
+  },
+  "scope": [
+    "E2.1 user-requested Clubhouse annex"
+  ],
+  "human_acceptance": "door_smoking_area_C_R_navigation_and_catalog_accepted_by_user_2026-11-05",
+  "scenes": [
+    {
+      "scene_id": "clubhouse_smoking_area",
+      "room": "clubhouse-smoking-area",
+      "background": "frontend/assets/ballpark/clubhouse-smoking-area-v1.png",
+      "background_sha256": "bac0f046c161abf04b20cdc9d7d9a5393621ebcd317a44ac9403afde41daf16c",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 1913967,
+      "editable_source": "output/ballpark/scenes-clubhouse-annex-v1/clubhouse-smoking-area-layers.svg",
+      "editable_source_sha256": "4ab2f32ae34ce637cba39adcfbe9f6b6d732a14c61c13f368d67854b53fb26e7",
+      "runtime_path": "output/ballpark/scenes-clubhouse-annex-v1/clubhouse-smoking-area.json",
+      "runtime_sha256": "b93fe19b01b1c2b4631e862e0b898ac421a5d86f96610cd6ea8340b3d8d822e8",
+      "collision_count": 17,
+      "foreground_count": 15,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    }
+  ],
+  "portal_additions": {
+    "clubhouse": [
+      {
+        "id": "smoking-door",
+        "label": "Smoking area · C",
+        "activation_key": "C",
+        "bounds": [
+          1318,
+          292,
+          42,
+          52
+        ],
+        "arrival": [
+          1341,
+          320
+        ],
+        "target": {
+          "room": "clubhouse-smoking-area",
+          "spawn": "return"
+        }
+      }
+    ]
+  },
+  "background_overrides": {
+    "clubhouse": {
+      "background": "frontend/assets/ballpark/clubhouse-backdoor-v1.png",
+      "image_size": [
+        1670,
+        941
+      ]
+    }
+  }
+}

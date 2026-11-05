@@ -1,8 +1,8 @@
 {
   "asset_version": "d4-characters-v1",
   "source_path": "frontend/assets/ballpark/characters/avatar-source-v1.json",
-  "source_sha256": "3013588444d32ccaaca5bd7a3379b8c17ac94201e16eceab06c9d96067463efb",
-  "source_script_sha256": "966907bba75f0f7a0400b576a2f47b908620ceacb754938bf09e818d76407603",
+  "source_sha256": "2b554978c91fb3808a86d190f6a4cdf7c18a0e97f33d9946b11615847791c84e",
+  "source_script_sha256": "9149fc2168ac6aa5919aeed90505c3d51afb797d9ea8c80dc0b1c5ce5c92bf46",
   "author": "Petehub project / independently authored pixel polygons and joint poses",
   "license": "Project-authored source; generated concept boards and MLB headshot are visual references only, no reference pixels copied",
   "exporter": "build_ballpark_characters.py:v1/Pillow-12.2.0",
@@ -198,5 +198,7 @@
   "runtime_kit": "frontend/assets/ballpark/characters/character-kit-v1.json",
   "runtime_kit_sha256": "a6f1b4d51e90f4cb4d62131f55cbb19f279ac4732522b565ec40e9921a5fb0ba",
   "human_acceptance": "user_accepted_D4_and_all_followups_2026-11-02",
-  "production_ready": false
+  "production_ready": true,
+  "readiness_scope": "D5_character_asset_only_not_runtime_release",
+  "d5_acceptance_date": "2026-11-04"
 }

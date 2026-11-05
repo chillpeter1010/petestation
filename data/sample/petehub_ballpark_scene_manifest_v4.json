@@ -1,0 +1,1664 @@
+{
+  "schema_version": 4,
+  "asset_version": "e2-scenes-v4",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-v4.json",
+  "source_sha256": "085ec0087cf4740b9b65ec6cfb188cca29e633bd283ff68ab5554d508a7b9f0f",
+  "exporter": "build_ballpark_scenes.py:v2",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / deterministic composition of accepted scene packages",
+    "license": "Retains each source package artwork/license/provenance; no new art generated",
+    "modification_note": "Exactly the live overlay composition, same backgrounds/geometry/targets; no new actions or NPCs. Old sources retained. Runtime release remains E6.",
+    "composition_sources": [
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-v3.json",
+        "sha256": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+        "provenance": {
+          "author": "Petehub project / OpenAI image generation and authored scene geometry",
+          "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
+          "modification_note": "Unified v2/D2.5 package retains approved backgrounds, masks, spawns and portals. Explicit Campus net, Coach/GM rear-equipment and Coach meeting-table aisle collision followups are recorded separately. User reported D5 acceptance passed on 2026-11-04; asset acceptance only, not E6/runtime production certification.",
+          "reference_manifests": [
+            "data/sample/petehub_ballpark_scene_manifest_v2.json",
+            "data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json"
+          ],
+          "composition_sources": [
+            {
+              "path": "frontend/assets/ballpark/scenes/scene-kit-v2.json",
+              "sha256": "33413d868925345129746a6f535d8c503f32ee503f5fa326e0133d9c4b25a949"
+            },
+            {
+              "path": "frontend/assets/ballpark/scenes/scene-kit-d2-5-v1.json",
+              "sha256": "c65aeec179d8709a3193ac7005b4c58c3ba8e5d37a5e9e79267c553a5ecd7a1b"
+            }
+          ]
+        }
+      },
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-e2-2-v1.json",
+        "sha256": "bb1d91252352f1a1ea057d9192ac7ca77397bce9084434887f5be3f03a0ac128",
+        "provenance": {
+          "author": "Petehub project / built-in OpenAI image generation and independently authored scene geometry",
+          "model": "not_exposed_by_image_generation_tool",
+          "license": "Project-generated artwork; use subject to applicable tool terms; no third-party asset pack or MLB licensing claim",
+          "reference_manifest": "data/sample/petehub_ballpark_e2_facility_concepts_v1.json",
+          "modification_note": "User accepted all three facility designs and subsequently the Game interface on 2026-11-04. Game artwork copied byte-for-byte, no repaint or resizing. Independently authored geometry unchanged by acceptance metadata update. Existing five-scene source unchanged; object actions remain E3.2/F1."
+        }
+      },
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-e2-3-4-v1.json",
+        "sha256": "8d1f27246884f0bc44e30ac3deff23b7fcf173776cc6dd72c8dc522a436b4a81",
+        "provenance": {
+          "author": "Petehub project / built-in OpenAI image generation and independently authored scene geometry",
+          "model": "not_exposed_by_image_generation_tool",
+          "license": "Project-generated artwork; use subject to applicable tool terms; no third-party asset pack or MLB licensing claim",
+          "reference_manifest": "data/sample/petehub_ballpark_e2_facility_concepts_v1.json",
+          "modification_note": "Batting artwork unchanged. User requested Pitcher In game relocation to both bullpen lanes: pitcher-mound-v2.png locally edited with built-in image_gen; old v1 retained, edit provenance in petehub_ballpark_pitcher_in_game_layout_v2.json. Collision/foreground/portals unchanged; each lane has separate planned object bounds. User accepted Pitcher layout v2 and supplied manual checks on 2026-11-04; User subsequently accepted Batting E2.3 gameplay. No actors, animation or object actions implemented; five-scene v3 unchanged."
+        }
+      },
+      {
+        "path": "frontend/assets/ballpark/scenes/scene-kit-clubhouse-annex-v1.json",
+        "sha256": "aa9c15feb0f0100858113c5bf310bc78d3de8a7dbb2939173800b59e731a46f9",
+        "provenance": {
+          "author": "Petehub project / built-in image_gen and independently authored geometry",
+          "model": "not_exposed_by_tool",
+          "license": "Project-generated artwork subject to tool terms; no third-party pack or MLB licensing claim",
+          "reference_manifest": "data/sample/petehub_ballpark_clubhouse_annex_v1.json",
+          "modification_note": "User requested a small side door and smoking courtyard. Clubhouse edit and new courtyard saved as siblings, v3 base source/art retained. Geometry is an independent supplement; NPC smoking/chat is future E3.3/F4, not implemented."
+        }
+      }
+    ],
+    "catalog": "data/sample/petehub_ballpark_object_catalog_v1.json",
+    "catalog_sha256": "0705abe15dd123a42da80d421691167057b0c206d276edbd430620e112ad4e27"
+  },
+  "scope": [
+    "E2.5"
+  ],
+  "human_acceptance": "authoring_scenes_catalog_and_v4_unified_navigation_accepted_by_user_2026-11-05",
+  "scenes": [
+    {
+      "scene_id": "campus",
+      "room": "campus",
+      "background": "frontend/assets/ballpark/main-campus-v5.png",
+      "background_sha256": "5f1ed07083289f62fd9a6d6e3e1003d2160467fe1337285187ed398dd16e4a65",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 3322389,
+      "editable_source": "output/ballpark/scenes-v4/campus-layers.svg",
+      "editable_source_sha256": "fb94097622337a5e9161055b82e575dd0398c1af7a50610d86253da392ecd06f",
+      "runtime_path": "output/ballpark/scenes-v4/campus.json",
+      "runtime_sha256": "e6ba2f5e02497d1e0e15e971b0b2e911d3d5d493ce984e3fa9a1fc852f92d2f9",
+      "collision_count": 24,
+      "foreground_count": 15,
+      "portal_count": 7,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/"
+      }
+    },
+    {
+      "scene_id": "clubhouse",
+      "room": "clubhouse",
+      "background": "frontend/assets/ballpark/clubhouse-backdoor-v1.png",
+      "background_sha256": "45eac2fa0471eacb9c0c2f08abf23685486602e400c9ccc8220f54bd43b41bcb",
+      "image_size": [
+        1670,
+        941
+      ],
+      "world_scale": [
+        1.0011976047904192,
+        1.0
+      ],
+      "background_bytes": 1958145,
+      "editable_source": "output/ballpark/scenes-v4/clubhouse-layers.svg",
+      "editable_source_sha256": "11b897900069a8d708025a2c62ba359176196a698f0734e9b06f9db3aba4a9a8",
+      "runtime_path": "output/ballpark/scenes-v4/clubhouse.json",
+      "runtime_sha256": "0c3203950e9ef67f1c995b0f5b6b0bced966c74bc7284eeb9effe968f44d869e",
+      "collision_count": 17,
+      "foreground_count": 9,
+      "portal_count": 3,
+      "decoded_texture_bytes": 6285880,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    },
+    {
+      "scene_id": "team_office",
+      "room": "team-office",
+      "background": "frontend/assets/ballpark/team-office-clean-v1.png",
+      "background_sha256": "626ab1765aa2c723ee44e93843f030057ea65b2a2feaf919e054617d5afb113b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2330257,
+      "editable_source": "output/ballpark/scenes-v4/team-office-layers.svg",
+      "editable_source_sha256": "c50b660085bf1b5d84df6ec1960f9566e6cede3f80e04b8b625bd2b7c6937a6c",
+      "runtime_path": "output/ballpark/scenes-v4/team-office.json",
+      "runtime_sha256": "c8cec63e9ad8cf595559151719a25175e7cc966c75eb42e3d1fda038f538f83c",
+      "collision_count": 31,
+      "foreground_count": 12,
+      "portal_count": 3,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    },
+    {
+      "scene_id": "training_lab",
+      "room": "training-lab",
+      "background": "frontend/assets/ballpark/training-lab-v1.png",
+      "background_sha256": "1b272c393a1b47cf026002b4347f1f305ae46cc0c49e348e9d1870d67fe31895",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2739518,
+      "editable_source": "output/ballpark/scenes-v4/training-lab-layers.svg",
+      "editable_source_sha256": "76a46c327f6d12bb2076ba54670b3562343adc2adf14995476878ad62089618b",
+      "runtime_path": "output/ballpark/scenes-v4/training-lab.json",
+      "runtime_sha256": "101d5d7f7cb0f686d6bb93f3edd1e8a899810febe7baec8c15075a5941d9470b",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/lab"
+      }
+    },
+    {
+      "scene_id": "video_game_room",
+      "room": "video-game-room",
+      "background": "frontend/assets/ballpark/video-game-room-v1.png",
+      "background_sha256": "250d94e6de2b3fb287718561dd3f5697b9aa968ead8ce466120bfe88363f333b",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2401716,
+      "editable_source": "output/ballpark/scenes-v4/video-game-room-layers.svg",
+      "editable_source_sha256": "976a74b0b7529b3db4823a19f801b3fe6853c57555b37f19e3452786041f450f",
+      "runtime_path": "output/ballpark/scenes-v4/video-game-room.json",
+      "runtime_sha256": "846721365a31e874f5e6edc3c2a10c572a47cc71fc96325dd45a0b32eacc06b0",
+      "collision_count": 33,
+      "foreground_count": 23,
+      "portal_count": 2,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/"
+      }
+    },
+    {
+      "scene_id": "game_center",
+      "room": "game-center",
+      "background": "frontend/assets/ballpark/game-center-v1.png",
+      "background_sha256": "4d360cd7a61e53010ad8896db7b852815660763a3aab1e58a27ad7b3780e3b88",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2717556,
+      "editable_source": "output/ballpark/scenes-v4/game-center-layers.svg",
+      "editable_source_sha256": "94c6d1762a1e64a31dfb06c0a16af2fa2bf591214d9ee1cfda46528184069b7a",
+      "runtime_path": "output/ballpark/scenes-v4/game-center.json",
+      "runtime_sha256": "fc060fcda0e2f7ac324ef1c4481f8ba793cc5aabb2c89517fd2f42eb69e538ac",
+      "collision_count": 21,
+      "foreground_count": 19,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/games/today"
+      }
+    },
+    {
+      "scene_id": "batting_cages",
+      "room": "batting-cages",
+      "background": "frontend/assets/ballpark/batting-cages-v1.png",
+      "background_sha256": "dc409ad4e6e63ce4be2919e439f7fa0e8840fe75676fe6e7e035e43ba6674a35",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2719206,
+      "editable_source": "output/ballpark/scenes-v4/batting-cages-layers.svg",
+      "editable_source_sha256": "87b24300238699fc9fef6901d5d987652064740ac843c345e9b0b9db03b07f7c",
+      "runtime_path": "output/ballpark/scenes-v4/batting-cages.json",
+      "runtime_sha256": "8369da4f3a3d0b902d655adbcd9c4e6d9742e8f3e13ae2aa667b6660a8626f1d",
+      "collision_count": 16,
+      "foreground_count": 14,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/batters"
+      }
+    },
+    {
+      "scene_id": "pitcher_mound",
+      "room": "pitcher-mound",
+      "background": "frontend/assets/ballpark/pitcher-mound-v2.png",
+      "background_sha256": "98a23c298b34b2b2e32684c513f3e63e77284b47da4d95c8391f678fcaf31b4e",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2484770,
+      "editable_source": "output/ballpark/scenes-v4/pitcher-mound-layers.svg",
+      "editable_source_sha256": "a2d7066741366745efc7b2dec7358386100cf08d81a89fc0e08a22395b6b9b5a",
+      "runtime_path": "output/ballpark/scenes-v4/pitcher-mound.json",
+      "runtime_sha256": "2406922d45ddfa71d83acdbae4d6419f37dd80a3cbbc82be487b746e7d2f94b1",
+      "collision_count": 19,
+      "foreground_count": 17,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/pitchers"
+      }
+    },
+    {
+      "scene_id": "clubhouse_smoking_area",
+      "room": "clubhouse-smoking-area",
+      "background": "frontend/assets/ballpark/clubhouse-smoking-area-v1.png",
+      "background_sha256": "bac0f046c161abf04b20cdc9d7d9a5393621ebcd317a44ac9403afde41daf16c",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 1913967,
+      "editable_source": "output/ballpark/scenes-v4/clubhouse-smoking-area-layers.svg",
+      "editable_source_sha256": "4ab2f32ae34ce637cba39adcfbe9f6b6d732a14c61c13f368d67854b53fb26e7",
+      "runtime_path": "output/ballpark/scenes-v4/clubhouse-smoking-area.json",
+      "runtime_sha256": "4421ad2cfc3b51153cd1abba160a9b8e695fd02cf88f5ae5910d8f81c0de0fed",
+      "collision_count": 17,
+      "foreground_count": 15,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/teams"
+      }
+    }
+  ],
+  "required_scene_ids": [
+    "campus",
+    "clubhouse",
+    "team_office",
+    "training_lab",
+    "video_game_room",
+    "game_center",
+    "batting_cages",
+    "pitcher_mound",
+    "clubhouse_smoking_area"
+  ],
+  "object_index": [
+    {
+      "id": "campus/game-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "foreground/game-gate",
+        "portals/game"
+      ],
+      "bounds": [
+        790,
+        540,
+        100,
+        38
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "未來進 Game 新場景；目前仍直連今日賽事",
+      "owner": "E2.2/F1",
+      "context": [
+        "selected_game_optional"
+      ],
+      "fallback": "/games/today",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "game-center",
+          "spawn": "return"
+        }
+      ]
+    },
+    {
+      "id": "campus/batting-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "collision/cages",
+        "portals/batting"
+      ],
+      "bounds": [
+        345,
+        289,
+        56,
+        46
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "未來進打擊場景；目前仍直連打者站",
+      "owner": "E2.3/F2",
+      "context": [
+        "selected_player_optional"
+      ],
+      "fallback": "/batters",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "batting-cages",
+          "spawn": "return"
+        }
+      ]
+    },
+    {
+      "id": "campus/pitching-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "collision/pitching-field",
+        "portals/pitching"
+      ],
+      "bounds": [
+        1440,
+        350,
+        100,
+        20
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "未來進投手場景；目前仍直連投手站",
+      "owner": "E2.4/F2",
+      "context": [
+        "selected_player_optional"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "pitcher-mound",
+          "spawn": "return"
+        }
+      ]
+    },
+    {
+      "id": "campus/training-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "portals/training"
+      ],
+      "bounds": [
+        165,
+        569,
+        145,
+        35
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "進既有 Training & Lab 場景",
+      "owner": "F3",
+      "context": [],
+      "fallback": "/lab",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "training-lab"
+        }
+      ]
+    },
+    {
+      "id": "campus/video-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "portals/video"
+      ],
+      "bounds": [
+        1500,
+        577,
+        125,
+        34
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "進既有 Video / Game Room",
+      "owner": "F6",
+      "context": [],
+      "fallback": "/",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "video-game-room"
+        }
+      ]
+    },
+    {
+      "id": "campus/clubhouse-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "portals/clubhouse"
+      ],
+      "bounds": [
+        245,
+        831,
+        165,
+        35
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "進主隊休息室；Viewing team 可暫時切隊",
+      "owner": "F4",
+      "context": [
+        "viewing_team"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "clubhouse"
+        }
+      ]
+    },
+    {
+      "id": "campus/office-entry",
+      "scene": "campus",
+      "geometry_refs": [
+        "portals/team-office"
+      ],
+      "bounds": [
+        1335,
+        831,
+        165,
+        35
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "進主隊辦公室",
+      "owner": "F5",
+      "context": [
+        "viewing_team"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "team-office"
+        }
+      ]
+    },
+    {
+      "id": "campus/scoreboard",
+      "scene": "campus",
+      "geometry_refs": [
+        "hotspots/leaderboard"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "排行榜；保留排名母體、as-of 及直接入口",
+      "owner": "F1",
+      "context": [
+        "season",
+        "ranking_filters"
+      ],
+      "fallback": "/leaderboards",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse/player-list",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "portals/roster"
+      ],
+      "bounds": [
+        1040,
+        285,
+        95,
+        40
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "官方 active roster 與直接選人；fresh/stale/unavailable",
+      "owner": "F4",
+      "context": [
+        "viewing_team",
+        "official_roster_retrieved_at"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "route": "/teams"
+        }
+      ]
+    },
+    {
+      "id": "clubhouse/north-lockers",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "collision/north-wall-lockers"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "預留選定球員資料／對話；不能把櫃上數字推定為真實名單",
+      "owner": "F4",
+      "context": [
+        "viewing_team",
+        "official_roster_player"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse/south-lockers",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "collision/south-east-lockers",
+        "collision/south-west-lockers",
+        "foreground/bottom-locker-row",
+        "foreground/bottom-locker-row-east"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "同北側；畫面群組可依核准 NPC 站位再拆穩定子 ID",
+      "owner": "F4",
+      "context": [
+        "viewing_team",
+        "official_roster_player"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse/smoking-door",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "portals/smoking-door"
+      ],
+      "bounds": [
+        1318,
+        292,
+        42,
+        52
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "??? C ?????Enter / Exit ??????????????????????????????????",
+      "owner": "E2.1 user-requested annex",
+      "context": [
+        "viewing_team"
+      ],
+      "fallback": "/ballpark/play?room=clubhouse-smoking-area",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "clubhouse-smoking-area",
+          "spawn": "return"
+        }
+      ]
+    },
+    {
+      "id": "clubhouse/npc-lounge-points",
+      "scene": "clubhouse",
+      "geometry_refs": [],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "8–10 名代表球員，走近對話／個人數據；不是本輪新增角色",
+      "owner": "E3.3/F4",
+      "context": [
+        "viewing_team",
+        "official_roster_player"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse/tv-cabinet",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "collision/tv-plant",
+        "collision/tv-upper-cabinet"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋，暫不新增獨立影片功能",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse/lounge-dining",
+      "scene": "clubhouse",
+      "geometry_refs": [
+        "collision/dining-set",
+        "collision/east-sofa",
+        "collision/lounge-table",
+        "collision/north-sofa",
+        "collision/south-sofa"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋；NPC 不可因布置堵住中央通道",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/coach-rotation",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/coach-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "主隊輪值",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "season"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/coach-lineup",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/coach-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "主隊打線；資料未提供時顯示 unavailable",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "selected_game_optional"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/coach-bullpen",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/coach-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "主隊牛棚",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "season"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/coach-workspace",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/coach-desk",
+        "foreground/coach-whiteboard"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "球隊 Coach 面板直接選單，三看板相同來源",
+      "owner": "F5",
+      "context": [
+        "viewing_team"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/gm-trades",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/manager-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "球隊交易／異動紀錄，不是執行真實交易",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "as_of"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/gm-payroll",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/manager-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "薪資資料；資料來源／功能未發布前不可用",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "season",
+        "salary_source"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/gm-contracts",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/manager-rear-wall-equipment"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "合約資料；無可靠資料時明示 unavailable",
+      "owner": "F5",
+      "context": [
+        "viewing_team",
+        "contract_source"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/gm-workspace",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/manager-desk",
+        "foreground/manager-desk"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "球隊 GM 面板直接選單",
+      "owner": "F5",
+      "context": [
+        "viewing_team"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/admin-frame",
+      "scene": "team-office",
+      "geometry_refs": [
+        "hotspots/admin-frame"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "既有後台熱區；不得另加浮動彩蛋按鈕",
+      "owner": "C4/E3.1",
+      "context": [],
+      "fallback": "/admin/updates",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/alcove-cabinet",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/central-door-alcove",
+        "collision/manager-entry-plant-cabinet"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋，不新增假門功能",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "team-office/meeting-lounge",
+      "scene": "team-office",
+      "geometry_refs": [
+        "collision/coach-table-chairs",
+        "collision/manager-coffee-table",
+        "collision/manager-sofa"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋，保留既有側邊通道",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "training-lab/lab-directory",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "portals/lab"
+      ],
+      "bounds": [
+        1110,
+        575,
+        350,
+        30
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "完整研究工具選單與直接入口",
+      "owner": "F3",
+      "context": [
+        "research_release_status"
+      ],
+      "fallback": "/lab",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "route": "/lab"
+        }
+      ]
+    },
+    {
+      "id": "training-lab/stuff-location",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "collision/analytics-desk",
+        "foreground/analytics-desk"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "跨球員分析；共用既有 Lab，保留版本與研究標示",
+      "owner": "F3",
+      "context": [
+        "season",
+        "selected_players",
+        "metric_version"
+      ],
+      "fallback": "/lab",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "training-lab/stamina-performance",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "collision/tracking-screen",
+        "foreground/tracking-screen"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "兩條獨立研究／狀態工具；不捏造合成分數",
+      "owner": "F3",
+      "context": [
+        "selected_player",
+        "as_of",
+        "research_release_status"
+      ],
+      "fallback": "/lab",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "training-lab/comparison-calculator",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "collision/lab-workbench",
+        "foreground/lab-workbench"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "共用比較入口、Stuff calculator 與其限制",
+      "owner": "F3",
+      "context": [
+        "selected_players",
+        "metric_version"
+      ],
+      "fallback": "/lab",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "training-lab/cross-domain-directory",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "collision/lab-workbench"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "其他已發布研究、捕手／守備等工具由選單提供，不要求每工具重畫一物件",
+      "owner": "F3",
+      "context": [
+        "research_release_status"
+      ],
+      "fallback": "/lab",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "training-lab/training-equipment",
+      "scene": "training-lab",
+      "geometry_refs": [
+        "collision/batting-net",
+        "collision/tracking-camera",
+        "collision/tracking-net",
+        "collision/weight-rack"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋；不把測量器材畫面說成實際生理檢測或新模擬",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/lab",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "video-game-room/recommended-screen",
+      "scene": "video-game-room",
+      "geometry_refs": [
+        "foreground/television",
+        "portals/recommendations"
+      ],
+      "bounds": [
+        350,
+        307,
+        180,
+        34
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "沿用首頁推薦影片；目前 runtime action 只開推薦說明／首頁連結，未直接嵌入完整影片功能",
+      "owner": "F6",
+      "context": [
+        "video_identity",
+        "availability"
+      ],
+      "fallback": "/",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "action": "video"
+        }
+      ]
+    },
+    {
+      "id": "video-game-room/video-library",
+      "scene": "video-game-room",
+      "geometry_refs": [
+        "collision/review-workstation",
+        "collision/video-library"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "同一推薦影片清單的次入口，不另外建立不相干的影片庫",
+      "owner": "F6",
+      "context": [
+        "video_identity",
+        "availability"
+      ],
+      "fallback": "/",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "video-game-room/future-minigames",
+      "scene": "video-game-room",
+      "geometry_refs": [
+        "collision/arcade-east",
+        "collision/arcade-west",
+        "collision/game-bay-east",
+        "collision/game-bay-west"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "僅預留未來小遊戲空間，本輪不製作遊戲",
+      "owner": "F6",
+      "context": [],
+      "fallback": "/",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "video-game-room/lounge-vending",
+      "scene": "video-game-room",
+      "geometry_refs": [
+        "collision/lounge-armchair",
+        "collision/lounge-sofa",
+        "collision/lounge-south-sofa",
+        "collision/vending"
+      ],
+      "bounds": null,
+      "bounds_status": "reference_group_or_unlocated_candidate",
+      "planned_feature": "本期裝飾／阻擋，不新增經濟系統",
+      "owner": "E2",
+      "context": [],
+      "fallback": "/",
+      "runtime_binding": "not_connected_by_this_package",
+      "runtime_targets": []
+    },
+    {
+      "id": "game-center/schedule-board",
+      "scene": "game-center",
+      "geometry_refs": [
+        "collision/schedule-wall-equipment",
+        "foreground/schedule-board-and-plants"
+      ],
+      "bounds": [
+        688,
+        188,
+        296,
+        190
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "今日賽事、比分與選定比賽",
+      "owner": "F1",
+      "context": [
+        "date",
+        "selected_game"
+      ],
+      "fallback": "/games/today",
+      "runtime_binding": "pending_E3.2_F1",
+      "runtime_targets": []
+    },
+    {
+      "id": "game-center/game-analysis-console",
+      "scene": "game-center",
+      "geometry_refs": [
+        "collision/analysis-bay",
+        "foreground/analysis-console"
+      ],
+      "bounds": [
+        146,
+        264,
+        396,
+        105
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "Box Score／Location／Sequence／Movement 以同一場比賽與球員選擇切頁",
+      "owner": "F1",
+      "context": [
+        "selected_game",
+        "selected_player",
+        "selected_pitch_optional"
+      ],
+      "fallback": "/games/today",
+      "runtime_binding": "pending_E3.2_F1",
+      "runtime_targets": []
+    },
+    {
+      "id": "game-center/replay-screen",
+      "scene": "game-center",
+      "geometry_refs": [
+        "collision/in-game-bay",
+        "foreground/in-game-console"
+      ],
+      "bounds": [
+        1137,
+        261,
+        384,
+        120
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "同一比賽／球路的 Historical Pitch Replay 與影片；不可改成 synthetic simulation",
+      "owner": "F1",
+      "context": [
+        "selected_game",
+        "selected_pitch",
+        "video_identity_optional"
+      ],
+      "fallback": "/games/today",
+      "runtime_binding": "pending_E3.2_F1",
+      "runtime_targets": []
+    },
+    {
+      "id": "game-center/return",
+      "scene": "game-center",
+      "geometry_refs": [
+        "portals/return"
+      ],
+      "bounds": [
+        754,
+        850,
+        167,
+        68
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "靠近按 R 到 Campus GAME 入口外",
+      "owner": "E2.2/E4",
+      "context": [
+        "origin_arrival"
+      ],
+      "fallback": "/ballpark/play",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "campus",
+          "spawn": "game"
+        }
+      ]
+    },
+    {
+      "id": "batting-cages/batter-directory",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "collision/directory-kiosk",
+        "foreground/directory-kiosk"
+      ],
+      "bounds": [
+        143,
+        551,
+        148,
+        103
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "打者搜尋與選定球員；完整站內工具選單",
+      "owner": "F2",
+      "context": [
+        "selected_player",
+        "season"
+      ],
+      "fallback": "/batters",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "batting-cages/batter-analysis",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "collision/stats-workbench",
+        "foreground/stats-workbench"
+      ],
+      "bounds": [
+        94,
+        228,
+        229,
+        97
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "打者個人分析及排行榜；先選人，不能打開無身分的個人頁",
+      "owner": "F2",
+      "context": [
+        "selected_player",
+        "season",
+        "filters"
+      ],
+      "fallback": "/batters",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "batting-cages/batter-comparison",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "collision/compare-workbench",
+        "foreground/compare-workbench"
+      ],
+      "bounds": [
+        1354,
+        222,
+        230,
+        121
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "球員／期間／球隊／打線比較共用選單",
+      "owner": "F2",
+      "context": [
+        "selected_players",
+        "period",
+        "viewing_team_optional"
+      ],
+      "fallback": "/batters/comparison",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "batting-cages/batter-lab",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "collision/lab-terminal",
+        "foreground/lab-terminal"
+      ],
+      "bounds": [
+        1363,
+        555,
+        220,
+        104
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "既有 Batter Lab，保留 Lab／來源／缺資料限制，不自行發布候選指標",
+      "owner": "F2",
+      "context": [
+        "selected_player",
+        "research_release_status"
+      ],
+      "fallback": "/batters/lab",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "batting-cages/practice-cage",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "collision/east-practice-cage",
+        "collision/west-practice-cage",
+        "foreground/east-practice-cage",
+        "foreground/west-practice-cage"
+      ],
+      "bounds": [
+        358,
+        110,
+        958,
+        390
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "場景裝飾與阻擋，不代表已實作打擊小遊戲",
+      "owner": "E2.3",
+      "context": [],
+      "fallback": "/batters",
+      "runtime_binding": "decoration_only_no_practice_game",
+      "runtime_targets": []
+    },
+    {
+      "id": "batting-cages/return",
+      "scene": "batting-cages",
+      "geometry_refs": [
+        "portals/return"
+      ],
+      "bounds": [
+        755,
+        850,
+        165,
+        68
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "靠近按 R 到 Campus Batting 入口外",
+      "owner": "E2.3/E4",
+      "context": [
+        "origin_arrival"
+      ],
+      "fallback": "/ballpark/play",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "campus",
+          "spawn": "batting"
+        }
+      ]
+    },
+    {
+      "id": "pitcher-mound/pitcher-directory",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/directory-kiosk",
+        "foreground/directory-kiosk"
+      ],
+      "bounds": [
+        151,
+        611,
+        145,
+        96
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "投手搜尋／選人及完整站內工具選單",
+      "owner": "F2",
+      "context": [
+        "selected_player",
+        "season"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/pitch-analysis",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/analysis-chair",
+        "collision/pitch-analysis-console",
+        "foreground/analysis-chair",
+        "foreground/pitch-analysis-console"
+      ],
+      "bounds": [
+        104,
+        210,
+        281,
+        125
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "僅保留個人球路、位置與 spin；In game 移至兩條牛棚道，不在此重複提供入口",
+      "owner": "F2",
+      "context": [
+        "selected_player",
+        "season",
+        "filters"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "pending_E3.2_F2_Shape_only",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/pitcher-comparison",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/compare-console",
+        "foreground/compare-console"
+      ],
+      "bounds": [
+        1305,
+        207,
+        273,
+        123
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "個人／期間比較與相似投手工具",
+      "owner": "F2",
+      "context": [
+        "selected_players",
+        "period"
+      ],
+      "fallback": "/comparison/personal",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/pitcher-tools",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/tools-rack",
+        "foreground/tools-rack"
+      ],
+      "bounds": [
+        1328,
+        611,
+        255,
+        144
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "保留既有投手工具與輪值／牛棚 direct links；球隊管理主入口仍在 Team Office，跨領域研究主入口仍 Training",
+      "owner": "F2",
+      "context": [
+        "selected_player_optional",
+        "viewing_team_optional",
+        "research_release_status"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "pending_E3.2_F2",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/in-game-west",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/west-bullpen-lane",
+        "foreground/west-bullpen-lane"
+      ],
+      "bounds": [
+        393,
+        145,
+        329,
+        577
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "未來隨機刷新所屬球隊投手在道內投球；可用等價 DOM 選單選投手及出賽場次，共用 Personal In game 逐球／影片。預設球隊為 favorite team，Viewing team 切換時跟隨瀏覽球隊；以官方 active roster 的投手候選為準。投球人體動作為明示 generic 展示，不宣稱歷史 mechanics 重建。尚未實作 actor／動畫或業務接線",
+      "owner": "E3.2/E4/F2",
+      "context": [
+        "viewing_team",
+        "favorite_team_default",
+        "official_active_roster",
+        "selected_player",
+        "season",
+        "selected_game",
+        "selected_pitch_optional"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "pending_E3.2_E4_F2_shared_Personal_In_game",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/in-game-east",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "collision/east-bullpen-lane",
+        "foreground/east-bullpen-lane"
+      ],
+      "bounds": [
+        952,
+        145,
+        329,
+        577
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "與左牛棚相同的所屬球隊投手隨機刷新／投球展示及投手、場次選單；兩道各有穩定物件 ID。隨機不覆蓋使用者手動選擇；無 roster／無出賽資料須有明確 unavailable，不能造球員／場次。刷新頻率、兩道去重與動畫規格在 F2 實作前細化，現在未執行",
+      "owner": "E3.2/E4/F2",
+      "context": [
+        "viewing_team",
+        "favorite_team_default",
+        "official_active_roster",
+        "selected_player",
+        "season",
+        "selected_game",
+        "selected_pitch_optional"
+      ],
+      "fallback": "/pitchers",
+      "runtime_binding": "pending_E3.2_E4_F2_shared_Personal_In_game",
+      "runtime_targets": []
+    },
+    {
+      "id": "pitcher-mound/return",
+      "scene": "pitcher-mound",
+      "geometry_refs": [
+        "portals/return"
+      ],
+      "bounds": [
+        755,
+        878,
+        165,
+        40
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "靠近按 R 到 Campus Pitcher 入口外",
+      "owner": "E2.4/E4",
+      "context": [
+        "origin_arrival"
+      ],
+      "fallback": "/ballpark/play",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "campus",
+          "spawn": "pitching"
+        }
+      ]
+    },
+    {
+      "id": "clubhouse-smoking-area/bench-west",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [
+        "collision/bench-west",
+        "foreground/bench-west"
+      ],
+      "bounds": [
+        181,
+        350,
+        354,
+        132
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "?????????????? action",
+      "owner": "E2.1 annex",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "decoration_only",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse-smoking-area/bench-east",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [
+        "collision/bench-east",
+        "foreground/bench-east"
+      ],
+      "bounds": [
+        1137,
+        350,
+        357,
+        132
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "?????????????? action",
+      "owner": "E2.1 annex",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "decoration_only",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse-smoking-area/ashtray",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [
+        "collision/ashtray",
+        "foreground/ashtray"
+      ],
+      "bounds": [
+        1258,
+        526,
+        65,
+        132
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "?????????????? action",
+      "owner": "E2.1 annex",
+      "context": [],
+      "fallback": "/teams",
+      "runtime_binding": "decoration_only",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse-smoking-area/chat-spot-west",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [],
+      "bounds": [
+        560,
+        480,
+        80,
+        80
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "???????????????????????????????????????????????? NPC??????????????????? F4 ??",
+      "owner": "E3.3/F4",
+      "context": [
+        "viewing_team",
+        "official_active_roster",
+        "npc_dialogue_state"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "pending_E3.3_F4_random_NPC_smoking_and_chat",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse-smoking-area/chat-spot-east",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [],
+      "bounds": [
+        1030,
+        480,
+        80,
+        80
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "???????????????????????????????????????????????? NPC??????????????????? F4 ??",
+      "owner": "E3.3/F4",
+      "context": [
+        "viewing_team",
+        "official_active_roster",
+        "npc_dialogue_state"
+      ],
+      "fallback": "/teams",
+      "runtime_binding": "pending_E3.3_F4_random_NPC_smoking_and_chat",
+      "runtime_targets": []
+    },
+    {
+      "id": "clubhouse-smoking-area/return",
+      "scene": "clubhouse-smoking-area",
+      "geometry_refs": [
+        "portals/return"
+      ],
+      "bounds": [
+        755,
+        835,
+        165,
+        78
+      ],
+      "bounds_status": "authored",
+      "planned_feature": "??? R ? Clubhouse smoking-door ??????????",
+      "owner": "E2.1 annex",
+      "context": [
+        "viewing_team",
+        "origin_arrival"
+      ],
+      "fallback": "/ballpark/play?room=clubhouse&spawn=smoking-door",
+      "runtime_binding": "portal",
+      "runtime_targets": [
+        {
+          "room": "clubhouse",
+          "spawn": "smoking-door"
+        }
+      ]
+    }
+  ],
+  "entrance_pilot": "output/ballpark/scenes-v4/game-entrance-pilot.json",
+  "entrance_editable_source": "output/ballpark/scenes-v4/game-entrance-layers.svg",
+  "entrance_editable_sha256": "98bc5fd938a847d7fe177d37d23025166e60aa645afe94bf9a39e2c1316fce33",
+  "totals": {
+    "collision_count": 211,
+    "foreground_count": 147,
+    "portal_count": 21,
+    "background_bytes": 22587524,
+    "decoded_texture_bytes": 56633144
+  }
+}

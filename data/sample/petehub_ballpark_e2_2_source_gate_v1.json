@@ -1,0 +1,22 @@
+{
+  "schema_version":1,
+  "slice":"E2.2",
+  "updated_at":"2026-11-04",
+  "source":"frontend/assets/ballpark/scenes/scene-kit-e2-2-v1.json",
+  "source_sha256":"835102802d88957220661749c46b27c81bf12030e2222d811209e3b59ddf0b9b",
+  "base_five_scene_sha256_unchanged":"0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+  "art_sha256":"4d360cd7a61e53010ad8896db7b852815660763a3aab1e58a27ad7b3780e3b88",
+  "art_acceptance":"User explicitly accepted all three new facility designs on 2026-11-04",
+  "source_only_status":"PASS",
+  "checks":[
+    {"command":"node frontend/scripts/check-ballpark-scenes.mjs e2-2-v1","status":"PASS","collision":21,"foreground":19,"portals":1,"reachable_exit":"return","numeric_positions":10943,"object_approaches":3},
+    {"command":"backend/.venv/Scripts/python.exe backend/scripts/build_ballpark_scenes.py --version e2-2-v1 --check","status":"PASS","editable_exports":"output/ballpark/scenes-e2-2-v1/"},
+    {"command":"node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json","cwd":"frontend","status":"PASS","note":"Direct typecheck only; no Nuxt prepare/build, browser or dev-server restart."}
+  ],
+  "production_ready":false,
+  "user_gameplay_acceptance":"Game interface explicitly accepted by user on 2026-11-04; E2.2 done",
+  "source_hash_note":"source_sha256 is the original source-check snapshot. Later Game acceptance metadata changed only; geometry checks were not rerun.",
+  "limitations":["Numeric geometry is not visual/collision-feel acceptance.","Schedule/Analysis/In game object actions remain E3.2/F1; canonical direct Game URL retained.","Batting/Pitcher now have independent e2-3-4-v1 layered previews pending user acceptance; no E2.5 unification or E3/E4/E5/F work."],
+  "manual_url":"http://127.0.0.1:3000/ballpark/play?room=game-center",
+  "manual_checks":["Campus GAME E/Enter enters Game; fixed navigation also opens it.","Central/cross aisles and three consoles' approach spaces are usable; desks, benches, shelves and walls block appropriately.","Foreground depth is appropriate around chairs, benches, shelves and doorway; no duplicated artwork or disappearing avatar.","Near south CAMPUS exit, R returns to Campus GAME arrival, not the previous Training page; repeat entry/exit.","Viewing team remains in URL; direct Game and Static map links remain available. Object actions are visibly not yet connected."]
+}

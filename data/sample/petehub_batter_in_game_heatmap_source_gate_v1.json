@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "batter-in-game-zone-heatmap-v1",
+  "updated_at": "2026-11-05",
+  "owner_slice": "Game Center3H; BallparkF2 consumes shared module later",
+  "status": "source_only_PASS; user_accepted_2026-11-05",
+  "sources": [
+    {
+      "path": "backend/app/api/schemas/batter_zone_rates.py",
+      "sha256": "adfe643c7800800b90cfcf3ee6a03e7f172b718043ededdd7b393f8cf51b223f"
+    },
+    {
+      "path": "backend/app/services/batter_zone_rates_service.py",
+      "sha256": "b54f4972cdae2ccc05dab0a9bec4405bc66a34106b9637312a65f7841a255129"
+    },
+    {
+      "path": "backend/app/api/routes/batters.py",
+      "sha256": "6a57b71e7dfc111cf04da5b465b43c9da455e4a6067b77640f64addca89c627b"
+    },
+    {
+      "path": "backend/tests/test_batter_zone_rates.py",
+      "sha256": "97d66c328d84fc33d6eb20962332901a816cb97a55d32abe9fc981d5979d2e77"
+    },
+    {
+      "path": "frontend/components/charts/BatterInGameHeatmap.vue",
+      "sha256": "4e4f37bbd5750d6bd5e6026eaf87c6f1f9ab6fba5f514d27dd4c57392f573649"
+    },
+    {
+      "path": "frontend/components/charts/PitchReplayChart.vue",
+      "sha256": "a2fe62fff6785112f1842e2230e03fc6e7633bbd85d14db6b505e2564f86b746"
+    },
+    {
+      "path": "frontend/components/charts/PitchReplayPanel.vue",
+      "sha256": "1d48bb8933b9f028e16770d26849a35f17cf1a1348b2651f160e5ac78db96c6f"
+    },
+    {
+      "path": "frontend/utils/batterZoneRates.ts",
+      "sha256": "3fc00ad347f4398de76457ce72c18aa16748d8bfd20b4dd1729a423fb31191ed"
+    },
+    {
+      "path": "frontend/composables/useApi.ts",
+      "sha256": "864d1b4d25defdffba9ac97fed118f1c58351bfe3db5db09ab18b3839cda6a59"
+    },
+    {
+      "path": "frontend/types/api.ts",
+      "sha256": "195011e80ae7829a18012c34efba20d8052c6ff432b4bb9c0d2a2c57b8d01599"
+    }
+  ],
+  "endpoint": "GET /api/batters/personal/zone-rates",
+  "contract_version": "batter_zone_rates_v1",
+  "scope": "Selected season regular-season completed unique batter PA>30 before hand split; ratio heatmap from selected batter and pitcher p_throws, not head-to-head stats",
+  "metrics": [
+    "Swing%",
+    "Contact%",
+    "Whiff%",
+    "SwStr%",
+    "Called Strike%",
+    "Strike%",
+    "CSW%",
+    "Z-Swing%",
+    "Z-Contact%",
+    "O-Swing%",
+    "O-Contact%",
+    "Foul%",
+    "In-play%"
+  ],
+  "regions": {
+    "inside": 9,
+    "outside": 8,
+    "normalization": "17-inch width, each pitch sz_bot/top; counted1.5-3.5ft fallback; outside extent grouped, not bounded sample clipping"
+  },
+  "checks": [
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pytest tests/test_batter_zone_rates.py -q",
+      "cwd": "backend",
+      "status": "PASS",
+      "tests": 7,
+      "coverage": [
+        "30/31 PA",
+        "unique completedPA notpitchcount",
+        "whole-season eligibility beforehandfilter",
+        "rate denominators",
+        "boundaries/missing/nullable coordinates",
+        "height normalization/unknownhand",
+        "DuckDBenriched/regular-season/batter identity"
+      ]
+    },
+    {
+      "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json",
+      "cwd": "frontend",
+      "status": "PASS",
+      "note": "One directtypecheck; no Nuxtprepare/build or server."
+    },
+    {
+      "check": "Actual2026 season read-only aggregate",
+      "status": "PASS",
+      "batter_id": 682998,
+      "season_pa": 671,
+      "R": {
+        "split_pitches": 1845,
+        "located": 1832,
+        "sum_cell_pitches": 1832
+      },
+      "L": {
+        "split_pitches": 800,
+        "located": 795,
+        "sum_cell_pitches": 795
+      }
+    },
+    {
+      "check": "ExistingAPI unauthenticated request",
+      "http_status": 401,
+      "note": "Access protected. No alternate account or logged-in UI/API success claimed."
+    }
+  ],
+  "unchanged": [
+    "Statcast trajectory coordinates/formulas",
+    "pitch/video identity and replay modes",
+    "legacyBatterPersonalDiscipline fixed zone/endpoint",
+    "BallparkE2accepted scenes; E3notstarted"
+  ],
+  "limitations": [
+    "Visual alignment, keyboard/narrow, play/video and actual request interaction require user acceptance.",
+    "Eventflags are shared, but new normalized17-inch zone differs from unchanged legacy fixedDiscipline x?.83,z1.5-3.5.",
+    "Low-sample styling at denominator<10 is a display cue, not statistical reliability certification; zero denominator isnull.",
+    "Client lifetime cache32entries/2min, serverLRU128 keyed DB/WALrevision; switchingmetric reuses payload. Unknownhand requires explicit choice."
+  ],
+  "manual_urls": [
+    "http://127.0.0.1:3000/pitcher-personal?tab=in-game",
+    "http://127.0.0.1:3000/games/today"
+  ],
+  "manual_checks": [
+    "PersonalIngame selectouting/Catcher: correctbatter, seasonPA/hand, loading/missing states.",
+    "Auto/manualL/R/All; changingbatter/pitcher/year/game doesnot retain staleperson.",
+    "Switch13rates and inspect counts/null/0/faintsmall samples; PA<=30 noheatmap.",
+    "Rotate/zoom alignment; toggleoff/Pitcherview restores originaltrajectory/selection/play/video.",
+    "SameGamepanel behavior and keyboard/narrow use."
+  ],
+  "human_acceptance": "user_accepted_2026-11-05",
+  "production_ready": false
+}

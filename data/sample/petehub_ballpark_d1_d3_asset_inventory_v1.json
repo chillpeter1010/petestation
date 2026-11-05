@@ -99,7 +99,8 @@
     "neutral_sprite": "frontend/assets/ballpark/characters/user-preview-v1.png",
     "human_acceptance": "user_accepted_D4_and_all_followups_2026-11-02"
   },
-  "d5_source_evidence": "data/sample/petehub_ballpark_d5_source_gate_v2.json",
-  "d5_manual_acceptance": {"status":"pending_user","checklist":"data/sample/petehub_ballpark_d5_manual_acceptance_v1.json","items":["team_office_rear_collision","loading_depth_and_atlas_bleed","narrow_real_device","reduced_motion","asset_failure_fallback"],"prior_D4_and_scene_acceptance":"passed_by_user_2026-11-02_not_reopened"},
-  "production_ready": false
+  "d5_source_evidence": "data/sample/petehub_ballpark_d5_release_gate_v1.json",
+  "d5_manual_acceptance": {"status":"user_accepted","accepted_at":"2026-11-04","checklist":"data/sample/petehub_ballpark_d5_manual_acceptance_v1.json","items":["team_office_rear_collision","loading_depth_and_atlas_bleed","narrow_real_device","reduced_motion","asset_failure_fallback"],"prior_D4_and_scene_acceptance":"passed_by_user_2026-11-02_not_reopened","device_browser_details":"not_provided_no_measured_performance_claim"},
+  "readiness_scope": "D5_asset_package_only_not_application_or_E6_release",
+  "production_ready": true
 }

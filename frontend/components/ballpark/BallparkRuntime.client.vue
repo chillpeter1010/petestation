@@ -15,7 +15,7 @@
         <div class="ballpark-runtime__state-actions">
           <button type="button" @click="mountRuntime">Try again</button>
           <NuxtLink to="/ballpark">Open static Ballpark</NuxtLink>
-          <NuxtLink :to="fallbackRoute || '/'">Open Classic UI</NuxtLink>
+          <NuxtLink :to="fallbackRoute || '/'" @click="emit('classic')">Open Classic UI</NuxtLink>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
         <strong>{{ worldState.renderer }}</strong>
       </div>
       <button type="button" :disabled="status !== 'ready'" @click="resetPlayer">Safe reset</button>
-      <button type="button" :disabled="status !== 'ready' || !worldState.nearby" @click="interact">Enter / Exit</button>
+      <button ref="interactButton" type="button" :disabled="status !== 'ready' || !worldState.nearby || paused" @click="interact">Interact / Enter / Exit</button>
     </aside>
 
     <div class="ballpark-runtime__controls" aria-label="Touch movement controls">
@@ -61,17 +61,35 @@
     </div>
 
     <p id="ballpark-runtime-title" class="ballpark-runtime__instructions">
-      Move with WASD, arrow keys, gamepad or touch. Use E or Enter at facility entrances; press R near a room’s exit to return to Ballpark. The Enter / Exit button also works. Safe reset returns to this room’s spawn.
+      Move with WASD, arrow keys, gamepad or touch. Use E or Enter near objects and guides, or click an object / use the room object menu. Use C near the Clubhouse smoking-area door; R near an exit returns to Clubhouse or Campus. Interact / Enter / Exit also works. Panels pause movement. Safe reset returns to this room’s spawn.
     </p>
     <p v-if="worldState.characterWarning" class="ballpark-runtime__instructions" role="status">{{ worldState.characterWarning }}</p>
+    <p v-if="worldState.restoreWarning" class="ballpark-runtime__instructions" role="status">{{ worldState.restoreWarning }}</p>
+    <details class="ballpark-runtime__diagnostics">
+      <summary>Runtime options / E6 recording</summary>
+      <div class="diagnostic-actions"><label><input v-model="reducedMotion" type="checkbox" @change="restartWithPosition"> Reduced motion</label><label><input v-model="preferCanvas" type="checkbox" @change="restartWithPosition"> Use Canvas renderer</label>
+        <button type="button" :disabled="status!=='ready'||recording" @click="startRecording">Record 20 seconds</button>
+        <button v-if="report" type="button" @click="downloadReport">Download recording JSON</button>
+      </div>
+      <p v-if="recording" role="status">Recording: walk normally for 20 seconds. Hidden tabs and paused panels are excluded.</p>
+      <p v-else-if="report" role="status">Samples {{ report.sample_count }} · walking {{ report.moving_samples }} · p95 {{ report.p95_ms?.toFixed(1) ?? '—' }} ms · {{ report.interpretation }}</p>
+      <p v-if="report?.interpretation==='offer_classic_fallback'">Frame time was high in this sample. <NuxtLink :to="fallbackRoute || '/'" @click="emit('classic')">Use Classic UI</NuxtLink> or choose Canvas.</p>
+      <p>Browser-local measurements only. This is not a production/device release certificate. Memory is unavailable if the browser does not expose it.</p>
+    </details>
   </section>
 </template>
 
 <script setup lang="ts">
 import type { BallparkPortalTarget, BallparkRoom, BallparkRuntimeHandle, BallparkRuntimeState } from './runtime/createBallparkGame'
+import { createRuntimeLoadGate } from './runtime/runtimeGuards'
+import type { ObjectIntent } from './runtime/interactionCatalog'
+import type { WorldPosition } from './runtime/worldState'
+import { createFrameRecorder, lifecycleSnapshot } from './runtime/runtimeTelemetry'
 
-const props = defineProps<{ room: BallparkRoom; arrivalId?: string; allowAdmin?: boolean; paused?: boolean; fallbackRoute?: string }>()
-const emit = defineEmits<{ portal: [target: BallparkPortalTarget] }>()
+const props = defineProps<{ room: BallparkRoom; arrivalId?: string; savedPosition?: WorldPosition; allowAdmin?: boolean; paused?: boolean; fallbackRoute?: string }>()
+const emit = defineEmits<{ portal: [target: BallparkPortalTarget]; object: [intent: ObjectIntent]; state: [state: BallparkRuntimeState]; classic:[] }>()
+const interactButton = ref<HTMLButtonElement | null>(null)
+defineExpose({ focusInteraction: () => interactButton.value?.focus({preventScroll:true}), snapshot:()=>runtime.value?.snapshot() })
 const { user } = useAuth()
 
 type RuntimeStatus = 'loading' | 'ready' | 'error'
@@ -81,6 +99,8 @@ const status = ref<RuntimeStatus>('loading')
 const errorMessage = ref('The runtime is unavailable on this device. Use the static Ballpark map instead.')
 const runtime = shallowRef<BallparkRuntimeHandle | null>(null)
 const worldState = ref<BallparkRuntimeState>({
+  room:props.room,
+  facing:'south',
   status: 'paused',
   x: 800,
   y: 690,
@@ -88,8 +108,18 @@ const worldState = ref<BallparkRuntimeState>({
   renderer: 'canvas',
   nearby: null
 })
-let mountId = 0
+const loadGate = createRuntimeLoadGate()
 let loadTimeout: ReturnType<typeof setTimeout> | undefined
+const reducedMotion=ref(false),preferCanvas=ref(false),recording=ref(false)
+const recorder=createFrameRecorder()
+type FrameReport=NonNullable<ReturnType<typeof recorder.finish>>
+const report=shallowRef<(FrameReport & Record<string,unknown>)|null>(null)
+let recordTimer:ReturnType<typeof setTimeout>|undefined,loadStarted=0,loadMs:number|null=null
+let resumePosition:WorldPosition|undefined,media:MediaQueryList|undefined
+let recordEnvironment:Record<string,unknown>={}
+function memory(){return (performance as Performance & {memory?:{usedJSHeapSize:number}}).memory?.usedJSHeapSize ?? null}
+function syncMotion(event:MediaQueryListEvent){reducedMotion.value=event.matches;restartWithPosition()}
+onMounted(()=>{media=window.matchMedia('(prefers-reduced-motion: reduce)');reducedMotion.value=media.matches;media.addEventListener('change',syncMotion)})
 
 const statusLabel = computed(() => {
   if (status.value === 'loading') return 'loading'
@@ -104,13 +134,13 @@ const touchControls = [
   { label: 'Move down', glyph: '↓', area: 'down', x: 0, y: 1 }
 ] as const
 
-onMounted(async () => { await nextTick(); await mountRuntime() })
-watch(runtimeHost, host => { if (host && !runtime.value && status.value === 'loading') void mountRuntime() }, { flush: 'post' })
+watch(runtimeHost, host => { if (host) void mountRuntime() }, { flush: 'post' })
 watch(() => props.paused, value => runtime.value?.setPaused(Boolean(value)))
 watch(() => [user.value?.avatar, user.value?.favorite_team_code] as const, ([avatar, team]) => { if (avatar) runtime.value?.setAppearance(avatar, team) })
 
 onBeforeUnmount(() => {
-  mountId += 1
+  clearTimeout(recordTimer);recorder.cancel();media?.removeEventListener('change',syncMotion)
+  loadGate.cancel()
   clearTimeout(loadTimeout)
   runtime.value?.destroy()
   runtime.value = null
@@ -119,53 +149,67 @@ onBeforeUnmount(() => {
 async function mountRuntime() {
   const host = runtimeHost.value
   if (!host) return
-  const currentMount = ++mountId
+  const signal = loadGate.start()
+  const isCurrent = () => loadGate.isCurrent(signal) && runtimeHost.value === host
   runtime.value?.destroy()
   runtime.value = null
   host.replaceChildren()
   status.value = 'loading'
+  loadStarted=performance.now();loadMs=null
   clearTimeout(loadTimeout)
-  loadTimeout = setTimeout(() => {
-    if (currentMount !== mountId || status.value !== 'loading') return
-    mountId += 1
+  function fail(message: string) {
+    if (!isCurrent()) return
+    clearTimeout(recordTimer);recording.value=false;recorder.cancel()
+    loadGate.cancel()
+    clearTimeout(loadTimeout)
     runtime.value?.destroy()
     runtime.value = null
-    errorMessage.value = 'The scene did not finish loading. Retry or use the static Ballpark map.'
+    errorMessage.value = message
     status.value = 'error'
-  }, 15000)
+  }
+  loadTimeout = setTimeout(() => fail('The scene did not finish loading. Retry or use the static Ballpark map.'), 15000)
 
   try {
     const { createBallparkGame } = await import('./runtime/createBallparkGame')
-    if (currentMount !== mountId) return
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (!isCurrent()) return
+    const savedPosition=resumePosition || props.savedPosition
+    const arrivalId=resumePosition ? undefined : props.arrivalId
+    resumePosition=undefined
     const handle = await createBallparkGame({
       parent: host,
+      signal,
       room: props.room,
-      arrivalId: props.arrivalId,
+      arrivalId,
+      savedPosition,
       allowAdmin: props.allowAdmin,
-      reducedMotion: media.matches,
+      reducedMotion: reducedMotion.value || (!media && window.matchMedia('(prefers-reduced-motion: reduce)').matches),
+      preferCanvas:preferCanvas.value,
+      onFrame(active,moving){if(recording.value)recorder.sample(performance.now(),active,moving)},
       avatar: user.value?.avatar,
       favoriteTeam: user.value?.favorite_team_code,
-      onError(error) { if (currentMount !== mountId) return; clearTimeout(loadTimeout); errorMessage.value = error.message; status.value = 'error' },
-      onPortal(target) { emit('portal', target) },
+      onError(error) { fail(error.message) },
+      onPortal(target) { if (isCurrent()) emit('portal', target) },
+      onObject(intent) { if (isCurrent()) emit('object', intent) },
       onState(nextState) {
-        if (currentMount !== mountId) return
+        if (!isCurrent()) return
         clearTimeout(loadTimeout)
+        if(loadMs===null)loadMs=performance.now()-loadStarted
         worldState.value = nextState
+        emit('state', nextState)
         status.value = 'ready'
       }
     })
-    if (currentMount !== mountId) {
+    if (!isCurrent()) {
       handle.destroy()
       return
     }
     runtime.value = handle
+    if (user.value?.avatar) handle.setAppearance(user.value.avatar, user.value.favorite_team_code)
     handle.setPaused(Boolean(props.paused))
   } catch (error) {
-    clearTimeout(loadTimeout)
+    if (!isCurrent()) return
     console.error('Unable to start Ballpark runtime', error)
-    errorMessage.value = error instanceof Error ? error.message : 'Unknown runtime error.'
-    status.value = 'error'
+    fail(error instanceof Error ? error.message : 'Unknown runtime error.')
   }
 }
 
@@ -184,6 +228,25 @@ function resetPlayer() {
 function interact() {
   runtime.value?.interact()
 }
+function restartWithPosition(){
+  const state=runtime.value?.snapshot()
+  if(state){emit('state',state);resumePosition={x:state.x,y:state.y,facing:state.facing,objectId:state.nearbyObject||undefined}}
+  clearTimeout(recordTimer);recording.value=false;recorder.cancel();report.value=null
+  void mountRuntime()
+}
+function startRecording(){
+  report.value=null;recording.value=true;recorder.start(performance.now())
+  recordEnvironment={schema_version:1,started_at:new Date().toISOString(),room:props.room,route:location.pathname+location.search,mode:import.meta.dev?'development':'production',browser:navigator.userAgent,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},hardware_threads:navigator.hardwareConcurrency,device_memory_gb:(navigator as Navigator & {deviceMemory?:number}).deviceMemory ?? null,reduced_motion:reducedMotion.value,renderer:worldState.value.renderer,heap_before_bytes:memory(),lifecycle_before:lifecycleSnapshot(),load_to_first_state_ms:loadMs,load_metric:'component mount to first runtime state, not navigation/LCP',cache_state:'not measured',device_class:'user must identify real hardware',release_status:'pending_user',limitations:['No forced GC / retained heap or GPU memory measurement','Owned lifecycle counters do not prove absence of all browser listeners/resources','No production LCP/input-latency/bundle certification','User-operated sample; no assistant browser test']}
+  recordTimer=setTimeout(()=>{
+    const frames=recorder.finish(performance.now());recording.value=false
+    if(frames)report.value={...frames,...recordEnvironment,heap_after_bytes:memory(),memory_api:memory()===null?'unavailable':'performance.memory.usedJSHeapSize (not retained heap)',lifecycle_after:lifecycleSnapshot()}
+  },20000)
+}
+function downloadReport(){
+  if(!report.value)return
+  const url=URL.createObjectURL(new Blob([JSON.stringify(report.value,null,2)],{type:'application/json'}))
+  const link=document.createElement('a');link.href=url;link.download=`ballpark-e6-${props.room}-${Date.now()}.json`;link.click();URL.revokeObjectURL(url)
+}
 </script>
 
 <style scoped>
@@ -196,6 +259,7 @@ function interact() {
   background: #070707;
   box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
 }
+.ballpark-runtime__diagnostics{padding:14px;color:#d7e4df;background:#111c19;border-top:1px solid #46554a;font-size:13px}.ballpark-runtime__diagnostics summary{cursor:pointer;font-weight:800}.diagnostic-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}.diagnostic-actions button{min-height:42px;padding:8px 12px;border:1px solid #d49d43;border-radius:6px;background:#1b2824;color:#ffe3af;cursor:pointer}.ballpark-runtime__diagnostics a{color:#ffc668}
 
 .ballpark-runtime__viewport {
   position: relative;

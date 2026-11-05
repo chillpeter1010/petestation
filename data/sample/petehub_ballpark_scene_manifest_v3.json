@@ -2,7 +2,7 @@
   "schema_version": 3,
   "asset_version": "d2-scenes-v3",
   "source_path": "frontend/assets/ballpark/scenes/scene-kit-v3.json",
-  "source_sha256": "a0e4744ae48d45e40e8a59a0dff58f3a73d5592475d1940d3278db7caa863e0f",
+  "source_sha256": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
   "exporter": "build_ballpark_scenes.py:v2",
   "render_mode": "layered_background",
   "world_size": [
@@ -16,7 +16,7 @@
   "provenance": {
     "author": "Petehub project / OpenAI image generation and authored scene geometry",
     "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
-    "modification_note": "Unified user-accepted v2 and D2.5 interiors; R-exit and Campus net followup accepted 2026-11-02. Backgrounds, masks, spawns and portals preserved. 2026-11-03 D5 followup adds Coach/GM rear-wall equipment collision after user reported walking through boards and monitors; manual acceptance pending. D5 release remains pending.",
+    "modification_note": "Unified v2/D2.5 package retains approved backgrounds, masks, spawns and portals. Explicit Campus net, Coach/GM rear-equipment and Coach meeting-table aisle collision followups are recorded separately. User reported D5 acceptance passed on 2026-11-04; asset acceptance only, not E6/runtime production certification.",
     "reference_manifests": [
       "data/sample/petehub_ballpark_scene_manifest_v2.json",
       "data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json"
@@ -84,10 +84,10 @@
       ],
       "background_bytes": 2141596,
       "editable_source": "output/ballpark/scenes-v3/clubhouse-layers.svg",
-      "editable_source_sha256": "543a5435a7e797e8c5c681259f8394b466af30dd7e8eade954644bcfdec907eb",
+      "editable_source_sha256": "ed3cb1f65660d514151d42b6dcd06d7ccc77a6c407db98c6e97c303946ca478b",
       "runtime_path": "output/ballpark/scenes-v3/clubhouse.json",
-      "runtime_sha256": "4db1e5bd61c103752d580cd1404d7e1eb15bac991d9c37a560c399b48f9a0727",
-      "collision_count": 16,
+      "runtime_sha256": "173bbd9f275b74ed1c9055469e533e0bfae0b57ca516aad4bb193d23fc4d0b2e",
+      "collision_count": 17,
       "foreground_count": 9,
       "portal_count": 2,
       "decoded_texture_bytes": 6289644,
@@ -111,10 +111,10 @@
       ],
       "background_bytes": 2330257,
       "editable_source": "output/ballpark/scenes-v3/team-office-layers.svg",
-      "editable_source_sha256": "d4a075f252cc059f9857a1715cab986df531e33a705dffc50438bd0f86c261eb",
+      "editable_source_sha256": "c50b660085bf1b5d84df6ec1960f9566e6cede3f80e04b8b625bd2b7c6937a6c",
       "runtime_path": "output/ballpark/scenes-v3/team-office.json",
-      "runtime_sha256": "54cf28a4d7a0cde8712bed4690718491cd5e9295838ae6088db889260487973b",
-      "collision_count": 29,
+      "runtime_sha256": "a5542e39635a1fdf31f7c081e18177c099bfbdd81e4f4763a2779f2f41c38777",
+      "collision_count": 31,
       "foreground_count": 12,
       "portal_count": 3,
       "decoded_texture_bytes": 6293408,
@@ -251,6 +251,71 @@
             385
           ]
         ]
+      },
+      {
+        "id": "central-door-alcove",
+        "polygon": [
+          [
+            643,
+            300
+          ],
+          [
+            1026,
+            300
+          ],
+          [
+            1026,
+            431
+          ],
+          [
+            643,
+            431
+          ]
+        ]
+      },
+      {
+        "id": "manager-entry-plant-cabinet",
+        "polygon": [
+          [
+            1026,
+            505
+          ],
+          [
+            1078,
+            505
+          ],
+          [
+            1083,
+            630
+          ],
+          [
+            1026,
+            642
+          ]
+        ]
+      }
+    ],
+    "clubhouse": [
+      {
+        "id": "tv-upper-cabinet",
+        "polygon": [
+          [
+            35,
+            285
+          ],
+          [
+            112,
+            285
+          ],
+          [
+            112,
+            385
+          ],
+          [
+            35,
+            385
+          ]
+        ]
       }
     ]
   },
@@ -364,15 +429,14 @@
     }
   },
   "pending_manual_acceptance": [
-    "2026-11-03: Team Office Coach/GM rear-wall boards, monitors and cabinets block walking; entry areas and central hall remain usable",
-    "2026-11-03: Coach meeting-table right-side aisle widened by trimming oversized chair collision; walking to lower area pending user confirmation"
+    "2026-11-04 E2: Team Office central door alcove, manager-entry plant cabinet and Clubhouse upper TV cabinet collisions; adjacent paths and portals must remain clear"
   ],
-  "followup_acceptance": "user_accepted_pitching_west_net_and_70vw_width_2026-11-02",
+  "followup_acceptance": "user_accepted_D5_including_office_rear_equipment_and_meeting_aisle_2026-11-04",
   "entrance_pilot": "output/ballpark/scenes-v3/game-entrance-pilot.json",
   "entrance_editable_source": "output/ballpark/scenes-v3/game-entrance-layers.svg",
   "entrance_editable_sha256": "98bc5fd938a847d7fe177d37d23025166e60aa645afe94bf9a39e2c1316fce33",
   "totals": {
-    "collision_count": 135,
+    "collision_count": 138,
     "foreground_count": 82,
     "portal_count": 16,
     "background_bytes": 12935476,

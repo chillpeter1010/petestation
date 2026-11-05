@@ -240,6 +240,9 @@ def build():
     emit(DEST/"character-kit-v1.json",json_bytes(kit))
     manifest = {"asset_version":source["asset_version"],"source_path":SOURCE.relative_to(ROOT).as_posix(),"source_sha256":sha(SOURCE),"source_script_sha256":sha(Path(__file__)),"author":source["author"],"license":source["license"],"exporter":f"build_ballpark_characters.py:v1/Pillow-{PILLOW_VERSION}","exported_at":source["authored_at"],"references":[{"path":p,"sha256":sha(ROOT/p)} for p in source["references"]],"assets":exported,"editable_parts":[{"path":p.relative_to(ROOT).as_posix(),"sha256":sha(p)} for p in sorted(EDITABLE.glob("*-parts.svg"))],"roles":{role:{k:v for k,v in spec.items() if k != "number_positions"} for role,spec in kit["roles"].items()},"clips":source["clips"],"directions":source["directions"],"runtime_kit":"frontend/assets/ballpark/characters/character-kit-v1.json","runtime_kit_sha256":sha(DEST/"character-kit-v1.json"),"human_acceptance":"pending_user_D4_character_acceptance","production_ready":False}
     manifest["human_acceptance"] = source.get("human_acceptance", "pending_user_D4_character_acceptance")
+    manifest["production_ready"] = source.get("d5_asset_accepted", False)
+    manifest["readiness_scope"] = "D5_character_asset_only_not_runtime_release"
+    manifest["d5_acceptance_date"] = source.get("d5_acceptance_date")
     emit(MANIFEST,(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n").encode("utf-8"))
     print(f"{'Verified' if CHECK else 'Exported'} D4: 48 frames per role, 4 User material layers, 100 numbers; acceptance: {manifest['human_acceptance']}")
 

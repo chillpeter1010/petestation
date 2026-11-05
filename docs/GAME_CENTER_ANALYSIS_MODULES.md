@@ -1,8 +1,30 @@
 # Game Center Analysis Modules
 
-> 狀態：In progress  
-> 更新：2026-10-27  
+> 狀態：In progress
+> 更新：2026-11-06
 > Tracker project：`game-center-analysis-modules`
+
+## 2026-11-06 呈現方案否決與 F2 重建規劃
+
+使用者否決整張照片平移／縮放、任意前景位移、固定 PNG 打者；11-06 新加的下移／白線框也沒有獲得接受。現行 `PitchReplayChart.vue` 仍有此候選實作，本輪只更新規劃，未撤接／回退或修改程式。停止生成更多 PNG 姿勢或疊加螢幕位移，不再請使用者核准被否決的方案。下節 11-05「新稿待驗」是歷史交付敘述，不代表現行設計被接受。
+
+單一實作 owner 為 Ballpark **F2.1–F2.7，全部 Planned**，詳細表在 `PETEHUB_BALLPARK_GAME_SYSTEM.md` 最上方：保存契約／引擎決策 → 同世界場地／真相機／球路 → 可編輯 rig → 確定性動作 clock → 實測 swing 資料 adapter → 共用整合／gate → 原設施業務 parity。母站 Game 與 Pitcher Personal 消費同一按需載入元件，Ballpark 只沿既有 canonical 入口，不把 Phaser 園區改成三維。Three.js 是優先候選，尚未安裝／選定 production；原 G 動作 Lab 收斂為後期進階擴充，避免重複 renderer／rig／clock。
+
+**保留而非重做：** 原 3H 已接受的選場／逐球／影片／16 項熱圖／PR／Outside、原球路公式與 source identity；最新 local 真名解析、姓名 Personal 連結、收合 guide、exact-count 投打 API／卡片。後一批 UI 尚無單獨明確驗收，F2.1 先封存行為與數據契約，不要求為即將替換的貼圖畫面重驗整套資料。12 項 focused backend tests 與 source/typecheck 是前批證據，不等同人工通過。
+
+**出手／揮棒契約：** 球從每球 release_pos_x/y/z 開始，投手丘／踏板與模型同世界，手部對該點定位；不從丘中心地面發射，不為配合背景改球路。bat speed／length／attack angle／direction／tilt 與部分平均姿態不構成逐幀球棒路徑；generic 動畫、season average、measured swing 需分開標記，來源不足顯示 unavailable，未來有實測才畫相應軌跡。時間軸需含 pre-pitch／release／plate-or-contact／post-pitch，pause／seek／replay 可重現；沒有接觸資料不得為看起來打到而改結果。
+
+**未收尾但非全數硬性前置：** 本專案 Location(1)／Sequence(2)／Tags(3)／Movement(3B) 仍 in_progress，原 verification 的人工缺口未被 3H 接受覆蓋；影片補抓按鈕已交付，這輪沒有全季補齊／播放證據。不要自行重跑其測試或補抓。重構前建議先保護 dirty worktree、建立經審閱 checkpoint，確認最新非 renderer UI；E6 的 2D runtime gate 與新 renderer F2.6 gate 分開，開發可先隔離原型，正式 release 不可跳過量測／使用者驗收。本輪沒有 engine install、資產生成、資料回填、瀏覽器或產品碼修改。
+
+## 最新共用 In game 延伸（2026-11-05，新增畫面待驗）
+
+原 3H 熱圖／PR／Outside 已由使用者接受，Done 不重開。這輪新增：投打姓名由本機 player lookup／master 補齊，姓名連至 Personal；熱圖說明與視角 guide 預設收合。捕手畫面下方並列投手／打者 exact pre-pitch count 季度卡片，投手看該側打者、打者看該側投手，按球種列樣本、Mix／球速／Swing／Contact／Whiff／AVG，展開可看 wOBA、HardHit 與分母。這是各自整季同側同球數，**不是兩人交手紀錄或本場累計**；缺資料不補零。新 API 契約見 `API_CONTRACTS.md`。
+
+視覺使用 `catcher-stadium-v2.png` 及 `catcher-batters-v4.png`。打者依使用者最後提供的白色大學球衣照片之姿勢／肩線／手持棒位置製作通用右／左打獨立靜態素材；不代表真實球員身形或動作。v2 舊姿勢與生成但未接入的 v3 背向稿被使用者否決，保留來源，不當作核准。完整生成 prompt、來源路徑及 hash 記於 `petehub_in_game_catcher_redesign_v1.json`，使用內建 imagegen。
+
+捕手視角改為**整幅畫面同層 pan／zoom**：背景、打者、本壘板、好球帶、熱圖、球路與球一起移動；不再只改前景 3D 距離。拖曳／方向鍵平移、滾輪共同縮放、Home／Reset view 復原；捕手不提供 Low angle，投手視角保留原 3D orbit。球路原始物理座標與重建公式不改。好球帶增加深底與青色虛線輔助外框（不是額外判決區或新的 shadow 分類），原 17 吋邊界不變。
+
+資料來源檢查：前批 12 項 focused backend tests 通過；來源／編譯檢查不等於畫面驗收。這輪新姿勢、整體縮放、收合說明、姓名連結與兩張資料卡待使用者驗收，未開瀏覽器、截圖或執行代理操作測試。舊待驗／通過記錄僅對應各自當時版本。
 
 ## 1. 目標與邊界
 
@@ -116,6 +138,7 @@ Pitch Replay 不能只用 Movement 的 `pfx_x/z` 或 Release Point 的 `release_
 | 3E · Pitch Replay trajectory API | Completed | 新增 game/pitcher lazy replay payload，在後端以版本化公式輸出時間化 3D path、逐球狀態、filters 與影片 identity | game/pitcher scope、缺欄位、3 英吋 closure、30–40 mph 正根、Pitch Out／pitchless 排除與實際 HTTP response 均已驗證 |
 | 3F · Pitch Replay SVG MVP | Completed | 新增 `Replay` 頂層頁籤，共用本場投手選單；單一透視場景可切換 Pitcher／Catcher、疊加該打席或全場其他球，並以拖曳或鍵盤微調鏡頭 | 播放／暫停／重播／scrub／速度、逐球選擇、local filters、影片、reduced-motion、視角方向、比較範圍、鏡頭控制與桌面／窄版均完成 |
 | 3G · Pitch Replay validation and release gate | Completed | 對帳落點、飛行時間、方向與事件順序，正式釋出 SVG MVP；目前不升級 Canvas／3D | 速球／變化球／左右投／側投／32.3 mph／缺值案例、回應時間、零 severe console error及模擬邊界均通過 |
+| 3H · Shared pitch panel and Personal In game | Done · 待使用者驗收 | Game Replay 與投手個人頁共用面板；Personal 新增 In game／場次選單，預設所選年度最近出賽 | 8 項來源／資料檢查及單次 Nuxt typecheck PASS；畫面／操作未由代理驗收，舊 3D–3G 不重開 |
 | 4 · Catcher Calling Context | Planned | 顯示本場實際 catcher pairing、count/pitch mix、sequence context，並連到既有 Catcher Lab／Paired Duo；支援時才附整季 strategy bridge 摘要 | `fielder_2` pairing coverage、換捕手切分、pitcher-catcher-game reconciliation；無 caller attribution、無 leaderboard、無 best-pitch claim |
 | 5 · Stamina Integration Gate | Planned | 把角色型 Stamina trait 與單場衰退訊號拆成兩層；決定 SP／RP 各自可顯示內容與 unavailable 規則 | 2026 role coverage 重算；單場 SP artifact 精確 join；RP 不誤顯 starter-only score；可靠度、CI、最低投球數與 Pitch Out 規則 |
 | 6 · Batter Feature Coverage Lab | Planned | 以單場 batter-game 為粒度稽核 swing tracking 與 batted-ball 欄位、分母、年代與缺失模式 | 2023–2026 年度 coverage、2026 逐球 coverage、左右投與替補分層、極小樣本案例、官方事件 reconciliation |
@@ -144,6 +167,28 @@ Game Center 新增 `Replay` 頂層頁籤並沿用本場投手下拉選單。可�
 2026-10-27 視覺複核後，Replay 的畫面 X 最終固定為捕手視角 `display_x = statcast_x`、投手視角 `display_x = -statcast_x`；兩個視角必須一起遵守這組相反方向，不在軌跡公式中二次翻轉。逐球好球帶真實邊界固定為 1.66 ft 寬並使用 `sz_bot/sz_top` 高度，Side View 與並排雙圖均已移除。單一 3D-to-2D perspective projection 讓兩種端點視角共用同一組實際三維軌跡與場地幾何，鏡頭旋轉只改投影、不改資料座標或軌跡公式。
 
 release gate 結果：代表場 824948 的 13 位投手共 328 顆有效球全部 supported；Tatsuya Imai 實際 HTTP payload 為 10／10 supported、31 點／球、10／10 有影片 identity。Tyler Rogers 側投案例 game 823428 為 35／35 supported、最低 release Z 1.21 ft；左投案例 game 823743 為 97／97 supported。Zach McKinstry game 823663 的最慢 32.3 mph 球得到 1.304 秒路徑並正確標成 limited；Martín Pérez game 823419 為 83 supported／1 unavailable。實際 service 代表案例約 0.17–0.22 秒。登入後 Chrome 再以 2026-09-27 HOU–ATH 驗證單一場景、Pitcher／Catcher 投影切換、拖曳改角度、同打席 4 顆與全場 40 顆比較軌跡；窄版 document 水平溢位為 0 px，console 無 severe error，Nuxt typecheck 通過。SVG perspective 足以負擔每位投手數十球的互動重播；人物模型、自由移動鏡頭、深度遮擋或更高軌跡量出現前，仍不需要引入 WebGL engine。
+
+### 3.3 Slice 3H · 共用面板與 Pitcher Personal In game（2026-11-04）
+
+使用者授權先改母站，投手個人頁分頁必須叫 **In game**，不是 Replay；預設所選年度該投手最後一場出賽。Game 原有 Replay 入口保留。`PitchReplayPanel.vue` 抽出逐場資料載入、local filters、逐球選擇／播放、support state／closure／影片動作；兩入口共用它與既有 `PitchReplayChart`。圖表僅新增 title prop，座標／投影／播放公式未改。Game 原外層遇 replay mode 不再重複 fetch；Movement／Location／Sequence 保持原路徑。
+
+`PitcherInGameTab.vue` 僅在進入分頁時 lazy 載入，以既有 `personalOutings(year,pitcherId)` 取得場次；`Date` 倒序、同日 `Game PK` 倒序、去重／排除無效 ID，預設第一場。網址若明確給出有效 `game_pk` 則優先該場，無效則退回最近場次；選單標示 Game PK 以區分雙重賽，不將 PK 排序說成精確開賽時間。先選比賽才請求原 `GET /api/games/{game_pk}/pitchers/{pitcher_id}/replay?year=...`，沿用五分鐘 game-analysis cache，不新增整季軌跡 endpoint 或重寫球路公式。
+
+契約仍是 `pitch_trajectory_statcast_v1` historical reconstruction，game/pitcher/pitch identity、左右視角、support／limited／unavailable、Savant video 及 reduced-motion 沿用；Pitch Out／無投球事件排除，缺軌跡不補值。每顆有效資料球保留於逐球選單，沒有軌跡者顯示 unavailable 而不是假動畫。共用面板及場次載入用 request version／unmount 防過期回覆，切年／投手／場次清除前筆資料，圖表按 context key 重新建立，不跨場混播。loading／empty／error／Retry 具 DOM 狀態，影片沿用各母頁既有 modal；沒有改 API、帳號／權限、後端計算或 Ballpark 場景。
+
+程式證據：`node frontend/scripts/check-pitcher-in-game.mjs --report data/sample/petehub_pitcher_in_game_source_gate_v1.json` 的 8 項純資料／來源契約檢查 PASS；單次 `npx nuxt typecheck` PASS，未跑完整 build／backend suite／瀏覽器。靜態 lifecycle guard 檢查不等於實際切換或清理通過，3H 保持 in_progress。3D–3G 舊已發布 gate 保留，不擴大成新入口人工通過。
+
+2026-11-04 逐球資訊 followup：依使用者希望比照 Stuff，新增共用逐球詳細欄位（日期／game／PA／球序／球速／球數／結果／投打側／捕手／出手與進壘座標）及軌跡 hover title／鍵盤聚焦名稱。比較軌跡與選定軌跡可點擊或 Enter／Space 選球並開該球影片；按下軌跡不觸發 camera drag。`open-video` 與自動 `select-pitch` 分開，下拉選球／播放換球不自動彈影片。保留 Open Video 按鈕，無映射明示 unavailable；資料來源不含的 Plus 指標不補造。兩入口同步，無新 API／座標公式。新增欄位缺值／零值、影片 URL／play_id、資料不變及兩個 SFC 來源語法檢查 PASS；未重跑完整 typecheck/build／舊八項檢查。上述 v1 證據是初次交付快照，非此 followup 新 hash 或人工通過，3H 仍待使用者確認。
+
+2026-11-04 影片補抓後台 followup：依使用者改為自行按鍵補齊的要求，在 `/admin/updates` 新增所選年度「補齊缺漏影片」面板，沿用既有 background job／StatsAPI worker，不啟動全量補抓、不重算模型。新增狀態 API 的已保存／待補場次、全域執行中與年度最新工作；同程序防重複排隊，失敗可再按續補。每 50 場保存，面板每 5 秒讀取；關頁不取消，後端須保持運行，重啟後須再按一次且只接續已保存映射。場次完整定義為 pitch／player lookup 交集，不是逐球影片可播放保證；失敗／剩餘缺漏不宣稱全季完成。6 項隔離後端測試與兩個 Vue SFC／TypeScript 語法檢查 PASS（非完整 typecheck 或 UI 驗收），詳見 `API_CONTRACTS.md`。待使用者確認後台按鍵、重進頁狀態與補後影片播放；3H 保持 in_progress，不重開已完成 Slice。
+
+使用者人工驗收（最多五項）：
+
+1. `/pitcher-personal?tab=in-game` 選投手，看到 **In game**，場次預設該年最近一場；有日期／對手／Game PK。
+2. 切換場次、投手、年份，逐球選單與球數跟著更新，不混入上一場或上一位投手；沒出賽時有空狀態。
+3. 逐球／PA／This game、播放／暫停／速度／時間軸、視角與篩選／清除可用；詳細欄位跟隨選球，缺軌跡球誠實顯示 unavailable。
+4. Hover／聚焦軌跡有該球資訊，點擊／Enter／Space 或 Open Video 開正確影片；自動換球不彈影片，無映射有說明。Game `/games/today` 的共用入口亦確認。
+5. 窄版、鍵盤選單／按鈕及 reduced-motion 可用；未測的裝置或情境不可列通過。代理不開瀏覽器／截圖／另開 server。
 
 ## 4. 投手模組設計
 
@@ -180,7 +225,7 @@ Movement 固定為該投手該場的球路形狀，直接重用 `MovementChart`�
 
 ### 4.4 Pitch Replay
 
-Pitch Replay 是 game-only 的資料重播，不是投手動作捕捉或空氣動力學模擬。入口與 Location／Movement 相同：比分板下方的頂層頁籤、共用本場投手下拉選單；預設選目前 Feed 對戰或該投手第一顆有效球，不能跨 game 或跨投手自動串接。
+Pitch Replay 是 game-scoped 的資料重播，不是投手動作捕捉或空氣動力學模擬。Game 入口與 Location／Movement 相同：比分板下方的頂層頁籤、共用本場投手下拉選單；2026-11-04 新增的投手個人頁 In game 則先選出賽場次後使用同一面板。兩邊都不能跨 game 或跨投手自動串接；新增入口人工 gate 見 3H。
 
 MVP 使用 Vue／TypeScript 與可重用 SVG 元件，在單一場景中切換 catcher-view 與 pitcher-view。捕手畫面 X 使用 Statcast X，投手畫面 X 為其鏡像；後端依 `pitch_trajectory_statcast_v1` 契約計算固定時間間隔的路徑點與 flight time，前端只處理播放狀態與視覺投影，不自行重寫物理公式。必要互動為播放／暫停、重播、scrub、0.25×／0.5×／1×、逐球／單一 PA／目前所選投手本場全部有效球續播、同既有 filters、tooltip 與 Savant video。播放倍率只調整單顆球的飛行時間，連播球與球之間固定停留 0.7 秒。使用者開啟 Replay 才 lazy load，不把路徑點塞進 Movement 的既有 payload。
 
@@ -301,6 +346,49 @@ RP 單場 Quality 並非資料上不可行。若使用既有 RP 1–5 球 baseli
 - 本場數據與整季 fingerprint 必須分欄顯示，不能合成一個未驗證的「打擊狀態」分數。
 
 建議 filters 控制在 Pitcher Hand、Pitch、Count、Pitch Result／Swing Type；單場資料不要提供過多交叉篩選，避免每個格子只剩一球。
+
+## 6.1 In game 捕手視角的打者九宮格（2026-11-05 第一版，人工待驗）
+
+2026-11-05 聯盟／PR給色取代絕對值色盤：使用者選擇完成前處理/API/給色、並採打者角度反向。新增離線 `build_batter_zone_baseline.py --year 2026`，共用同一 `aggregate_zone_rates` 而非另寫聯盟公式；唯讀716,544 regular-season pitches／662打者，571名全季完成PA>30合格，產出705個hand/zone/metric群組，快取 `data/MLB2026/batter_zone_baseline_v1.json`（4,130,003 bytes）。每群只收該格分母>=10的合格打者；league_average為合併分子／合併分母，PR分布是每打者等權的原值，至少5名比較者。PR=100×(低於值的人數+0.5×同值人數)/N，全部同值為PR50；PR50是打者分布中位，並非加權聯盟平均。這是樣本描述PR，不是穩定能力認證。
+
+打者方向：AVG/wOBA/HardHit/Contact/Z-Contact/O-Contact較高偏紅；Whiff/SwStr/CalledStrike/Strike/CSW/O-Swing較低偏紅（100−raw_PR）。Swing/Z-Swing/Foul/In-play屬頻率，維持raw_PR高紅低藍並明示不判斷能力好壞。新回應附league_average/raw_pr/color_pr/peer_count/benchmark_status及cohort門檻；原值與分母不變。前端改平滑同區基準PR、非繼續平滑原始百分比，色階PR0藍#0050ff／50近白／100紅#ff142d，較飽和且alpha .86。低樣本／少比較者無PR即不給色；基準缺失、來源變動或無效時不退回舊絕對值紅藍，表格仍可讀原值。原Personal palette不受此新Ingame PR色盤影響。
+
+前處理僅先完成2026；其他年度須另執行相同腳本，HTTP不得偷偷掃全季。快取含DB/WAL revision與原始彙整程式／事件集合fingerprint，原始DB不寫入；完成時確認來源未變，原子發布。API以LRU讀JSON，enrich raw cached response時deep-copy避免PR污染原快取。2026來源與快取已對帳，無重複建置；`test_batter_zone_rates.py`＋`test_batter_zone_baseline.py` 共16項PASS，PR contour純來源檢查及direct vue-tsc PASS。A.J. Ewing id805999 vsR中間格：Swing83.61%、同格合格平均75.42%、rawPR81.48；Whiff5.88%、平均10.50%、反向colorPR76.01。九格Swing PR26.26–81.48、Whiff打者PR22.28–96.95，顯示舊全紅／全藍是絕對量尺／方向問題，不應為了讓畫面紅藍平均而對單一球員重縮放。證據 `petehub_batter_zone_pr_source_gate_v1.json`，本批仍待使用者畫面驗收。
+
+同次使用者指出Outside zones呈大矩形與橫線，已改僅在白框外normalized距離<.28的圓角窄halo顯示，向外衰減（最高為內圈alpha的.55倍），同色/透明度用compound path合併繪製處理逐列接縫。帶外仍是8粗分組的示意，不是逐球密度，表格及PR不變、不剔除較遠的球；樣本不足區保留空白。純幾何檢查確認帶外範圍／衰減，畫面是否合適由使用者回報。此次未執行browser、截圖、另一個server或替代帳號。
+
+2026-11-05 Personal式等高線上色：使用者希望套用Personal的等高線風格，已將其原heatColor／heatStroke／八階contourLevel抽為共用 `heatmapPalette.ts`，Personal原本計算／配色數值不變。In game改為對有樣本區的分子與分母做高斯顯示插值（normalized sigma .22，3sigma範圍），48×48採樣後按同色橫列合併，呈現同八階連續色帶；鏡頭改動只重投影色帶，不重做平滑。這是9／17區彙整值的顯示插值，非從原始逐球位置重新估計的KDE，不宣稱增加解析度或可靠性；UI已說明精確值見數值表。零值有冷色、零分母／缺樣本區不畫，Z/O不跨inside/outside插值；分母<10仍淡色。原16項數值、PA資格、座標及球路不動，帶外開關保留。`check-batter-zone-contours.mjs` 純來源／數學檢查PASS（空／零、分母加權、缺樣本洞、bounds、非修改資料、壓縮與wOBA尺度），一次direct vue-tsc PASS；未重跑後端測試／build／瀏覽器或畫面驗證，3H人工仍待回報。
+
+2026-11-05 outcome metrics followup：使用者要求 AVG、wOBA、HardHit%，已加入同一共用熱圖選單，現16項。AVG為完成PA之H/AB，使用既有 NON_AB／HIT events；wOBA直接使用有效原始 woba_value 與正分母 woba_denom，缺值不補零、不另造年度權重。兩者只在該PA最後一球的有效位置入格，完成PA先按game/at-bat挑最後pitch去重，避免把結果重複套每球；無位置的結束球不轉嫁給前一球。HardHit%使用完成PA的場內擊球且有有限正值初速，>=95mph／有追蹤初速BBE，缺初速不當soft hit。AVG／wOBA為三位小數，HardHit%為百分比；numerator／denominator可為浮點權重。各格低樣本仍按自身分母淡色，資格仍整季PA>30。色階分別為百分比0–100、AVG0–1、wOBA0–2，上限顏色截頂且圖例有≥，原數值不截斷（wOBA可>1甚至>2）。來源檢查：10項targeted tests、8項格式／色階assertions、一次direct vue-tsc PASS；實際2026打者682998 vsR有位置結束球合計H84/AB400、wOBA144.35/455、HardHit140/300，僅資料對照，並非畫面／能力評價。證據 `petehub_batter_in_game_outcome_metrics_v1.json`，3H與最新比例／熱圖畫面仍待使用者驗收。
+
+2026-11-05 比例 followup：使用者截圖指出好球帶視覺比例失衡。只調整 catcher 通用剪影為原顯示縮放的0.76/0.95，並與好球帶同一深度平面定位；不聲稱其為球員實際身高／動作。帶外八區預設不畫，可用 Outside zones 開關；選 O 系列時自動顯示，白色九宮格與17吋／sz_bot/top不變。數值表仍保留全17區，資料／分母／球路不動。本次只為呈現修正，不重跑先前資料測試／typecheck/build，也未由代理進行畫面測試；等待使用者回報。
+
+使用者已授權完成可操作第一版（資料 API＋捕手熱圖＋比率切換）。Game／Pitcher Personal 共用 `PitchReplayPanel.vue` → `PitchReplayChart.vue` 的 Catcher 視角已接入 `BatterInGameHeatmap.vue`；依當前逐球 batter／pitcher／year／p_throws 取得資料，整季總 PA >30 才顯示。這是母站 3H 延伸，不是 Ballpark E3 開工。以下保留原需求，現況以本段及交付／驗收紀錄為準，舊「未實作」說明屬接線前快照。
+
+**第一版交付：** 新增 `GET /api/batters/personal/zone-rates`、`batter_zone_rates_v1` schema／service，直接唯讀原 regular-season pitch table 的必要欄位；不載入／改寫影片、Plus cache 或軌跡資料。重用既有完成 PA 計數與 Discipline event flags；以 DB／WAL mtime/size 作 server LRU identity，client 在元件生命週期內以 year/batter/hand 快取最多32份、兩分鐘。回應一次含13種比率，換 metric 不重抓資料；latest-request guard 隔離換人／手別／卸載的過期回應。Game 與 Personal 均經同一共用元件，保留原 API／Batter Personal Discipline 頁面。
+
+16項選單：Swing%、Contact%、Whiff%、SwStr%、Called Strike%、Strike%、CSW%、Z-Swing%、Z-Contact%、O-Swing%、O-Contact%、Foul%、In-play%、AVG、wOBA、HardHit%。每格回傳 numerator／denominator／value，真實0與null不混用，百分比與小數格式分開。九宮格＋八個帶外群組共17區；帶外矩形顯示範圍為示意，實際彙整包括更遠的球。Z/O 指標在不適用區域為 null。低於10個分母樣本用較淡顏色，並保留數值表；全季31 PA資格不代表每一格樣本足夠。各指標色階見最新followup，紅只表示較高數值。
+
+**座標與相容性：** 熱圖每球以自己的 sz_bot/top 正規化，缺值／無效高度回退1.5–3.5ft並回報數量；水平為17吋本壘板。投到現有 replay 的當前好球帶 plane，同一個 `physicalPolygon` 隨捕手角度／縮放變換，不改球路。既有 Discipline 固定框 x±0.83ft、z1.5–3.5ft 未改；此圖的 Z/O 以正規化17吋框分區，不能假稱與舊固定框所有 Z/O 彙整值逐格一致。事件 flags／比率分母則沿用既有定義，包括 foul_tip 等既有分類，不用1−Whiff%推算Contact%。
+
+**已完成來源檢查：** `test_batter_zone_rates.py` 七項測試（30/31 PA、唯一完成PA、左右手與分母、17區邊界／coverage、正常化／未知手別、DuckDB enriched/regular/batter選擇、nullable位置）PASS；單次直接 vue-tsc PASS。唯讀2026打者682998：全季671PA，vsR 1845球／1832有位置，vsL 800球／795有位置，17區合計相符；不是畫面或對該球員身分／能力的評價。未登入既有 API 回401，未建立其他帳號或 UI fixture，未做登入後播放／畫面測試。證據 `petehub_batter_in_game_heatmap_source_gate_v1.json`。3H仍 in_progress，等使用者人工驗收，不推定原影片播放與所有3H gate通過。
+
+**本批人工清單（使用者執行）：**
+
+1. `/pitcher-personal?tab=in-game` 選出賽場次、切 Catcher，確認顯示目前打者的整季PA／手別／熱圖；資料載入中及缺資料有說明。
+2. 自動左右投與手動 L／R／All 正確；換打者／投手／年度／場次不殘留上一人的結果。
+3. 切13種比率、展開數值表，確認0%／無分母區分、低樣本淡色，30PA以下不畫熱圖。
+4. 拖曳／縮放時格子對齊；關閉熱圖或回 Pitcher 視角，原球路／選球／播放／影片操作維持正常。
+5. 在 Game Center 相同共用面板確認同功能，並確認鍵盤選單、開關與窄版可用。
+
+- 資格：使用所選年度 regular-season 全季唯一 PA（沿既有事件／game_pk＋at_bat_number 語意）計算，嚴格大於 30；不能用 pitch count、單場 PA 或對該手別 PA 代替。PA 門檻不隨目前顯示的左右投／球數等圖表 filters 改變。
+- 手別：由目前選球的 `p_throws` 預選 vs LHP／RHP，與打者 `stand` 分開；允許手動切換且清楚標示篩選。換投／換打者／換年／換場時清除過期結果，未知手別不可默認右投。左右投兩份可快取，switch hitter 仍依投手手別取樣，不能鏡像混用。
+- 比率選單：共用既有 discipline event flags／分母定義，提供 Swing%、Contact%、Whiff%、SwStr%、Called Strike%、Strike%、CSW% 及適用的 Z/O 系列等可計算選項；每格同時有 numerator、denominator、樣本與百分比。Contact%／Whiff% 以 swings，Swing%／SwStr%／CSW% 以 eligible pitches；不可同用球數當所有分母。AVG 等非比率百分比若加入，另用正確 AB/PA-end 及格式，不能與 Swing% 混算。
+- 圖面：沿用 Discipline 的座標／區域語意及配色能力，但目前其 heatmap 主要是 density（另有 bat-speed／choice），不是所有比率皆已有 heatmap。新圖需計算各格分子／分母後著色；純 density 不可冒充揮棒／接觸率。好球帶以正規化高度及捕手視角對齊當前 replay 九宮格，視角旋轉需跟隨 projection，不改 Statcast 軌跡／左右側。O 系列須有帶外區呈現或在帶內格顯示不適用，不能把零母數塗成 0%。
+- 範圍：打者全季對該投球手別樣本，非本場／對目前這一位投手的對戰成績；可先共用獨立 DOM 面板，再依接線規格呈現在 catcher 視角，保留圖例、開關、數值／鍵盤可讀表。低樣本顯示樣本提示，不推定個別格滿足全季 PA 門檻；缺座標／分母為零顯示無資料，不補造熱區。
+- 現況證據：`batterPersonalDiscipline` 的 useApi／route／service 目前沒有 `pitcher_hand` 查詢參數，只有 `stand`；雖回應有 pitcher_hand_split，不能據此宣稱所有 location points 已依左右投篩選。需擴充共用資料契約、回應樣本／coverage 及 cache identity（year/batter/pitcher_hand/metric/filters/version），Game 與 Personal 使用相同模組，避免每換一球重抓整季資料。既有 endpoints／母站先保持現況。
+- 手別欄位已確認（2026-11-05）：`game_pitcher_analysis_service.py` 的 replay scalar columns 已含 `p_throws`，回應每球保留；summary 另有 `pitcher_hand`。`pitcherInGame.ts` 將 `p_throws` 顯示為 Selected Pitch 的 Throws。`batter_service.py` 的正規化／欄位清單也保留 `p_throws`，且以它產生 pitcher_hand_split。因此直接讀目前選球 p_throws 可自動預選左右投；缺的是 Discipline 的獨立查詢參數及熱圖彙整，不是資料缺欄或需要推測／重抓手別。缺值仍明示未知，stand 始終為打者站位。
+- 驗收方向：30/31 PA 邊界、左右投／switch hitter／換投換打者、各比率分母、空資料／缺位置／低樣本、捕手座標方向及關閉熱圖後原圖／影片不變；資料契約需 targeted tests，畫面一律由使用者驗收。仍待後續開工，不將本段當已完成 UI。
 
 ## 7. Slice 9 釋出標準
 

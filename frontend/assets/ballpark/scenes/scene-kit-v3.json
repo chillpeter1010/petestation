@@ -7,7 +7,7 @@
   "provenance": {
     "author": "Petehub project / OpenAI image generation and authored scene geometry",
     "license": "Project-generated artwork; use subject to applicable OpenAI terms; no third-party asset pack",
-    "modification_note": "Unified user-accepted v2 and D2.5 interiors; R-exit and Campus net followup accepted 2026-11-02. Backgrounds, masks, spawns and portals preserved. 2026-11-03 D5 followup adds Coach/GM rear-wall equipment collision after user reported walking through boards and monitors; manual acceptance pending. D5 release remains pending.",
+    "modification_note": "Unified v2/D2.5 package retains approved backgrounds, masks, spawns and portals. Explicit Campus net, Coach/GM rear-equipment and Coach meeting-table aisle collision followups are recorded separately. User reported D5 acceptance passed on 2026-11-04; asset acceptance only, not E6/runtime production certification.",
     "reference_manifests": ["data/sample/petehub_ballpark_scene_manifest_v2.json","data/sample/petehub_ballpark_scene_manifest_d2-5-v1.json"],
     "composition_sources": [
       {"path":"frontend/assets/ballpark/scenes/scene-kit-v2.json","sha256":"33413d868925345129746a6f535d8c503f32ee503f5fa326e0133d9c4b25a949"},
@@ -19,12 +19,15 @@
     "campus":[{"id":"pitching-west-net","polygon":[[1320,225],[1347,225],[1348,319],[1320,319]]}],
     "team-office":[
       {"id":"coach-rear-wall-equipment","polygon":[[105,200],[664,200],[664,385],[105,385]]},
-      {"id":"manager-rear-wall-equipment","polygon":[[1010,200],[1540,200],[1540,385],[1010,385]]}
-    ]
+      {"id":"manager-rear-wall-equipment","polygon":[[1010,200],[1540,200],[1540,385],[1010,385]]},
+      {"id":"central-door-alcove","polygon":[[643,300],[1026,300],[1026,431],[643,431]]},
+      {"id":"manager-entry-plant-cabinet","polygon":[[1026,505],[1078,505],[1083,630],[1026,642]]}
+    ],
+    "clubhouse":[{"id":"tv-upper-cabinet","polygon":[[35,285],[112,285],[112,385],[35,385]]}]
   },
   "collision_overrides": {"team-office":{"coach-table-chairs":{"id":"coach-table-chairs","polygon":[[204,567],[287,567],[287,554],[321,554],[321,573],[353,573],[353,554],[400,554],[400,576],[505,576],[536,612],[536,718],[499,718],[499,772],[433,772],[433,715],[397,715],[397,772],[338,772],[338,714],[291,714],[291,772],[235,772],[235,714],[204,714]]}}},
-  "pending_manual_acceptance": ["2026-11-03: Team Office Coach/GM rear-wall boards, monitors and cabinets block walking; entry areas and central hall remain usable", "2026-11-03: Coach meeting-table right-side aisle widened by trimming oversized chair collision; walking to lower area pending user confirmation"],
-  "followup_acceptance": "user_accepted_pitching_west_net_and_70vw_width_2026-11-02",
+  "pending_manual_acceptance": ["2026-11-04 E2: Team Office central door alcove, manager-entry plant cabinet and Clubhouse upper TV cabinet collisions; adjacent paths and portals must remain clear"],
+  "followup_acceptance": "user_accepted_D5_including_office_rear_equipment_and_meeting_aisle_2026-11-04",
   "scenes": {
     "campus": {
       "scene_id": "campus",
@@ -113,7 +116,8 @@
         {"id":"plant-east","polygon":[[918,691],[957,691],[957,743],[918,743]]},
         {"id":"equipment-west","polygon":[[35,800],[327,800],[327,883],[35,883]]},
         {"id":"equipment-east","polygon":[[1072,785],[1350,785],[1350,883],[1072,883]]},
-        {"id":"south-wall","polygon":[[0,884],[1672,884],[1672,941],[0,941]]}
+        {"id":"south-wall","polygon":[[0,884],[1672,884],[1672,941],[0,941]]},
+        {"id":"tv-upper-cabinet","polygon":[[35,285],[112,285],[112,385],[35,385]]}
       ],
       "foreground": [
         {"id":"lounge-north-sofa","depth_y":403,"polygon":[[202,323],[414,323],[414,401],[202,401]]},
@@ -171,7 +175,9 @@
         {"id":"south-wall-east","polygon":[[989,795],[1672,795],[1672,941],[989,941]]},
         {"id":"south-step","polygon":[[0,916],[1672,916],[1672,941],[0,941]]},
         {"id":"coach-rear-wall-equipment","polygon":[[105,200],[664,200],[664,385],[105,385]]},
-        {"id":"manager-rear-wall-equipment","polygon":[[1010,200],[1540,200],[1540,385],[1010,385]]}
+        {"id":"manager-rear-wall-equipment","polygon":[[1010,200],[1540,200],[1540,385],[1010,385]]},
+        {"id":"central-door-alcove","polygon":[[643,300],[1026,300],[1026,431],[643,431]]},
+        {"id":"manager-entry-plant-cabinet","polygon":[[1026,505],[1078,505],[1083,630],[1026,642]]}
       ],
       "foreground": [
         {"id":"coach-desk","depth_y":528,"polygon":[[250,424],[290,424],[290,414],[332,414],[332,426],[486,426],[486,528],[250,528]]},

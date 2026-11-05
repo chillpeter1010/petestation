@@ -1,5 +1,15 @@
 # API Contracts
 
+## In game exact-count season context（2026-11-05）
+
+`GET /api/games/matchup-context?year=2026&pitcher_id=...&batter_id=...&batter_side=L&pitcher_hand=R&balls=1&strikes=2` 沿用現有 API 授權。year 2021–2100、正球員 ID、side／hand `L|R|unknown`、balls 0–3、strikes 0–2；固定路徑先於 game_pk 動態路徑宣告。
+
+回應 `in_game_count_matchup_v1`，scope 為 `regular_season_exact_pre_pitch_count`。包含年／投打 ID／本機解析姓名／手別／球數、source_status，以及 pitcher／batter 的 status、summary、pitch-type rows。投手統計為全季同球數對該側打者；打者為全季同球數對該手投手，不是 head-to-head，也不是目前比賽樣本。未知手別 `unknown_hand`，缺 split `no_data`，缺季資料 `unavailable`；零分母值 null，不偽造零。
+
+每列有 pitches、usage_pct、有效球速均值、Strike／Zone／Swing／Contact／Whiff、AVG、wOBA、HardHit。AVG 使用唯一 PA 最後有結果球之 H/AB，先確定 terminal 再篩球數／手別，排除既有 NON_AB events；wOBA 只用來源 woba_value／正 woba_denom，無年度權重補值；HardHit 是 ≥95mph／有效初速 fair BBE。Contact／Whiff 分母為 swings；denominators 回 pitches、swings、ab、woba、tracked_bbe。列 pitches<30 標 limited，非可信度認證。非有限數值不入有效數據。
+
+來源只讀 regular-season 必要欄位與本機 player lookup／master，姓名缺漏使用既有本機 timing map，不從網路批抓。Server LRU 128 以 DB／WAL mtime+size、季／球員／手別／球數失效；client 生命週期快取最多48組且 latest-request guard 防換球／換人舊回應覆蓋。既有 replay rows 同步補 batter_name／pitcher_name，不修改軌跡及影片契約。
+
 ## Shared Query Parameters
 
 Most pitcher analysis endpoints should share these parameters where possible:
@@ -223,6 +233,14 @@ Returns cached video links from DuckDB columns:
 - `video_url`
 
 The endpoint does not call StatsAPI or Baseball Savant at request time.
+
+#### Admin pitch-video backfill
+
+- `POST /api/admin/jobs/backfill-video-lookup?year=2026&batch_size=50` queues the existing missing-game lookup worker only; it does not refresh pitches or recompute models. A queued/running video job is returned instead of queuing another (single backend process, including other seasons).
+- `GET /api/admin/video-lookup-status?year=2026` adds `complete_games` / `missing_games` against that season's `games` table. A cached game counts as complete only when both pitch and player lookup rows exist, matching the worker's skip rule; this is not a per-pitch playback guarantee. `active_job` is global, `latest_job` is season-scoped, and `coverage_error` indicates a temporarily unreadable database, not zero coverage.
+- `/admin/updates` exposes a dedicated start/resume button, persisted coverage refreshed every five seconds, partial-failure counts and retry guidance. Coverage updates after each 50-game save, not after every request. Job results remain available via `/api/admin/jobs/{job_id}` during the backend process lifetime.
+- Closing/reloading the page does not cancel the backend job. The backend must stay running; after a restart the in-memory job status is lost, but saved CSV/DuckDB mappings are reused on the next explicit click. There is no automatic restart or durable queue claim.
+- Both endpoints retain the router's server-side admin-role **and** exact `peter1010` username requirement. No backfill runs simply by opening the page. Play IDs/links come from official StatsAPI; missing or unplayable source videos are not fabricated.
 
 #### `GET /api/personal/timing`
 
@@ -461,6 +479,18 @@ The freshness manifest is the runtime authority for data cutoff reporting. `docs
 ```
 
 ## Versioning Rule
+
+### Batter In game zone rates · 2026-11-05
+
+`GET /api/batters/personal/zone-rates?year=2026&batter_id=682998&pitcher_hand=R` uses the existing API authentication; `batter_id` must be positive and `pitcher_hand` is exactly `All|L|R`. It returns `batter_zone_rates_v1`: year/batter/hand identity, status (`ready|insufficient_pa|no_data|unavailable`), whole-season completed unique `season_pa`, `eligible` (`PA>30`), split/located/missing-location/height-fallback pitch counts, metric definitions and 17 cells (9 normalized strike-zone + 8 outside groups). Each cell has stable id/label/region, `[u0,v0,u1,v1]` normalized bounds, pitches and all metric `{numerator,denominator,value}` records. Values are percentages; zero denominator/not-applicable is null, never zero. The eligibility count is computed before handedness filtering and is not pitch count or batter-vs-pitcher history. Regular-season PA excludes truncated PA and deduplicates by game/at-bat using the existing batter service definition.
+
+Swing/strike/CSW and other pitch-based rates use cell pitches; Contact/Whiff use swings; Z/O variants are only applicable inside/outside respectively. Event flags reuse Discipline; coordinates use the replay's 17-inch zone and per-pitch recorded height (fallback 1.5–3.5ft, counted), distinct from the unchanged legacy Discipline fixed box. Missing/nonfinite locations do not enter cells. All finite outside locations are grouped even beyond their finite display bounds. Read-only season DB queries use enriched table first, select only necessary columns and exclude other batters/postseason; no video/Plus cache side effects. Server cache is bounded and keyed by year/batter/hand plus DB/WAL revision. Replay response and trajectory contract are unchanged. The old `/batters/personal/discipline` route still has its original arguments; new hand filtering is provided by this compact endpoint.
+
+Outcome metric extension (additive, 2026-11-05): 16 metrics now include AVG, wOBA and HardHit%. Metric definitions expose `format=decimal|percent`; AVG/wOBA values are native decimal ratios, not percentages. Numerator/denominator support floating weights. AVG=H/AB on completed PA-ending rows with the shared non-AB exclusions. wOBA=sum(finite recorded woba_value)/sum(finite positive woba_denom) on PA-ending rows with both fields available; no missing-weight zero fill or generated coefficients. HardHit%=100*95+mph fair BBE/finite-positive-EV fair BBE, so missing EV is excluded. One completed PA outcome is chosen globally by game/at-bat/final pitch before hand/location filtering; only its final location receives the outcome. Nonterminal foul/stray EV and duplicated PA metadata do not create extra BBE/AB. Percentage metrics remain unchanged; missing/zero denominators are null. The client uses explicit separate color scales (percent0–100, AVG0–1, wOBA0–2), while actual values above the display ceiling remain unchanged in the numeric table.
+
+League/PR extension (additive, 2026-11-05, supersedes absolute display coloring): root `benchmark_status/version/min_denominator/min_peers`; each rate adds `league_average`, `raw_pr`, `color_pr`, `peer_count`, `benchmark_status`; metric definitions add `direction=higher|lower|frequency`. Only same year/hand/cell/metric peers with full-season PA>30 and cell denominator>=10 enter the reference group; the weighted pooled league mean is separate from equal-batter midrank PR. At least5 peers and target denominator>=10 are required for color PR. Lower-is-favorable batter metrics reverse100−rawPR; frequency metrics retain rawPR with no quality claim. All ties yieldPR50. Raw AVG/wOBA/% and numerators/denominators remain unchanged. The client uses vivid0/50/100 PR colors and display-only PR interpolation; no missing/stale-reference absolute-color fallback. Outside groups render a narrow feathered halo, not actual pitch-density geometry.
+
+Offline command: `python backend/scripts/build_batter_zone_baseline.py --year 2026`. Cache is per-year `MLB{year}/batter_zone_baseline_v1.json`, atomically published with DB/WAL stat plus aggregation/event-code fingerprint; same raw aggregator used for all peers. Only2026 is built initially. HTTP only reads/enriches and never scans/builds the league; source mismatch gives stale status and noPR until explicit preprocessing. Raw per-batter LRU results are deep-copied before enrichment. The reference artifact contains distributions but API exposes only summary/PR, not the entire population.
 
 Keep URLs stable during MVP. If a breaking response change is needed, add a new field first, migrate frontend, then remove the old field later.
 # Ballpark D4 avatar profile (draft, not D5-released)

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "slices": [
+    "E2.3",
+    "E2.4"
+  ],
+  "updated_at": "2026-11-04",
+  "source": "frontend/assets/ballpark/scenes/scene-kit-e2-3-4-v1.json",
+  "source_sha256": "991a47368dca9f8ea7216642bb8ca613f995d9c4619ad2c07d7d68cb0e3f9af9",
+  "base_five_scene_sha256_unchanged": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+  "manifest": "data/sample/petehub_ballpark_scene_manifest_e2-3-4-v1.json",
+  "art": [
+    {
+      "room": "batting-cages",
+      "runtime_path": "frontend/assets/ballpark/batting-cages-v1.png",
+      "approved_original": "output/ballpark/e2-facilities-v1/batting-cages-concept-v1.png",
+      "sha256": "dc409ad4e6e63ce4be2919e439f7fa0e8840fe75676fe6e7e035e43ba6674a35",
+      "bytes": 2719206,
+      "image_size": [
+        1672,
+        941
+      ],
+      "copy": "byte_identical"
+    },
+    {
+      "room": "pitcher-mound",
+      "runtime_path": "frontend/assets/ballpark/pitcher-mound-v1.png",
+      "approved_original": "output/ballpark/e2-facilities-v1/pitcher-mound-concept-v1.png",
+      "sha256": "d159478a402993e4ee741155c976a7ff7a006144240d6b6dfd149f29ec6d6dd8",
+      "bytes": 2740636,
+      "image_size": [
+        1672,
+        941
+      ],
+      "copy": "byte_identical"
+    }
+  ],
+  "source_only_status": "PASS",
+  "later_revision": {"note":"This v1 file preserves original source checks/hash/typecheck before the requested Pitcher layout edit. Current runtime uses pitcher-mound-v2; its new image/layout is not art-accepted yet. No repeat geometry/typecheck or new visual PASS inferred.","current_revision":"data/sample/petehub_ballpark_pitcher_in_game_layout_v2.json","current_pitcher_objects":6,"current_catalog_objects":52},
+  "checks": [
+    {
+      "command": "node frontend/scripts/check-ballpark-scenes.mjs e2-3-4-v1",
+      "status": "PASS",
+      "rooms": [
+        {
+          "room": "batting-cages",
+          "collision": 16,
+          "foreground": 14,
+          "portals": 1,
+          "object_approaches": 5,
+          "numeric_positions": 13350
+        },
+        {
+          "room": "pitcher-mound",
+          "collision": 19,
+          "foreground": 17,
+          "portals": 1,
+          "object_approaches": 5,
+          "numeric_positions": 10754
+        }
+      ]
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe backend/scripts/build_ballpark_scenes.py --version e2-3-4-v1 --check",
+      "status": "PASS"
+    },
+    {
+      "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json",
+      "cwd": "frontend",
+      "status": "PASS",
+      "note": "One direct typecheck; no Nuxt prepare/build or server change."
+    },
+    {
+      "check": "Approved PNG byte identity and dimensions; v3 base hash unchanged",
+      "status": "PASS"
+    }
+  ],
+  "production_ready": false,
+  "human_acceptance": {
+    "art": "All three designs accepted by user 2026-11-04",
+    "Game_E2.2": "User subsequently explicitly accepted Game interface; done",
+    "Batting_E2.3": "User explicitly accepted E2.3 after initial evidence snapshot; done.",
+    "Pitcher_E2.4": "pending_user"
+  },
+  "limitations": [
+    "Numerical geometry and source checks do not verify visual depth, movement feel or interaction. Agent did not open/control browser or perform movement/collision tests.",
+    "Directory/Stats/Compare/Lab/Shape/In game objects have bounds/approaches but no actions; E3.2/F2 remains future work. Direct Classic URLs retained.",
+    "Netted practice bays are scenery and blockers, not playable batting/pitching or simulated player motion.",
+    "Independent two-room supplement, not E2.5 unified package. E2/E2.1 closure remains separate; no E3/E4/E5/F work."
+  ],
+  "manual_urls": [
+    "http://127.0.0.1:3000/ballpark/play?room=batting-cages",
+    "http://127.0.0.1:3000/ballpark/play?room=pitcher-mound"
+  ],
+  "manual_checks": [
+    "Enter each room from its Campus E/Enter entrance and fixed navigation.",
+    "Walk the central aisle and side/cross aisles; check nets, walls, kiosks and equipment block at sensible edges without invisible walls.",
+    "Check avatar/foreground depth around cage posts, kiosks, consoles and south exit; no disappearing avatar or repeated artwork.",
+    "Near south CAMPUS exit press R: Batting returns to Campus Batting entrance, Pitcher to Campus Pitcher entrance, independent of previously visited room. Repeat entry/exit.",
+    "Viewing team remains in URL; direct Game/Batting/Pitcher and Static map remain available. Object actions are explicitly marked unconnected."
+  ]
+}

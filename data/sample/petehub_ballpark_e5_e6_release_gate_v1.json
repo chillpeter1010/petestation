@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-05",
+  "project_id": "petehub-ballpark-game-system",
+  "slices": ["E5", "E6"],
+  "implementation": "delivered_for_user_acceptance",
+  "release_decision": "pending_user_and_required_measurements",
+  "production_ready": false,
+  "user_operational_acceptance": {
+    "source": "User reported all operations were fine after the E5/E6 delivery",
+    "scope": "Aggregate acceptance of delivered operations, no device-specific numeric certification",
+    "E5": "done",
+    "E6": "operations accepted; quantitative/device release evidence still pending",
+    "new_followup_pending": "Single-destination link objects skip the intermediary panel; clearer/larger scene text"
+  },
+  "previous_acceptance": {
+    "slices": ["E3", "E3.1", "E3.2", "E3.3", "E4"],
+    "status": "done",
+    "source": "User explicitly clarified E3-E4 all passed and authorized E5-E6; do not repeat those checks. No per-device numeric performance inferred."
+  },
+  "storage_contract": {
+    "schema_version": 1,
+    "owner": "Nuxt, browser-local localStorage per signed-in account",
+    "key_prefix": "petehub.ballpark.world.v1:",
+    "fields": ["account_id", "world_revision", "saved_at", "last_room", "viewing_team", "rooms: x/y/facing/objectId"],
+    "write_policy": "At most one queued write per second, plus exact checkpoints before leave/pagehide/hidden and Classic navigation",
+    "position_priority": ["explicit one-use portal arrival", "valid saved pose for requested room", "safe current object approach for invalid saved pose", "scene safe spawn"],
+    "migration": "No earlier world-position schema exists. Unsupported schema or account mismatch recovers to a fresh safe save; package revision changes revalidate each restored position using current collision.",
+    "storage_failure": "Keep current visit in memory with notice; Classic remains available",
+    "cross_device_sync": false,
+    "server_profile_changed": false,
+    "secrets_or_engine_objects_saved": false
+  },
+  "source_evidence": "data/sample/petehub_ballpark_e5_e6_source_gate_v1.json",
+  "source_typecheck": {
+    "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json",
+    "working_directory": "frontend",
+    "status": "pass",
+    "meaning": "Compilation only; not UI or device acceptance"
+  },
+  "manual_acceptance": [
+    {"id": "E5-save-restore", "status": "pending_user", "check": "Refresh/relogin/Classic return retain room, position, facing and team; another account stays separate"},
+    {"id": "E5-arrival-recovery", "status": "pending_user", "check": "Nine-room travel, C/R portal arrivals and Safe reset; storage failure/invalid-save recovery if user can exercise them"},
+    {"id": "E6-input-display", "status": "pending_user", "check": "Desktop/narrow, available real devices, keyboard/touch/gamepad and reduced motion; record unavailable device/input types explicitly"},
+    {"id": "E6-record-idle-cleanup", "status": "pending_user", "check": "User records 20 seconds while walking, exports JSON, repeats room/Classic transitions and observes idle/hidden behavior"},
+    {"id": "E6-fallback", "status": "pending_user", "check": "Canvas switch preserves pose; runtime errors offer Retry/Static/Classic; no duplicate instance or stuck input after return"}
+  ],
+  "release_budgets_not_measurements": {
+    "classic_initial_transfer_bytes_max": 300000,
+    "deployed_desktop_lcp_p75_ms_max": 2500,
+    "representative_input_p75_ms_max": 200,
+    "desktop_frame_p95_ms_max": 20,
+    "frame_p95_ms_requiring_fallback_offer": 33.3,
+    "warm_20_cycle_forced_gc_retained_heap_growth_bytes_max": 1048576,
+    "status": "not_certified_by_local_source_checks_or_dev_sample"
+  },
+  "measurement_matrix": {
+    "chrome_edge_firefox": "pending_user_available_browsers",
+    "real_low_end_device": "pending_user_or_unavailable",
+    "desktop_narrow_keyboard_reduced_motion": "pending_user",
+    "production_bundle_transfer_lcp": "not_measured",
+    "input_latency": "not_measured",
+    "forced_gc_retained_heap_gpu_global_listener_cleanup": "not_measured",
+    "console_errors": "pending_user",
+    "frame_samples": "await_user_downloaded_recording"
+  },
+  "limitations": [
+    "No assistant browser/visual/input/collision testing, screenshot, alternate login, fixture or extra frontend server",
+    "User recording explicitly labels development versus production and includes raw bounded samples",
+    "Local load-to-first-state is not LCP; performance.memory is not retained heap or GPU memory",
+    "Owned created/destroyRequested/destroyed counters do not certify all browser listeners, timers or GPU resources",
+    "Unavailable devices/APIs must remain unavailable rather than pass",
+    "E3-E4 user acceptance does not certify E5-E6; F4 real roster NPC art/random appearances remain planned"
+  ]
+}

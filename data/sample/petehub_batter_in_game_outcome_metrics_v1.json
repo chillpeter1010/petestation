@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "batter-in-game-outcome-metrics-v1",
+  "updated_at": "2026-11-05",
+  "slices": [
+    "GameCenter3H"
+  ],
+  "added_metrics": [
+    "AVG",
+    "wOBA",
+    "HardHit%"
+  ],
+  "metric_count": 16,
+  "source_files": [
+    {
+      "path": "backend/app/api/schemas/batter_zone_rates.py",
+      "sha256": "dae17878863ca3afaed81dec98f7ec0ebe5b9cae5203ced3272314ed3405242e"
+    },
+    {
+      "path": "backend/app/services/batter_zone_rates_service.py",
+      "sha256": "44d69ec31bf1838080ea6c76d2c9b4d2084220ee783535009e20a0e5fb67307e"
+    },
+    {
+      "path": "backend/tests/test_batter_zone_rates.py",
+      "sha256": "d8f2618bf3ecd42f06c540725a672713b33e4bb8e9d8333fa1d703f6aee078f0"
+    },
+    {
+      "path": "frontend/components/charts/BatterInGameHeatmap.vue",
+      "sha256": "907bd3b2233c8d214091d7b6857e0f40015d35a1c1cd5be7f92c59f23c341b75"
+    },
+    {
+      "path": "frontend/components/charts/PitchReplayChart.vue",
+      "sha256": "ed7777c9e197cb63dba8bcccfa5935c2087967948ad8e3184a41c7d581e062dd"
+    },
+    {
+      "path": "frontend/utils/batterZoneRates.ts",
+      "sha256": "4f031701e166f16e82483588bcd7ed9545c518bf11b8cea37988e6e17d787b14"
+    },
+    {
+      "path": "frontend/types/api.ts",
+      "sha256": "b943465e93cdb71d71b122000168bf3909f1dadc27f13cce4655190428e264ee"
+    }
+  ],
+  "definitions": {
+    "avg": "H/AB on unique completed PA-ending pitch, native decimal",
+    "woba": "sum recorded finite weight / sum positive finite recorded denominator on unique completed PA-ending rows; missing weight excluded, native decimal",
+    "hard_hit": "95+mph fair BBE / finite positive-EV fair BBE, percentage",
+    "location": "Only the chosen final PA pitch receives outcome, no redistribution to earlier pitches if missing location. Regular-season whole-batter PA>30 eligibility remains independent of hand split."
+  },
+  "source_only_checks": {
+    "backend": "10 tests passed, tests/test_batter_zone_rates.py",
+    "frontend_formatting": "8 assertions passed: AVG/wOBA native decimals, >1 wOBA, %/null/zero and independent color scale",
+    "direct_vue_tsc": "PASS; one run, no Nuxt prepare/build",
+    "real_data_read_only": {
+      "year": 2026,
+      "batter_id": 682998,
+      "hand": "R",
+      "season_pa": 671,
+      "hits": 84,
+      "AB": 400,
+      "woba_numerator": 144.35,
+      "woba_denominator": 455,
+      "hard_hit": 140,
+      "tracked_BBE": 300
+    }
+  },
+  "human_acceptance": "user_accepted_2026-11-05",
+  "browser": "not_performed_by_agent",
+  "unchanged": [
+    "Statcast trajectory",
+    "season PA gate",
+    "raw source data",
+    "Ballpark E2 acceptance; E3 not started"
+  ],
+  "manual_url": "http://127.0.0.1:3000/pitcher-personal?tab=in-game",
+  "manual_checks": [
+    "Refresh In game, select Catcher, then choose AVG/wOBA/HardHit%.",
+    "AVG/wOBA show three decimals without percent; HardHit% shows percent. Table shows H/AB, weighted-value/denominator and HH/trackedBBE respectively.",
+    "Hand changes update data; zero and missing cells differ; prior heatmap/proportion/playback remain user-verified only."
+  ]
+,
+  "contour_shading_revision":{"kind":"Personal_style_contour_shading","human_acceptance":"user_accepted_2026-11-05","sources":[{"path":"frontend/utils/heatmapPalette.ts","sha256":"b68223e6b8652ae4a9b7cc2b06d21b7b15d714e228b89f9e63bb8cd9acb51021"},{"path":"frontend/utils/batterZoneRates.ts","sha256":"33366aaa364f3fa67a5819100c8ba6a1bee8ce893b27a2462f420fba2a81b95b"},{"path":"frontend/components/charts/StrikeZoneScatter.vue","sha256":"7df80ada18fa88e288441cef6d08b870fc92d8f03913bb9e0d46c60db5d86235"},{"path":"frontend/components/charts/PitchReplayChart.vue","sha256":"0fa6655f315a2a3fbb83c1c7f99725d5cf572210f5c92e2f5f994da2e89f173f"},{"path":"frontend/components/charts/BatterInGameHeatmap.vue","sha256":"7ab98b846cd269dfbca19cdabbaeb3ef1eb2cebbae34cd1ba36509aedd813f2e"},{"path":"frontend/scripts/check-batter-zone-contours.mjs","sha256":"db1ae00d8d03ef58cd19deab4a91467abca92020b1349d2e5a8a763c9a7117be"}],"method":"Display-only Gaussian interpolation of aggregated numerator/denominator, sigma .22 in normalized zone units, separate inside/outside support, 48x48 samples/eight original Personal contour levels, horizontal-run compression; exact table untouched. Not pitch-level KDE.","checks":["node frontend/scripts/check-batter-zone-contours.mjs PASS","one direct vue-tsc PASS"],"not_repeated":["backend tests","Nuxt build","browser/visual tests"],"snapshot_note":"Original source_files and original outcome checks above are earlier snapshots, not repeated or relabeled as latest tests."}
+}

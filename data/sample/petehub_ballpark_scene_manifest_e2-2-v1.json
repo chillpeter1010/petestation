@@ -1,0 +1,64 @@
+{
+  "schema_version": 2,
+  "asset_version": "e2-2-game-v1",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-e2-2-v1.json",
+  "source_sha256": "bb1d91252352f1a1ea057d9192ac7ca77397bce9084434887f5be3f03a0ac128",
+  "exporter": "build_ballpark_scenes.py:v1",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / built-in OpenAI image generation and independently authored scene geometry",
+    "model": "not_exposed_by_image_generation_tool",
+    "license": "Project-generated artwork; use subject to applicable tool terms; no third-party asset pack or MLB licensing claim",
+    "reference_manifest": "data/sample/petehub_ballpark_e2_facility_concepts_v1.json",
+    "modification_note": "User accepted all three facility designs and subsequently the Game interface on 2026-11-04. Game artwork copied byte-for-byte, no repaint or resizing. Independently authored geometry unchanged by acceptance metadata update. Existing five-scene source unchanged; object actions remain E3.2/F1."
+  },
+  "scope": [
+    "E2.2"
+  ],
+  "human_acceptance": "art_and_Game_interface_accepted_by_user_2026-11-04",
+  "scenes": [
+    {
+      "scene_id": "game_center",
+      "room": "game-center",
+      "background": "frontend/assets/ballpark/game-center-v1.png",
+      "background_sha256": "4d360cd7a61e53010ad8896db7b852815660763a3aab1e58a27ad7b3780e3b88",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2717556,
+      "editable_source": "output/ballpark/scenes-e2-2-v1/game-center-layers.svg",
+      "editable_source_sha256": "94c6d1762a1e64a31dfb06c0a16af2fa2bf591214d9ee1cfda46528184069b7a",
+      "runtime_path": "output/ballpark/scenes-e2-2-v1/game-center.json",
+      "runtime_sha256": "33a84415a868f193da8e94f9b1ebb07570df238d52ea3f43d3af6f820e4edb83",
+      "collision_count": 21,
+      "foreground_count": 19,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/games/today"
+      }
+    }
+  ],
+  "portal_overrides": {
+    "campus": {
+      "game": {
+        "room": "game-center",
+        "spawn": "return"
+      }
+    }
+  }
+}

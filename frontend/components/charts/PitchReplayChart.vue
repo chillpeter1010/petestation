@@ -2,11 +2,14 @@
   <section class="replay-chart" aria-label="Pitch trajectory replay">
     <header class="replay-header">
       <div>
-        <h3>Pitch Replay</h3>
+        <h3>{{ title }}</h3>
         <p>Statcast constant-acceleration reconstruction · ball path only</p>
       </div>
       <span :class="['status-badge', trajectoryStatus]">{{ statusLabel }}</span>
     </header>
+    <nav v-if="selectedRow" class="matchup-names" aria-label="Selected pitch players">
+      <NuxtLink :to="{path:'/pitcher-personal',query:{year,pitcher_id:Number(selectedRow.pitcher)}}">{{ displayPitcherName }}</NuxtLink><span>vs</span><NuxtLink :to="{path:'/batter-personal',query:{year,batter_id:selectedBatterId}}">{{ displayBatterName }}</NuxtLink><small>{{ selectedRow.balls ?? '—' }}–{{ selectedRow.strikes ?? '—' }} · {{ String(selectedRow.stand || '?') }}HB / {{ String(selectedRow.p_throws || '?') }}HP</small>
+    </nav>
 
     <div class="replay-controls">
       <label>Pitch
@@ -59,18 +62,26 @@
           </div>
         </div>
         <div class="camera-actions">
-          <button type="button" class="camera-button" @click="setLowCamera">Low angle</button>
-          <button type="button" class="camera-button" @click="resetCamera">Reset angle</button>
+          <button v-if="activeView === 'pitcher'" type="button" class="camera-button" @click="setLowCamera">Low angle</button>
+          <button type="button" class="camera-button" @click="resetCamera">Reset view</button>
         </div>
       </div>
 
+      <BatterInGameHeatmap
+        v-if="activeView === 'catcher' && year && selectedBatterId"
+        :year="year" :batter-id="selectedBatterId" :batter-name="displayBatterName"
+        :pitcher-id="Number(selectedRow?.pitcher || 0)" :pitcher-hand="String(selectedRow?.p_throws || '').toUpperCase()"
+        @overlay="batterHeatmap = $event"
+      />
+
       <div class="scene-shell">
+        <details class="scene-view-help"><summary>{{ activeView==='catcher'?'CATCHER VIEW':'PITCHER VIEW' }} · guide</summary><p>{{ activeView === 'catcher' ? 'Drag / arrow keys to pan · wheel to zoom the whole scene · Home to reset' : 'Drag / arrow keys to orbit · wheel to zoom · Home to reset' }}</p><p>{{ contextPaths.length }} comparison pitches · elevation {{ cameraElevationLabel }}</p><p>17-inch Statcast zone · 3×3 grid. Dashed margin is a visual guide. Generic batter; not measured player mechanics. Catcher view uses an illustrative stadium photo and a shared pan/zoom for all scene layers.</p></details>
         <svg
           class="trajectory-scene"
           :class="{ dragging }"
           viewBox="0 0 960 560"
-          role="img"
-          :aria-label="`${pitchName} trajectory from the ${activeView} view. Drag to adjust the camera angle.`"
+          role="group"
+          :aria-label="`${pitchName} trajectory from the ${activeView} view. ${activeView === 'catcher' ? 'Drag to pan the whole scene.' : 'Drag to adjust the camera angle.'}`"
           tabindex="0"
           @pointerdown="startCameraDrag"
           @pointermove="moveCamera"
@@ -82,12 +93,12 @@
         >
           <defs>
             <linearGradient id="replay-sky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#070d18" />
-              <stop offset="1" stop-color="#101b2c" />
+              <stop offset="0" stop-color="#071420" />
+              <stop offset="1" stop-color="#29475a" />
             </linearGradient>
             <linearGradient id="replay-turf" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#1c4a3d" />
-              <stop offset="1" stop-color="#102b27" />
+              <stop offset="0" stop-color="#32684f" />
+              <stop offset="1" stop-color="#123e32" />
             </linearGradient>
             <filter id="ball-glow" x="-200%" y="-200%" width="500%" height="500%">
               <feGaussianBlur stdDeviation="5" result="blur" />
@@ -95,39 +106,56 @@
             </filter>
           </defs>
 
+          <rect width="960" height="560" fill="#071420" />
+          <g :transform="catcherSceneTransform">
           <rect width="960" height="560" fill="url(#replay-sky)" />
+          <image v-if="activeView==='catcher'" :href="catcherStadiumArt" width="960" height="560" preserveAspectRatio="xMidYMid slice" aria-hidden="true" />
+          <g v-if="activeView!=='catcher'">
+          <g class="stadium-backdrop" aria-hidden="true"><path d="M0 180 Q480 245 960 180L960 275 0 275Z" fill="#0c2634" /><path d="M0 199 Q480 257 960 199M0 219 Q480 274 960 219" fill="none" stroke="#4a6e7b" stroke-width="3" /><path d="M0 239 Q480 285 960 239L960 285 0 285Z" fill="#163b3e" /><g v-for="i in 32" :key="i" opacity=".5"><circle :cx="i*31-10" :cy="207+Math.sin(i/32*Math.PI)*26" r="2" fill="#b9cad3" /></g><g v-for="x in [80,880]" :key="x"><path :d="`M${x} 88V208`" stroke="#638092" stroke-width="3" /><rect :x="x-23" y="74" width="46" height="15" rx="3" fill="#cedcdb" /><path :d="`M${x-25} 91L${x-90} 210H${x+90}L${x+25} 91`" fill="#c7e6df" opacity=".035" /></g></g>
           <polygon class="field" :points="groundPolygon" />
+          <polygon v-for="(stripe,i) in grassStripes" :key="i" :points="stripe" :fill="i%2?'#174b39':'#438262'" opacity=".24" />
           <polygon class="dirt-lane" :points="dirtLanePolygon" />
           <polyline v-for="(line, index) in fieldLines" :key="`field-${index}`" class="field-line" :points="line" />
           <polygon class="mound" :points="moundPolygon" />
           <line v-if="rubberLine" class="rubber" :x1="rubberLine[0].x" :y1="rubberLine[0].y" :x2="rubberLine[1].x" :y2="rubberLine[1].y" />
+          </g>
+          <g :transform="activeView === 'catcher' ? 'translate(-30 80)' : undefined">
+          <polygon v-for="(box, index) in batterBoxPolygons" :key="`batter-box-${index}`" class="batter-box" :points="box" aria-hidden="true" />
           <polygon class="plate" :points="homePlatePolygon" />
 
-          <image v-if="batterFigure" class="batter-silhouette" :href="batterFigure.asset" width="179" height="478" :transform="batterFigure.transform" preserveAspectRatio="xMidYMax meet" aria-hidden="true" />
+          <g v-if="batterFigure && activeView==='catcher'" :transform="batterFigure.photoTransform" aria-hidden="true"><svg width="478" height="478" :viewBox="batterFigure.side==='left'?'0 0 887 887':'887 0 887 887'" overflow="hidden"><image :href="catcherBattersArt" width="1774" height="887" /></svg></g>
+          <ReplayBatterFigure v-else-if="batterFigure" :side="batterFigure.side" :transform="batterFigure.transform" />
 
+          <polygon class="zone-backplate" :points="strikeZonePolygon" />
+          <g v-if="activeView === 'catcher'" class="batter-zone-rates" pointer-events="none" aria-hidden="true">
+            <path v-for="band in heatmapPaths" :key="band.id" :d="band.path" :fill="band.color" :fill-opacity="band.opacity" stroke="none" />
+          </g>
+          <polygon class="zone-margin" :points="zoneMarginPolygon" aria-hidden="true" />
           <polygon class="strike-zone" :points="strikeZonePolygon"><title>Statcast strike zone: 17-inch plate width by batter sz_bot / sz_top</title></polygon>
           <line v-for="(line, index) in strikeZoneGridLines" :key="`zone-grid-${index}`" class="strike-zone-grid" :x1="line[0].x" :y1="line[0].y" :x2="line[1].x" :y2="line[1].y" />
 
-          <g class="comparison-trajectories" aria-hidden="true">
-            <polyline v-for="path in contextPaths" :key="path.key" class="comparison-path" :style="{ stroke: path.color }" :points="path.points"><title>{{ path.label }}</title></polyline>
-            <circle v-for="path in contextPaths" :key="`${path.key}-release`" class="comparison-release" :style="{ fill: path.color }" :cx="path.release.x" :cy="path.release.y" r="3.5" />
+          <g class="comparison-trajectories">
+            <g v-for="path in contextPaths" :key="path.key" class="interactive-pitch" role="button" tabindex="0" :aria-label="path.label" @pointerdown.stop @click.stop="activatePitch(path.row)" @keydown.enter.stop.prevent="activatePitch(path.row)" @keydown.space.stop.prevent="activatePitch(path.row)">
+              <title>{{ path.label }}</title>
+              <polyline class="pitch-hit-area" :points="path.points" />
+              <polyline class="comparison-path" :style="{ stroke: path.color }" :points="path.points" />
+              <circle class="comparison-release" :style="{ fill: path.color }" :cx="path.release.x" :cy="path.release.y" r="3.5" />
+            </g>
           </g>
 
           <polyline class="selected-path-shadow" :points="selectedProjectedPath" />
           <polyline class="selected-full-path" :style="{ stroke: pitchColor }" :points="selectedProjectedPath" />
           <polyline class="selected-played-path" :style="{ stroke: pitchColor }" :points="playedProjectedPath" />
+          <g v-if="selectedRow && selectedProjectedPath" class="interactive-pitch" role="button" tabindex="0" :aria-label="pitchInfo(selectedRow)" @pointerdown.stop @click.stop="activatePitch(selectedRow)" @keydown.enter.stop.prevent="activatePitch(selectedRow)" @keydown.space.stop.prevent="activatePitch(selectedRow)">
+            <title>{{ pitchInfo(selectedRow) }}</title><polyline class="pitch-hit-area" :points="selectedProjectedPath" />
+          </g>
           <circle v-if="releaseScreenPoint" class="selected-release-ring" :cx="releaseScreenPoint.x" :cy="releaseScreenPoint.y" r="8" />
           <circle v-if="releaseScreenPoint" class="selected-release" :style="{ fill: pitchColor }" :cx="releaseScreenPoint.x" :cy="releaseScreenPoint.y" r="4.5" />
           <circle v-if="currentScreenPoint" class="ball-halo" :cx="currentScreenPoint.x" :cy="currentScreenPoint.y" r="7.8" />
           <circle v-if="currentScreenPoint" class="ball" :cx="currentScreenPoint.x" :cy="currentScreenPoint.y" r="3.9"><title>{{ ballTooltip }}</title></circle>
-
-          <g class="scene-hud" aria-hidden="true">
-            <rect x="24" y="22" width="300" height="106" rx="9" />
-            <text x="42" y="48" class="hud-title">{{ activeView === 'pitcher' ? 'PITCHER VIEW' : 'CATCHER VIEW' }}</text>
-            <text x="42" y="72" class="hud-copy">Drag to orbit · wheel to zoom</text>
-            <text x="42" y="92" class="hud-copy">{{ contextPaths.length }} comparison {{ contextPaths.length === 1 ? 'pitch' : 'pitches' }} · elevation {{ cameraElevationLabel }}</text>
-            <text x="42" y="112" class="hud-copy">Statcast zone · 3×3 grid</text>
           </g>
+          </g>
+
           <g class="scene-orientation" aria-hidden="true">
             <line x1="846" y1="505" x2="898" y2="505" />
             <line x1="846" y1="505" x2="846" y2="458" />
@@ -135,6 +163,7 @@
             <text x="840" y="449">Z</text>
           </g>
         </svg>
+        <InGameMatchupCards v-if="activeView==='catcher' && year && selectedBatterId && selectedPitcherId && countValid" :year="year" :pitcher-id="selectedPitcherId" :batter-id="selectedBatterId" :pitcher-name="displayPitcherName" :batter-name="displayBatterName" :batter-side="batterStand" :pitcher-hand="String(selectedRow?.p_throws||'')" :balls="Number(selectedRow?.balls)" :strikes="Number(selectedRow?.strikes)" @identity="setIdentity" />
 
         <div class="scene-caption">
           <div>
@@ -148,6 +177,7 @@
     </div>
     <p v-else class="empty-state">This pitch does not have enough release, velocity and acceleration data for replay.</p>
 
+    <p class="motion-note">Hover or focus a path for pitch details. Click a path or press Enter to select it and open its video when available; the Pitch menu also selects individual pitches.</p>
     <footer class="replay-readout" aria-live="polite">
       <span><b>{{ pitchName }}</b> · {{ displayNumber(selectedRow?.release_speed, 1) }} mph</span>
       <span>Flight {{ displayNumber(selectedRow?.flight_time_seconds, 3) }} s</span>
@@ -158,8 +188,10 @@
 
 <script setup lang="ts">
 import { getPitchColor } from '~/utils/pitchColors'
-import leftSideBatterAsset from '~/assets/images/pitch-replay/LHH_pitcher_and_RHH_catcher.png'
-import rightSideBatterAsset from '~/assets/images/pitch-replay/RHH_pitcher_and_LHH_catcher.png'
+import { inGamePitchDetails } from '~/utils/pitcherInGame'
+import { buildZoneRateContours, type BatterHeatmapOverlay } from '~/utils/batterZoneRates'
+import catcherBattersArt from '~/assets/images/pitch-replay/catcher-batters-v4.png'
+import catcherStadiumArt from '~/assets/images/pitch-replay/catcher-stadium-v2.png'
 
 type ReplayRow = Record<string, unknown>
 type TrajectoryPoint = { progress: number; time_seconds: number; x_ft: number; y_ft: number; z_ft: number }
@@ -173,8 +205,8 @@ const CAMERA_PRESETS: Record<CameraView, { yaw: number; pitch: number; distance:
   catcher: { yaw: 0, pitch: -4 * Math.PI / 180, distance: 42 },
 }
 
-const props = defineProps<{ rows: ReplayRow[] }>()
-const emit = defineEmits<{ 'select-pitch': [pitch: ReplayRow] }>()
+const props = withDefaults(defineProps<{ rows: ReplayRow[]; title?: string; year?: number }>(), { title: 'Pitch Replay' })
+const emit = defineEmits<{ 'select-pitch': [pitch: ReplayRow]; 'open-video': [pitch: ReplayRow] }>()
 
 const selectedKey = ref('')
 const playMode = ref<'pitch' | 'pa' | 'game'>('pitch')
@@ -183,10 +215,16 @@ const progress = ref(1)
 const isPlaying = ref(false)
 const reducedMotion = ref(false)
 const activeView = ref<CameraView>('pitcher')
+const batterHeatmap = ref<BatterHeatmapOverlay | null>(null)
 const comparisonScope = ref<ComparisonScope>('pa')
 const cameraYaw = ref(CAMERA_PRESETS.pitcher.yaw)
 const cameraPitch = ref(CAMERA_PRESETS.pitcher.pitch)
 const cameraDistance = ref(CAMERA_PRESETS.pitcher.distance)
+// A flat stadium cannot orbit in 3D. Catcher view moves every rendered layer together.
+const catcherViewport = ref({ x: 0, y: 0, zoom: 1 })
+const catcherSceneTransform = computed(() => activeView.value === 'catcher'
+  ? `translate(${catcherViewport.value.x} ${catcherViewport.value.y}) translate(480 280) scale(${catcherViewport.value.zoom}) translate(-480 -280)`
+  : undefined)
 const dragging = ref(false)
 let dragPointerId: number | null = null
 let lastPointerX = 0
@@ -213,6 +251,42 @@ const trajectoryReason = computed(() => String(selectedRow.value?.trajectory_rea
 const statusLabel = computed(() => ({ supported: 'Supported', limited_trajectory: 'Limited', unavailable: 'Unavailable' }[trajectoryStatus.value] || 'Unavailable'))
 const zoneTop = computed(() => finiteOr(selectedRow.value?.sz_top, 3.5))
 const zoneBottom = computed(() => finiteOr(selectedRow.value?.sz_bot, 1.5))
+const selectedBatterId = computed(() => {
+  const id = Number(selectedRow.value?.batter)
+  return Number.isInteger(id) && id > 0 ? id : 0
+})
+const selectedPitcherId=computed(()=>Number(selectedRow.value?.pitcher)||0)
+const identity=ref<{pitcherId:number;batterId:number;pitcherName:string;batterName:string}|null>(null)
+function validPlayerName(value:unknown){const text=String(value||'').trim();return !text||/^(?:(?:batter|pitcher|player)\s*)?\d+$/i.test(text)||/^(unknown|none|nan)/i.test(text)?'':text}
+const displayPitcherName=computed(()=>validPlayerName(selectedRow.value?.pitcher_name) || (identity.value?.pitcherId===selectedPitcherId.value?validPlayerName(identity.value.pitcherName):'') || 'Pitcher name unavailable')
+const displayBatterName=computed(()=>validPlayerName(selectedRow.value?.batter_name) || (identity.value?.batterId===selectedBatterId.value?validPlayerName(identity.value.batterName):'') || 'Batter name unavailable')
+const countValid=computed(()=>selectedRow.value?.balls!=null&&selectedRow.value?.strikes!=null&&Number.isInteger(Number(selectedRow.value.balls))&&Number.isInteger(Number(selectedRow.value.strikes))&&Number(selectedRow.value.balls)>=0&&Number(selectedRow.value.balls)<=3&&Number(selectedRow.value.strikes)>=0&&Number(selectedRow.value.strikes)<=2)
+function setIdentity(value:{pitcherName:string;batterName:string}){identity.value={...value,pitcherId:selectedPitcherId.value,batterId:selectedBatterId.value}}
+const heatmapBands = computed(() => {
+  const overlay = batterHeatmap.value
+  const context = `${props.year}:${selectedBatterId.value}:${Number(selectedRow.value?.pitcher || 0)}:${String(selectedRow.value?.p_throws || '').toUpperCase()}`
+  if (!overlay || overlay.context !== context) return []
+  return buildZoneRateContours(overlay.data.cells, overlay.metric)
+})
+const heatmapPolygons = computed(() => {
+  return heatmapBands.value.map(cell => {
+    const [x0, z0, x1, z1] = cell.bounds
+    const point = (x: number, z: number) => ({ x: -strikeZoneHalfWidth + x * strikeZoneHalfWidth * 2, y: strikeZonePlaneY, z: zoneBottom.value + z * (zoneTop.value - zoneBottom.value) })
+    return { ...cell, points: physicalPolygon([point(x0, z0), point(x1, z0), point(x1, z1), point(x0, z1)]) }
+  })
+})
+// One compound path per color/opacity avoids seams between translucent row tiles.
+const heatmapPaths = computed(() => {
+  const groups = new Map<string, { id: string; path: string; color: string; opacity: number }>()
+  for (const cell of heatmapPolygons.value) {
+    if (!cell.points) continue
+    const id = `${cell.color}:${cell.opacity}`
+    const group = groups.get(id) || { id, path: '', color: cell.color, opacity: cell.opacity }
+    group.path += `M${cell.points.trim().split(/\s+/).join('L')}Z`
+    groups.set(id, group)
+  }
+  return [...groups.values()]
+})
 const batterStand = computed(() => {
   const value = String(selectedRow.value?.stand || '').toUpperCase()
   return value === 'L' || value === 'R' ? value : ''
@@ -233,10 +307,11 @@ const contextPaths = computed(() => contextRows.value.flatMap((row) => {
   if (!release || !projected) return []
   return [{
     key: rowKey(row),
+    row,
     points: projected,
     release,
     color: getPitchColor(String(row.pitch_name || row.pitch_type || 'Unknown')),
-    label: pitchOptionLabel(row),
+    label: pitchInfo(row),
   }]
 }))
 const selectedProjectedPath = computed(() => projectPolyline(pathPoints.value))
@@ -246,14 +321,11 @@ const currentScreenPoint = computed(() => currentPoint.value ? projectPhysical(c
 const groundPolygon = computed(() => visualPolygon([
   { x: -25, y: -6, z: 0 }, { x: 25, y: -6, z: 0 }, { x: 25, y: 68, z: 0 }, { x: -25, y: 68, z: 0 },
 ]))
-const dirtLanePolygon = computed(() => visualPolygon([
-  { x: -0.66, y: -4, z: 0.02 }, { x: 0.66, y: -4, z: 0.02 }, { x: 0.82, y: 67, z: 0.02 }, { x: -0.82, y: 67, z: 0.02 },
+const dirtLanePolygon = computed(() => physicalPolygon([
+  ...Array.from({length:49},(_,i)=>({x:Math.cos(i/48*Math.PI*2)*13,y:Math.sin(i/48*Math.PI*2)*13,z:.02}))
 ]))
-const fieldLines = computed(() => [
-  visualPolyline([{ x: 0, y: -4, z: 0.04 }, { x: 0, y: 68, z: 0.04 }]),
-  visualPolyline([{ x: -19, y: -4, z: 0.04 }, { x: -7, y: 68, z: 0.04 }]),
-  visualPolyline([{ x: 19, y: -4, z: 0.04 }, { x: 7, y: 68, z: 0.04 }]),
-].filter(Boolean))
+const grassStripes=computed(()=>Array.from({length:12},(_,i)=>visualPolygon([{x:-25,y:-6+i*6,z:.01},{x:25,y:-6+i*6,z:.01},{x:25,y:i*6,z:.01},{x:-25,y:i*6,z:.01}])))
+const fieldLines = computed(() => [-1,1].map(side=>formatPoints([{x:0,y:0,z:.04},{x:55*side,y:55,z:.04}].map(projectPhysical))).filter(Boolean))
 const moundPolygon = computed(() => physicalPolygon(Array.from({ length: 30 }, (_, index) => {
   const angle = (index / 29) * Math.PI * 2
   return { x: Math.cos(angle) * 9, y: 60.5 + Math.sin(angle) * 9, z: 0.05 }
@@ -267,18 +339,29 @@ const homePlatePolygon = computed(() => physicalPolygon([
   { x: -17 / 24, y: 0, z: 0.06 }, { x: 17 / 24, y: 0, z: 0.06 }, { x: 17 / 24, y: 17 / 24, z: 0.06 },
   { x: 0, y: 17 / 12, z: 0.06 }, { x: -17 / 24, y: 17 / 24, z: 0.06 },
 ]))
+// Presentation-only chalk guides on the same ground plane as the plate.
+// Keep both boxes visible; selected stand controls the independently authored batter.
+const batterBoxPolygons = computed(() => activeView.value === 'catcher'
+  ? [-1, 1].map(side => physicalPolygon([
+    { x: side * 1.2, y: -3, z: 0.06 }, { x: side * 5.2, y: -3, z: 0.06 },
+    { x: side * 5.2, y: 3, z: 0.06 }, { x: side * 1.2, y: 3, z: 0.06 },
+  ]))
+  : [])
 const batterFigure = computed(() => {
   if (!batterStand.value) return null
   const physicalSide = batterStand.value === 'R' ? -1 : 1
-  const feet = projectPhysical({ x: physicalSide * 2.15, y: 0.72, z: 0.06 })
-  const crown = projectPhysical({ x: physicalSide * 2.15, y: 0.72, z: 6.15 })
+  const figurePlaneY = activeView.value === 'catcher' ? -2.8 : 0.72
+  const feet = projectPhysical({ x: physicalSide * 2.15, y: figurePlaneY, z: 0.06 })
+  const crown = projectPhysical({ x: physicalSide * 2.15, y: figurePlaneY, z: 6.15 })
   if (!feet || !crown) return null
-  const viewScale = activeView.value === 'catcher' ? 0.95 : 1
+  // Generic illustration, not measured player height; avoid dominating the zone.
+  const viewScale = activeView.value === 'catcher' ? 0.76 : 1
   const scale = clamp(Math.abs(feet.y - crown.y) / 478 * viewScale, 0.04, 2)
   const useLeftSideAsset = (activeView.value === 'pitcher' && batterStand.value === 'L')
     || (activeView.value === 'catcher' && batterStand.value === 'R')
   return {
-    asset: useLeftSideAsset ? leftSideBatterAsset : rightSideBatterAsset,
+    side: (useLeftSideAsset?'left':'right') as 'left'|'right',
+    photoTransform:`translate(${feet.x.toFixed(2)} ${feet.y.toFixed(2)}) scale(${scale.toFixed(4)}) translate(-239 -454.1)`,
     transform: `translate(${feet.x.toFixed(2)} ${feet.y.toFixed(2)}) scale(${scale.toFixed(4)}) translate(-89.5 -478)`,
   }
 })
@@ -288,6 +371,7 @@ const strikeZonePolygon = computed(() => physicalPolygon([
   { x: -strikeZoneHalfWidth, y: strikeZonePlaneY, z: zoneBottom.value }, { x: strikeZoneHalfWidth, y: strikeZonePlaneY, z: zoneBottom.value },
   { x: strikeZoneHalfWidth, y: strikeZonePlaneY, z: zoneTop.value }, { x: -strikeZoneHalfWidth, y: strikeZonePlaneY, z: zoneTop.value },
 ]))
+const zoneMarginPolygon=computed(()=>physicalPolygon([{x:-strikeZoneHalfWidth-.18,y:strikeZonePlaneY,z:zoneBottom.value-.18},{x:strikeZoneHalfWidth+.18,y:strikeZonePlaneY,z:zoneBottom.value-.18},{x:strikeZoneHalfWidth+.18,y:strikeZonePlaneY,z:zoneTop.value+.18},{x:-strikeZoneHalfWidth-.18,y:strikeZonePlaneY,z:zoneTop.value+.18}]))
 const strikeZoneGridLines = computed<Array<[Point2D, Point2D]>>(() => {
   const height = zoneTop.value - zoneBottom.value
   const verticalXs = [-strikeZoneHalfWidth / 3, strikeZoneHalfWidth / 3]
@@ -305,6 +389,8 @@ const strikeZoneGridLines = computed<Array<[Point2D, Point2D]>>(() => {
 })
 
 function rowKey(row: ReplayRow) { return [row.game_pk, row.pitcher, row.at_bat_number, row.pitch_number, row.pitch_uid].map(value => String(value ?? '')).join('|') }
+function pitchInfo(row: ReplayRow) { return inGamePitchDetails(row).map(field => `${field.label}: ${field.value}`).join('\n') }
+function activatePitch(row: ReplayRow) { selectedKey.value = rowKey(row); emit('select-pitch', row); emit('open-video', row) }
 function pitchOptionLabel(row: ReplayRow) { return `PA ${row.at_bat_number ?? '—'} · P${row.pitch_number ?? '—'} · ${row.pitch_name || row.pitch_type || 'Unknown'} · ${row.trajectory_status === 'unavailable' ? 'Unavailable' : displayNumber(row.release_speed, 1) + ' mph'}` }
 function finiteOr(value: unknown, fallback: number) { if (value === null || value === undefined || value === '') return fallback; const number = Number(value); return Number.isFinite(number) ? number : fallback }
 function displayNumber(value: unknown, digits: number) { if (value === null || value === undefined || value === '') return '—'; const number = Number(value); return Number.isFinite(number) ? number.toFixed(digits) : '—' }
@@ -373,8 +459,14 @@ function startCameraDrag(event: PointerEvent) {
 }
 function moveCamera(event: PointerEvent) {
   if (!dragging.value || dragPointerId !== event.pointerId) return
-  cameraYaw.value = clamp(cameraYaw.value + (event.clientX - lastPointerX) * 0.006, -0.72, 0.72)
-  cameraPitch.value = clamp(cameraPitch.value - (event.clientY - lastPointerY) * 0.004, -0.1, 0.58)
+  if (activeView.value === 'catcher') {
+    const bounds = (event.currentTarget as SVGSVGElement).getBoundingClientRect()
+    const unitsPerPixel = 960 / Math.max(bounds.width, 1)
+    panCatcher((event.clientX - lastPointerX) * unitsPerPixel, (event.clientY - lastPointerY) * unitsPerPixel)
+  } else {
+    cameraYaw.value = clamp(cameraYaw.value + (event.clientX - lastPointerX) * 0.006, -0.72, 0.72)
+    cameraPitch.value = clamp(cameraPitch.value - (event.clientY - lastPointerY) * 0.004, -0.1, 0.58)
+  }
   lastPointerX = event.clientX
   lastPointerY = event.clientY
 }
@@ -389,6 +481,11 @@ function moveCameraWithKeyboard(event: KeyboardEvent) {
   if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return
   event.preventDefault()
   if (event.key === 'Home') { resetCamera(); return }
+  if (activeView.value === 'catcher') {
+    panCatcher(event.key === 'ArrowLeft' ? -20 : event.key === 'ArrowRight' ? 20 : 0,
+      event.key === 'ArrowUp' ? -20 : event.key === 'ArrowDown' ? 20 : 0)
+    return
+  }
   if (event.key === 'ArrowLeft') cameraYaw.value = clamp(cameraYaw.value - 0.06, -0.72, 0.72)
   if (event.key === 'ArrowRight') cameraYaw.value = clamp(cameraYaw.value + 0.06, -0.72, 0.72)
   if (event.key === 'ArrowUp') cameraPitch.value = clamp(cameraPitch.value + 0.04, -0.1, 0.58)
@@ -401,11 +498,23 @@ function setView(view: CameraView) {
 function zoomCamera(event: WheelEvent) {
   const direction = Math.sign(event.deltaY)
   if (!direction) return
+  if (activeView.value === 'catcher') {
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 560 : 1)
+    const zoom = clamp(catcherViewport.value.zoom * Math.exp(-clamp(delta, -160, 160) * 0.0015), 0.75, 2.5)
+    const ratio = zoom / catcherViewport.value.zoom
+    catcherViewport.value = { x: catcherViewport.value.x * ratio, y: catcherViewport.value.y * ratio, zoom }
+    return
+  }
   const step = clamp(Math.abs(event.deltaY) * 0.025, 1, 4)
   cameraDistance.value = clamp(cameraDistance.value + direction * step, 32, 70)
 }
-function setLowCamera() { cameraPitch.value = -0.08 }
+function panCatcher(x: number, y: number) {
+  catcherViewport.value.x = clamp(catcherViewport.value.x + x, -480, 480)
+  catcherViewport.value.y = clamp(catcherViewport.value.y + y, -280, 280)
+}
+function setLowCamera() { if (activeView.value === 'pitcher') cameraPitch.value = -0.08 }
 function resetCamera() {
+  catcherViewport.value = { x: 0, y: 0, zoom: 1 }
   const preset = CAMERA_PRESETS[activeView.value]
   cameraYaw.value = preset.yaw
   cameraPitch.value = preset.pitch
@@ -478,7 +587,13 @@ onBeforeUnmount(pause)
 </script>
 
 <style scoped>
+.matchup-names{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.matchup-names a{color:var(--color-foreground);font-size:16px;font-weight:850;text-decoration:none;border-bottom:1px solid #4dbe9b}.matchup-names span,.matchup-names small{color:var(--color-muted-text)}.scene-shell{position:relative}.scene-view-help{position:absolute;top:14px;left:16px;z-index:4;max-width:310px;padding:10px 14px;border:1px solid #55727c;border-radius:8px;background:rgb(8 22 33 / 94%);color:#cfdee7;font-size:12px;box-shadow:0 7px 20px #0003}.scene-view-help summary{cursor:pointer;color:#f8c473;font-weight:850;letter-spacing:.06em}.scene-view-help p{margin:9px 0;line-height:1.5}.zone-backplate{fill:#061725;fill-opacity:.78;stroke:#061725;stroke-width:7;vector-effect:non-scaling-stroke}.zone-margin{fill:none;stroke:#7ce9d0;stroke-width:1.5;stroke-dasharray:5 4;vector-effect:non-scaling-stroke;opacity:.9}
 /* Interactive replay stage */
+.interactive-pitch { cursor:pointer; }
+.selected-release-ring,.selected-release,.ball,.ball-halo { pointer-events:none; }
+.pitch-hit-area { fill:none; stroke:transparent; stroke-width:12; pointer-events:stroke; vector-effect:non-scaling-stroke; }
+.batter-box{fill:none;stroke:#fff9e6;stroke-width:2.6;stroke-linejoin:round;opacity:.94;pointer-events:none;vector-effect:non-scaling-stroke}
+.interactive-pitch:focus-visible .pitch-hit-area,.interactive-pitch:hover .pitch-hit-area { stroke:rgba(255,255,255,.18); }
 .replay-chart{display:grid;gap:14px;min-width:0;border:1px solid var(--color-border);border-radius:14px;padding:16px;background:var(--color-surface)}
 .replay-header{display:flex;align-items:start;justify-content:space-between;gap:14px}.replay-header h3{margin:0}.replay-header p{margin:3px 0 0;color:var(--color-muted-text);font-size:12px}
 .status-badge{border:1px solid var(--color-border);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;text-transform:uppercase}.status-badge.supported{border-color:#22c55e;color:#22c55e}.status-badge.limited_trajectory{border-color:#f59e0b;color:#f59e0b}.status-badge.unavailable{border-color:#ef4444;color:#ef4444}

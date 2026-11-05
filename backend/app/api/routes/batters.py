@@ -1,4 +1,8 @@
+from typing import Literal
+
 from fastapi import APIRouter, Query
+from app.api.schemas.batter_zone_rates import BatterZoneRatesResponse
+from app.services.batter_zone_rates_service import get_batter_zone_rates
 
 from app.api.schemas.batter_swing_timing import SwingTimingPlayerDetailResponse, SwingTimingResponse
 from app.api.schemas.batter_stuff_attack import StuffAttackResponse
@@ -13,6 +17,11 @@ from app.services.batter_service import (
 )
 
 router = APIRouter()
+
+
+@router.get("/personal/zone-rates", response_model=BatterZoneRatesResponse)
+def read_batter_zone_rates(year: int = Query(2026), batter_id: int = Query(..., gt=0), pitcher_hand: Literal["All", "L", "R"] = Query("All")) -> BatterZoneRatesResponse:
+    return get_batter_zone_rates(year, batter_id, pitcher_hand)
 
 
 @router.get("", response_model=list[BatterOption])

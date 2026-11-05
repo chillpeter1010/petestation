@@ -229,6 +229,15 @@ if __name__ == "__main__":
         report["input_hashes"] = {path.relative_to(ROOT).as_posix(): sha_file(path) for path in inputs}
         report["fallback_source_review"] = {"neutral_atlas": "present_and_hash_checked", "silhouette_and_saved_appearance": "implemented_in_ballparkCharacter.ts_not_failure_injected",
             "scene_static_and_classic_links": "implemented_in_BallparkRuntime.client.vue_not_failure_injected", "actual_fallback_rendering": "pending_user"}
+        inventory = json.loads(INVENTORY.read_text(encoding="utf-8"))
+        manual = inventory.get("d5_manual_acceptance", {})
+        report["manual_acceptance"] = manual
+        if manual.get("checklist"):
+            checklist_path = ROOT / manual["checklist"]
+            report["input_hashes"][manual["checklist"]] = sha_file(checklist_path)
+        if not failures and not source_only and not d2_only and manual.get("status") == "user_accepted":
+            report["release_status"] = "D5_asset_package_accepted_not_E6_or_application_release"
+            report["fallback_source_review"]["actual_fallback_rendering"] = "user_reported_pass_not_agent_tested"
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     sys.exit(1 if failures else 0)

@@ -76,6 +76,7 @@ export const siteGroups: SiteGroup[] = [
 
 export const sharedModules: SharedModule[] = [
   { name: 'MovementChart', layer: 'Frontend', purpose: 'Scatter, average and per-pitch Stuff+ movement views', consumers: 'Personal, comparison, outings', source: 'components/charts/MovementChart.vue' },
+  { name: 'PitchReplayPanel', layer: 'Frontend', purpose: 'Shared game-scoped historical pitch reconstruction, filters, playback and video action', consumers: 'Game Center Replay, Pitcher Personal In game', source: 'components/charts/PitchReplayPanel.vue' },
   { name: 'Strike-zone charts', layer: 'Frontend', purpose: 'Location scatter, zones and heat surfaces', consumers: 'Personal, comparison, labs', source: 'components/charts/*StrikeZone*' },
   { name: 'Stuff score cache', layer: 'Backend', purpose: 'Precomputed per-pitch Stuff+ lookup', consumers: 'Movement, fatigue, personal, outings', source: 'services/pitch_stuff_cache_service.py' },
   { name: 'Location+ store', layer: 'Data', purpose: 'Per-pitch and aggregated Location+ scores', consumers: 'Location lab, fatigue, outings', source: 'data/derived/location_plus_scores.duckdb' },

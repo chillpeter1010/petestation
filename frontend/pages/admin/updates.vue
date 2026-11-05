@@ -46,6 +46,8 @@
 
     <p v-if="message" :class="['operations-message', { error: failed }]" role="status">{{ message }}</p>
 
+    <AdminVideoBackfill :year="year" :disabled="running" />
+
     <section class="historical-panel" aria-labelledby="historical-plus-title">
       <div class="historical-copy">
         <span class="eyebrow">Historical model coverage</span>
@@ -166,6 +168,7 @@ import SiteArchitectureMap from '~/components/admin/SiteArchitectureMap.vue'
 import AdminDataFreshness from '~/components/admin/AdminDataFreshness.vue'
 import AdminProjectTracker from '~/components/admin/AdminProjectTracker.vue'
 import AdminResearchDisplayStandards from '~/components/admin/AdminResearchDisplayStandards.vue'
+import AdminVideoBackfill from '~/components/admin/AdminVideoBackfill.vue'
 
 const api = useApi()
 const { isPetehub, brandName, toggleBrand } = useSiteBrand()

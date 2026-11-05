@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-04T01:03:19.037Z",
+  "scope": "E1/E2 source-only contracts",
+  "status": "PASS",
+  "checks": [
+    "superseded runtime load is aborted and cannot update current state",
+    "gamepad waits for neutral on mount and after pause/blur",
+    "gamepad action is edge-triggered and deadzone/non-finite axes are safe",
+    "Phaser import remains lazy and Classic shell has no engine import",
+    "load cancellation, error cleanup and owned-canvas teardown stay wired"
+  ],
+  "input_hashes": {
+    "frontend/components/ballpark/runtime/runtimeGuards.ts": "9aa77dafcded549b989cedbac3189d971736fa49ea6fd892ee735e76bb0f064d",
+    "frontend/components/ballpark/runtime/createBallparkGame.ts": "3b37a9fd80a53029314449de685caf00dd6d1f03d0866024172e6e980912ae8e",
+    "frontend/components/ballpark/BallparkRuntime.client.vue": "d0127587243d9e04ac70ffc07642085916b0bbaa33847c734e229fea09e76afe",
+    "frontend/pages/ballpark/play.vue": "fbc001235a528e93d5448fa3d361af84d82e29d0f6fda9c810896c097af3bb9a",
+    "frontend/app.vue": "14df9eae505ebe77a67fe489a21b5bea1b35e7a549e672968b5fcc42e1c0b507",
+    "frontend/nuxt.config.ts": "7a20d36deb14026a7eb1485833d65329eb7bf5a8019e5c26ff6379603d6dd0e1"
+  },
+  "limitations": [
+    "No browser or visual/interaction acceptance",
+    "Import/source review is not a measured production bundle graph",
+    "Scheduled Phaser destroy is not measured GPU/listener leak certification; E6 remains separate",
+    "Accepted D5 movement/scene geometry reused, not re-tested visually"
+  ],
+  "manual_acceptance": "pending_user"
+}

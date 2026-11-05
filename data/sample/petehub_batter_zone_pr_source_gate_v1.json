@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "id": "batter-zone-league-pr-v1",
+  "updated_at": "2026-11-05",
+  "status": "source_checks_PASS; user_accepted_2026-11-05",
+  "user_acceptance": "2026-11-05 user replied all passed to the delivered heatmap/PR/Outside checks and moved focus back to E3 planning. Aggregate acceptance; no device/performance detail inferred.",
+  "authorization": "User chose full offlinebaseline/API/colors and batter-favorable direction; outside display followup included without abandoning league work.",
+  "sources": [
+    {
+      "path": "backend/app/api/schemas/batter_zone_rates.py",
+      "sha256": "21db1c0e776eb0d62eaaa23e27c145cff4e6350d6682ba0843cf705fd8fdb282"
+    },
+    {
+      "path": "backend/app/services/batter_zone_rates_service.py",
+      "sha256": "8475b6d82e92004feff8d3dadc9f4cb43bf0bf472d8469647cd10ad1f63e9dc2"
+    },
+    {
+      "path": "backend/app/services/batter_zone_baseline_service.py",
+      "sha256": "6d0e83a8371d772d4ea3a3bf5c6557a88caa0c65c02d5fcfa6b8cdc39539c78c"
+    },
+    {
+      "path": "backend/scripts/build_batter_zone_baseline.py",
+      "sha256": "f819dc4ab3e8a298cc13cd14b1f3794434f1a7b4c80116218905e78cf3d47971"
+    },
+    {
+      "path": "backend/tests/test_batter_zone_baseline.py",
+      "sha256": "be427e6cc213b895f5b40b382b6f5a9f81b5b079b911d6104039fea00c6c3bb0"
+    },
+    {
+      "path": "frontend/types/api.ts",
+      "sha256": "be8895699eff41b259b173624ce5dd0a61e31dbfab0ae5cadcaf3fa1e95957e3"
+    },
+    {
+      "path": "frontend/utils/batterZoneRates.ts",
+      "sha256": "926b7767b44f3b5a3fcf18005816e381cee7fd6c59021c2c6eb888d15c93e499"
+    },
+    {
+      "path": "frontend/components/charts/BatterInGameHeatmap.vue",
+      "sha256": "4cb1382c03423b96d4ec58e520166af84bca9515a57d67a9f5ec049b99c25a41"
+    },
+    {
+      "path": "frontend/components/charts/PitchReplayChart.vue",
+      "sha256": "ab9e927ff3a460796309a6abeaa24bb0376c26fb5f3d94ef5eb2c84b4be78dd0"
+    },
+    {
+      "path": "frontend/scripts/check-batter-zone-contours.mjs",
+      "sha256": "48228cbd7a2b9bfb7d90e917085cbb3ba253eb9660c866de0d67bf40848159ef"
+    }
+  ],
+  "artifact": {
+    "path": "data/MLB2026/batter_zone_baseline_v1.json",
+    "sha256": "07dbb2d77130b921c294a96da6f59ee5b58abee65dec666620d75358095635d0",
+    "bytes": 4130003,
+    "version": "batter_zone_pr_v1",
+    "source_signature": {
+      "database": "C:\\intern\\project_transfer\\data\\MLB2026\\mlb_2026.duckdb",
+      "mtime_ns": 1793839432152424400,
+      "bytes": 449064960,
+      "wal_mtime_ns": 0,
+      "wal_bytes": 0,
+      "algorithm_sha256": "b6b097c842abaf7c7a6719f3e03dd8f8f348064bb4771c28cddf2e4457d63514"
+    },
+    "regular_season_pitches": 716544,
+    "batters": 662,
+    "qualified_batters": 571,
+    "reference_groups": 705
+  },
+  "comparison": {
+    "keys": [
+      "year",
+      "pitcher_hand",
+      "zone",
+      "metric"
+    ],
+    "season_PA": ">30",
+    "cell_denominator": ">=10",
+    "minimum_peers": 5,
+    "league_mean": "sum numerator/sum denominator, correct native metric units",
+    "PR": "100*(below + .5*equal)/N, equal-player ranks; all ties50, reverse100-raw forlower-is-favorable metrics",
+    "PR50": "peer median, distinct from denominator-weighted league mean",
+    "frequency_metrics": [
+      "swing",
+      "z_swing",
+      "foul",
+      "in_play"
+    ],
+    "no_fallback": "No colors without valid source/current reference/targetsample/peer count; raw numeric table remains."
+  },
+  "checks": {
+    "offline_build": "Completed once with progress, source unchanged before/after; originalDBread-only",
+    "artifact_integrity": "source fingerprint matches; populations sorted/counts/denominator gates consistent",
+    "backend": "16 passed: test_batter_zone_rates.py + test_batter_zone_baseline.py",
+    "frontend_math": "check-batter-zone-contours.mjs PASS incl neutralPR vsrawzero, low-sample masks, nonmutation/holes/decimals and outsidehalo bounds/fading",
+    "vue_tsc": "PASS after latest outsidehalo/path change; no Nuxtbuild",
+    "AJEwing": {
+      "year": 2026,
+      "batter_id": 805999,
+      "hand": "R",
+      "PA": 492,
+      "middle_swing": {
+        "raw": 83.61,
+        "league": 75.42,
+        "PR": 81.48
+      },
+      "middle_whiff": {
+        "raw": 5.88,
+        "league": 10.5,
+        "batter_PR": 76.01
+      },
+      "nine_zone_PR_ranges": {
+        "swing": [
+          26.26,
+          81.48
+        ],
+        "whiff_batter": [
+          22.28,
+          96.95
+        ]
+      },
+      "L_hand": "reference ready; PR ranges/sample gates verified"
+    }
+  },
+  "rendering": {
+    "palette": [
+      "#0050ff",
+      "#fafaff",
+      "#ff142d"
+    ],
+    "inside_alpha": 0.86,
+    "outside": "bounded normalizeddistance<.28 halo, fadesout andmax.55ofinsideopacity; groupedreference,notpitch-leveldensity",
+    "seams": "Compoundpath percolor/opacity, replacing separate rowpolygons",
+    "projection": "Existing physicalPolygon and ball coordinates unchanged"
+  },
+  "limitations": [
+    "2026preprocessed only; other years require explicit same script run. HTTPnever buildsleague.",
+    "PRisdescriptive; minsample thresholds do not certify stable skill. Frequency metrics are not favorable-abilitygrades.",
+    "Raw unit/PA/outcome definitions unchanged; contours interpolate PR for display, tableisexact.",
+    "No browser/visual/movement/screenshot/fixture/extraUIserver. No E3work."
+  ],
+  "manual_url": "http://127.0.0.1:3000/pitcher-personal?tab=in-game",
+  "manual_checks": [
+    "RefreshCatcher: brighterPRpalette, league average/PR/peer columns and per-metricdirection labels.",
+    "AJ Ewing/others: Swingfrequency and inverseWhiff reflectsame-hand/same-cellPR, not oldabsolutehigh/low.",
+    "SwitchL/R/All andmetrics; rawAVG/wOBA/% remain correct andlow-sample/reference-unavailable cellsunpainted.",
+    "Outsidecheckbox/Ometrics: narrowfadinghalo, no bigrectangularwall/rowseams; fulloutsidevaluesremainintable.",
+    "Cameraalignment/heatmaptoggle/pitchselection/play/video andGame sharedpanel remain user-verified."
+  ]
+}

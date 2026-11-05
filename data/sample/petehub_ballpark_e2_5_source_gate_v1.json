@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "slice": "E2.5",
+  "updated_at": "2026-11-05",
+  "source": "frontend/assets/ballpark/scenes/scene-kit-v4.json",
+  "source_sha256": "80f8ef43982646d557a312f541e2f2df4d54645be9cbce5fe074435613ca3327",
+  "builder": "backend/scripts/build_ballpark_scene_package.py",
+  "manifest": "data/sample/petehub_ballpark_scene_manifest_v4.json",
+  "manifest_sha256": "0bcd7b5a083baf1c343db8aa1134c58257cecd12dd02c0b5fe412f5fa4f7b65a",
+  "base_v3_sha256_unchanged": "0bf1629083fee6fb48188ae81555c70feb8b0a07f4241cee5101f99cb239a28e",
+  "scene_count": 9,
+  "object_count": 59,
+  "totals": {
+    "collision_count": 211,
+    "foreground_count": 147,
+    "portal_count": 21,
+    "background_bytes": 22587524,
+    "decoded_texture_bytes": 56633144
+  },
+  "hotspot_count": 2,
+  "source_only_status": "PASS",
+  "snapshot_note": "source_sha256/manifest_sha256 identify the initial source-check snapshot. Later user acceptance updates root metadata only; source checks are not repeated or represented as new browser/visual tests.",
+  "checks": [
+    {
+      "command": "backend/.venv/Scripts/python.exe backend/scripts/build_ballpark_scene_package.py --check",
+      "status": "PASS",
+      "scope": "Source composition and preserved effective overlay values; unique IDs/refs and target arrivals; 628 compact source lines."
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe backend/scripts/build_ballpark_scenes.py --version v4 --check",
+      "status": "PASS",
+      "scope": "Reproducible SVG/JSON/manifest exports, image dimensions, background hashes."
+    },
+    {
+      "check": "Runtime PNG import mapping / declared image dimensions / single v4 source / 59 index IDs",
+      "status": "PASS"
+    },
+    {
+      "command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json",
+      "cwd": "frontend",
+      "status": "PASS",
+      "scope": "One direct typecheck. No Nuxt prepare/build or new dev server."
+    }
+  ],
+  "user_acceptance": {
+    "individual_authoring_scenes_and_catalog": "already_accepted_by_user",
+    "unified_v4_navigation_fallback": "user_accepted_2026-11-05",
+    "basis": "User replied ??? to all five manual items; E2.5 done. No device-specific measurement inferred."
+  },
+  "browser": "not_performed_by_agent",
+  "production_ready": false,
+  "limitations": [
+    "No new art, collision/foreground coordinate edits or business actions/NPCs. Old geometry BFS and full build/audit not rerun. Source checks are not visual/interaction acceptance.",
+    "Decoded RGBA total is asset-size arithmetic, not measured GPU/memory/FPS or simultaneous texture usage. Only active-room texture loading remains the existing runtime behavior.",
+    "Some catalog entries are reference groups or unlocated future candidates; null bounds remain explicit, not invented activation zones.",
+    "Old five-scene source and D5 evidence retained. Complete runtime release remains E6."
+  ],
+  "manual_url": "http://127.0.0.1:3000/ballpark/play",
+  "manual_checks": [
+    "Header shows E2 SCENES V4; fixed navigation opens all nine scenes and only one current character/control set.",
+    "Campus GAME / Batting / Pitcher E/Enter opens the correct room; R returns to matching Campus entrance.",
+    "Clubhouse side door C opens smoking area; R returns to same back door; other room R exits remain unchanged.",
+    "Viewing team query survives travel; Static map and equivalent direct Classic routes remain available.",
+    "Spot-check accepted foreground/collision appearance at doorways/furniture; source values/art are unchanged, no new art approval needed."
+  ]
+}

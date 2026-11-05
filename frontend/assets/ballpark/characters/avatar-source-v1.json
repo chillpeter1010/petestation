@@ -2,6 +2,8 @@
   "source_version": 1,
   "authored_at": "2026-11-02 09:11:56 UTC",
   "human_acceptance": "user_accepted_D4_and_all_followups_2026-11-02",
+  "d5_asset_accepted": true,
+  "d5_acceptance_date": "2026-11-04",
   "asset_version": "d4-characters-v1",
   "author": "Petehub project / independently authored pixel polygons and joint poses",
   "license": "Project-authored source; generated concept boards and MLB headshot are visual references only, no reference pixels copied",

@@ -1,0 +1,130 @@
+{
+  "artifact_version": 1,
+  "updated_at": "2026-11-05",
+  "scope": "Shared mother-site In game catcher followup; Ballpark floating R UI removal",
+  "acceptance": {
+    "prior_3H": "user_accepted_done_preserved",
+    "prior_all_object_direct_entry_and_R_return": "user_accepted",
+    "latest_UI_art_and_camera": "pending_user",
+    "browser_visual_agent_tests": "not_performed_user_only",
+    "E6_quantitative_device_release": "pending_no_new_measurements"
+  },
+  "delivery": [
+    "Local resolved player names and Personal links; placeholder IDs no longer presented as names",
+    "Heatmap methodology and view guide collapsed by default",
+    "Two seasonal exact-pre-pitch-count same-side pitch-type cards below scene; not head-to-head",
+    "Deep zone backplate and dashed margin; original 17-inch boundary retained",
+    "Catcher common SVG group pans/zooms stadium, batter, plate, zone, heatmap, all pitch paths and ball; fixed projection during catcher pan/zoom; pitcher 3D orbit preserved",
+    "Invisible Ballpark Classic return component retains guarded keyboard R; no floating banner"
+  ],
+  "data_contract": {
+    "endpoint": "GET /api/games/matchup-context",
+    "version": "in_game_count_matchup_v1",
+    "scope": "regular_season_exact_pre_pitch_count",
+    "pitcher_split": "selected pitcher vs current batter stand for exact pre-pitch count",
+    "batter_split": "selected batter vs current pitcher p_throws for exact pre-pitch count",
+    "terminal_PA": "unique game/at-bat final outcome selected before filtering count/hand",
+    "rates": "Existing discipline flags; H/AB, recorded wOBA values/positive denom, >=95mph/tracked fair BBE; null for missing denominator",
+    "cache": "server LRU128 keyed source revision plus context, component cache48 latest-request guarded",
+    "name_example": {
+      "batter_id": 701675,
+      "local_resolved_name": "Nathan Church"
+    },
+    "trajectory": "original historical reconstruction equations, physical pitch coordinates and video contracts unchanged"
+  },
+  "artwork": {
+    "tool": "built-in image_gen",
+    "latest_pose_prompt": {
+      "transparent_background": true,
+      "num_last_images_to_include": 1,
+      "prompt": "Use case: photorealistic-natural. Asset type: static transparent two-pose batter atlas for a catcher-view baseball analysis scene. The LAST user supplied photograph of the white collegiate-uniform batter is the sole pose/camera reference; match its actual shoulder line, hands beside the face, bat above the rear shoulder, knee bend, foot placement and balanced ready-to-hit weight distribution. Do NOT invent a back-facing twist or rotate his torso further. Camera is directly behind home plate near catcher eye height, looking toward pitcher; batter stands beside the plate and looks toward pitcher, natural oblique view like the reference. Create one wide 2:1 transparent RGBA canvas containing exactly two separate full-body generic adult male batters: LEFT HALF a right-handed batter standing on screen left of the imaginary home plate, looking inward/right toward the pitcher; RIGHT HALF a separately posed anatomically correct left-handed batter standing on screen right, looking inward/left. Natural sports photo realism, consistent scale and lighting. Both wear unbranded navy blue helmets and jerseys, gray baseball pants, red batting gloves, navy socks, dark cleats, wood bat. Preserve the latest reference stance without copying identity, jersey lettering or logos. Each athlete and complete bat fits within its equal square half, generous transparent gutter, no crossing halfway. Center feet horizontally within each half, shoe soles aligned at 95% canvas height; complete bat and helmet within top 5% margin. Hands correctly stacked for their respective handedness, five fingers, natural elbows, no body twisting, no direct gaze at camera. This is two static independent illustrative poses, not an animation atlas and not a particular real player's mechanics. No stadium, no floor, no home plate, no shadow plane, no text, no labels, no checkerboard, no UI. Genuine fully transparent background."
+    },
+    "latest_pose_source": "Generated images are saved to C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90 as C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90\\exec-eefc34a1-1fb3-4fb7-8f66-8081e660bdbe.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "stadium_prompt": "See original built-in generation conversation: realistic empty indoor stadium catcher viewpoint, no UI/player/plate.",
+    "stadium_source": "Generated images are saved to C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90 as C:\\Users\\郭睿承\\.codex\\generated_images\\01a19b15-8e83-7bf3-8753-d11432fede90\\exec-43f3079a-1ff7-48e1-8018-5edb59ccb6e1.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link.",
+    "pose_layout": "1774x887 RGBA; independent RHH left square, LHH right square; each viewBox887 square; soles anchored at95%height; generic static illustration, not player biomechanics",
+    "rejected": [
+      "Side-facing catcher-batters-v2.png retained, no longer imported",
+      "Rear-quarter v3 generated but never wired; rejected by user; original retained in generated_images"
+    ],
+    "reference": "Latest user white collegiate uniform photo is pose/camera reference, not real-player identity; no further invented torso rotation; generic unbranded navy/gray athletes",
+    "visual_acceptance": "pending_user_not_agent_certified",
+    "originals_preserved": true
+  },
+  "source_checks": {
+    "backend_tests": "Previous batch: 12 focused tests passed (pitch matchup + historical trajectory service); no backend change since, not repeated",
+    "frontend": "direct vue-tsc --noEmit -p .nuxt/tsconfig.json exit0 after final pose import and whole-scene camera change",
+    "image_header": "PNG dimensions/alpha color type only; no screenshot or image comparison",
+    "no_build_or_browser": true
+  },
+  "files": {
+    "frontend/components/charts/PitchReplayChart.vue": {
+      "sha256": "f2a07157cb66146595cc2dd66ccba0a957c2b1c64953a2f775e382b873a7480b",
+      "bytes": 44100
+    },
+    "frontend/components/charts/InGameMatchupCards.vue": {
+      "sha256": "a7c8429a6385a98dfda0e1acfe1d5c003aeb6bfb8ee88e8bdcd56c60ba717a19",
+      "bytes": 6859
+    },
+    "frontend/components/charts/BatterInGameHeatmap.vue": {
+      "sha256": "2c061d8a75a2f342a34f2023c1cc0f9b0dd5fd8a95e8c4d9b1e3db97534221d8",
+      "bytes": 7877
+    },
+    "frontend/components/charts/ReplayBatterFigure.vue": {
+      "sha256": "680cadd182836b78c65c41a72f6f6789aed5cc329bd81536ef7eb22718fda945",
+      "bytes": 4843
+    },
+    "frontend/components/ballpark/BallparkClassicReturn.vue": {
+      "sha256": "c5445a7212d12b9ed762d5bd05294bed005548d775a4d52d2348b4695c3b88a8",
+      "bytes": 1204
+    },
+    "frontend/pages/ballpark/play.vue": {
+      "sha256": "c5ff6ebfc93616719aeebf19a38f3105ec7e3614c699d0b34c216bb7109af737",
+      "bytes": 15027
+    },
+    "backend/app/services/pitch_matchup_service.py": {
+      "sha256": "5f6ba6955bc25eff8865eda226e4abaaca294d98728b824a0e0c6195b1db4811",
+      "bytes": 8420
+    },
+    "backend/app/services/game_pitcher_analysis_service.py": {
+      "sha256": "10867d6150a56b9ec76d7675967549fd1ad57345bce77ee0197509664f63356f",
+      "bytes": 27073
+    },
+    "backend/app/api/routes/games.py": {
+      "sha256": "10774c96f0634d349a637a2559a4d9c61356c80f83720d726cf2b0a5bc5599f8",
+      "bytes": 4087
+    },
+    "backend/tests/test_pitch_matchup_service.py": {
+      "sha256": "4083c6adf6064379ed4e498d07c922f849f58c8868c132125a0821e6b13dd0cd",
+      "bytes": 4499
+    },
+    "frontend/assets/images/pitch-replay/catcher-batters-v2.png": {
+      "sha256": "f9d818f03f5b19b2be2ec9d16c0e676c54e9d1cd964c0e15be823b18fbf75999",
+      "bytes": 835698,
+      "width": 1774,
+      "height": 887,
+      "png_color_type": 6
+    },
+    "frontend/assets/images/pitch-replay/catcher-batters-v4.png": {
+      "sha256": "f76b8baf820f40f5266395fcac31d3b014de09c2a848a7e0eac72b37f9239e69",
+      "bytes": 668299,
+      "width": 1774,
+      "height": 887,
+      "png_color_type": 6
+    },
+    "frontend/assets/images/pitch-replay/catcher-stadium-v2.png": {
+      "sha256": "83b88d9bee8ed56b9e745d0880cffcca1b0bb2f8c62d69c009e15b9f2f7f189b",
+      "bytes": 3227980,
+      "width": 1672,
+      "height": 941,
+      "png_color_type": 2
+    }
+  },
+  "manual_checks": [
+    "Player names and Personal destinations",
+    "Heatmap/scene notes collapsed and expandable; true zone/margin readable",
+    "Change selected pitch/count/hand and verify two season context cards update; empty/null samples explicit",
+    "Latest R/L batter pose and whole-scene wheel zoom/drag/Home reset; compare pitcher view unchanged",
+    "No floating R UI; keyboard R returns to saved room and does not interrupt form entry"
+  ]
+}

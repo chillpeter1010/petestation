@@ -16,7 +16,7 @@ from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = sys.argv[sys.argv.index("--version") + 1] if "--version" in sys.argv else "v1"
-if VERSION not in {"v1", "v2", "d2-5-v1", "v3"}:
+if VERSION not in {"v1", "v2", "d2-5-v1", "v3", "v4", "e2-2-v1", "e2-3-4-v1", "clubhouse-annex-v1"}:
     raise ValueError("Unknown scene-kit version")
 SOURCE = ROOT / f"frontend/assets/ballpark/scenes/scene-kit-{VERSION}.json"
 DEST = ROOT / f"output/ballpark/scenes-{VERSION}"
@@ -43,7 +43,7 @@ def write_output(path: Path, value: bytes) -> None:
 
 def write_json(path: Path, value: object) -> None:
     # Generated runtime JSON stays compact; the editable source is the scene kit.
-    options = {"separators": (",", ":")} if VERSION == "v3" and path.parent == DEST else {"indent": 2}
+    options = {"separators": (",", ":")} if VERSION in {"v3", "v4", "e2-2-v1", "e2-3-4-v1", "clubhouse-annex-v1"} and path.parent == DEST else {"indent": 2}
     write_output(path, (json.dumps(value, ensure_ascii=False, **options) + "\n").encode("utf-8"))
 
 
@@ -55,11 +55,13 @@ def export() -> None:
     kit = json.loads(SOURCE.read_text(encoding="utf-8"))
     DEST.mkdir(parents=True, exist_ok=True)
     manifest = {"schema_version": 2, "asset_version": kit["asset_version"], "source_path": SOURCE.relative_to(ROOT).as_posix(), "source_sha256": sha(SOURCE), "exporter": "build_ballpark_scenes.py:v1", "render_mode": kit["render_mode"], "world_size": kit["world_size"], "footprint": kit["footprint"], "provenance": kit["provenance"], "scope": kit.get("scope", ["D2.1", "D2.2", "D2.3", "D2.4"]), "human_acceptance": kit.get("human_acceptance", "pending_new_layered_three_scene_delivery"), "scenes": []}
-    if VERSION == "v3":
+    if VERSION in {"v3", "v4"}:
         manifest.update(schema_version=3, exporter="build_ballpark_scenes.py:v2", required_scene_ids=kit["required_scene_ids"])
+    if VERSION == "v4":
+        manifest.update(schema_version=4, object_index=kit["object_index"])
     if "portal_overrides" in kit:
         manifest["portal_overrides"] = kit["portal_overrides"]
-    for field in ("collision_additions", "collision_overrides", "pending_manual_acceptance", "followup_acceptance"):
+    for field in ("collision_additions", "collision_overrides", "pending_manual_acceptance", "followup_acceptance", "portal_additions", "background_overrides"):
         if field in kit:
             manifest[field] = kit[field]
     for room, scene in kit["scenes"].items():
@@ -87,6 +89,11 @@ def export() -> None:
         for item in scene["portals"] + scene["hotspots"]:
             x, y, w, h = item["bounds"]
             ET.SubElement(interactions, f"{{{SVG}}}rect", {"id": "interaction-" + item["id"], "x": str(x), "y": str(y), "width": str(w), "height": str(h), "fill": "#44bbff", "fill-opacity": ".35"})
+        if scene.get("objects"):
+            objects = svg_layer(root, "planned-objects", style="display:none")
+            for item in scene["objects"]:
+                x, y, w, h = item["bounds"]
+                ET.SubElement(objects, f"{{{SVG}}}rect", {"id": "object-" + item["id"], "x": str(x), "y": str(y), "width": str(w), "height": str(h), "fill": "#ffaa33", "fill-opacity": ".25", "data-binding": item["binding"]})
         svg_path = DEST / f"{room}-layers.svg"
         write_output(svg_path, ET.tostring(root, encoding="utf-8", xml_declaration=True))
         if room == "campus":
@@ -103,13 +110,13 @@ def export() -> None:
     # The entrance pilot is a real region of Campus, not another generated image.
     pilot = {"source_scene": "campus", "world_region": [550, 410, 650, 450], "foreground_ids": ["game-gate", "west-front-lamp", "east-front-lamp", "entrance-lamp-west", "entrance-lamp-east"], "collision_ids": ["field-fence", "gate-lamp-west", "gate-lamp-east"], "portal_ids": ["game"], "visual_direction": "user_approved", "human_acceptance": "included_in_three_scene_delivery"}
     if "campus" in kit["scenes"]:
-        if VERSION == "v3":
+        if VERSION in {"v3", "v4"}:
             pilot["human_acceptance"] = kit["human_acceptance"]
         write_json(DEST / "game-entrance-pilot.json", pilot)
         manifest["entrance_pilot"] = (DEST / "game-entrance-pilot.json").relative_to(ROOT).as_posix()
         manifest["entrance_editable_source"] = (DEST / "game-entrance-layers.svg").relative_to(ROOT).as_posix()
         manifest["entrance_editable_sha256"] = sha(DEST / "game-entrance-layers.svg")
-    if VERSION == "v3":
+    if VERSION in {"v3", "v4"}:
         manifest["totals"] = {field: sum(s[field] for s in manifest["scenes"]) for field in ("collision_count", "foreground_count", "portal_count", "background_bytes", "decoded_texture_bytes")}
     write_json(MANIFEST, manifest)
     print(f"{'Verified reproducible exports for' if CHECK else 'Exported'} {len(manifest['scenes'])} editable scenes and manifest; human acceptance: {manifest['human_acceptance']}.")

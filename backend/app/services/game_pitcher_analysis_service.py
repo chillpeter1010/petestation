@@ -249,7 +249,7 @@ def build_game_pitch_replay_response(
     working["in_play_result_group"] = working.get("events", pd.Series(index=working.index, dtype="object")).map(_in_play_result_group)
 
     scalar_columns = [
-        "game_date", "game_pk", "pitcher", "batter", "at_bat_number", "pitch_number", "pitch_uid",
+        "game_date", "game_pk", "pitcher", "batter", "pitcher_name", "batter_name", "at_bat_number", "pitch_number", "pitch_uid",
         "pitch_name", "pitch_type", "description", "events", "stand", "p_throws", "balls", "strikes",
         "bb_type", "fielder_2", "catcher_name", "release_speed", "release_extension", "release_pos_x",
         "release_pos_y", "release_pos_z", "plate_x", "plate_z", "sz_top", "sz_bot", "play_id", "video_url",
@@ -304,8 +304,14 @@ def build_game_pitch_replay_response(
 
 
 def get_game_pitch_replay(year: int, game_pk: int, pitcher_id: int) -> AnalysisResponse:
+    from app.services.pitch_matchup_service import resolve_replay_names
+    frame = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, game_pk=game_pk)
+    ids = tuple({pitcher_id, *pd.to_numeric(frame.get("batter", pd.Series(dtype=float)), errors="coerce").dropna().astype(int).tolist()})
+    names = resolve_replay_names(year, ids)
+    frame["batter_name"] = frame["batter"].map(names) if "batter" in frame else None
+    frame["pitcher_name"] = names.get(pitcher_id)
     return build_game_pitch_replay_response(
-        load_personal_pitch_df(year=year, pitcher_id=pitcher_id, game_pk=game_pk),
+        frame,
         year=year,
         game_pk=game_pk,
         pitcher_id=pitcher_id,

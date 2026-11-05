@@ -75,5 +75,6 @@ export function createBallparkCharacter(scene: Phaser.Scene, appearance: Ballpar
   }
   setAppearance(appearance)
   animate(0, 0, false, 0)
-  return { root, animate, setAppearance, warning }
+  function setFacing(value:Direction) { facing=value;current=-1;animate(0,0,false,0) }
+  return { root, animate, setAppearance, warning, setFacing, getFacing:()=>facing }
 }

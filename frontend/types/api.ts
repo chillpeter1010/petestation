@@ -1,3 +1,42 @@
+export interface BatterZoneRate {
+  numerator: number
+  denominator: number
+  value: number | null
+  league_average?: number | null
+  raw_pr?: number | null
+  color_pr?: number | null
+  peer_count?: number
+  benchmark_status?: string
+}
+export interface BatterZoneRateCell {
+  id: string
+  label: string
+  region: 'zone' | 'outside'
+  bounds: [number, number, number, number]
+  pitches: number
+  rates: Record<string, BatterZoneRate>
+}
+export interface BatterZoneRatesResponse {
+  contract_version: string
+  year: number
+  batter_id: number
+  pitcher_hand: 'All' | 'L' | 'R'
+  status: 'ready' | 'insufficient_pa' | 'no_data' | 'unavailable'
+  season_pa: number
+  eligible: boolean
+  split_pitches: number
+  located_pitches: number
+  missing_location_pitches: number
+  zone_height_fallback_pitches: number
+  metrics: { key: string; label: string; denominator: string; format?: 'decimal' | 'percent'; direction?: 'higher' | 'lower' | 'frequency' }[]
+  cells: BatterZoneRateCell[]
+  benchmark_status?: string
+  benchmark_version?: string | null
+  benchmark_min_denominator?: number
+  benchmark_min_peers?: number
+  scope: string
+}
+
 export interface ResponseMeta {
   year: number
   data_updated_at: string | null
@@ -3010,4 +3049,17 @@ export interface PerformanceStateShadowResponse {
   integration_gate: { eligible: boolean; required_untouched_year: number; minimum_prospective_rows_per_role_target: number; reason: string }
   dataset_status: string
   warnings: string[]
+}
+export interface InGameCountPitchRow {
+  pitch:string; pitches:number; usage_pct:number|null; velocity:number|null
+  strike_pct:number|null; zone_pct:number|null; swing_pct:number|null; contact_pct:number|null; whiff_pct:number|null
+  avg:number|null; woba:number|null; hard_hit_pct:number|null; sample_status:string
+  denominators:{pitches:number;swings:number;ab:number;woba:number;tracked_bbe:number}
+}
+export interface InGameCountContext {
+  source_status:'available'|'unavailable'
+  contract_version:string;year:number;scope:string;count:string;pitcher_id:number;batter_id:number
+  pitcher_name:string|null;batter_name:string|null;batter_side:string;pitcher_hand:string
+  pitcher:{status:string;summary:InGameCountPitchRow;pitches:InGameCountPitchRow[]}
+  batter:{status:string;summary:InGameCountPitchRow;pitches:InGameCountPitchRow[]}
 }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from threading import Lock
 from typing import Any, Callable
 from uuid import uuid4
 
@@ -31,6 +32,11 @@ from app.services.video_service import get_video_lookup_status
 
 router = APIRouter()
 JOB_REGISTRY: dict[str, dict[str, Any]] = {}
+_VIDEO_JOB_LOCK = Lock()
+
+
+def _video_jobs() -> list[dict[str, Any]]:
+    return [dict(job) for job in list(JOB_REGISTRY.values()) if job.get("name") == "backfill_video_lookup"]
 
 
 @router.get("/player-archetypes/slice3")
@@ -101,18 +107,22 @@ def backfill_video_lookup_job(
     end_date: str | None = None,
     batch_size: int = 50,
 ) -> dict[str, object]:
-    return _start_job(
-        background_tasks,
-        "backfill_video_lookup",
-        year,
-        lambda: run_video_lookup_backfill(
-            year=year,
-            max_games=max_games,
-            start_date=start_date,
-            end_date=end_date,
-            batch_size=batch_size,
-        ),
-    )
+    with _VIDEO_JOB_LOCK:
+        active = next((job for job in _video_jobs() if job.get("status") in {"queued", "running"}), None)
+        if active:
+            return active
+        return _start_job(
+            background_tasks,
+            "backfill_video_lookup",
+            year,
+            lambda: run_video_lookup_backfill(
+                year=year,
+                max_games=max_games,
+                start_date=start_date,
+                end_date=end_date,
+                batch_size=batch_size,
+            ),
+        )
 
 
 @router.post("/jobs/backfill-pitcher-game-lines")
@@ -214,7 +224,15 @@ def read_pitcher_data_status(year: int = 2026) -> dict[str, object]:
 
 @router.get("/video-lookup-status")
 def read_video_lookup_status(year: int = 2026) -> dict[str, object]:
-    return get_video_lookup_status(year=year)
+    try:
+        payload = get_video_lookup_status(year=year)
+    except Exception as exc:
+        # A brief DuckDB write lock must not hide the still-running job.
+        payload = {"year": year, "coverage_error": str(exc)}
+    jobs = _video_jobs()
+    active = next((job for job in jobs if job.get("status") in {"queued", "running"}), None)
+    latest = next((job for job in reversed(jobs) if job.get("year") == year), None)
+    return {**payload, "active_job": active, "latest_job": latest}
 
 
 @router.get("/pitcher-game-line-status")

@@ -84,6 +84,17 @@
       @select-pitch="openSelectedPitch"
     />
 
+    <LazyPitcherInGameTab
+      v-else-if="activeTab === 'in-game'"
+      :key="`${filters.year}:${filters.pitcherId}`"
+      :year="filters.year"
+      :pitcher-id="filters.pitcherId ? Number(filters.pitcherId) : null"
+      :pitcher-name="selectedName"
+      :initial-game-pk="Number.isFinite(routeGamePk) ? routeGamePk : undefined"
+      :refresh-token="dataRefreshToken"
+      @select-pitch="openSelectedPitch"
+    />
+
     <PitcherStuffTab
       v-else-if="activeTab === 'movement'"
       v-model:stand="stuffStand"
@@ -239,6 +250,7 @@ const tabs = [
   { key: 'overview', label: 'Overview' },
   { key: 'rotation', label: 'Rotation' },
   { key: 'outing', label: 'Outing Report' },
+  { key: 'in-game', label: 'In game' },
   { key: 'movement', label: 'Stuff' },
   { key: 'sequence', label: 'Sequence' },
   { key: 'stamina', label: 'Stamina' },
@@ -683,7 +695,7 @@ watch(
 watch(
   () => [activeTab.value, filters.year, filters.pitcherId, dataRefreshToken.value] as const,
   async ([tab, year, pitcherId, refreshToken]) => {
-    if (!pitcherId || tab === 'overview' || tab === 'stamina') return
+    if (!pitcherId || tab === 'overview' || tab === 'stamina' || tab === 'in-game') return
     const loadKey = `${year}:${pitcherId}:${refreshToken}`
     if (tabLoadKeys[tab] === loadKey) return
     tabLoadKeys[tab] = loadKey

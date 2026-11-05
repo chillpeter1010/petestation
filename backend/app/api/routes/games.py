@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
+from typing import Literal
+from app.services.pitch_matchup_service import get_pitch_matchup
 
 from app.api.schemas.common import AnalysisResponse
 from app.services.game_pitcher_analysis_service import get_game_pitch_replay, get_game_pitch_shape, get_game_pitcher_tags
@@ -10,6 +12,11 @@ from app.services.games_service import get_game_pitching, list_games
 from app.services.personal_service import get_personal_movement, get_personal_sequence
 
 router = APIRouter()
+
+
+@router.get("/matchup-context")
+def read_matchup_context(year: int = Query(2026, ge=2021, le=2100), pitcher_id: int = Query(..., gt=0), batter_id: int = Query(..., gt=0), batter_side: Literal["L", "R", "unknown"] = "unknown", pitcher_hand: Literal["L", "R", "unknown"] = "unknown", balls: int = Query(..., ge=0, le=3), strikes: int = Query(..., ge=0, le=2)) -> dict[str, Any]:
+    return get_pitch_matchup(year, pitcher_id, batter_id, batter_side, pitcher_hand, balls, strikes)
 
 
 @router.get("")

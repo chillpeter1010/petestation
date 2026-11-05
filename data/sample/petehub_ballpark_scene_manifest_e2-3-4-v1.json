@@ -1,0 +1,96 @@
+{
+  "schema_version": 2,
+  "asset_version": "e2-3-4-facilities-v1",
+  "source_path": "frontend/assets/ballpark/scenes/scene-kit-e2-3-4-v1.json",
+  "source_sha256": "8d1f27246884f0bc44e30ac3deff23b7fcf173776cc6dd72c8dc522a436b4a81",
+  "exporter": "build_ballpark_scenes.py:v1",
+  "render_mode": "layered_background",
+  "world_size": [
+    1672,
+    941
+  ],
+  "footprint": {
+    "half_width": 9,
+    "height": 10
+  },
+  "provenance": {
+    "author": "Petehub project / built-in OpenAI image generation and independently authored scene geometry",
+    "model": "not_exposed_by_image_generation_tool",
+    "license": "Project-generated artwork; use subject to applicable tool terms; no third-party asset pack or MLB licensing claim",
+    "reference_manifest": "data/sample/petehub_ballpark_e2_facility_concepts_v1.json",
+    "modification_note": "Batting artwork unchanged. User requested Pitcher In game relocation to both bullpen lanes: pitcher-mound-v2.png locally edited with built-in image_gen; old v1 retained, edit provenance in petehub_ballpark_pitcher_in_game_layout_v2.json. Collision/foreground/portals unchanged; each lane has separate planned object bounds. User accepted Pitcher layout v2 and supplied manual checks on 2026-11-04; User subsequently accepted Batting E2.3 gameplay. No actors, animation or object actions implemented; five-scene v3 unchanged."
+  },
+  "scope": [
+    "E2.3",
+    "E2.4"
+  ],
+  "human_acceptance": "Pitcher_layout_v2_accepted_2026-11-04; Batting_gameplay_subsequently_accepted_by_user",
+  "scenes": [
+    {
+      "scene_id": "batting_cages",
+      "room": "batting-cages",
+      "background": "frontend/assets/ballpark/batting-cages-v1.png",
+      "background_sha256": "dc409ad4e6e63ce4be2919e439f7fa0e8840fe75676fe6e7e035e43ba6674a35",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2719206,
+      "editable_source": "output/ballpark/scenes-e2-3-4-v1/batting-cages-layers.svg",
+      "editable_source_sha256": "87b24300238699fc9fef6901d5d987652064740ac843c345e9b0b9db03b07f7c",
+      "runtime_path": "output/ballpark/scenes-e2-3-4-v1/batting-cages.json",
+      "runtime_sha256": "7cff8b25c6ec0daf7a1f45e35ac6d66080122317bd2368873696ae3ff4e878d6",
+      "collision_count": 16,
+      "foreground_count": 14,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/batters"
+      }
+    },
+    {
+      "scene_id": "pitcher_mound",
+      "room": "pitcher-mound",
+      "background": "frontend/assets/ballpark/pitcher-mound-v2.png",
+      "background_sha256": "98a23c298b34b2b2e32684c513f3e63e77284b47da4d95c8391f678fcaf31b4e",
+      "image_size": [
+        1672,
+        941
+      ],
+      "world_scale": [
+        1.0,
+        1.0
+      ],
+      "background_bytes": 2484770,
+      "editable_source": "output/ballpark/scenes-e2-3-4-v1/pitcher-mound-layers.svg",
+      "editable_source_sha256": "a2d7066741366745efc7b2dec7358386100cf08d81a89fc0e08a22395b6b9b5a",
+      "runtime_path": "output/ballpark/scenes-e2-3-4-v1/pitcher-mound.json",
+      "runtime_sha256": "6e52b87a1ea587068bdbe9e957c9848d0ffa050341ffdeb1e52f833883374c4f",
+      "collision_count": 19,
+      "foreground_count": 17,
+      "portal_count": 1,
+      "decoded_texture_bytes": 6293408,
+      "fallback": {
+        "static_route": "/ballpark",
+        "classic_route": "/pitchers"
+      }
+    }
+  ],
+  "portal_overrides": {
+    "campus": {
+      "batting": {
+        "room": "batting-cages",
+        "spawn": "return"
+      },
+      "pitching": {
+        "room": "pitcher-mound",
+        "spawn": "return"
+      }
+    }
+  }
+}

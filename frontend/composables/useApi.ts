@@ -1,4 +1,5 @@
 import type {
+  BatterZoneRatesResponse,
   AnalysisResponse,
   CatcherDescriptiveDetailResponse,
   CatcherDescriptiveLeaderboardResponse,
@@ -300,6 +301,10 @@ export function useApi() {
           _ts: Date.now()
         },
         cache: 'no-store'
+      }),
+    batterZoneRates: (params: { year: number; batterId: number; pitcherHand: 'All' | 'L' | 'R' }) =>
+      $fetch<BatterZoneRatesResponse>(`${apiBase}/batters/personal/zone-rates`, {
+        query: { year: params.year, batter_id: params.batterId, pitcher_hand: params.pitcherHand }
       }),
     batterPersonalOverview: (params: { year: number; batterId: number }) =>
       $fetch<AnalysisResponse>(`${apiBase}/batters/personal/overview`, {
@@ -825,6 +830,8 @@ export function useApi() {
         query: { year: params.year }
       }))
     },
+    inGameCountContext: (params:{year:number;pitcherId:number;batterId:number;batterSide:'L'|'R'|'unknown';pitcherHand:'L'|'R'|'unknown';balls:number;strikes:number}) =>
+      $fetch<import('~/types/api').InGameCountContext>(`${apiBase}/games/matchup-context`,{query:{year:params.year,pitcher_id:params.pitcherId,batter_id:params.batterId,batter_side:params.batterSide,pitcher_hand:params.pitcherHand,balls:params.balls,strikes:params.strikes}}),
     gamePitcherTags: (params: { year: number; gamePk: number; pitcherId: number; role: 'SP' | 'RP' | string }) => {
       const key = `tags:${JSON.stringify(params)}`
       return cachedGameAnalysis(key, () => $fetch<Record<string, unknown>>(`${apiBase}/games/${params.gamePk}/pitchers/${params.pitcherId}/tags`, {
