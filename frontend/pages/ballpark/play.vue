@@ -26,8 +26,8 @@
 
     <p v-if="world.notice.value" role="status">{{ world.notice.value }}</p>
     <nav class="direct-nav" aria-label="Direct facility links" @click.capture="rememberDirectClassic">
-      <NuxtLink to="/games/today">Game</NuxtLink><NuxtLink to="/pitchers">Pitcher Mound</NuxtLink>
-      <NuxtLink to="/batters">Batting Cages</NuxtLink><NuxtLink to="/leaderboards">Leaderboard</NuxtLink>
+      <NuxtLink :to="gameDirectLink">Game</NuxtLink><NuxtLink to="/pitchers">Pitcher Mound</NuxtLink>
+      <NuxtLink to="/batters">Batting Cages</NuxtLink><NuxtLink :to="leaderboardDirectLink">Leaderboard</NuxtLink>
       <NuxtLink to="/lab">Training &amp; Lab</NuxtLink><NuxtLink :to="teamRoute">Team &amp; roster</NuxtLink>
       <button type="button" @click="openRecommendations">Recommended videos</button>
     </nav>
@@ -57,6 +57,7 @@ import { objectClassicDestination } from '~/components/ballpark/runtime/classicD
 import { positiveId } from '~/components/ballpark/runtime/interactionCatalog'
 import { MLB_TEAMS, normalizeMlbTeamCode } from '~/config/mlbTeams'
 import sceneKit from '~/assets/ballpark/scenes/scene-kit-v4.json'
+import { gameContext } from '~/utils/gameCenterContext'
 
 const route = useRoute()
 const router = useRouter()
@@ -93,6 +94,11 @@ let opening=false
 const arrivalId = ref(typeof route.query.spawn === 'string' ? route.query.spawn : undefined)
 const viewedTeam = computed(() => normalizeMlbTeamCode(route.query.team) || normalizeMlbTeamCode(world.save.value.viewing_team) || normalizeMlbTeamCode(user.value?.favorite_team_code))
 const teamRoute = computed(() => viewedTeam.value ? `/teams/${viewedTeam.value}` : '/teams')
+const gameDirectLink = computed(() => {
+  const context = gameContext({...route.query, game_pk:route.query.game || route.query.game_pk, pitcher_id:route.query.player || route.query.pitcher_id})
+  return {path:'/games/today',query:{year:context.year,team:viewedTeam.value||undefined,date:context.date||undefined,game_pk:context.gamePk,pitcher_id:context.pitcherId,ballpark_from:router.resolve({path:'/ballpark/play',query:baseQuery()}).fullPath}}
+})
+const leaderboardDirectLink = computed(() => ({path:'/leaderboards',query:{year:gameContext(route.query).year,team:viewedTeam.value||undefined,ballpark_from:router.resolve({path:'/ballpark/play',query:baseQuery()}).fullPath}}))
 const classicFallback = computed(() => {
   const activeRoom = room.value
   const target = sceneKit.scenes[activeRoom].fallback.classic_route
@@ -100,7 +106,7 @@ const classicFallback = computed(() => {
 })
 
 function roomLink(id: BallparkRoom, spawn?: string) {
-  return { path: '/ballpark/play', query: { room:id, ...(viewedTeam.value ? { team: viewedTeam.value } : {}), ...(spawn ? { spawn } : {}) } }
+  return { path: '/ballpark/play', query: { room:id, ...(route.query.year ? {year:gameContext(route.query).year} : {}), ...(viewedTeam.value ? { team: viewedTeam.value } : {}), ...(spawn ? { spawn } : {}) } }
 }
 function saveState(state:BallparkRuntimeState){
   world.update(state.room,{x:state.x,y:state.y,facing:state.facing,objectId:state.room===room.value?activeObject.value?.id||state.nearbyObject||undefined:state.nearbyObject||undefined},viewedTeam.value)
@@ -145,7 +151,7 @@ async function openObject(id:string,path?:string) {
 function directObjectRoute(target:Interaction,path?:string){
   const requestedYear=Number(route.query.year||selections.value[selectionKey(target.kind)]?.year)
   const saved=selections.value[selectionKey(target.kind)]
-  const destination=objectClassicDestination(target,{path,team:viewedTeam.value,year:[2026,2025,2024,2023,2022,2021].includes(requestedYear)?requestedYear:2026,player:positiveId(route.query.player||saved?.player),game:positiveId(route.query.game||saved?.game)})
+  const destination=objectClassicDestination(target,{path,team:viewedTeam.value,year:[2026,2025,2024,2023,2022,2021].includes(requestedYear)?requestedYear:2026,player:positiveId(route.query.player||saved?.player),game:positiveId(route.query.game||saved?.game),date:typeof route.query.date==='string'?route.query.date:saved?.date})
   if(!destination)return null
   return {...destination,query:{...destination.query,ballpark_from:router.resolve({path:'/ballpark/play',query:baseQuery()}).fullPath}}
 }

@@ -6,6 +6,8 @@
 
 ## 2026-11-06 呈現方案否決與 F2 重建規劃
 
+**同日後續 F1 交付優先：** 使用者授權先推 checkpoint 再收可保留 UI、開始 Ballpark F1；d25f602 已推 main。母站 Game 現在消費並同步 year/date/game_pk/pitcher_id/tab，指定歷史場無 date 時由原場取得日期；list／detail latest-request、缺場／錯誤／空資料與 source snapshot 標示補齊。Leaderboard 讀取／同步 year/team/tab/role，來源 cutoff 未提供者明示，不改 PR 母體。保留真名／Personal 連結、收合說明、exact-count 兩卡／原 API，逐球 details 改真名；R 元件無 banner，guard 保留。F1 source contract 與一次 direct vue-tsc PASS，最新人工清單見 Ballpark 主文件，尚未整體通過；母站3H早前done不變，其他分析Slice不因F1自動結案。F2 未開工，拒絕的貼圖候選沒重畫／沒再微調。
+
 使用者否決整張照片平移／縮放、任意前景位移、固定 PNG 打者；11-06 新加的下移／白線框也沒有獲得接受。現行 `PitchReplayChart.vue` 仍有此候選實作，本輪只更新規劃，未撤接／回退或修改程式。停止生成更多 PNG 姿勢或疊加螢幕位移，不再請使用者核准被否決的方案。下節 11-05「新稿待驗」是歷史交付敘述，不代表現行設計被接受。
 
 單一實作 owner 為 Ballpark **F2.1–F2.7，全部 Planned**，詳細表在 `PETEHUB_BALLPARK_GAME_SYSTEM.md` 最上方：保存契約／引擎決策 → 同世界場地／真相機／球路 → 可編輯 rig → 確定性動作 clock → 實測 swing 資料 adapter → 共用整合／gate → 原設施業務 parity。母站 Game 與 Pitcher Personal 消費同一按需載入元件，Ballpark 只沿既有 canonical 入口，不把 Phaser 園區改成三維。Three.js 是優先候選，尚未安裝／選定 production；原 G 動作 Lab 收斂為後期進階擴充，避免重複 renderer／rig／clock。

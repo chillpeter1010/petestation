@@ -8,6 +8,8 @@
       back-label="Home"
     />
 
+    <p class="scope-note">{{ year }} season · {{ team === 'All' ? 'All MLB teams' : team }} · {{ selectedRole }} · {{ activeView }}. {{ activeView === 'basic' ? 'Snapshot cutoff is not supplied for Basic stats.' : 'Source cutoffs and availability are shown below.' }} Rankings are not live; team/search filters do not redefine the percentile population.</p>
+
     <details class="column-guide">
       <summary><span>欄位說明</span><small>點擊展開目前頁籤的自定義指標</small></summary>
       <div class="column-guide__grid">
@@ -147,17 +149,21 @@
 <script setup lang="ts">
 import type { PitcherLeaderboardRow, StaminaCommandRetentionResponse, StaminaGameStatesResponse, StaminaPhysicalStabilityResponse, TablePayload } from '~/types/api'
 import { buildLeaderboardPercentiles, leaderboardHeatStyle, leaderboardMetricValue, type LeaderboardDisplayMode } from '~/utils/leaderboardDisplay'
+import { leaderboardContext } from '~/utils/gameCenterContext'
 
 const api = useApi()
+const route = useRoute(), router = useRouter()
+const initialContext = leaderboardContext(route.query)
+let restoringContext = false, contextWrites = 0
 
-const year = ref(2026)
+const year = ref(initialContext.year)
 type LeaderboardView = 'basic' | 'stuff' | 'location' | 'pitching' | 'stamina'
 type PlusView = Exclude<LeaderboardView, 'basic' | 'stamina'>
 
-const activeView = ref<LeaderboardView>('basic')
-const includeStarters = ref(true)
-const includeRelievers = ref(true)
-const team = ref('All')
+const activeView = ref<LeaderboardView>(initialContext.tab)
+const includeStarters = ref(initialContext.role !== 'RP')
+const includeRelievers = ref(initialContext.role !== 'SP')
+const team = ref(initialContext.team)
 const searchText = ref('')
 const minimumIp = ref(0)
 const displayMode = ref<LeaderboardDisplayMode>('actual')
@@ -473,7 +479,7 @@ const staminaTable = computed<TablePayload>(() => ({
 }))
 
 watch([year, selectedRole], () => {
-  team.value = 'All'
+  if (!restoringContext) team.value = 'All'
 })
 
 watch(activeView, (view) => {
@@ -489,6 +495,22 @@ watch([includeStarters, includeRelievers], ([hasStarters, hasRelievers]) => {
     includeStarters.value = true
     includeRelievers.value = true
   }
+})
+
+watch([year,team,activeView,selectedRole], async () => {
+  if (restoringContext) return
+  const target = {query:{...route.query,year:year.value,team:team.value==='All'?undefined:team.value,tab:activeView.value,role:selectedRole.value}}
+  if (router.resolve(target).fullPath === route.fullPath) return
+  contextWrites++
+  try { await router.replace(target) } finally { contextWrites-- }
+})
+watch(() => [route.query.year,route.query.team,route.query.tab,route.query.role], async () => {
+  if (contextWrites) return
+  restoringContext = true
+  const next = leaderboardContext(route.query)
+  year.value = next.year; team.value = next.team; activeView.value = next.tab
+  includeStarters.value = next.role !== 'RP'; includeRelievers.value = next.role !== 'SP'
+  await nextTick(); restoringContext = false
 })
 
 function playerRole(pitcher: PitcherLeaderboardRow) {

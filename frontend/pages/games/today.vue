@@ -14,18 +14,21 @@
 
     <section class="games-controls">
       <label>Year<select v-model.number="year" @change="changeYear"><option v-for="option in yearOptions" :key="option" :value="option">{{ option }}</option></select></label>
-      <label class="date-control">Date<div class="date-picker"><button type="button" class="date-step" aria-label="Previous day" @click="shiftDate(-1)">&lt;</button><input v-model="selectedDate" type="date" @change="loadGames"><button type="button" class="date-step" aria-label="Next day" @click="shiftDate(1)">&gt;</button></div></label>
-      <button type="button" @click="loadGames">Load games</button>
+      <label class="date-control">Date<div class="date-picker"><button type="button" class="date-step" aria-label="Previous day" @click="shiftDate(-1)">&lt;</button><input v-model="selectedDate" type="date" @change="loadGames()"><button type="button" class="date-step" aria-label="Next day" @click="shiftDate(1)">&gt;</button></div></label>
+      <button type="button" @click="loadGames()">Load games</button>
       <div class="scope-summary">
         <strong>{{ teamFilter ? `${teamFilter} games` : 'All MLB games' }}</strong>
         <span>{{ games.length }} on {{ selectedDate || latestGameDate || '—' }}</span>
-        <NuxtLink v-if="teamFilter" :to="{ path: '/games/today', query: { year } }">Clear team filter</NuxtLink>
+        <NuxtLink v-if="teamFilter" :to="{ path: '/games/today', query: { ...route.query, team: undefined } }">Clear team filter</NuxtLink>
       </div>
     </section>
 
-    <section class="games-list" aria-label="Games">
+    <p class="snapshot-note">Snapshot latest game in this scope: {{ latestGameDate || 'unavailable' }} · {{ year }} regular season · not a live feed</p>
+    <p v-if="contextNotice" class="snapshot-note" role="status">{{ contextNotice }}</p>
+    <p v-if="loadError" class="empty-detail" role="alert">{{ loadError }} <button type="button" @click="loadGames(true)">Retry</button></p>
+    <section class="games-list" aria-label="Games" :aria-busy="loadingList">
       <button v-for="game in games" :key="gameKey(game)" type="button" :class="{ active: Number(game.game_pk) === selectedGamePk }" @click="selectGame(Number(game.game_pk))">
-        <span class="game-card-status">Final</span>
+        <span class="game-card-status">{{ game.status || 'Snapshot' }}</span>
         <strong>{{ game.away_team }} <b>{{ scoreValue(game.away_score) ?? '—' }}</b></strong>
         <strong>{{ game.home_team }} <b>{{ scoreValue(game.home_score) ?? '—' }}</b></strong>
       </button>
@@ -105,7 +108,8 @@
 
       <p class="snapshot-note"><b>Data note:</b> this is a Petehub Statcast snapshot, not a second-by-second live MLB feed. In-progress games advance when the local update pipeline ingests newer pitches.</p>
     </section>
-    <section v-else class="empty-detail">No games are available for this date and scope.</section>
+    <section v-else-if="loading" class="empty-detail" role="status">Loading selected game…</section>
+    <section v-else-if="!loadError" class="empty-detail">No games are available for this date and scope.</section>
     <Teleport to="body">
       <div v-if="gameVideoOpen" class="game-video-backdrop" @click.self="gameVideoOpen = false">
         <section class="game-video-modal" role="dialog" aria-modal="true" aria-label="Selected pitch video">
@@ -120,6 +124,7 @@
 
 <script setup lang="ts">
 import { getPitchColor } from '~/utils/pitchColors'
+import { GAME_YEARS, gameContext, gameDate, gameFitsScope } from '~/utils/gameCenterContext'
 
 type GameRow = { game_pk?: number | string; game_date?: string; away_team?: string; home_team?: string; total_pitches?: number | string; away_score?: number | string | null; home_score?: number | string | null; status?: string }
 type PitchMixSlice = { pitch: string; pitches: number; color: string }
@@ -139,20 +144,23 @@ type PitcherAnalysisMode = 'location' | 'sequence' | 'movement' | 'replay'
 const api = useApi()
 const route = useRoute()
 const router = useRouter()
-const yearOptions = [2026, 2025, 2024, 2023, 2022, 2021]
-const requestedYear = Number(route.query.year)
-const year = ref(yearOptions.includes(requestedYear) ? requestedYear : 2026)
-const teamFilter = computed(() => String(route.query.team || '').trim().toUpperCase())
-const selectedDate = ref(String(route.query.date || ''))
+const yearOptions = GAME_YEARS
+const initialContext = gameContext(route.query)
+const year = ref(initialContext.year)
+const teamFilter = computed(() => gameContext(route.query).team)
+const selectedDate = ref(initialContext.date)
 const games = ref<GameRow[]>([])
 const latestGameDate = ref('')
 const selectedGamePk = ref<number | null>(null)
 const gameDetail = ref<GameDetail | null>(null)
-const activeTab = ref<TabValue>('feed')
+const activeTab = ref<TabValue>(initialContext.tab)
 const selectedAtBat = ref<number | null>(null)
 const selectedGamePitch = ref<Record<string, unknown> | null>(null)
 const gameVideoOpen = ref(false)
 const selectedPitcherId = ref<number | null>(null)
+const loadingList = ref(false), loadingDetail = ref(false), loadError = ref(''), contextNotice = ref('')
+const loading = computed(() => loadingList.value || loadingDetail.value)
+let listVersion = 0, detailVersion = 0, routeWrites = 0
 const tabs: Array<{ value: TabValue; label: string }> = [{ value: 'feed', label: 'Feed' }, { value: 'box', label: 'Box Score' }, { value: 'location', label: 'Location' }, { value: 'sequence', label: 'Sequence' }, { value: 'movement', label: 'Movement' }, { value: 'replay', label: 'Replay' }]
 
 const selectedGame = computed(() => gameDetail.value?.game || games.value.find(game => Number(game.game_pk) === selectedGamePk.value) || null)
@@ -176,23 +184,65 @@ const selectedGamePitchLabel = computed(() => {
   return `${pitch.pitch_name || 'Pitch'} · ${speedLabel} · ${humanizePitchResult(String(pitch.description || ''))}`
 })
 
-await loadGames()
+await loadGames(true)
 
-async function loadGames() {
-  const response = await api.gamesList({ year: year.value, date: selectedDate.value || undefined, team: teamFilter.value || undefined, limit: 120 })
-  games.value = (response.games as GameRow[] | undefined) || []
-  latestGameDate.value = String(response.latest_game_date || '')
-  if (!selectedDate.value && latestGameDate.value) {
-    selectedDate.value = latestGameDate.value
-    const dated = await api.gamesList({ year: year.value, date: selectedDate.value, team: teamFilter.value || undefined, limit: 120 })
-    games.value = (dated.games as GameRow[] | undefined) || []
-  }
-  await router.replace({ query: { year: year.value, date: selectedDate.value || undefined, team: teamFilter.value || undefined } })
-  if (games.value.length) await selectGame(Number(games.value[0].game_pk))
-  else { selectedGamePk.value = null; gameDetail.value = null; selectedAtBat.value = null }
+async function syncGameQuery() {
+  const target = {query:{...route.query,year:year.value,date:selectedDate.value||undefined,team:teamFilter.value||undefined,game_pk:selectedGamePk.value||undefined,tab:activeTab.value,pitcher_id:selectedPitcherId.value||undefined}}
+  if (router.resolve(target).fullPath === route.fullPath) return
+  routeWrites++
+  try { await router.replace(target) } finally { routeWrites-- }
 }
-
-async function selectGame(gamePk: number) { selectedGamePk.value = gamePk; selectedPitcherId.value = null; gameDetail.value = await api.gamePitching({ year: year.value, gamePk }) as unknown as GameDetail; selectedPitcherId.value = gamePitchers.value[0]?.pitcher_id || null; selectedAtBat.value = gameDetail.value.plays[0]?.at_bat_number || null; selectedGamePitch.value = null; gameVideoOpen.value = false; prefetchSelectedPitcherAnalysis() }
+async function loadGames(restore = false) {
+  const token = ++listVersion; ++detailVersion
+  const requested = restore ? gameContext(route.query) : {gamePk:selectedGamePk.value,pitcherId:undefined}
+  const scope = {year:year.value,date:gameDate(selectedDate.value,year.value),team:teamFilter.value}
+  selectedDate.value = scope.date
+  loadingList.value = true; loadingDetail.value = false; loadError.value = ''; contextNotice.value = ''
+  games.value = []; latestGameDate.value = ''; gameDetail.value = null; selectedGamePk.value = null; selectedPitcherId.value = null; selectedAtBat.value = null; selectedGamePitch.value = null; gameVideoOpen.value = false
+  try {
+    let cached: GameDetail | undefined
+    if (restore && requested.gamePk && !scope.date) {
+      try { cached = await api.gamePitching({year:scope.year,gamePk:requested.gamePk}) as unknown as GameDetail }
+      catch { cached = undefined }
+      if (token !== listVersion) return
+      if (cached && Number(cached.game?.game_pk) === requested.gamePk && gameFitsScope(cached.game,scope)) scope.date = String(cached.game.game_date).slice(0,10)
+    }
+    let response = await api.gamesList({year:scope.year,date:scope.date||undefined,team:scope.team||undefined,limit:120})
+    if (token !== listVersion) return
+    latestGameDate.value = String(response.latest_game_date || '')
+    if (!scope.date && gameDate(latestGameDate.value,scope.year)) {
+      scope.date = latestGameDate.value
+      response = await api.gamesList({year:scope.year,date:scope.date,team:scope.team||undefined,limit:120})
+      if (token !== listVersion) return
+    }
+    selectedDate.value = scope.date
+    games.value = ((response.games || []) as GameRow[]).filter(game => gameFitsScope(game,scope))
+    if (Array.isArray(response.warnings) && response.warnings.length) contextNotice.value = 'Some local snapshot sources are unavailable.'
+    const next = games.value.find(game => Number(game.game_pk) === requested.gamePk) || games.value[0]
+    if (restore && requested.gamePk && Number(next?.game_pk) !== requested.gamePk) contextNotice.value = 'Requested game is unavailable in this year/date/team scope. Showing an available game, if any.'
+    if (next) await selectGame(Number(next.game_pk),false,Number(cached?.game?.game_pk)===Number(next.game_pk)?cached:undefined,requested.pitcherId)
+    if (token === listVersion) await syncGameQuery()
+  } catch { if (token === listVersion) loadError.value = 'Game snapshot could not load. Retry this date and scope.' }
+  finally { if (token === listVersion) loadingList.value = false }
+}
+async function selectGame(gamePk: number, sync = true, cached?: GameDetail, requestedPitcher?: number) {
+  if (!games.value.some(game => Number(game.game_pk) === gamePk)) return
+  const token = ++detailVersion, selectedYear = year.value
+  selectedGamePk.value = gamePk; selectedPitcherId.value = null; gameDetail.value = null; selectedAtBat.value = null; selectedGamePitch.value = null; gameVideoOpen.value = false
+  loadingDetail.value = true; loadError.value = ''
+  try {
+    const result = cached || await api.gamePitching({year:selectedYear,gamePk}) as unknown as GameDetail
+    if (token !== detailVersion) return
+    if (Number(result.game?.game_pk) !== gamePk || !gameFitsScope(result.game,{year:selectedYear,date:selectedDate.value,team:teamFilter.value})) throw new Error('Mismatched game')
+    gameDetail.value = result
+    selectedPitcherId.value = gamePitchers.value.find(p => p.pitcher_id === requestedPitcher)?.pitcher_id || gamePitchers.value[0]?.pitcher_id || null
+    if (requestedPitcher && selectedPitcherId.value !== requestedPitcher) contextNotice.value = 'Requested pitcher is not in this game; selected an available pitcher.'
+    selectedAtBat.value = result.plays?.[0]?.at_bat_number || null
+    if (sync) await syncGameQuery()
+    prefetchSelectedPitcherAnalysis()
+  } catch { if (token === detailVersion) loadError.value = 'Selected game detail is unavailable. Retry or select another game.' }
+  finally { if (token === detailVersion) loadingDetail.value = false }
+}
 async function changeYear() { selectedDate.value = ''; await loadGames() }
 async function shiftDate(days: number) { selectedDate.value = offsetIsoDate(selectedDate.value || latestGameDate.value || todayIsoDate(), days); await loadGames() }
 function gameKey(game: GameRow) { return String(game.game_pk || `${game.game_date}-${game.away_team}-${game.home_team}`) }
@@ -218,6 +268,14 @@ function pitchVideoUrl(pitch: Record<string, unknown> | null) { if (!pitch) retu
 function selectGamePitch(pitch: Record<string, unknown>) { selectedGamePitch.value = pitch; if (pitchVideoUrl(pitch)) gameVideoOpen.value = true }
 function pitchMixGradient(mix: PitchMixSlice[] = []) { const total = mix.reduce((sum, row) => sum + Number(row.pitches || 0), 0); if (!total) return getPitchColor('Unknown'); let start = 0; const stops = mix.map(row => { const end = start + (Number(row.pitches || 0) / total) * 100; const stop = `${getPitchColor(row.pitch)} ${start.toFixed(2)}% ${end.toFixed(2)}%`; start = end; return stop }); return `conic-gradient(${stops.join(', ')})` }
 watch(selectedAtBat, () => { selectedGamePitch.value = null; gameVideoOpen.value = false })
+watch([activeTab,selectedPitcherId], () => { if (!loading.value && !routeWrites) void syncGameQuery() })
+watch(() => [route.query.year,route.query.date,route.query.team,route.query.game_pk,route.query.tab,route.query.pitcher_id], () => {
+  if (routeWrites) return
+  const next = gameContext(route.query)
+  year.value = next.year; selectedDate.value = next.date; activeTab.value = next.tab
+  void loadGames(true)
+})
+onBeforeUnmount(() => { ++listVersion; ++detailVersion })
 </script>
 
 <style scoped>

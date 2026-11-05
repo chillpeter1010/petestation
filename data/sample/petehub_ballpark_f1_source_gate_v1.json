@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-06",
+  "project_id": "petehub-ballpark-game-system",
+  "slice": "F1",
+  "status": "implemented_pending_user_acceptance",
+  "checkpoint_pushed": "d25f602",
+  "source_checks": {
+    "command": "node scripts/check-ballpark-f1.mjs",
+    "working_directory": "frontend",
+    "status": "pass",
+    "scope": "Pure normalization/mapping and actual Game Vue setup with in-memory API responses; no DOM/rendering/browser/HTTP/server/login fixture.",
+    "checks": [
+      "Year/date/calendar and safe positive identity normalization",
+      "Game schedule/analysis/replay and scoreboard canonical destinations",
+      "Specified doubleheader game PK, pitcher and tab restoration",
+      "No-date historical game derives actual date",
+      "Unavailable requested game falls back explicitly within selected scope",
+      "Stale game-detail response cannot replace newer game",
+      "Game list error clears old game identity and provides retry state",
+      "Ballpark origin query preserved",
+      "Selected pitch detail uses pitcher/batter name fields"
+    ],
+    "typecheck": {
+      "command": "vue-tsc --noEmit -p .nuxt/tsconfig.json",
+      "status": "pass",
+      "meaning": "Compilation only; not UI acceptance"
+    }
+  },
+  "preserved": [
+    "Accepted D/E1-E5 and original 3H data/video/PR",
+    "Nuxt route/auth/DOM ownership and single lazy Phaser runtime",
+    "Original historical trajectory and source rate/percentile formulas",
+    "Name/Personal links, collapsed heatmap/scene notes, exact-count same-side cards",
+    "No floating R UI; current-account guarded keyboard return",
+    "Approved scene backgrounds/collisions/avatars unchanged"
+  ],
+  "not_started": [
+    "F2 3D renderer or dependencies/model generation",
+    "G advanced motion",
+    "F4 real team NPC art/random dialogue",
+    "Any full-season video backfill or broad old tests"
+  ],
+  "limitations": [
+    "F1 must remain in_progress until explicit user report",
+    "Rejected photo/PNG catcher rendering retained as superseded candidate pending F2, not newly approved",
+    "Basic leaderboard API has no cutoff: explicitly unavailable; do not borrow Plus cutoff",
+    "Snapshot latest-game date is not real-time ingestion/availability certification",
+    "No numeric/device/production performance certificate; E6 still open",
+    "Team/search display filters do not change existing PR population"
+  ],
+  "input_hashes": {
+    "frontend/components/ballpark/runtime/classicDestinations.ts": "99e5d5c994eb22e603204f480c540b36b330c9c0822ece57d64ebc9320094cc6",
+    "frontend/pages/ballpark/play.vue": "3f39acd59047b96ace407c1bda67ae5168a1632bee7913d2fc57fadb66a6e4b9",
+    "frontend/pages/games/today.vue": "fd761a959c28c0c805fc5eb10904b77617e04dbd68035ea6f0ec5b74c1edbec5",
+    "frontend/pages/leaderboards.vue": "340bcc8afe84b240df30578e38cc390fb34ef8371b1cd4eee78a63cb8bf32561",
+    "frontend/utils/gameCenterContext.ts": "3e6cf560cb717c702a35c1015615b97a9785b9466501038107b49813da3dd066",
+    "frontend/utils/pitcherInGame.ts": "b14fcb546b569f153fc19db7d29a53fb8b7935618dd9d721f7abfdfc5292652d",
+    "frontend/scripts/check-ballpark-f1.mjs": "9fa39e7fddd39c32bfdcec8f61833433153b72ed69e57865b7873c0f0eefd5bf",
+    "frontend/components/charts/PitchReplayChart.vue": "0fe7a8134e6684ac1d6bd279b55b429cef49dbd5111131f9200a9553b208f4c6",
+    "frontend/components/charts/BatterInGameHeatmap.vue": "2c061d8a75a2f342a34f2023c1cc0f9b0dd5fd8a95e8c4d9b1e3db97534221d8",
+    "frontend/components/charts/InGameMatchupCards.vue": "a7c8429a6385a98dfda0e1acfe1d5c003aeb6bfb8ee88e8bdcd56c60ba717a19",
+    "frontend/components/ballpark/BallparkClassicReturn.vue": "c5445a7212d12b9ed762d5bd05294bed005548d775a4d52d2348b4695c3b88a8"
+  },
+  "manual_checklist": [
+    "Campus GAME, Game schedule/analysis/In game objects and DOM equivalents enter canonical mother-site functions directly",
+    "Select available year/date/game/pitcher/tab and refresh; verify doubleheaders, fast switches, empty and retry states",
+    "Campus scoreboard and DOM Leaderboard carry year/team; switch view/role/team and refresh; cutoff and limitations clear",
+    "Player Personal name links, default-collapsed notes, exact-count cards, pitch/video/heatmap remain usable; rejected art/camera not an acceptance target",
+    "R from mother-site returns to saved room/pose without floating banner; typing/select/video-dialog guards and direct Classic access"
+  ]
+}

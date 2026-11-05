@@ -5,6 +5,26 @@
 專案 ID：`petehub-ballpark-game-system`
 狀態：In progress（Section A–D、E1～E5 與其子項已完成，36／66；新增七個 F2 Planned 子項，並非已完成進度退回；E6 效能／裝置 gate 尚未放行）
 
+## 2026-11-06 F1 接續交付（人工驗收待回報）
+
+使用者要求先 git push、收好可保留 UI，再開始 F1。前段 checkpoint **d25f602** 已推送 origin/main，包含當時142個相關檔；被否決的母站貼圖只是可回溯候選，不因此變成核准。F1 已交付 source implementation，維持 **in_progress、36／66**，等使用者檢查；F2.1–F2.7 仍全部 Planned，不安裝引擎／產模型／改原圖。
+
+F1 沿用 Campus GAME → 已核准 Game Center 室內，以及三個室內物件直連母站；外野 Leaderboard 記分板點擊與 DOM 直接選單連同一 `/leaderboards`，不另外做一張假資料排行。Game 的 `year/date/game_pk/pitcher_id/tab` 與 Leaderboard 的 `year/team/tab/role` 會被讀取並同步 URL；同一天多場以 game_pk 辨認，指定歷史 game 無 date 時先由該場資料取得日期。不合該年度／日期／球隊的 game 或 pitcher 明示 fallback，缺資料不補另一場當作所選；快速切換有 latest-request guard、離頁失效。來源 token 沿 query 保留，既有帳號隔離鍵盤 R 回房間／pose，沒有浮動 R banner。
+
+保留 UI 收束：真名／Personal 連結、熱圖及視角 guide 預設收合、同側 exact-count 季度投打卡片與原 API／分母不變；逐球細項也改讀 pitcher_name／batter_name，不再以 batter 數字 ID 當姓名。原始球路／PR／影片未改，被否決的固定 PNG／照片相機未繼續修補，仍留 F2 待替換。
+
+Game 顯示該 scope 最新可用賽事日期、completed snapshot 非即時直播；列表無來源 status 時寫 Snapshot，不強稱 Final。載入／錯誤／Retry／空資料有明確狀態。Leaderboard 讀取入口 team/year，顯示季／角色／榜單與 snapshot 意義；Basic API 沒有 cutoff 就明示未提供，Plus／Stamina 使用既有 data_as_of，不借別榜日期冒充。所有隊伍／搜尋仍只篩顯示，不改既有 PR 母體或公式；Stamina 僅2026/SP，沿既有產品限制。
+
+來源驗證：新增 `check-ballpark-f1.mjs`，在無 DOM／HTTP／登入／server 的 Node/Vue 記憶體狀態檢查 canonical mapping、合法日期／ID、指定雙重賽／投手／分頁、歷史日期、缺場 fallback、stale detail 排除、origin 保留與姓名欄位；一次 direct vue-tsc PASS。證據 `petehub_ballpark_f1_source_gate_v1.json`；未重跑 backend／build／既有完整 audit，沒有代理瀏覽器或畫面操作。E6 未量測項目不因此結案。
+
+使用者人工清單（最多五項）：
+
+1. `/ballpark/play?room=campus&team=AZ`：GAME 門進 Game Center，Schedule／Game analysis／In game 三物件與 DOM 選單直接進母站對應分頁，不出中繼確認。
+2. `/games/today?year=2026&team=AZ`：選可用日期／比賽／投手／分頁後重新整理仍一致；同日多場不串場，快速換場沒有舊比分／投手，空日期與錯誤狀態合理。
+3. Campus 點外野 Leaderboard 或 DOM 連結，年度／Viewing team 正確；切 Basic／Plus／Stamina、角色／隊伍後 URL 及重新整理一致，cutoff／不可用標示清楚。
+4. 從 Game／Leaderboard 進 Personal 或 In game：真名可點、說明預設收合、exact-count 兩卡隨球數／手別更新，影片與原熱圖仍可用。固定貼圖／舊相機外觀不在這次接受範圍，等 F2 替換。
+5. 從母站按 R 回來源房間與已存位置；輸入框／選單／影片彈窗時不誤觸，也不再出現浮動 R banner。直接 Classic URL 不必先進 Ballpark。
+
 ## 2026-11-06 F2 重排與開工前盤點（只規劃，未授權實作）
 
 使用者明確否決母站 Catcher 的整張照片 pan／zoom、獨立前景 translate 與固定 PNG 打者；先前 v4／下移／白線框不能記為接受。這是共用 In game 呈現層的待替換方案，不重開已接受的 3H 資料／影片／PR，也不重開 D／E1–E5 或重畫園區背景。新三維場景屬 F2，僅供母站 Game／Pitcher Personal 與設施入口共用；Ballpark 園區仍為核准的 2D Phaser，V2 球員／V3 User 標準及 F4 roster NPC 不因本計畫自動重製。
@@ -262,7 +282,7 @@ Petehub Ballpark 是現有分析網站上方的可選遊戲化入口，而不是
 
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
-| F1 · Main field, Game and Leaderboard | Planned | GAME gate 連 Game Center；外野記分板呈現 Leaderboard | canonical route／game identity／ranking as-of 一致；記分板不是唯一入口 |
+| F1 · Main field, Game and Leaderboard | In progress | GAME／三個室內物件與 Leaderboard canonical context／query／狀態已接；保留 UI 與 R 返回 | source/data contracts＋vue-tsc PASS；最新五項使用者驗收待回報，36／66，不能把 source PASS 當 visual PASS |
 | F2 · Pitching and Batting facilities | Planned | 七個子項 F2.1–F2.7：母站共用三維歷史 In game、rig／clock／揮棒資料介面與 gate，以及原兩牛棚／投打設施 parity | 詳見最上方 2026-11-06 分項；不改 2D 園區／原始軌跡，不把 generic 動作當真實量測；parent 需完成其實際範圍，不因規劃先 done |
 | F3 · Training & Lab | Planned | 集中 Stuff+、Location+、Stamina、Performance State、比較與計算器 | 研究與 production 標示清楚；不複製公式 |
 | F4 · Clubhouse active-roster experience | Planned | 主隊休息室、8–10 名場景 NPC、完整 PLAYER LIST、球員互動與個人數據；吸菸附屬區預留偶爾刷新球員抽菸與聊天 | official active roster／as-of 顯示；選單永遠可直接選人；附屬區刷新頻率、虛構情境動畫／聊天及通道不阻擋待實作 |

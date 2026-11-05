@@ -5,7 +5,7 @@ export type InGameFilters = Record<'stand' | 'count' | 'pitch' | 'pitchResult' |
 export function inGamePitchDetails(row: InGameRow | null) {
   const fields = [
     ['game_date', 'Date'], ['game_pk', 'Game'], ['at_bat_number', 'PA'], ['pitch_number', 'Pitch #'],
-    ['batter', 'Batter ID'], ['pitch_name', 'Pitch'], ['release_speed', 'Velocity (mph)'],
+    ['pitcher_name', 'Pitcher'], ['batter_name', 'Batter'], ['pitch_name', 'Pitch'], ['release_speed', 'Velocity (mph)'],
     ['balls', 'Balls'], ['strikes', 'Strikes'], ['description', 'Pitch result'], ['events', 'PA result'],
     ['stand', 'Batter side'], ['p_throws', 'Throws'], ['catcher_name', 'Catcher'],
     ['release_extension', 'Extension (ft)'], ['release_pos_x', 'Release X (ft)'],
