@@ -259,7 +259,7 @@ function shortPitch(pitch: string) { return ({ 'Four-Seam': 'FF', '4-Seam': 'FF'
 .state-panel { margin: 0; border: 1px solid var(--color-border); border-radius: 14px; padding: 18px; color: var(--color-muted-text); background: var(--color-surface); }
 .state-panel--error { color: #ff8a8a; }
 .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.metric-strip article { display: grid; gap: 4px; min-height: 118px; border: 1px solid var(--color-border); border-radius: 16px; padding: 17px 19px; background: linear-gradient(145deg, color-mix(in srgb, var(--color-accent) 8%, var(--color-surface)), var(--color-surface) 58%); }
+.metric-strip article { display: grid; gap: 4px; min-height: 118px; border: 1px solid var(--color-border); border-radius: 16px; padding: 17px 19px; background: #000; }
 .metric-strip span { color: var(--color-muted-text); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .metric-strip strong { color: var(--color-text); font: 900 29px "Fira Code", monospace; }
 .metric-strip small { color: var(--color-muted-text); font-size: 11px; }
@@ -277,7 +277,7 @@ function shortPitch(pitch: string) { return ({ 'Four-Seam': 'FF', '4-Seam': 'FF'
 .shape-panel header, .arsenal-table-panel > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--color-border); padding: 15px 18px; }
 .shape-panel h2, .pitch-inspector h2, .arsenal-table-panel h2 { margin: 3px 0 0; color: var(--color-text); font-size: 21px; }
 .shape-panel header small { color: var(--color-muted-text); }
-.shape-panel svg { width: 100%; height: 470px; display: block; background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 55%); }
+.shape-panel svg { width: 100%; height: 470px; display: block; background: #000; }
 .grid-lines line { stroke: color-mix(in srgb, var(--color-border-strong) 72%, transparent); stroke-width: 1; }
 .zero-line { stroke: color-mix(in srgb, var(--color-muted-text) 65%, transparent); stroke-width: 1.5; }
 .pitch-point { cursor: pointer; outline: none; }
@@ -286,7 +286,7 @@ function shortPitch(pitch: string) { return ({ 'Four-Seam': 'FF', '4-Seam': 'FF'
 .pitch-point text { fill: var(--color-text); font: 900 12px "Fira Code", monospace; text-anchor: middle; paint-order: stroke; stroke: var(--color-background); stroke-width: 4px; }
 .axis-label { fill: var(--color-muted-text); font: 700 10px "Fira Code", monospace; text-anchor: middle; }
 .pitch-inspector { display: flex; flex-direction: column; border-color: color-mix(in srgb, var(--pitch-color) 45%, var(--color-border)); }
-.pitch-inspector > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 19px; background: linear-gradient(135deg, color-mix(in srgb, var(--pitch-color) 15%, transparent), transparent 65%); }
+.pitch-inspector > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 19px; background: #000; }
 .pitch-inspector > header > strong { display: grid; color: var(--pitch-color); font: 900 38px "Fira Code", monospace; text-align: right; }
 .pitch-inspector > header small { color: var(--color-muted-text); font: 800 10px inherit; text-transform: uppercase; }
 .grade-track { height: 7px; margin: 0 19px 18px; overflow: hidden; border-radius: 99px; background: var(--color-muted); }
@@ -315,7 +315,7 @@ tbody tr { cursor: pointer; }
 tbody tr:hover { background: color-mix(in srgb, var(--color-accent) 6%, transparent); }
 tbody td:first-child { display: flex; align-items: center; gap: 9px; color: var(--color-text); font-family: inherit; font-weight: 850; }
 td.plus { color: var(--color-accent); font-size: 14px; font-weight: 900; }
-.method-note { border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border)); border-radius: 14px; padding: 15px 17px; background: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface)); }
+.method-note { border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border)); border-radius: 14px; padding: 15px 17px; background: #000; }
 .method-note strong { color: var(--color-accent); }
 .method-note p { margin: 6px 0 0; color: var(--color-muted-text); font-size: 12px; }
 @media (max-width: 1180px) { .control-deck { grid-template-columns: 1fr 120px 150px; } .control-deck__identity, .pitcher-select { grid-column: span 2; } .arsenal-workbench { grid-template-columns: 190px 1fr; } .pitch-inspector { grid-column: 1 / -1; } .trait-grid { grid-template-columns: repeat(3, 1fr); } .trait-grid div:nth-child(even) { border-right: 1px solid var(--color-border); } }

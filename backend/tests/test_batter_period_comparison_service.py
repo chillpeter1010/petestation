@@ -166,3 +166,71 @@ def test_batter_team_stints_keep_contiguous_return_to_team_separate():
     assert [stint["team"] for stint in stints] == ["PIT", "AZ", "PIT"]
     assert stints[0]["games"] == 2
     assert stints[2]["stint_index"] == 2
+
+
+def test_pa_hit_keeps_first_pitch_but_pitch_hit_selects_terminal_only():
+    rows = service.normalize_batter_period_rows(pd.DataFrame([
+        _row("2026-05-01", 1, 1, "ball", "", balls=0, strikes=0),
+        _row("2026-05-01", 1, 2, "hit_into_play", "single", balls=1, strikes=0, pitch_type="SL", pitch_name="Slider"),
+        _row("2026-05-01", 2, 1, "hit_into_play", "field_out"),
+        _row("2026-07-01", 3, 1, "hit_into_play", "double"),
+    ]))
+    window = dict(start_date="2026-05-01", end_date="2026-05-31")
+    pa_hit = service.apply_batter_period_filters(rows, **window, pa_result="Hit", count="0-0", pitch="4-Seam Fastball")
+    assert len(pa_hit) == 1
+    assert pa_hit.iloc[0]["description"] == "ball"
+    assert pa_hit.iloc[0]["events"] == ""
+    pitch_hit = service.apply_batter_period_filters(rows, **window, pitch_result="Hit")
+    assert len(pitch_hit) == 1
+    assert pitch_hit.iloc[0]["events"] == "single"
+    assert service.apply_batter_period_filters(rows, **window, pitch_result="Hit", count="0-0").empty
+    assert "Hit" in service._filter_options(rows)["pitch_result"]
+
+
+def test_count_average_only_counts_terminal_at_bats():
+    from app.services.discipline_service import build_pitcher_panel_metrics
+    rows = service.normalize_batter_period_rows(pd.DataFrame([
+        _row("2026-05-01", 1, 1, "ball", "", balls=0, strikes=0),
+        _row("2026-05-01", 1, 2, "hit_into_play", "single", balls=1, strikes=0),
+        _row("2026-05-01", 2, 1, "hit_into_play", "field_out"),
+    ]))
+    first = rows[rows["count"].eq("0-0")]
+    assert next(m["value"] for m in build_pitcher_panel_metrics(first) if m["label"] == "AVG") == 0
+    assert next(m["value"] for m in build_pitcher_panel_metrics(first.iloc[:1]) if m["label"] == "AVG") is None
+
+
+def test_location_rows_keep_tracking_scores_keys_and_swing_flags():
+    rows = sample_rows()
+    rows["pitch_stuff_plus"] = 108.5
+    rows["location_plus_pitch"] = 99.2
+    rows["play_id"] = "test-play"
+    rows["video_url"] = "https://baseballsavant.mlb.com/sporty-videos?playId=test-play"
+    points = service._discipline_location_rows(rows)
+    assert len(points) == len(rows)
+    assert points[0]["balls"] == 0 and points[0]["strikes"] == 0
+    assert points[0]["is_swing"] is False
+    assert points[1]["is_swing"] is True
+    assert points[0]["pitch_stuff_plus"] == 108.5
+    assert points[0]["location_plus_pitch"] == 99.2
+    assert points[0]["play_id"] == "test-play"
+    assert "test-play" in points[0]["video_url"]
+
+
+def test_season_row_cache_invalidates_and_does_not_share_mutable_frames(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+    path = tmp_path / "season.duckdb"
+    path.write_bytes(b"first")
+    monkeypatch.setattr(service, "settings", SimpleNamespace(data_dir=tmp_path))
+    monkeypatch.setattr(service, "get_season_duckdb_path", lambda *args: path)
+    versions = []
+    def cached(db_path, batter_id, version, time_bucket):
+        versions.append(version)
+        return source
+    source = sample_rows()
+    monkeypatch.setattr(service, "_cached_batter_period_rows", cached)
+    first = service.load_batter_period_rows(2026, 10)
+    first.loc[0, "events"] = "changed"
+    assert source.loc[0, "events"] == ""
+    path.write_bytes(b"second-version")
+    service.load_batter_period_rows(2026, 10)
+    assert versions[0] != versions[1]

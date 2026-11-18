@@ -275,7 +275,7 @@ onBeforeUnmount(() => cancelAnimationFrame(animationFrame))
 <style scoped>
 .vision-page { max-width: 1460px; min-height: 100vh; margin: 0 auto; padding: 92px 22px 64px; }
 .vision-hero, .vision-controls, .metric-strip, .vision-stage, .state-card { border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.vision-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; padding: 30px; background: radial-gradient(circle at top right, color-mix(in srgb, #69d3c3 20%, transparent), transparent 36%), var(--color-surface); }
+.vision-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; padding: 30px; background: #000; }
 nav { display: flex; gap: 9px; margin-bottom: 22px; color: var(--color-muted-text); font-size: 13px; }
 nav a { color: inherit; }
 .eyebrow, .vision-controls > label > span, .play-controls > span, .metric-strip span, .vision-stage > header span, .motion-panel header span, .motion-panel footer span, .stage-note > span { color: var(--color-primary); font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }

@@ -4,6 +4,7 @@
     <p v-else-if="loading" class="state-message" role="status">Loading outings…</p>
     <p v-else-if="errorMessage" class="state-message error" role="alert">{{ errorMessage }} <button type="button" @click="loadOutings">Retry</button></p>
     <template v-else-if="outings.length">
+      <p v-if="selectionNotice" class="state-message" role="status">{{ selectionNotice }}</p>
       <div class="outing-toolbar">
         <label>Game
           <select v-model.number="selectedGamePk" aria-label="In game outing">
@@ -12,28 +13,32 @@
         </label>
         <span>{{ outings.length }} outings · latest first</span>
       </div>
-      <LazyPitchReplayPanel v-if="selectedGamePk" :key="`${year}:${pitcherId}:${selectedGamePk}`" title="In game" :year="year" :game-pk="selectedGamePk" :pitcher-id="pitcherId!" :pitcher-name="pitcherName" @select-pitch="emit('select-pitch', $event)" />
+      <PitchReplayPanel v-if="selectedGamePk" :key="`${year}:${pitcherId}:${selectedGamePk}`" title="In game" :year="year" :game-pk="selectedGamePk" :pitcher-id="pitcherId!" :pitcher-name="pitcherName" @select-pitch="emit('select-pitch', $event)" />
     </template>
     <p v-else class="state-message">No outings are available for this pitcher in {{ year }}.</p>
   </section>
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
 import { inGameOutings, initialInGameOuting, type InGameOuting, type InGameRow } from '~/utils/pitcherInGame'
 
-const props = defineProps<{ year: number; pitcherId: number | null; pitcherName: string; initialGamePk?: number; refreshToken?: number }>()
+const PitchReplayPanel = defineAsyncComponent(() => import('~/components/charts/PitchReplayPanel.vue'))
+const props = defineProps<{ year: number; pitcherId: number | null; pitcherName: string; initialGamePk?: number; refreshToken?: number; videoPosePilot?:boolean }>()
 const emit = defineEmits<{ 'select-pitch': [pitch: InGameRow]; 'select-game': [gamePk: number] }>()
 const api = useApi()
 const outings = ref<InGameOuting[]>([])
 const selectedGamePk = ref<number | null>(null)
 const loading = ref(false)
 const errorMessage = ref('')
+const selectionNotice=ref('')
 let requestVersion = 0
 async function loadOutings() {
   const version = ++requestVersion
   outings.value = []
   selectedGamePk.value = null
   errorMessage.value = ''
+  selectionNotice.value = ''
   loading.value = false
   if (!props.pitcherId) return
   loading.value = true
@@ -42,6 +47,7 @@ async function loadOutings() {
     if (version !== requestVersion) return
     outings.value = inGameOutings(result.tables.outings?.rows || [])
     selectedGamePk.value = initialInGameOuting(outings.value, props.initialGamePk)
+    if(props.initialGamePk && !outings.value.some(o=>o.gamePk===props.initialGamePk))selectionNotice.value='Requested outing is unavailable for this pitcher; showing the latest available outing.'
   } catch (error) {
     if (version === requestVersion) errorMessage.value = error instanceof Error ? error.message : 'Outings request failed'
   } finally {
@@ -49,6 +55,7 @@ async function loadOutings() {
   }
 }
 watch(() => [props.year, props.pitcherId, props.refreshToken], loadOutings, { immediate: true })
+watch(()=>props.initialGamePk,value=>{if(value && outings.value.some(o=>o.gamePk===value))selectedGamePk.value=value})
 watch(selectedGamePk, value => { if (value) emit('select-game', value) })
 onBeforeUnmount(() => { requestVersion += 1 })
 </script>

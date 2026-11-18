@@ -1,0 +1,42 @@
+{
+  "slice": 2,
+  "date": "2026-11-14",
+  "status": "completed",
+  "games": [
+    {
+      "year": 2024,
+      "game_pk": 746731,
+      "before_rows": 319,
+      "at_run_before_rows": 320,
+      "after_rows": 320,
+      "unrelated_games_unchanged": true,
+      "csv_roundtrip_exact": true,
+      "raw_snapshot": "C:\\intern\\project_transfer\\data\\research\\decision_support_slice2_20261114\\sources\\statcast_746731.csv.gz",
+      "before_backup": "C:\\intern\\project_transfer\\data\\research\\decision_support_slice2_20261114\\before\\pitches_2024_746731.parquet",
+      "formal_models_refitted": false,
+      "tracking_imputed": false,
+      "note": "Changed game derivatives are not silently overwritten; old formal exports remain frozen and require version-aware refresh later.",
+      "metadata_synced": true
+    },
+    {
+      "year": 2026,
+      "game_pk": 823244,
+      "before_rows": 10,
+      "at_run_before_rows": 10,
+      "after_rows": 258,
+      "unrelated_games_unchanged": true,
+      "csv_roundtrip_exact": true,
+      "raw_snapshot": "C:\\intern\\project_transfer\\data\\research\\decision_support_slice2_20261114\\sources\\statcast_823244.csv.gz",
+      "before_backup": "C:\\intern\\project_transfer\\data\\research\\decision_support_slice2_20261114\\before\\pitches_2026_823244.parquet",
+      "formal_models_refitted": false,
+      "tracking_imputed": false,
+      "note": "Changed game derivatives are not silently overwritten; old formal exports remain frozen and require version-aware refresh later.",
+      "metadata_synced": true
+    }
+  ],
+  "physical_key_differences_resolved": 249,
+  "original_backups_preserved": true,
+  "formal_models_refitted": false,
+  "tracking_imputed": false,
+  "downstream_note": "Formal derivatives remain versioned historical snapshots; this research warehouse reads repaired sources."
+}

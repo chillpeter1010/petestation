@@ -3,7 +3,7 @@
   <main v-else class="ballpark-shell">
     <header class="topbar">
       <div class="brand-block">
-        <PetehubLogo size="compact" aria-label="Petehub Classic UI home" />
+        <PetehubLogo size="compact" aria-label="DaPeter Classic UI home" />
         <span class="version-label">{{ ballparkVersion }}</span>
       </div>
       <NuxtLink class="walk-open" to="/ballpark/play">Walk V0</NuxtLink>
@@ -315,41 +315,40 @@ useHead({
 </script>
 
 <style scoped>
-:global(body) { background: #080a08; }
-.ballpark-shell { --orange: #f3a22c; min-height: 100dvh; color: #f6f0dd; background: radial-gradient(circle at 50% 0, #273b22, #080a08 42rem); }
+.ballpark-shell { --orange: #f3a22c; min-height: 100dvh; color: #f6f0dd; background: #000; }
 .topbar, .scene { max-width: 1500px; margin-inline: auto; }
 .topbar { min-height: 68px; display: flex; align-items: center; gap: 20px; padding: 12px clamp(14px, 2vw, 28px); }
 .brand-block { display: flex; align-items: center; gap: 13px; }
-.avatar-open { margin-left: auto; border: 1px solid #bd7a2f; border-radius: 7px; padding: 9px 14px; color: #f7ebd6; background: #1a2024; font: 850 12px/1.2 Consolas, monospace; letter-spacing: .04em; cursor: pointer; }
+.avatar-open { margin-left: auto; border: 1px solid #bd7a2f; border-radius: 7px; padding: 9px 14px; color: #f7ebd6; background: #000; font: 850 12px/1.2 Consolas, monospace; letter-spacing: .04em; cursor: pointer; }
 .walk-open { margin-left: auto; border: 1px solid #bd7a2f; border-radius: 7px; padding: 9px 14px; color: #121923; background: #f3a22c; font: 850 12px/1.2 Consolas, monospace; letter-spacing: .04em; text-decoration: none; }
 .walk-open + .avatar-open { margin-left: 0; }
 .avatar-open:hover { background: #27313a; }
 .version-label, .panel-label { color: #ff9900; font: 850 11px/1.2 Consolas, monospace; letter-spacing: .09em; text-transform: uppercase; }
-.panel-actions a, .panel-actions button { border: 1px solid #465044; border-radius: 7px; padding: 9px 12px; color: #f6f0dd; background: #151a15; font: inherit; font-weight: 800; text-decoration: none; }
+.panel-actions a, .panel-actions button { border: 1px solid #465044; border-radius: 7px; padding: 9px 12px; color: #f6f0dd; background: #000; font: inherit; font-weight: 800; text-decoration: none; }
 .scene { padding: 0 clamp(0px, 2vw, 28px) 28px; }
-.scene-art { position: relative; overflow: hidden; border: 1px solid #394237; border-radius: 12px; background: #111; box-shadow: 0 24px 80px rgb(0 0 0 / 45%); }
+.scene-art { position: relative; overflow: hidden; border: 1px solid #394237; border-radius: 12px; background: #000; box-shadow: 0 24px 80px rgb(0 0 0 / 45%); }
 .scene-art img { display: block; width: 100%; height: auto; }
 .campus-toolbar { display: flex; height: clamp(48px, 4vw, 68px); }
 .campus-map { position: relative; }
-.image-hud, .image-nav { z-index: 5; height: 100%; background: #121923; }
+.image-hud, .image-nav { z-index: 5; height: 100%; background: #000; }
 .image-hud--home { left: 0; width: 19%; display: flex; align-items: center; padding-left: 2.2%; color: var(--orange); font-size: clamp(8px, .95vw, 15px); font-weight: 950; letter-spacing: .08em; }
-.image-nav { left: 19%; width: 59%; display: flex; align-items: stretch; overflow: hidden; border-inline: 1px solid #3b4552; background: linear-gradient(180deg, #1a2230, #111721); box-shadow: inset 0 -2px #35404d; }
+.image-nav { left: 19%; width: 59%; display: flex; align-items: stretch; overflow: hidden; border-inline: 1px solid #3b4552; background: #000; box-shadow: inset 0 -2px #35404d; }
 .image-team-picker { right: 0; width: 22%; display: flex; align-items: center; justify-content: center; gap: clamp(5px, .7vw, 10px); border-left: 1px solid #3b4552; padding-inline: 1%; color: #d8d6cb; font-family: "Aptos", "Segoe UI", sans-serif; font-size: clamp(8px, .8vw, 13px); font-weight: 850; }
-.image-team-picker select { min-width: 0; width: min(185px, 68%); border: 1px solid #465363; border-radius: 6px; padding: clamp(3px, .45vw, 7px) 8px; color: #f6f0dd; background: #0d1219; font: inherit; font-weight: 850; }
+.image-team-picker select { min-width: 0; width: min(185px, 68%); border: 1px solid #465363; border-radius: 6px; padding: clamp(3px, .45vw, 7px) 8px; color: #f6f0dd; background: #000; font: inherit; font-weight: 850; }
 .image-nav a, .image-nav button, .interior-nav a, .interior-nav button { min-width: 0; flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: clamp(3px, .4vw, 7px); border: 0; border-right: 1px solid #3b4552; border-radius: 0; padding: 0 6px; color: #f6f0dd; background: transparent; font-family: "Aptos", "Segoe UI", sans-serif; font-size: clamp(9px, .9vw, 15px); font-weight: 850; line-height: 1; text-align: center; text-decoration: none; text-shadow: 0 1px 2px #000; cursor: pointer; }
 .image-nav svg, .interior-nav svg { flex: 0 0 auto; width: clamp(13px, 1.1vw, 18px); height: clamp(13px, 1.1vw, 18px); stroke-width: 2.4; }
 .image-nav a:last-child { border-right: 0; }
 .image-nav [aria-current="page"] { color: #171109; background: linear-gradient(180deg, #f5b348, #dc9026); box-shadow: inset 0 -3px #a85d13; text-shadow: none; }
 .image-nav a:hover, .image-nav button:hover, .image-nav a:focus-visible, .image-nav button:focus-visible, .interior-nav a:hover, .interior-nav button:hover, .interior-nav a:focus-visible, .interior-nav button:focus-visible { color: #fff2d7; background: #293342; box-shadow: inset 0 -3px var(--orange); outline: none; }
-.interior-toolbar { position: absolute; z-index: 8; top: 0; left: 0; right: 0; height: 6.7%; min-height: 56px; display: flex; border-bottom: 2px solid #b37a2b; background: #121923; box-shadow: 0 4px 14px rgb(0 0 0 / 35%); }
-.interior-nav { min-width: 0; flex: 1 1 auto; display: flex; align-items: stretch; overflow-x: auto; background: linear-gradient(180deg, #1a2230, #111721); scrollbar-width: thin; }
+.interior-toolbar { position: absolute; z-index: 8; top: 0; left: 0; right: 0; height: 6.7%; min-height: 56px; display: flex; border-bottom: 2px solid #b37a2b; background: #000; box-shadow: 0 4px 14px rgb(0 0 0 / 35%); }
+.interior-nav { min-width: 0; flex: 1 1 auto; display: flex; align-items: stretch; overflow-x: auto; background: #000; scrollbar-width: thin; }
 .interior-nav a, .interior-nav button { min-width: 100px; }
 .interior-nav .interior-nav__home { position: sticky; z-index: 1; left: 0; flex: 0 0 124px; color: #171109; background: linear-gradient(180deg, #f5b348, #dc9026); text-shadow: none; }
 .interior-nav [aria-current="page"] { color: #ffbf5c; box-shadow: inset 0 -3px var(--orange); }
-.interior-team-picker { flex: 0 0 260px; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; border-left: 1px solid #3b4552; padding: 0 10px; color: #f6f0dd; background: #121923; font-family: "Aptos", "Segoe UI", sans-serif; font-size: 12px; font-weight: 850; white-space: nowrap; }
-.interior-team-picker select { min-width: 0; width: 150px; border: 1px solid #596354; border-radius: 5px; padding: 7px 6px; color: #f6f0dd; background: #111923; font: inherit; }
+.interior-team-picker { flex: 0 0 260px; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; border-left: 1px solid #3b4552; padding: 0 10px; color: #f6f0dd; background: #000; font-family: "Aptos", "Segoe UI", sans-serif; font-size: 12px; font-weight: 850; white-space: nowrap; }
+.interior-team-picker select { min-width: 0; width: 150px; border: 1px solid #596354; border-radius: 5px; padding: 7px 6px; color: #f6f0dd; background: #000; font: inherit; }
 .hotspot { position: absolute; display: grid; place-items: center; border: 2px solid transparent; border-radius: 8px; color: transparent; background: transparent; cursor: pointer; text-decoration: none; }
-.hotspot span { display: flex; align-items: center; gap: 6px; border: 1px solid var(--orange); border-radius: 5px; padding: 7px 10px; color: #fff; background: rgb(8 10 8 / 92%); box-shadow: 0 4px 18px #000; font-family: "Aptos", "Segoe UI", sans-serif; font-size: clamp(10px, .8vw, 13px); font-weight: 850; letter-spacing: .035em; line-height: 1; text-transform: uppercase; opacity: 0; transform: translateY(5px); transition: opacity .15s ease, transform .15s ease; white-space: nowrap; }
+.hotspot span { display: flex; align-items: center; gap: 6px; border: 1px solid var(--orange); border-radius: 5px; padding: 7px 10px; color: #fff; background: #000; box-shadow: 0 4px 18px #000; font-family: "Aptos", "Segoe UI", sans-serif; font-size: clamp(10px, .8vw, 13px); font-weight: 850; letter-spacing: .035em; line-height: 1; text-transform: uppercase; opacity: 0; transform: translateY(5px); transition: opacity .15s ease, transform .15s ease; white-space: nowrap; }
 .hotspot span svg { width: 15px; height: 15px; stroke: var(--orange); stroke-width: 2.5; }
 .hotspot:hover, .hotspot:focus-visible { border-color: var(--orange); background: rgb(243 162 44 / 13%); outline: none; }
 .hotspot:hover span, .hotspot:focus-visible span { opacity: 1; transform: none; }
@@ -366,11 +365,11 @@ useHead({
 .hotspot--easter-egg:hover, .hotspot--easter-egg:focus-visible { border-color: transparent; background: transparent; }
 .hotspot--easter-egg:focus-visible { outline: 3px solid #ffd166; outline-offset: 2px; }
 .overlay { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; padding: 18px; background: rgb(0 0 0 / 76%); backdrop-filter: blur(4px); }
-.video-panel { width: min(590px, 100%); border: 1px solid #596354; border-radius: 12px; padding: 25px; background: #111611; box-shadow: 0 30px 90px #000; }
+.video-panel { width: min(590px, 100%); border: 1px solid #596354; border-radius: 12px; padding: 25px; background: #000; box-shadow: 0 30px 90px #000; }
 .video-panel h2 { margin: 7px 0 10px; font-size: 28px; }
 .video-panel p { color: #c2c1b6; line-height: 1.65; }
 .bootstrap-panel label { display: grid; gap: 7px; margin-top: 18px; color: #f6f0dd; font-size: 12px; font-weight: 850; }
-.bootstrap-panel select { width: 100%; height: 46px; border: 1px solid #596354; border-radius: 7px; padding: 0 12px; color: #f6f0dd; background: #0b0f0b; }
+.bootstrap-panel select { width: 100%; height: 46px; border: 1px solid #596354; border-radius: 7px; padding: 0 12px; color: #f6f0dd; background: #000; }
 .bootstrap-panel .profile-error { margin: 10px 0 0; color: #f4a4a0; font-size: 12px; }
 .avatar-panel { width: min(780px, 100%); max-height: min(92dvh, 850px); overflow-y: auto; }
 .avatar-panel h2 { margin-bottom: 4px; }
@@ -381,7 +380,7 @@ useHead({
 .avatar-preview span { color: #d5cfbf; font: 850 10px/1.2 Consolas, monospace; letter-spacing: .03em; }
 .avatar-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: 12px; }
 .avatar-fields label { display: grid; gap: 6px; color: #e9dcc8; font-size: 12px; font-weight: 800; }
-.avatar-fields select, .avatar-fields input { min-width: 0; width: 100%; height: 42px; border: 1px solid #596354; border-radius: 6px; padding: 0 9px; color: #f6f0dd; background: #101820; font: inherit; }
+.avatar-fields select, .avatar-fields input { min-width: 0; width: 100%; height: 42px; border: 1px solid #596354; border-radius: 6px; padding: 0 9px; color: #f6f0dd; background: #000; font: inherit; }
 .panel-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .panel-actions .primary-action { border-color: var(--orange); color: #151009; background: var(--orange); }
 .panel-actions button { cursor: pointer; }

@@ -1,0 +1,42 @@
+{
+  "yesavage-reference-01": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "yesavage-reference-02": {
+    "status": "failed",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "yesavage-reference-03": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "yesavage-reference-04": {
+    "status": "failed",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "yesavage-reference-05": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "thompson-reference-01": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "thompson-reference-02": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "thompson-reference-03": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "thompson-reference-04": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  },
+  "thompson-reference-05": {
+    "status": "candidate",
+    "methodVersion": "motionbert-identity-full-timeline-v3"
+  }
+}

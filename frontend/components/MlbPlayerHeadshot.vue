@@ -49,7 +49,7 @@ watch(() => props.playerId, () => { failed.value = false })
 </script>
 
 <style scoped>
-.mlb-headshot { width: var(--headshot-size); height: var(--headshot-size); flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); color: var(--color-muted-text); background: color-mix(in srgb, var(--color-muted) 82%, #10141c); }
+.mlb-headshot { width: var(--headshot-size); height: var(--headshot-size); flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border: 1px solid color-mix(in srgb, currentColor 18%, transparent); color: var(--color-muted-text); background: #000; }
 .mlb-headshot--circle { border-radius: 50%; }
 .mlb-headshot--rounded { border-radius: min(22%, 14px); }
 .mlb-headshot img { width: 100%; height: 100%; display: block; object-fit: contain; object-position: center bottom; }

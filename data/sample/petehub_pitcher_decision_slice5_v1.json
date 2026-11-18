@@ -1,0 +1,141 @@
+{
+  "slice": 5,
+  "years": [
+    {
+      "year": 2021,
+      "decisions": 182162,
+      "with_nominal_candidates": 136702,
+      "nominal_candidate_rows": 1637227,
+      "low_confidence_boundaries": 865,
+      "candidate_profiles": 2415870
+    },
+    {
+      "year": 2022,
+      "decisions": 182468,
+      "with_nominal_candidates": 138342,
+      "nominal_candidate_rows": 1649088,
+      "low_confidence_boundaries": 647,
+      "candidate_profiles": 2398973
+    },
+    {
+      "year": 2023,
+      "decisions": 184506,
+      "with_nominal_candidates": 141064,
+      "nominal_candidate_rows": 1603376,
+      "low_confidence_boundaries": 559,
+      "candidate_profiles": 2328442
+    },
+    {
+      "year": 2024,
+      "decisions": 182903,
+      "with_nominal_candidates": 139295,
+      "nominal_candidate_rows": 1603843,
+      "low_confidence_boundaries": 699,
+      "candidate_profiles": 2330943
+    },
+    {
+      "year": 2025,
+      "decisions": 183387,
+      "with_nominal_candidates": 139583,
+      "nominal_candidate_rows": 1606674,
+      "low_confidence_boundaries": 471,
+      "candidate_profiles": 2338086
+    },
+    {
+      "year": 2026,
+      "decisions": 184328,
+      "with_nominal_candidates": 140640,
+      "nominal_candidate_rows": 1613393,
+      "low_confidence_boundaries": 462,
+      "candidate_profiles": 2351501
+    }
+  ],
+  "strict_time_violations": 0,
+  "dated_roster_probe_games": 72,
+  "probe_results": {
+    "dated_active_exact": 66,
+    "dated_roster_conflict": 6
+  },
+  "roster_confidence_boundaries": {
+    "official_game_roster_date_unverified": 1096673,
+    "insufficient_roster": 373,
+    "dated_roster_conflict": 232,
+    "dated_active_exact": 2476
+  },
+  "roster_basis": "Full official game-day player roster, not final used-pitcher list; 72 explicit-date API cross-checks, not all-date certification.",
+  "operational_status": "Warm-up, medical clearance, suspension and exact intraday transaction timing unknown; all individual ranking gates CLOSED.",
+  "eligibility": "Nominal position P or two-way Y; exclude current, removed, previously used and unsupported position-switch players; statutory three-batter gate.",
+  "limitations": [
+    "Unverified dates remain medium-confidence game-roster observations; future game usage does not define the pool.",
+    "Active starters can be nominal legal relievers; role/workload is a feature, not automatic available readiness.",
+    "Candidate workload uses strict timestamps across all teams/roles; historical starter counts begin in 2021."
+  ],
+  "data_checks": [
+    {
+      "year": 2021,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 16590,
+      "observed_incoming_in_nominal_pool": 16026,
+      "candidate_vs_exact_sql_rows": 176835,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    },
+    {
+      "year": 2022,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 15950,
+      "observed_incoming_in_nominal_pool": 15433,
+      "candidate_vs_exact_sql_rows": 176534,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    },
+    {
+      "year": 2023,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 15703,
+      "observed_incoming_in_nominal_pool": 15234,
+      "candidate_vs_exact_sql_rows": 178742,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    },
+    {
+      "year": 2024,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 15756,
+      "observed_incoming_in_nominal_pool": 15268,
+      "candidate_vs_exact_sql_rows": 177571,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    },
+    {
+      "year": 2025,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 15920,
+      "observed_incoming_in_nominal_pool": 15442,
+      "candidate_vs_exact_sql_rows": 177861,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    },
+    {
+      "year": 2026,
+      "duplicate_candidate_keys": 0,
+      "time_violations": 0,
+      "illegal_nominal_candidates": 0,
+      "invented_availability_or_ranking": 0,
+      "statutorily_supported_observed_changes": 15907,
+      "observed_incoming_in_nominal_pool": 15406,
+      "candidate_vs_exact_sql_rows": 178767,
+      "candidate_vs_exact_sql_window_disagreements": 0
+    }
+  ]
+}

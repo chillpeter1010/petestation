@@ -40,7 +40,7 @@ function trapKeys(event: KeyboardEvent) {
 .ballpark-overlay{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px;background:rgb(0 0 0 / 78%)}
 section{width:min(1400px,96vw);max-height:94dvh;overflow:auto;overscroll-behavior:contain;padding:22px;border:1px solid #d99a38;border-radius:14px;color:var(--color-foreground,#f6f0dd);background:var(--color-background,#121923);box-shadow:0 20px 80px #0008}
 header{display:flex;justify-content:space-between;align-items:start;gap:20px;margin-bottom:20px}h2{margin:4px 0}small{color:#d7ac63}
-button{min-height:44px;padding:8px 16px;border:1px solid #d99a38;border-radius:7px;background:#252f24;color:#fff3db;cursor:pointer;white-space:nowrap}
+button{min-height:44px;padding:8px 16px;border:1px solid #d99a38;border-radius:7px;background:#000;color:#fff3db;cursor:pointer;white-space:nowrap}
 button:focus-visible{outline:3px solid #ffbd53;outline-offset:3px}
 @media(max-width:600px){.ballpark-overlay{padding:6px}section{padding:12px;width:100%;max-height:98dvh}}
 </style>

@@ -22,7 +22,7 @@ function compare(left?: ComparisonTeamStint, right?: ComparisonTeamStint) { if (
 function compareSelected() { compare(props.stints.find(stint => stint.stint_index === props.leftIndex), props.stints.find(stint => stint.stint_index === props.rightIndex)) }
 </script>
 <style scoped>
-.transfer-panel { margin-top: 16px; border: 1px solid color-mix(in srgb, var(--color-primary) 58%, var(--color-border)); padding: 16px 18px; background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface)); }
+.transfer-panel { margin-top: 16px; border: 1px solid color-mix(in srgb, var(--color-primary) 58%, var(--color-border)); padding: 16px 18px; background: #000; }
 .transfer-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
 .transfer-heading p, .transfer-heading h2 { margin: 0; }.transfer-heading p { color: var(--color-primary); font-size: 11px; font-weight: 900; text-transform: uppercase; }.transfer-heading h2 { margin-top: 4px; color: var(--color-foreground); font-size: 16px; }.transfer-heading span { color: var(--color-muted-text); font-size: 12px; }
 .transfer-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; margin-top: 14px; }

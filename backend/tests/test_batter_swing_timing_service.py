@@ -81,6 +81,12 @@ def test_get_batter_swing_timing_filters_and_qualifies(tmp_path, monkeypatch):
         {"player_id": 1, "name": "First Hitter", "team": "NYY", "plate_appearances": 180},
         {"player_id": 2, "name": "Second Hitter", "team": "BOS", "plate_appearances": 80},
     ])
+    context_calls = []
+    def filtered_metrics(year, codes, hand, side, team, opponent, root):
+        context_calls.append((year, codes, hand, side, team, opponent))
+        return {1: {"avg_bat_speed": 73.5, "ideal_attack_angle_pct": 60.0,
+                    "context_pa": 20, "k_pct": 25.0, "bb_pct": 10.0, "k_bb_pct": 15.0}}
+    monkeypatch.setattr(service, "filtered_batting_metrics", filtered_metrics)
 
     response = service.get_batter_swing_timing(
         year=2025,
@@ -98,6 +104,17 @@ def test_get_batter_swing_timing_filters_and_qualifies(tmp_path, monkeypatch):
     assert response.leaderboard[0].name == "First Hitter"
     assert response.data_updated_at == "2026-08-22"
     assert response.leaderboard[0].plate_appearances == 180
+    assert response.leaderboard[0].context_pa == 20
+    assert response.leaderboard[0].avg_bat_speed == 73.5
+    assert response.leaderboard[0].ideal_attack_angle_pct == 60.0
+    assert response.leaderboard[0].k_pct == 25.0
+    assert response.leaderboard[0].bb_pct == 10.0
+    assert response.leaderboard[0].k_bb_pct == 15.0
+    assert context_calls[0] == (2025, {"FF", "SI", "FC"}, "R", "R", "All", "All")
+    # Enrichment must not mutate cached Savant summary models.
+    cached_rows, _, _ = service._aggregate_selection(2025, "fastball", "All", "R", "R", "All", str(data_dir.resolve()), cache.stat().st_mtime_ns)
+    assert cached_rows[0].avg_bat_speed is None
+    assert cached_rows[0].k_pct is None
 
     team_response = service.get_batter_swing_timing(
         year=2025,

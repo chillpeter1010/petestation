@@ -1,0 +1,51 @@
+{
+  "version": "petehub_static_release_delivery_v1",
+  "date": "2026-11-07",
+  "status": "implementation_delivered_pending_user",
+  "slices": {"F2.4": "in_progress", "F2.5": "deferred_by_user", "F2.6": "in_progress", "F2.7": "in_progress"},
+  "mode": "static_source_release_analysis",
+  "animation": false,
+  "poseCapture": false,
+  "retargeting": false,
+  "sourceFields": ["arm_angle", "p_throws", "release_pos_x", "release_pos_y", "release_pos_z", "release_extension"],
+  "diagram": {"gold": "recorded release X/Z", "black": "recorded arm-angle direction", "body": "generic schematic", "shoulder": "derived illustration only", "armLengthFt": 2, "armLengthMeasured": false, "views": ["front catcher", "back pitcher"], "negativeAngles": "retained", "missing": "unavailable, no invented point/angle", "extension": "separate source field; not stride"},
+  "integration": {"owner": "Nuxt shared PitchReplayChart", "entryPoints": ["mother-site Game In game", "mother-site Pitcher Personal In game", "Ballpark west/east bullpen canonical entry"], "renderer": "existing lazy Three.js", "actors": "static ready only", "playback": "unchanged historical ball only", "fallback": "source diagram outside trajectory gate; 2D/data/video and retry on renderer failure", "returns": "existing guarded keyboard R and room-position save"},
+  "bullpen": {"source": "existing MLB StatsAPI active-roster endpoint", "filter": "position_type=Pitcher", "freshness": ["fresh", "stale", "unavailable"], "timestamps": ["retrieved_at", "source_as_of"], "manualHistoricalPriority": true, "default": "first official entry only when no explicit pitcher", "outing": "manual valid game PK otherwise latest, notice on unavailable requested game", "npcSpawnOrAnimation": false},
+  "sourceChecks": {"command": "node frontend/scripts/check-static-release.mjs", "result": "PASS", "coverage": ["L/R front/back source immutability", "negative/zero/overhead angles", "missing/nonfinite values", "canonical lane destinations", "official pitcher filtering", "manual/historical priority", "unavailable/error", "late response exclusion", "shared panel/static switches/lazy and cleanup source"]},
+  "compileCheck": {"command": "node node_modules/vue-tsc/bin/vue-tsc.js --noEmit -p .nuxt/tsconfig.json", "cwd": "frontend", "result": "PASS"},
+  "browserUsed": false,
+  "frontendServerStarted": false,
+  "visualAcceptance": "pending_user",
+  "devicePerformanceAcceptance": "not_measured",
+  "productionReady": false,
+  "mountingFollowup": {
+    "userReport": "video popup has header/footer only; Sequence component absent",
+    "change": "explicit PitchVideoPlayer imports in Game/Personal and explicit direct InGameSequence import/use in ReplayPanel instead of auto/Lazy resolution",
+    "checks": "all three SFC compiler templates use imported $setup component bindings directly; vue-tsc PASS",
+    "runtimeRootCauseConfirmed": false,
+    "visualAcceptance": "pending_user",
+    "browserUsed": false
+  },
+  "latestUserRevision": {
+    "status": "delivered_pending_manual_acceptance",
+    "removed": ["3D pitcher figure", "large Arm angle diagram", "bottom Selected Pitch field table", "inner scene sidebar"],
+    "layout": "heatmap and View/Compare/Reset controls aligned in same wrapping row; compact button groups; matchup cards in outermost right ReplayPanel sidebar",
+    "sequence": "existing Conditioned branch tree: season anchors match current exact count, batter side and previous pitch; retain actual PA downstream/count descendants",
+    "previousPitch": "full unfiltered replay rows, same game/pitcher/PA and exact pitch_number minus one; first and missing states distinct",
+    "apiExtension": "optional /personal/sequence previous_pitch, default unchanged, __first__ reserved; eligible anchors retain branch descendants",
+    "video": "shared native video player for mother-site Game/Personal, existing direct-media resolver, no full Savant iframe, loading/retry/source link and stale/unmount guards",
+    "sourceChecks": ["3 targeted backend branch/adjacency tests PASS", "frontend previous context PASS", "frontend native-video URL/unavailable/late-response PASS", "one vue-tsc PASS"],
+    "browserUsed": false
+  },
+  "userFeedbackFollowup": {
+    "acceptance": "pending_user_after_reported_failures",
+    "reported": ["pitcher still chest-ready instead of extending arm", "ball-shaped glove", "transparent missing-PR heatmap cells", "unwanted close-up controls", "bottom information cards"],
+    "changes": ["frozen per-pitch L/R arm-angle shoulder-to-wrist direction without foot/root motion", "separate leather glove pocket/thumb/fingers attached to hand orientation", "neutral grey missing/low-support cells, no fabricated PR", "removed batter/release close-up controls", "side information cards with six pitch types and explicit expansion; narrow layout stacks"],
+    "checks": ["static pitcher source/math PASS within 0.0001 degree float32 tolerance, feet/root unchanged and repeatable", "PR contour source/math PASS, missing neutral and excluded from PR smoothing", "one vue-tsc PASS"],
+    "measuredShoulderOrArmLength": false,
+    "handForcedToRecordedReleasePoint": false,
+    "browserUsed": false
+  },
+  "remaining": ["user manual acceptance of new static diagrams and bullpen selections", "F2.6 renderer/device/resource measurements and E6 release gate"],
+  "preserved": ["source trajectories", "heatmap PR/formulas", "video mapping", "accepted F2.1-F2.3", "Ballpark art/collision", "static jersey/cleats", "archived motion evidence disabled"]
+}

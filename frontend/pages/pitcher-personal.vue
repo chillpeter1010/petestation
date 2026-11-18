@@ -39,7 +39,8 @@
       </div>
     </header>
 
-    <FiltersPanel />
+    <LazyBullpenPitcherSelect v-if="bullpenLane" :lane="bullpenLane" :year="filters.year" :team="filters.team" :pitcher-id="filters.pitcherId" @ready="bullpenReady=$event" @identity="bullpenIdentity=$event" />
+    <FiltersPanel v-else />
 
     <p v-if="activeWarnings.length" class="warning-strip">{{ activeWarnings.join(' ') }}</p>
 
@@ -88,11 +89,12 @@
       v-else-if="activeTab === 'in-game'"
       :key="`${filters.year}:${filters.pitcherId}`"
       :year="filters.year"
-      :pitcher-id="filters.pitcherId ? Number(filters.pitcherId) : null"
+      :pitcher-id="bullpenLane && !bullpenReady ? null : filters.pitcherId ? Number(filters.pitcherId) : null"
       :pitcher-name="selectedName"
       :initial-game-pk="Number.isFinite(routeGamePk) ? routeGamePk : undefined"
       :refresh-token="dataRefreshToken"
       @select-pitch="openSelectedPitch"
+      @select-game="rememberInGameOuting"
     />
 
     <PitcherStuffTab
@@ -213,7 +215,7 @@
             </div>
             <button type="button" aria-label="Close video" @click="videoModalOpen = false">x</button>
           </header>
-          <iframe v-if="selectedPitchVideoUrl" :src="selectedPitchVideoUrl" title="Selected pitch video" />
+          <PitchVideoPlayer v-if="selectedPitchVideoUrl" :url="selectedPitchVideoUrl" />
           <footer>
             <a :href="selectedPitchVideoUrl" target="_blank" rel="noreferrer">Open in Baseball Savant</a>
           </footer>
@@ -224,15 +226,20 @@
 </template>
 
 <script setup lang="ts">
+import PitchVideoPlayer from '~/components/charts/PitchVideoPlayer.vue'
 import type { AnalysisResponse, PersonalOverviewResponse, StaminaCommandRetentionResponse, StaminaGameStatesResponse, StaminaPhysicalStabilityResponse, TablePayload } from '~/types/api'
 
 const filters = useAnalysisFilters()
 const api = useApi()
 const route = useRoute()
+const router=useRouter()
+const bullpenLane=computed(()=>route.query.bullpen==='west'||route.query.bullpen==='east'?route.query.bullpen:null)
+const bullpenReady=ref(false),bullpenIdentity=ref<{id:number;name:string}|null>(null)
+function rememberInGameOuting(gamePk:number){if(bullpenLane.value && Number(route.query.game_pk)!==gamePk)void router.replace({query:{...route.query,game_pk:gamePk}})}
 
 const routeYear = Number(route.query.year)
 const routePitcherId = Number(route.query.pitcher_id || route.query.pitcherId)
-const routeGamePk = Number(route.query.game_pk || route.query.gamePk)
+const routeGamePk = computed(()=>Number(route.query.game_pk || route.query.gamePk))
 if (Number.isFinite(routeYear)) {
   filters.year = routeYear
 }
@@ -245,6 +252,7 @@ if (typeof route.query.team === 'string') {
 if (Number.isFinite(routePitcherId)) {
   filters.pitcherId = routePitcherId
 }
+if(bullpenLane.value && !Number.isFinite(routePitcherId))filters.pitcherId=null
 
 const tabs = [
   { key: 'overview', label: 'Overview' },
@@ -283,7 +291,7 @@ const staminaLoading = ref(false)
 const staminaError = ref('')
 const staminaSignalErrors = ref<string[]>([])
 const selectedRotationGamePk = ref<number | null>(null)
-const selectedOutingGamePk = ref<number | null>(Number.isFinite(routeGamePk) ? routeGamePk : null)
+const selectedOutingGamePk = ref<number | null>(Number.isFinite(routeGamePk.value) ? routeGamePk.value : null)
 const selectedStuffPitch = ref<Record<string, unknown> | null>(null)
 const showStuffTiming = ref(false)
 const timingLoading = ref(false)
@@ -380,7 +388,7 @@ const paResultOptions = [
 
 const selectedName = computed(() => {
   const selected = overview.value?.selected_pitcher
-  return String(selected?.label || selected?.name || '')
+  return String(selected?.label || selected?.name || (bullpenIdentity.value?.id===filters.pitcherId?bullpenIdentity.value?.name:'') || '')
 })
 
 const selectedTeam = computed(() => {
@@ -830,6 +838,7 @@ watch(
     if (Number.isFinite(nextYear)) filters.year = nextYear
     if (typeof roleValue === 'string' && ['SP', 'RP'].includes(roleValue)) filters.role = roleValue
     if (typeof teamValue === 'string') filters.team = teamValue
+    if (bullpenLane.value && !pitcherValue) {filters.pitcherId=null;clearResponses()}
 
     if (pitcherChanged) {
       personalRequestVersion += 1
@@ -1432,8 +1441,7 @@ function formatFieldValue(value: unknown) {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background:
-    linear-gradient(135deg, rgba(30, 64, 175, 0.09), rgba(217, 119, 6, 0.08)),
-    var(--color-surface);
+    #000;
   box-shadow: var(--shadow-md);
 }
 
@@ -1922,11 +1930,11 @@ function formatFieldValue(value: unknown) {
   width: min(960px, 100%);
   max-height: min(760px, calc(100vh - 48px));
   display: grid;
-  grid-template-rows: auto minmax(360px, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid rgba(226, 232, 240, 0.42);
   border-radius: var(--radius-md);
-  background: #0f172a;
+  background: #000;
   box-shadow: 0 24px 80px rgba(15, 23, 42, 0.45);
 }
 
@@ -1937,7 +1945,7 @@ function formatFieldValue(value: unknown) {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  background: #111827;
+  background: #000;
 }
 
 .video-modal h2 {
@@ -1969,7 +1977,7 @@ function formatFieldValue(value: unknown) {
   height: 100%;
   min-height: 360px;
   border: 0;
-  background: #020617;
+  background: #000;
 }
 
 .video-modal footer {

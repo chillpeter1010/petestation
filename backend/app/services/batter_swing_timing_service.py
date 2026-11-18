@@ -25,6 +25,7 @@ from app.services.batter_swing_matchup_service import (
     available_pitcher_teams,
     build_matchup_pitch_profiles,
     build_matchup_rows,
+    filtered_batting_metrics,
 )
 
 
@@ -170,12 +171,16 @@ def get_batter_swing_timing(
     requested_pa = min(700, max(5, int(minimum_plate_appearances)))
     minimum_pa = min(700, max(5, ((requested_pa + 2) // 5) * 5))
     filters = _build_filters(year, data_dir)
+    context_metrics = filtered_batting_metrics(
+        year, _selected_pitch_codes(group, code), hand, side, hitter_team, opponent_team, data_dir,
+    )
     if opponent_team != "All":
         rows, league, matched_swings, warnings = build_matchup_rows(
             year=year, pitch_codes=_selected_pitch_codes(group, code), pitcher_hand=hand,
             batter_side=side, batter_team=hitter_team, pitcher_team=opponent_team, data_dir=data_dir,
         )
         rows = _apply_player_context(rows, year, data_dir)
+        rows = [row.model_copy(update=context_metrics.get(row.batter_id, {})) for row in rows]
         qualified = [row for row in rows if row.n_swings >= max(0, int(minimum_swings)) and (row.plate_appearances is None or row.plate_appearances >= minimum_pa)]
         warnings.append("Pitcher Team uses exact pitch-level matchups. Savant horizontal, timing, and vertical alignment fields are unavailable in this event mode.")
         return SwingTimingResponse(
@@ -203,6 +208,7 @@ def get_batter_swing_timing(
             warnings=[warning],
         )
     enriched_rows = _apply_player_context(rows, year, data_dir)
+    enriched_rows = [row.model_copy(update=context_metrics.get(row.batter_id, {})) for row in enriched_rows]
     qualified = [
         row for row in enriched_rows
         if row.n_swings >= max(0, int(minimum_swings))

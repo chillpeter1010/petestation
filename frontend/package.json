@@ -17,11 +17,13 @@
     "phaser": "^4.2.1",
     "pinia": "^3.0.4",
     "reka-ui": "^2.10.1",
+    "three": "0.187.0",
     "vue": "^3.4.0",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "@types/three": "0.187.0",
     "typescript": "^5.5.0",
     "vue-tsc": "^2.2.12"
   }

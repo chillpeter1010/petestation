@@ -1,7 +1,7 @@
 import type { BatterZoneRatesResponse } from '~/types/api'
 import { heatColor } from './heatmapPalette'
 
-export type BatterHeatmapOverlay = { data: BatterZoneRatesResponse; metric: string; context: string }
+export type BatterHeatmapOverlay = { data?: BatterZoneRatesResponse; bands?:ZoneContourBand[]; metric: string; context: string; colorMode?:'pr'|'rate' }
 
 export function zoneRateScale(metric: string): number { return metric === 'woba' ? 2 : metric === 'avg' ? 1 : 100 }
 
@@ -28,10 +28,20 @@ export function zonePRColor(pr: number): string {
 }
 
 // Display interpolation of zone aggregates, not pitch-level KDE or new statistics.
-// Smooth comparable same-zone PR values; never paint missing/low-support cells.
-export function buildZoneRateContours(cells: BatterZoneRatesResponse['cells'], metric: string): ZoneContourBand[] {
+// Smooth comparable same-zone PR values; missing/low-support cells use neutral grey, never invented PR.
+const contourCache=new WeakMap<BatterZoneRatesResponse['cells'],Map<string,ZoneContourBand[]>>()
+export function buildZoneRateContours(cells: BatterZoneRatesResponse['cells'], metric: string,mode:'pr'|'rate'='pr'): ZoneContourBand[] {
+  let metrics=contourCache.get(cells)
+  if(!metrics){metrics=new Map();contourCache.set(cells,metrics)}
+  const key=metric+':'+mode,cached=metrics.get(key);if(cached)return cached
+  // Context rates have no matching league cohort: never label them as PR.
+  const displayCells=mode==='rate'?cells.map(cell=>{const r=cell.rates[metric],score=r?.value!=null&&r.denominator>=5?(metric==='whiff'||metric==='called_strike'?100-r.value:r.value):null;return {...cell,rates:{...cell.rates,[metric]:{...r,color_pr:score,benchmark_status:score==null?'low_sample':'ready'}}}}):cells
+  const result=calculateZoneRateContours(displayCells,metric);metrics.set(key,result);return result
+}
+function calculateZoneRateContours(cells: BatterZoneRatesResponse['cells'], metric: string): ZoneContourBand[] {
   const valid = cells.filter(c => c.rates[metric]?.color_pr != null && c.rates[metric].benchmark_status === 'ready')
-  if (!valid.length) return []
+  const missing:ZoneContourBand[]=cells.filter(c=>c.region==='zone'&&!valid.includes(c)).map(c=>({id:`missing-${c.id}`,bounds:[...c.bounds] as [number,number,number,number],color:'#64748b',opacity:1}))
+  if (!valid.length) return missing
   const xMin = Math.min(...valid.map(c => c.bounds[0])), xMax = Math.max(...valid.map(c => c.bounds[2]))
   const zMin = Math.min(...valid.map(c => c.bounds[1])), zMax = Math.max(...valid.map(c => c.bounds[3]))
   const bins = 48, dx = (xMax - xMin) / bins, dz = (zMax - zMin) / bins
@@ -68,5 +78,5 @@ export function buildZoneRateContours(cells: BatterZoneRatesResponse['cells'], m
       }
     }
   }
-  return bands
+  return [...missing,...bands]
 }

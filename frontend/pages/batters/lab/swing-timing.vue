@@ -46,6 +46,10 @@
         <article><span>Competitive rate</span><strong>{{ percent(response.league?.competitive_pct) }}</strong><small>League weighted rate</small></article>
       </section>
 
+      <details class="leaderboard-card regression-section" :open="regressionOpen" @toggle="setRegressionOpen">
+        <summary>指標散點圖與回歸分析 · 展開選擇 X／Y 軸</summary>
+        <BatterTimingRegression v-if="regressionOpen" :filters="{ year, pitchGroup, pitchType, pitcherHand, batterSide, batterTeam, pitcherTeam, minimumSwings, minimumPlateAppearances }" :search="searchText" :selected-batter-id="expandedBatterId" @select-batter="toggleProfile" />
+      </details>
       <section class="leaderboard-card">
         <header class="board-heading">
           <div><span>Research leaderboard</span><h2>Batter alignment profile</h2><p>主欄位固定；切換 X／Y／Z 維度查看失誤方向與平均偏差。</p></div>
@@ -59,7 +63,8 @@
           </div>
         </header>
 
-        <div class="table-scroll">
+        <label class="table-pan"><span>左右拖曳查看全部欄位</span><input type="range" min="0" :max="tableMaxScroll" :value="tableScrollLeft" :disabled="tableMaxScroll === 0" step="1" aria-label="左右捲動排行榜" @input="panTable" /></label>
+        <div ref="tableScroller" class="table-scroll" tabindex="0" aria-label="可水平捲動的打者排行榜" @scroll="syncTableScroll">
           <table>
             <colgroup>
               <col class="col-hitter">
@@ -97,9 +102,9 @@
                   <td class="sample-cell">{{ row.batter_side }}</td>
                   <td class="sample-cell">{{ row.plate_appearances == null ? '—' : integer(row.plate_appearances) }}</td>
                   <td class="sample-cell">{{ integer(row.n_swings) }}</td>
-                  <td v-for="column in tableColumns" :key="`${row.batter_id}-${column.key}`" :style="heatmapStyle(row, column)">{{ metric(row, column) }}</td>
+                  <td v-for="column in tableColumns" :key="`${row.batter_id}-${column.key}`" :style="heatmapStyle(row, column)" :title="metricSampleTitle(row, column)">{{ metric(row, column) }}</td>
                 </tr>
-                <tr v-if="expandedBatterId === row.batter_id" class="profile-row"><td :colspan="6 + tableColumns.length"><div class="profile-panel">
+                <tr v-if="expandedBatterId === row.batter_id" class="profile-row"><td :colspan="6 + tableColumns.length"><div class="profile-panel" :style="tableViewportWidth ? { width: `${tableViewportWidth}px` } : undefined">
                   <header><div><span>Selected hitter</span><h3>{{ row.name }} <small>{{ row.team }}</small></h3></div><NuxtLink :to="personalLink(row)">Open player report <ArrowUpRight :size="15" aria-hidden="true" /></NuxtLink></header>
                   <p v-if="detailPending" class="profile-state">Loading V2 player analysis…</p>
                   <p v-else-if="detailError" class="profile-state error">Unable to load player analysis.</p>
@@ -128,7 +133,7 @@ import type { SwingTimingLeaderboardRow, SwingTimingPlayerDetailResponse } from 
 type Dimension = 'horizontal' | 'timing' | 'vertical'
 type MetricKey = keyof SwingTimingLeaderboardRow
 type SortDirection = 'asc' | 'desc'
-type TableColumn = { key: MetricKey; label: string; format: 'percent' | 'distance' | 'ms' | 'integer'; definition: string }
+type TableColumn = { key: MetricKey; label: string; format: 'percent' | 'distance' | 'ms' | 'integer' | 'mph'; definition: string }
 
 const api = useApi()
 const route = useRoute()
@@ -149,6 +154,29 @@ const sortDirection = ref<SortDirection>('desc')
 const displayMode = ref<'actual' | 'percentile'>('actual')
 const heatmapEnabled = ref(true)
 const displayLimit = ref(200)
+const regressionOpen = ref(false)
+function setRegressionOpen(event: Event) { regressionOpen.value = (event.target as HTMLDetailsElement).open }
+const tableScroller = ref<HTMLElement | null>(null)
+const tableScrollLeft = ref(0), tableMaxScroll = ref(0), tableViewportWidth = ref(0)
+let tableResize: ResizeObserver | undefined
+function measureTable() {
+  const element = tableScroller.value
+  if (!element) return
+  tableViewportWidth.value = Math.max(0, element.clientWidth - 2)
+  tableMaxScroll.value = Math.max(0, element.scrollWidth - element.clientWidth)
+  tableScrollLeft.value = element.scrollLeft
+}
+function panTable(event: Event) { const element = tableScroller.value; if (element) element.scrollLeft = Number((event.target as HTMLInputElement).value) }
+function syncTableScroll() { tableScrollLeft.value = tableScroller.value?.scrollLeft || 0 }
+watch(tableScroller, (element) => {
+  tableResize?.disconnect()
+  if (!element) return
+  tableResize = new ResizeObserver(measureTable)
+  tableResize.observe(element)
+  if (element.firstElementChild) tableResize.observe(element.firstElementChild)
+  measureTable()
+}, { flush: 'post' })
+onBeforeUnmount(() => tableResize?.disconnect())
 const expandedBatterId = ref<number | null>(null)
 const playerDetail = ref<SwingTimingPlayerDetailResponse | null>(null)
 const detailPending = ref(false)
@@ -164,6 +192,11 @@ const fallbackPitchTypeGroups = [
 const fallbackPitchGroups = [{ value: 'all', label: 'All pitch types' }, ...fallbackPitchTypeGroups.map(group => ({ value: group.key, label: group.label }))]
 const dimensionOptions: Array<{ value: Dimension; label: string }> = [{ value: 'horizontal', label: 'Horizontal' }, { value: 'timing', label: 'Timing' }, { value: 'vertical', label: 'Vertical' }]
 const coreColumns: TableColumn[] = [
+  { key: 'avg_bat_speed', label: 'Avg Bat Speed', format: 'mph', definition: '目前篩選下的 competitive swings 平均棒速；依球員整季棒速第 10 百分位，或棒速至少 60 mph 且擊球初速至少 90 mph 判定。缺少追蹤資料不當作 0。' },
+  { key: 'ideal_attack_angle_pct', label: 'Ideal Bat Angle%', format: 'percent', definition: '目前篩選下有 Attack Angle 的非觸擊揮棒中，角度在 5°–20° 的比例。這是球棒攻擊角度，不是擊球仰角。' },
+  { key: 'k_pct', label: 'K%', format: 'percent', definition: '三振／符合目前球種、左右投打與球隊條件的終結打席數；不要求有棒速追蹤。球種以打席最後一球判定。' },
+  { key: 'bb_pct', label: 'BB%', format: 'percent', definition: '保送（含故意四壞）／符合目前條件的終結打席數；觸身球不計入保送。球種以打席最後一球判定。' },
+  { key: 'k_bb_pct', label: 'K−BB%', format: 'percent', definition: '相同條件與打席分母下的 K% 減 BB%，差值以百分點計算；打者數值較低視為較佳。' },
   { key: 'miss_distance', label: 'Avg Miss Dist.', format: 'distance', definition: '揮空時，球棒 barrel half 與球在最接近瞬間的平均距離。' },
   { key: 'flawed_pct', label: 'Flawed Swing%', format: 'percent', definition: '揮空且 Centered、On Time、Lined Up 三項全部未達標的揮棒比例。' },
   { key: 'perfect_pct', label: 'Perfect Contact%', format: 'percent', definition: '有碰到球且 Centered、On Time、Lined Up 三項同時達標的揮棒比例。' },
@@ -194,6 +227,7 @@ const columnsByDimension: Record<Dimension, TableColumn[]> = {
   ]
 }
 const performanceDirection: Partial<Record<MetricKey, 'higher' | 'lower'>> = {
+  avg_bat_speed: 'higher', ideal_attack_angle_pct: 'higher', k_pct: 'lower', bb_pct: 'higher', k_bb_pct: 'lower',
   miss_distance: 'lower', flawed_pct: 'lower', perfect_pct: 'higher', whiff_pct: 'lower', competitive_pct: 'higher',
   tied_up_pct: 'lower', avg_tied_up_distance: 'lower', centered_pct: 'higher', flail_pct: 'lower', avg_flail_distance: 'lower',
   late_pct: 'lower', avg_late_ms: 'lower', on_time_pct: 'higher', early_pct: 'lower', avg_early_ms: 'lower',
@@ -320,11 +354,17 @@ function skillValue(key: MetricKey, value: SwingTimingLeaderboardRow[MetricKey])
   return key.startsWith('avg_') || key === 'miss_distance' ? Math.abs(value) : value
 }
 function percentile(row: SwingTimingLeaderboardRow, key: MetricKey) { return percentileMaps.value.get(key)?.get(row.batter_id) ?? null }
+function metricSampleTitle(row: SwingTimingLeaderboardRow, column: TableColumn) {
+  if (['k_pct', 'bb_pct', 'k_bb_pct'].includes(column.key)) return `${column.definition} 本條件分母：${row.context_pa ?? 0} PA。`
+  if (column.key === 'avg_bat_speed') return `${column.definition} 本條件分母：${row.bat_speed_swings ?? 0} 次揮棒。`
+  if (column.key === 'ideal_attack_angle_pct') return `${column.definition} 本條件分母：${row.attack_angle_swings ?? 0} 次揮棒。`
+  return column.definition
+}
 function metric(row: SwingTimingLeaderboardRow, column: TableColumn) {
   const value = row[column.key] as number | null
   const pr = percentile(row, column.key)
   if (displayMode.value === 'percentile' && pr != null) return `${Math.round(pr)}`
-  return column.format === 'percent' ? percent(value) : column.format === 'ms' ? milliseconds(value) : column.format === 'integer' ? integer(value || 0) : distance(value)
+  return column.format === 'percent' ? percent(value) : column.format === 'mph' ? (value == null ? '—' : `${value.toFixed(1)} mph`) : column.format === 'ms' ? milliseconds(value) : column.format === 'integer' ? integer(value || 0) : distance(value)
 }
 function heatmapStyle(row: SwingTimingLeaderboardRow, column: TableColumn) {
   if (!heatmapEnabled.value) return undefined
@@ -355,21 +395,22 @@ function queryNumber(value: unknown, fallback: number) { const parsed = Number(A
 </script>
 
 <style scoped>
+.regression-section > summary { padding: 18px 20px; color: var(--color-primary); font-weight: 800; cursor: pointer; }
 .timing-page { max-width: 1560px; min-height: 100vh; margin: 0 auto; padding: 88px clamp(14px, 2.5vw, 36px) 64px; color: var(--color-text); }
 .page-hero, .filter-panel, .summary-grid article, .leaderboard-card, .state-card, .method-note { border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
 .mode-banner { display: flex; align-items: center; gap: 12px; margin: 10px 0 0; border: 1px solid var(--color-border); border-radius: 10px; padding: 9px 13px; color: var(--color-muted-text); background: var(--color-surface); font-size: 11px; }.mode-banner b { color: var(--color-primary); }.profile-state { margin: 14px 0 0; border: 1px solid var(--color-border); border-radius: 10px; padding: 16px; color: var(--color-muted-text); }.profile-state.error { color: var(--color-destructive); }
-.page-hero { display: flex; align-items: end; justify-content: space-between; gap: 28px; border-radius: 20px; padding: clamp(22px, 4vw, 40px); background: radial-gradient(circle at top right, color-mix(in srgb, #8fd3f4 25%, transparent), transparent 36%), var(--color-surface); }
+.page-hero { display: flex; align-items: end; justify-content: space-between; gap: 28px; border-radius: 20px; padding: clamp(22px, 4vw, 40px); background: #000; }
 .page-hero nav { display: flex; gap: 8px; margin-bottom: 20px; color: var(--color-muted-text); font-size: 12px; }.page-hero nav a { color: inherit; }.page-hero nav b { color: var(--color-foreground); }
 .eyebrow, .board-heading > div > span { color: var(--color-primary); font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .page-hero h1 { margin: 10px 0 0; color: var(--color-foreground); font-size: clamp(40px, 5vw, 64px); font-weight: 750; line-height: 1.06; letter-spacing: -.012em; }.page-hero p { max-width: 760px; margin: 15px 0 0; color: var(--color-muted-text); font-size: 16px; line-height: 1.55; }
-.rules-card { position: relative; width: min(330px, 100%); flex: 0 0 auto; }.rules-card summary { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; border: 1px solid color-mix(in srgb, var(--color-primary) 65%, var(--color-border)); border-radius: 12px; padding: 14px 16px; background: color-mix(in srgb, var(--color-primary) 7%, var(--color-background)); cursor: pointer; list-style: none; }.rules-card summary::-webkit-details-marker { display: none; }.rules-card summary span { grid-column: 1; color: var(--color-primary); font-size: 9px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }.rules-card summary strong { grid-column: 1; color: var(--color-foreground); font-size: 14px; }.rules-card summary svg { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--color-primary); transition: transform 160ms ease; }.rules-card[open] summary svg { transform: rotate(180deg); }
+.rules-card { position: relative; width: min(330px, 100%); flex: 0 0 auto; }.rules-card summary { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; border: 1px solid color-mix(in srgb, var(--color-primary) 65%, var(--color-border)); border-radius: 12px; padding: 14px 16px; background: #000; cursor: pointer; list-style: none; }.rules-card summary::-webkit-details-marker { display: none; }.rules-card summary span { grid-column: 1; color: var(--color-primary); font-size: 9px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }.rules-card summary strong { grid-column: 1; color: var(--color-foreground); font-size: 14px; }.rules-card summary svg { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--color-primary); transition: transform 160ms ease; }.rules-card[open] summary svg { transform: rotate(180deg); }
 .rules-popover { position: absolute; z-index: 30; top: calc(100% + 9px); right: 0; width: min(660px, calc(100vw - 44px)); max-height: min(72vh, 760px); overflow-y: auto; border: 1px solid var(--color-border); border-radius: 14px; padding: 20px; background: var(--color-surface); box-shadow: 0 18px 50px rgb(0 0 0 / 35%); }.rules-popover header { border-bottom: 1px solid var(--color-border); padding-bottom: 13px; }.rules-popover header span { color: var(--color-primary); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }.rules-popover h2 { margin: 4px 0 0; color: var(--color-foreground); font-size: 24px; }.rules-popover section { margin-top: 18px; }.rules-popover h3 { margin: 0 0 7px; color: var(--color-primary); font-size: 13px; }.rules-popover dl { margin: 0; }.rules-popover dl div { display: grid; grid-template-columns: 150px 1fr; gap: 14px; border-top: 1px solid var(--color-border); padding: 8px 0; }.rules-popover dt { color: var(--color-foreground); font-size: 12px; font-weight: 850; }.rules-popover dd, .rules-popover > p { margin: 0; color: var(--color-muted-text); font-size: 12px; line-height: 1.55; }.rules-popover > p { margin-top: 16px; border-left: 2px solid var(--color-primary); padding-left: 12px; }
 .filter-panel { display: grid; grid-template-columns: 100px repeat(4, minmax(145px, 1fr)) 145px; gap: 11px; margin-top: 16px; border-radius: 14px; padding: 13px; }.filter-panel label { display: grid; gap: 6px; }.filter-panel label > span, .board-controls label > span { color: var(--color-muted-text); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }.filter-panel select, .board-controls select, .board-controls input { width: 100%; min-height: 42px; border: 1px solid var(--color-border); border-radius: 8px; padding: 0 10px; color: var(--color-text); background: var(--color-background); font-weight: 750; }
 .matchup-filters { grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) minmax(360px, 2fr); margin-top: 10px; }.matchup-filters label > small { color: var(--color-muted-text); font-size: 9px; }.matchup-filters select:disabled { cursor: not-allowed; opacity: .58; }.pa-slider > span { display: flex; align-items: center; justify-content: space-between; }.pa-slider > span b { color: var(--color-primary); font-size: 12px; letter-spacing: 0; }.pa-slider input[type="range"] { width: 100%; height: 42px; margin: 0; accent-color: var(--color-primary); cursor: pointer; }.pa-slider > small { display: flex; justify-content: space-between; }.pa-slider > small i { color: var(--color-muted-text); font-size: 9px; font-style: normal; }.pa-slider > small i:nth-child(2) { color: var(--color-primary); font-weight: 800; }
 .state-card { margin-top: 12px; border-radius: 13px; padding: 20px; }.state-card.error { color: var(--color-destructive); }.state-card.warning { color: var(--color-primary); }
 .summary-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 11px; margin-top: 12px; }.summary-grid article { border-radius: 13px; padding: 15px; }.summary-grid span, .summary-grid small { display: block; color: var(--color-muted-text); }.summary-grid span { font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }.summary-grid strong { display: block; margin: 7px 0 4px; color: var(--color-foreground); font-size: clamp(25px, 3vw, 36px); }.summary-grid small { font-size: 12px; }
 .leaderboard-card { margin-top: 12px; border-radius: 16px; overflow: hidden; }.board-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding: 20px; }.board-heading h2 { margin: 5px 0 0; color: var(--color-foreground); font-size: clamp(27px, 3vw, 38px); }.board-heading p { margin: 7px 0 0; color: var(--color-muted-text); font-size: 12px; }.board-controls { display: flex; align-items: end; gap: 10px; }.board-controls label { display: grid; gap: 5px; min-width: 165px; }.board-controls .search { min-width: 220px; }.search div { position: relative; }.search svg { position: absolute; top: 13px; left: 11px; color: var(--color-muted-text); }.search input { padding-left: 35px; }.dimension-tabs, .mode-toggle { display: flex; border: 1px solid var(--color-border); border-radius: 9px; padding: 3px; background: var(--color-background); }.dimension-tabs button, .mode-toggle button { min-height: 34px; border: 0; border-radius: 6px; padding: 0 11px; color: var(--color-muted-text); background: transparent; cursor: pointer; font-size: 11px; font-weight: 850; }.dimension-tabs button.active, .mode-toggle button.active { color: var(--color-on-primary); background: var(--color-primary); }.display-control { display: grid; gap: 5px; }.display-control > span { color: var(--color-muted-text); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }.heat-toggle { background: linear-gradient(90deg, rgb(69 132 188 / 18%), var(--color-background) 48%, rgb(190 68 75 / 18%)); }.heat-toggle button.active { color: #fff; background: color-mix(in srgb, var(--color-primary) 82%, #111827); }
-.table-scroll { overflow-x: auto; border-top: 1px solid var(--color-border); }.table-scroll table { width: 1182px; table-layout: fixed; border-collapse: collapse; }.table-scroll col.col-hitter { width: 180px; }.table-scroll col.col-age, .table-scroll col.col-hand { width: 38px; }.table-scroll col.col-team { width: 50px; }.table-scroll col.col-pa { width: 44px; }.table-scroll col.col-swings { width: 52px; }.table-scroll col.col-metric { width: 78px; }.table-scroll th, .table-scroll td { border-bottom: 1px solid var(--color-border); padding: 9px 4px; text-align: center; }.table-scroll td { overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }.table-scroll th { position: sticky; top: 0; z-index: 2; height: 64px; color: var(--color-muted-text); background: var(--color-background); font-size: 9.45px; font-weight: 900; letter-spacing: .025em; line-height: 1.2; text-transform: uppercase; white-space: normal; }.table-scroll th:first-child, .table-scroll td:first-child { position: sticky; left: 0; z-index: 1; text-align: left; background: var(--color-surface); }.table-scroll thead th:first-child { z-index: 3; background: var(--color-background); }.table-scroll tbody tr:hover > td { background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface)); }.table-scroll tbody tr.selected > td { background: color-mix(in srgb, #8fd3f4 10%, var(--color-surface)); }.sample-cell { color: var(--color-text); background: var(--color-surface); font-variant-numeric: tabular-nums; }
+.table-scroll { overflow-x: auto; border-top: 1px solid var(--color-border); }.table-scroll table { width: 100%; min-width: 1572px; table-layout: fixed; border-collapse: collapse; }.table-scroll col.col-hitter { width: 180px; }.table-scroll col.col-age, .table-scroll col.col-hand { width: 38px; }.table-scroll col.col-team { width: 50px; }.table-scroll col.col-pa { width: 44px; }.table-scroll col.col-swings { width: 52px; }.table-scroll col.col-metric { width: 78px; }.table-scroll th, .table-scroll td { border-bottom: 1px solid var(--color-border); padding: 9px 4px; text-align: center; }.table-scroll td { overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }.table-scroll th { position: sticky; top: 0; z-index: 2; height: 64px; color: var(--color-muted-text); background: var(--color-background); font-size: 9.45px; font-weight: 900; letter-spacing: .025em; line-height: 1.2; text-transform: uppercase; white-space: normal; }.table-scroll th:first-child, .table-scroll td:first-child { position: sticky; left: 0; z-index: 1; text-align: left; background: var(--color-surface); }.table-scroll thead th:first-child { z-index: 3; background: var(--color-background); }.table-scroll tbody tr:hover > td { background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface)); }.table-scroll tbody tr.selected > td { background: color-mix(in srgb, #8fd3f4 10%, var(--color-surface)); }.sample-cell { color: var(--color-text); background: var(--color-surface); font-variant-numeric: tabular-nums; }
 .sort-button { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 2px; width: 100%; max-width: 70px; border: 0; padding: 4px 0; color: inherit; background: transparent; cursor: pointer; font: inherit; font-weight: inherit; letter-spacing: inherit; line-height: inherit; text-transform: inherit; white-space: normal; }.sort-button > span:first-child { min-width: 0; overflow-wrap: normal; text-align: center; }.sort-button:hover, .sort-button:focus-visible { color: var(--color-primary); }.sort-button:focus-visible { border-radius: 4px; outline: 2px solid color-mix(in srgb, var(--color-primary) 70%, transparent); outline-offset: 2px; }.table-scroll th:first-child .sort-button { max-width: none; justify-content: flex-start; }.table-scroll th:first-child .sort-button > span:first-child { text-align: left; }
 .player-button { display: flex; align-items: center; justify-content: flex-start; gap: 8px; width: 100%; border: 0; padding: 0; color: inherit; background: transparent; cursor: pointer; text-align: left; }.player-button > span { display: grid; min-width: 0; }.player-button strong { overflow: hidden; color: var(--color-foreground); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }.player-button > svg { flex: 0 0 auto; color: var(--color-muted-text); transition: transform 150ms ease; }.player-button > svg.rotated { transform: rotate(180deg); }
 .team-cell { position: relative; overflow: visible !important; }.team-link, .team-menu summary { color: var(--color-primary); font-size: 11px; font-weight: 850; text-decoration: none; }.team-link:hover, .team-link:focus-visible, .team-menu summary:hover, .team-menu summary:focus-visible { color: var(--color-foreground); }.team-menu { position: relative; }.team-menu summary { cursor: pointer; list-style: none; }.team-menu summary::-webkit-details-marker { display: none; }.team-menu summary:focus-visible { border-radius: 4px; outline: 2px solid var(--color-primary); outline-offset: 3px; }.team-popover { position: absolute; z-index: 8; top: calc(100% + 8px); left: 50%; display: flex; gap: 5px; min-width: max-content; transform: translateX(-50%); border: 1px solid var(--color-border); border-radius: 8px; padding: 6px; background: var(--color-background); box-shadow: 0 10px 28px rgb(0 0 0 / 35%); }.team-popover a { border-radius: 5px; padding: 5px 7px; color: var(--color-primary); background: var(--color-surface); font-size: 10px; font-weight: 900; text-decoration: none; }.team-popover a:hover, .team-popover a:focus-visible { color: var(--color-on-primary); background: var(--color-primary); outline: none; }
@@ -379,4 +420,52 @@ function queryNumber(value: unknown, fallback: number) { const parsed = Number(A
 @media (max-width: 760px) { .timing-page { padding-top: 28px; }.page-hero { align-items: flex-start; flex-direction: column; }.rules-card { width: 100%; }.filter-panel, .matchup-filters { grid-template-columns: 1fr 1fr; }.pa-slider { grid-column: 1 / -1; }.summary-grid { grid-template-columns: 1fr 1fr; }.board-controls { align-items: stretch; flex-direction: column; }.board-controls label, .board-controls .search { width: 100%; min-width: 0; }.dimension-tabs { display: grid; grid-template-columns: repeat(3, 1fr); }.profile-grid { grid-template-columns: 1fr; }.board-footer { align-items: flex-start; flex-direction: column; }.board-footer a { margin-left: 0; } }
 @media (max-width: 480px) { .filter-panel, .summary-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .rules-card summary svg, .player-button > svg { transition: none; } }
+
+/* Research Display Contract: readable text and contained horizontal overflow. */
+.timing-page { min-width: 0; }
+.leaderboard-card { min-width: 0; max-width: 100%; }
+.board-heading { flex-wrap: wrap; align-items: flex-start; }
+.board-controls { min-width: 0; flex-wrap: wrap; }
+.board-controls .search { min-width: 180px; flex: 1 1 200px; }
+.board-heading p, .board-footer, .board-footer button, .method-note p, .mode-banner { font-size: 14px; line-height: 1.5; }
+.display-control > span, .board-controls label > span { font-size: 12px; }
+.dimension-tabs button, .mode-toggle button { font-size: 14px; }
+.table-pan { display: flex; align-items: center; gap: 16px; padding: 12px 18px; border-top: 1px solid var(--color-border); color: var(--color-muted-text); font-size: 14px; }
+.table-pan span { flex: 0 0 auto; }
+.table-pan input { flex: 1; min-width: 0; height: 22px; accent-color: var(--color-primary); cursor: ew-resize; }
+.table-scroll { width: 100%; min-width: 0; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: auto; scrollbar-color: var(--color-primary) var(--color-border); }
+.table-scroll::-webkit-scrollbar { height: 14px; }
+.table-scroll::-webkit-scrollbar-track { background: var(--color-border); }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--color-primary); border: 3px solid var(--color-border); border-radius: 12px; }
+.table-scroll table { min-width: 2056px; line-height: 1.5; }
+.table-scroll col.col-hitter { width: 240px; }
+.table-scroll col.col-age, .table-scroll col.col-hand { width: 44px; }
+.table-scroll col.col-team { width: 64px; }
+.table-scroll col.col-pa { width: 56px; }
+.table-scroll col.col-swings { width: 68px; }
+.table-scroll col.col-metric { width: 96px; }
+.table-scroll th { font-size: 12px; padding: 12px 6px; }
+.table-scroll td { font-size: 16px; padding: 12px 6px; }
+.sort-button { max-width: 90px; }
+.player-button strong { font-size: 16px; }
+.team-link, .team-menu summary, .team-popover a { font-size: 14px; }
+.profile-panel { position: sticky; left: 0; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.profile-panel > header { flex-wrap: wrap; }
+.profile-panel > header span { font-size: 12px; }
+.profile-panel > header a { font-size: 14px; }
+.profile-panel :deep(.dimension-chart), .profile-panel :deep(.matrix), .profile-panel :deep(.gear) { min-width: 0; max-width: 100%; line-height: 1.5; }
+.profile-panel :deep(.dimension-chart > header) { flex-wrap: wrap; }
+.profile-panel :deep(.axes) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.profile-panel :deep(.axes article) { min-width: 0; }
+.profile-panel :deep(.axes h5), .profile-panel :deep(.metric > div:first-child) { font-size: 14px; }
+.profile-panel :deep(.metric > div:first-child), .profile-panel :deep(.gear footer) { flex-wrap: wrap; gap: 6px; }
+.profile-panel :deep(.dimension-chart header span), .profile-panel :deep(.matrix header span), .profile-panel :deep(.gear header span), .profile-panel :deep(.metric span small) { font-size: 12px; }
+.profile-panel :deep(.matrix th) { font-size: 12px; }
+.profile-panel :deep(.matrix td), .profile-panel :deep(.matrix p), .profile-panel :deep(.gear header p), .profile-panel :deep(.gear > p), .profile-panel :deep(.gear article > div:first-child), .profile-panel :deep(.gear footer) { font-size: 14px; }
+.profile-panel :deep(.matrix td:first-child small) { font-size: 12px; }
+.profile-panel :deep(.scroll) { max-width: 100%; scrollbar-width: auto; scrollbar-color: var(--color-primary) var(--color-border); }
+.profile-panel :deep(.scroll::-webkit-scrollbar) { height: 12px; }
+.profile-panel :deep(.scroll::-webkit-scrollbar-thumb) { background: var(--color-primary); border-radius: 10px; }
+@media (max-width: 1100px) { .profile-panel :deep(.axes) { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .table-pan { flex-wrap: wrap; gap: 4px; } .table-pan input { flex-basis: 100%; } }
 </style>

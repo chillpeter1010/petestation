@@ -1,0 +1,1544 @@
+{
+  "project": {
+    "id": "pitcher-decision-support",
+    "title": "換投決策與預警研究 / Pitcher Decision Lab",
+    "area": "Pitcher Lab",
+    "status": "in_progress",
+    "updated_at": "2026-11-14",
+    "document": "docs/PITCHER_DECISION_SUPPORT.md",
+    "route": "/lab/decision-support",
+    "summary": "Slices 0–10 研究資料層與歷史特徵已完成：保留暖機、建立獨立研究 Plus、先發／牛棚 prefix 三訊號與 WE／RE／PA-LI；正式模型保留，個別排名與預警晉升關閉。",
+    "next_step": "新增 Slice 6–10 結果區待使用者人工驗收；下一階段為 Slice 11 決策樣本庫與探索分析，尚未開始，須使用者指示。",
+    "phases": [
+      {
+        "id": "data",
+        "title": "01 資料前處理與補齊",
+        "description": "先確認缺什麼、來源能否回溯，再建立完整事件與可用名單。"
+      },
+      {
+        "id": "features",
+        "title": "02 歷史指標與當下狀態",
+        "description": "所有能力、負荷與局面指標都只使用決策前已知的資料。"
+      },
+      {
+        "id": "models",
+        "title": "03 預期價值與選項比較",
+        "description": "從打席結果分布推導 xWPA、xRE24，先研究續投與換投。"
+      },
+      {
+        "id": "validation",
+        "title": "04 穩健性與歷史部署",
+        "description": "檢查選擇偏差、樣本支持、校準與不確定性，再凍結測試。"
+      },
+      {
+        "id": "product",
+        "title": "05 儀表板與預警整合",
+        "description": "先呈現狀態，再依有證據支持的替代選項提供決策提示。"
+      }
+    ],
+    "experiment": [
+      {
+        "years": "2021–2023",
+        "role": "訓練",
+        "detail": "擴張時間窗產生樣本外特徵；最早資料不足時保留暖機期。"
+      },
+      {
+        "years": "2024",
+        "role": "Validation",
+        "detail": "選模型、校準、燈號與拒絕判斷門檻，完成後凍結。"
+      },
+      {
+        "years": "2025",
+        "role": "Test",
+        "detail": "本研究凍結後的一次測試；既有模型用過此年，須先重建上游。"
+      },
+      {
+        "years": "2026",
+        "role": "歷史部署模擬",
+        "detail": "已被研究過的資料，只能稱回溯影子評估。"
+      },
+      {
+        "years": "2027+",
+        "role": "前瞻影子驗證",
+        "detail": "凍結後的新資料；通過預先設定的證據門檻才考慮產品晉升。"
+      }
+    ],
+    "guardrails": [
+      "初版限定例行賽、合法打席間的投手續投／換投；打席中換投與特殊角色分層處理。",
+      "已觀測的換投與續投都要建樣本；官方換人事件、可用牛棚與零球事件仍待補齊。",
+      "全場 Stamina、季末能力與接手後才知道的球質不能用於當下決策；缺值不補成 100。",
+      "現行正式 Plus 模型訓練至 2025，現有成績僅供覆蓋盤點；嚴格測試須另建時間一致版本。",
+      "xWPA 以己方勝率差計，xRE24 先限定當前半局且守方越高越好；比較選項使用相同評估終點。",
+      "負 WPA、高 LI 或單項分數下降不直接等於應換投；三項狀態不強制合成一個體力分數。",
+      "資料不足或替代選項缺乏歷史支持時拒絕推薦；既有 Stamina／Performance State 正式版本與晉升門檻保留。"
+    ],
+    "slices": [
+      {
+        "id": "P0",
+        "phase": "data",
+        "label": "P0 · 研究規劃與 Lab 入口",
+        "status": "done",
+        "depends_on": [],
+        "deliverable": "建立單一規劃文件、追蹤紀錄及投手 Lab 研究頁，呈現五階段、依賴、覆蓋與驗證條件。",
+        "verification": "2026-11-12 使用者明確回覆『通過 開始slice1』，規劃頁人工驗收完成。先前一次 vue-tsc 與計畫／文件一致性來源檢查通過。",
+        "acceptance": "頁面能區分盤點完成、規劃待驗與未開始研究，不呈現虛構預測或可啟動訓練的按鈕。"
+      },
+      {
+        "id": "0",
+        "phase": "data",
+        "label": "Slice 0 · 六年資料覆蓋盤點",
+        "status": "done",
+        "depends_on": [],
+        "deliverable": "取出本機例行賽逐打席觀測、換投序列、WPA／RE 來源完整率、LI 參考支持及 Plus／三項狀態覆蓋。",
+        "verification": "2026-11-12：4,284,184 球、1,099,489 個觀測 PA、96,248 次觀測投手更換；六年鍵唯一、球數與登板更換數核對通過。",
+        "acceptance": "保留 357 次打席中換投、598 個無終結事件序列及稀疏 LI 標記；不聲稱完整官方決策集。",
+        "evidence": "data/research/decision_support_audit_20261112/coverage_report.json"
+      },
+      {
+        "id": "1",
+        "phase": "data",
+        "label": "Slice 1 · 賽程、來源版本與缺漏清單",
+        "status": "done",
+        "depends_on": [
+          "0"
+        ],
+        "deliverable": "核對 2021–2026 官方賽程、比賽完成狀態、日期與事件範圍；輸出逐年缺場、缺日、缺事件與來源版本清單。",
+        "verification": "2026-11-12：保存 6 份公開賽程 URL／UTC／SHA 快照；14,577 場完成賽程、唯讀 DB 與既有 feed 核對，缺場／缺日皆 0，排除 3 場取消。定位 2 場合計 249 個實投鍵差異、3 場再見 balk 比分語意與 14,017 個編號不匹配；3 項局部測試及六年資料一致性檢查通過。2026-11-14 使用者授權繼續後續 Slices；未將授權推定為所有新畫面驗收通過。",
+        "acceptance": "分清真實零事件、未完成比賽與尚未取得資料；先估補抓量與來源合法可用性。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice1_audit_v1.json"
+      },
+      {
+        "id": "2",
+        "phase": "data",
+        "label": "Slice 2 · 原始事件與追蹤資料補齊",
+        "status": "done",
+        "depends_on": [
+          "1"
+        ],
+        "deliverable": "按缺漏清單逐年分批補比賽事件、投球與換人紀錄；保存原始快照、來源與可續跑清單。",
+        "verification": "2026-11-14：僅針對兩場比賽補抓公開 Statcast CSV；2024 game 746731 由 319 增為 320 筆，2026 game 823244 由 10 增為 258 筆。兩場 DB、年度 CSV 與來源 metadata 已同步，原始檔與 SHA 備份保留；CSV 往返讀取一致，其他比賽資料指紋不變。正式 Plus／Stamina 產物未重訓或覆寫。",
+        "acceptance": "精確鍵去重、筆數核對與可重跑；不可取得的追蹤欄位保留缺值，不插補成實測資料。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice2_v1.json"
+      },
+      {
+        "id": "3",
+        "phase": "data",
+        "label": "Slice 3 · 打席與換人事件正規化",
+        "status": "done",
+        "depends_on": [
+          "2"
+        ],
+        "deliverable": "統一投球、打席、登板與決策事件鍵；區分局間、打席間、打席中、零球事件、續投與特殊換人原因。",
+        "verification": "2026-11-14：建立 14,577 場、4,866,152 個官方事件、4,270,416 顆實投、1,099,754 個 play 與 125,429 個登板段；登板段包含零球與重新上丘，不等於正式出賽數 G。六年面對打者數 BF 與既有官方帳本一致，事件／決策鍵無重複，WPA／RE 結果只在 play 層保存一次；七局、跨局與來源時間異常均保留標記。",
+        "acceptance": "WPA／RE24 每事件只計一次；處理跨局、繼承跑者、再見與未完成 PA，並建立年度合法換投規則。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice3_v1.json"
+      },
+      {
+        "id": "4",
+        "phase": "data",
+        "label": "Slice 4 · 負荷與角色歷史",
+        "status": "done",
+        "depends_on": [
+          "3"
+        ],
+        "deliverable": "依球員 ID 跨隊、跨角色累積近 1／3／7／14 日用球、連續登板、休息間隔、跨局及先發轉後援歷史。",
+        "verification": "2026-11-14：建立 125,412 個投球 session；近 1／3／7／14 日用球只計決策前已觀測實投，同日多場依 UTC 事件時間排序。200 個抽樣時點的四種滾動窗與獨立逐筆計算一致；1,066,310 列現任投手候選負荷與精確 SQL 視窗比較差異皆為 0。三場來源時間異常、2021 年初歷史不足與角色未知皆另有旗標。",
+        "acceptance": "當日多場依事件時間區分；不使用稍後登板、未來角色或受傷資訊；曾先發不自動增加體力。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice4_v1.json"
+      },
+      {
+        "id": "5",
+        "phase": "data",
+        "label": "Slice 5 · 當時可用牛棚與候選集合",
+        "status": "done",
+        "depends_on": [
+          "3",
+          "4"
+        ],
+        "deliverable": "重建當日有效名單、已使用球員、合法可用人選與名單信心，記錄熱身及身體狀態未知。",
+        "verification": "2026-11-14：使用完整官方比賽日球員名單建立名義牛棚候選，未以稍後實際登板者倒推選項。72 組指定日期 active-roster 覆核中，66 組一致、6 組衝突；其他日期仍保留未逐日驗證標記。候選附嚴格過去負荷與角色歷史，熱身／身體狀態維持 null，所有個別排名允許值皆為 false；未宣稱名義候選等於實際可用牛棚。使用者已授權接續 Slice 6–10。",
+        "acceptance": "不得用稍後真的登板者倒推可用牛棚；名單不足時只做狀態觀測，不排名個別替代投手。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice5_v1.json"
+      },
+      {
+        "id": "6",
+        "phase": "features",
+        "label": "Slice 6 · 時間切分與上游模型契約",
+        "status": "done",
+        "depends_on": [
+          "3",
+          "4"
+        ],
+        "deliverable": "凍結外層年份、暖機期、擴張窗、特徵可知時間與模型版本；重建 prior-only 主要速球及球員基準。",
+        "verification": "2026-11-14：訓練前凍結四個擴張／固定參考期；主要速球只取此前已結束登板，模型標籤只用 cutoff 前已結束比賽。訓練、參考與決策時點檢查無違規；正式模型 metadata SHA 不變。修正代跑誤改打者的 parser 並保存逐欄清單；27 顆來源打者身分歧異另列。前置特徵與結果標籤分檔，資料不足保留暖機或缺值。",
+        "acceptance": "所有訓練、標準化、補值與基準都遵守 cutoff；時間截斷檢查不得讀取未來事件。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice6_v1.json"
+      },
+      {
+        "id": "7",
+        "phase": "features",
+        "label": "Slice 7 · 歷史 Stuff+／Location+ 補算",
+        "status": "done",
+        "depends_on": [
+          "2",
+          "6"
+        ],
+        "deliverable": "使用時間一致的獨立版本按年補算兩項指標；產生樣本外特徵、涵蓋率、模型指紋與失敗原因。",
+        "verification": "2026-11-14：六年研究 Plus 已補算；2021 上半年暖機，2024–2026 使用截至 2023 年底的凍結模型，未使用 2025／2026 結果調參。研究 Location 預測位置／情境價值，研究 Stuff 預測扣除位置／情境後的物理殘差，與正式方法分開。保存逐球可用性、模型與指紋；2024 物理殘差增量很小，未晉升正式模型。",
+        "acceptance": "正式快取不覆寫；2025 測試特徵不來自使用過 2025 結果的模型；2021 早期不足時明示暖機。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice7_v1.json"
+      },
+      {
+        "id": "8",
+        "phase": "features",
+        "label": "Slice 8 · 先發單場 prefix 三項狀態",
+        "status": "done",
+        "depends_on": [
+          "4",
+          "7"
+        ],
+        "deliverable": "重建截至每個合法決策點的 Quality、Physical、Command，保留區間、可靠度與已觀測窗口。",
+        "verification": "2026-11-14：先發前 20 球建立同球種基準、至少另觀測 15 球；只用當下已結束的投球，並嚴格早於決策點接入。Quality／Physical／Command 分開，保留支持比例、近似 80% 抽樣區間及收縮權重；中斷重新暖機。2024 已觀測 prefix 路徑比較優於純用球數／近期負荷基準，但下一段預測與換投效益未驗證，不提供合成電量。",
+        "acceptance": "不得以全場結算回填前段；前 20 球不足與晚段缺支持要保留 unavailable，三項尺度不任意拉伸。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice8_v1.json"
+      },
+      {
+        "id": "9",
+        "phase": "features",
+        "label": "Slice 9 · 牛棚短登板狀態",
+        "status": "done",
+        "depends_on": [
+          "4",
+          "7"
+        ],
+        "deliverable": "建立歷史同球種基準、當日前幾球更新與角色部分池化；納入近期用球及長中繼／先發轉任背景。",
+        "verification": "2026-11-14：牛棚前 5 球建立同球種基準、至少再觀測 5 球，向歷史角色預期收縮；納入嚴格過去用球、休息、連續日、同日登板、角色／長局數背景及最近打席邊界 PA-LI。2024 已與純用球數及近七日用球＋休息基準比較。候選另附決策前已結束登板的觀測狀態，不讀本場前五球；短登板與歷史不足保留缺值，個別排名關閉。",
+        "acceptance": "與簡單近期負荷基準比較；候選後援使用登板前能力，不使用本場接手後的實測球質。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice9_v1.json"
+      },
+      {
+        "id": "10",
+        "phase": "features",
+        "label": "Slice 10 · WE／RE／LI 時間一致參考",
+        "status": "done",
+        "depends_on": [
+          "3",
+          "6"
+        ],
+        "deliverable": "建立固定歷史 WE、24 壘包出局 RE 與有收縮的 LI，保存參考期、稀疏支持與預測校準。",
+        "verification": "2026-11-14：建立歷史中性 WE、24 壘包出局／延長賽收縮 RE，以及過去完成打者轉移的研究 PA-LI。各參考期以已結束比賽訓練，固定內層時間切分校準；七局、再見、終局及延長賽跑者規則有檢查。每個官方決策皆有列，暖機／不可靠來源不填分，缺 LI 不補 1；2024 WE Brier 0.157961、log loss 0.472171。前置與實現結果分檔，尚未訓練 xWPA／xRE24 行動模型。",
+        "acceptance": "不以同年全季結果建立當年的決策特徵；核對方向與終局邊界，不把缺 LI 補成有證據的 1。",
+        "evidence": "data/sample/petehub_pitcher_decision_slice10_v1.json"
+      },
+      {
+        "id": "11",
+        "phase": "models",
+        "label": "Slice 11 · 決策樣本庫與探索分析",
+        "status": "planned",
+        "depends_on": [
+          "5",
+          "8",
+          "9",
+          "10"
+        ],
+        "deliverable": "整合合法續投與換投機會、前置特徵、候選及固定範圍結果；分析用球、球質變化、LI 與教練選擇。",
+        "verification": "Pending",
+        "acceptance": "公布每年每角色的共同分母與排除原因；分開結果相關性與決策效果，不只保留換投樣本。"
+      },
+      {
+        "id": "12",
+        "phase": "models",
+        "label": "Slice 12 · 打席結果與局面轉移基準",
+        "status": "planned",
+        "depends_on": [
+          "11"
+        ],
+        "deliverable": "建立局面-only、用球數及球員對位基準，預測打席結果與壘包／出局／比分轉移分布。",
+        "verification": "Pending",
+        "acceptance": "機率總和與轉移合法性通過；在 2024 比較 Brier、log loss、校準及 WPA／RE 誤差。"
+      },
+      {
+        "id": "13",
+        "phase": "models",
+        "label": "Slice 13 · 狀態指標增益與消融",
+        "status": "planned",
+        "depends_on": [
+          "12"
+        ],
+        "deliverable": "逐層加入 Stuff、Location、Quality、Physical、Command、近期負荷與角色特徵。",
+        "verification": "Pending",
+        "acceptance": "以相同樣本、相同未來時窗比較；只保留穩定樣本外增益，不用訓練相關性選指標。"
+      },
+      {
+        "id": "14",
+        "phase": "models",
+        "label": "Slice 14 · xWPA／xRE24 與人選價值",
+        "status": "planned",
+        "depends_on": [
+          "13"
+        ],
+        "deliverable": "先比較續投與角色條件替代池，再在支持足夠時評估個別後援；輸出相同終點的預期價值、差值與區間。",
+        "verification": "Pending",
+        "acceptance": "下一 PA 用於解釋、固定半局作主要研究；遵守最低打者與後續安排，長期資源成本另定義，不任意加總 LI／WPA／RE。"
+      },
+      {
+        "id": "15",
+        "phase": "validation",
+        "label": "Slice 15 · 選擇偏差與樣本重疊",
+        "status": "planned",
+        "depends_on": [
+          "11",
+          "14"
+        ],
+        "deliverable": "時間交叉擬合歷史調度傾向，檢查換投與續投、各候選的支持、極端權重及有效樣本數。",
+        "verification": "Pending",
+        "acceptance": "無重疊人群拒絕推薦；披露權重截斷敏感度與教練未公開資訊，不把觀測效果直接稱因果。"
+      },
+      {
+        "id": "16",
+        "phase": "validation",
+        "label": "Slice 16 · 策略評估與 robustness",
+        "status": "planned",
+        "depends_on": [
+          "15"
+        ],
+        "deliverable": "比較 direct／SNIPS／doubly robust；進行比賽區塊 bootstrap、角色與年代分群、隱藏混雜及評估範圍敏感度分析。",
+        "verification": "Pending",
+        "acceptance": "多步策略採序列方法；預先登記門檻、實用收益、區間與最低支持，不以單一指標顯著就晉升。"
+      },
+      {
+        "id": "17",
+        "phase": "validation",
+        "label": "Slice 17 · 凍結與 2025 最終測試",
+        "status": "planned",
+        "depends_on": [
+          "16"
+        ],
+        "deliverable": "鎖定模型、校準、門檻、候選及評估範圍，記錄指紋後執行一次 2025 評估。",
+        "verification": "Pending",
+        "acceptance": "測試結果不回流調參；新版本另立實驗，清楚披露 2025 在既有其他研究中已被查看。"
+      },
+      {
+        "id": "18",
+        "phase": "validation",
+        "label": "Slice 18 · 2026 歷史部署與影子紀錄",
+        "status": "planned",
+        "depends_on": [
+          "17"
+        ],
+        "deliverable": "依時間順序模擬 2026 決策、保存當時預測與事後結果，統計校準、支持率及提醒負擔。",
+        "verification": "Pending",
+        "acceptance": "明示 retrospective replay；部署重訓若使用至 2025 須另存版本，不把 2026 稱前瞻未見資料。"
+      },
+      {
+        "id": "19",
+        "phase": "product",
+        "label": "Slice 19 · Personal 儀表板與 In game 同步",
+        "status": "planned",
+        "depends_on": [
+          "8",
+          "9",
+          "18"
+        ],
+        "deliverable": "點選單場展開三項狀態、負荷餘裕電池與時間軸；共用同場同投手同投球鍵同步 In game。",
+        "verification": "Pending",
+        "acceptance": "電池不是生理剩餘百分比；篩選不重置累積負荷，前後球時間語意一致；畫面與操作由使用者驗收。"
+      },
+      {
+        "id": "20",
+        "phase": "product",
+        "label": "Slice 20 · 狀態與決策雙層燈號",
+        "status": "planned",
+        "depends_on": [
+          "19",
+          "16"
+        ],
+        "deliverable": "建立灰／綠／黃／紅提醒、觸發原因、區間、解除與冷卻機制，分開狀態下降與換投優勢。",
+        "verification": "Pending",
+        "acceptance": "紅燈需合法替代方案且保守收益超過凍結門檻；高 LI 或一次負 WPA 不單獨觸發換投建議；人工驗收。"
+      },
+      {
+        "id": "21",
+        "phase": "product",
+        "label": "Slice 21 · 前瞻監測與產品晉升門檻",
+        "status": "planned",
+        "depends_on": [
+          "20"
+        ],
+        "deliverable": "用凍結後 2027+ 新資料作 append-only 影子監測，檢查漂移、收益、區間、誤報與可用覆蓋。",
+        "verification": "Pending",
+        "acceptance": "在有足夠有效樣本與可重現實用收益前維持研究模式；不取代既有模型或自動宣稱最佳策略。"
+      },
+      {
+        "id": "22",
+        "phase": "product",
+        "label": "Slice 22 · 代打、跑壘與防守擴充",
+        "status": "deferred",
+        "depends_on": [
+          "21"
+        ],
+        "deliverable": "沿用狀態／行動／價值契約，各自補事件、合法選項、能力與歸屬模型。",
+        "verification": "Deferred",
+        "acceptance": "投手研究完成且有新授權後再細分；不把現有投手更換盤點冒充其他決策的資料覆蓋。"
+      }
+    ]
+  },
+  "auditDate": "2026-11-12",
+  "coverage": [
+    {
+      "year": 2021,
+      "pitches": 712320,
+      "pa": 182131,
+      "changes": 16682,
+      "wpa": 100.0,
+      "re24": 99.6118178673592,
+      "stuff": 91.98913409703503,
+      "location": 99.56676774483378,
+      "liSupported": 76.28080886834202,
+      "quality": null,
+      "physical": null,
+      "command": null
+    },
+    {
+      "year": 2022,
+      "pitches": 710210,
+      "pa": 182433,
+      "changes": 16018,
+      "wpa": 99.99945185355719,
+      "re24": 99.73524526812584,
+      "stuff": 99.71078976640712,
+      "location": 99.70741048422298,
+      "liSupported": 77.63946215871032,
+      "quality": null,
+      "physical": null,
+      "command": null
+    },
+    {
+      "year": 2023,
+      "pitches": 720684,
+      "pa": 184478,
+      "changes": 15769,
+      "wpa": 99.99891585988573,
+      "re24": 99.16358590184196,
+      "stuff": 99.5822024632155,
+      "location": 99.57998235010074,
+      "liSupported": 77.09049317533798,
+      "quality": null,
+      "physical": 4631,
+      "command": 4498
+    },
+    {
+      "year": 2024,
+      "pitches": 711898,
+      "pa": 182869,
+      "changes": 15835,
+      "wpa": 100.0,
+      "re24": 99.38644603513991,
+      "stuff": 99.62438439214607,
+      "location": 99.62213687915965,
+      "liSupported": 77.1442945496503,
+      "quality": null,
+      "physical": 4685,
+      "command": 4555
+    },
+    {
+      "year": 2025,
+      "pitches": 712528,
+      "pa": 183362,
+      "changes": 16008,
+      "wpa": 100.0,
+      "re24": 99.43717891384256,
+      "stuff": 99.63243549727169,
+      "location": 99.6278041003301,
+      "liSupported": 77.03122784437342,
+      "quality": 4693,
+      "physical": 4706,
+      "command": 4547
+    },
+    {
+      "year": 2026,
+      "pitches": 716544,
+      "pa": 184216,
+      "changes": 15936,
+      "wpa": 99.99945715898727,
+      "re24": 99.49190081209015,
+      "stuff": 99.62444734726688,
+      "location": 99.62040014290818,
+      "liSupported": 76.78431840882442,
+      "quality": 4563,
+      "physical": 4572,
+      "command": 4392
+    }
+  ],
+  "sourceAudit": {
+    "contract_version": "pitcher_decision_slice1_source_audit_v1",
+    "audit_date": "2026-11-12",
+    "scope": "2021–2026 MLB regular season; schedule snapshots and preexisting official feeds; source databases read-only",
+    "years": [
+      {
+        "year": 2021,
+        "completedGames": 2429,
+        "localGames": 2429,
+        "missingGames": 0,
+        "cachedFeeds": 2429,
+        "missingPitchKeys": 0,
+        "unmatchedLocalKeys": 2468,
+        "completedPlaysWithoutLocalRows": 30,
+        "localPlaysWithoutTerminal": 80,
+        "officialPitchingSubstitutions": 16692,
+        "scoreReviewGames": 0
+      },
+      {
+        "year": 2022,
+        "completedGames": 2430,
+        "localGames": 2430,
+        "missingGames": 0,
+        "cachedFeeds": 2430,
+        "missingPitchKeys": 0,
+        "unmatchedLocalKeys": 1670,
+        "completedPlaysWithoutLocalRows": 34,
+        "localPlaysWithoutTerminal": 84,
+        "officialPitchingSubstitutions": 16047,
+        "scoreReviewGames": 1
+      },
+      {
+        "year": 2023,
+        "completedGames": 2430,
+        "localGames": 2430,
+        "missingGames": 0,
+        "cachedFeeds": 2430,
+        "missingPitchKeys": 0,
+        "unmatchedLocalKeys": 2739,
+        "completedPlaysWithoutLocalRows": 28,
+        "localPlaysWithoutTerminal": 102,
+        "officialPitchingSubstitutions": 15804,
+        "scoreReviewGames": 2
+      },
+      {
+        "year": 2024,
+        "completedGames": 2429,
+        "localGames": 2429,
+        "missingGames": 0,
+        "cachedFeeds": 2429,
+        "missingPitchKeys": 1,
+        "unmatchedLocalKeys": 2387,
+        "completedPlaysWithoutLocalRows": 34,
+        "localPlaysWithoutTerminal": 104,
+        "officialPitchingSubstitutions": 15850,
+        "scoreReviewGames": 0
+      },
+      {
+        "year": 2025,
+        "completedGames": 2430,
+        "localGames": 2430,
+        "missingGames": 0,
+        "cachedFeeds": 2430,
+        "missingPitchKeys": 0,
+        "unmatchedLocalKeys": 2444,
+        "completedPlaysWithoutLocalRows": 25,
+        "localPlaysWithoutTerminal": 117,
+        "officialPitchingSubstitutions": 16027,
+        "scoreReviewGames": 0
+      },
+      {
+        "year": 2026,
+        "completedGames": 2429,
+        "localGames": 2429,
+        "missingGames": 0,
+        "cachedFeeds": 2429,
+        "missingPitchKeys": 248,
+        "unmatchedLocalKeys": 2309,
+        "completedPlaysWithoutLocalRows": 111,
+        "localPlaysWithoutTerminal": 111,
+        "officialPitchingSubstitutions": 15971,
+        "scoreReviewGames": 1
+      }
+    ],
+    "totals": {
+      "completedGames": 14577,
+      "localGames": 14577,
+      "missingGames": 0,
+      "cachedFeeds": 14577,
+      "missingPitchKeys": 249,
+      "unmatchedLocalKeys": 14017,
+      "completedPlaysWithoutLocalRows": 262,
+      "localPlaysWithoutTerminal": 598,
+      "officialPitchingSubstitutions": 96391,
+      "scoreReviewGames": 4
+    },
+    "cancelled_games": [
+      {
+        "year": 2021,
+        "game_pk": 632457,
+        "date": "2021-09-16",
+        "status": "Cancelled",
+        "count_as_missing": false
+      },
+      {
+        "year": 2024,
+        "game_pk": 746577,
+        "date": "2024-09-29",
+        "status": "Cancelled",
+        "count_as_missing": false
+      },
+      {
+        "year": 2026,
+        "game_pk": 823490,
+        "date": "2026-09-27",
+        "status": "Cancelled",
+        "count_as_missing": false
+      }
+    ],
+    "missing_whole_dates": [],
+    "score_semantics_review": [
+      {
+        "year": 2022,
+        "game_pk": 663053,
+        "last_event_type": "balk",
+        "classification": "nonpitch_terminal_balk",
+        "description": "With Tyler Naquin batting, Mark Kolozsvary scores on a balk. Albert Almora Jr. advances to 2nd on a balk.",
+        "scores": {
+          "local": [
+            1,
+            1
+          ],
+          "official": [
+            2,
+            1
+          ]
+        }
+      },
+      {
+        "year": 2023,
+        "game_pk": 716704,
+        "last_event_type": "balk",
+        "classification": "nonpitch_terminal_balk",
+        "description": "With Edward Olivares batting, Maikel Garcia scores on a balk. Bobby Witt Jr. advances to 3rd on a balk. MJ Melendez advances to 2nd on a balk.",
+        "scores": {
+          "local": [
+            6,
+            6
+          ],
+          "official": [
+            7,
+            6
+          ]
+        }
+      },
+      {
+        "year": 2023,
+        "game_pk": 717170,
+        "last_event_type": "balk",
+        "classification": "nonpitch_terminal_balk",
+        "description": "With Michael Massey batting, MJ Melendez scores on a balk. Dairon Blanco advances to 3rd on a balk. Drew Waters advances to 2nd on a balk.",
+        "scores": {
+          "local": [
+            6,
+            6
+          ],
+          "official": [
+            7,
+            6
+          ]
+        }
+      },
+      {
+        "year": 2026,
+        "game_pk": 823244,
+        "last_event_type": "field_out",
+        "classification": "pitch_or_source_gap",
+        "description": "Casey Schmitt flies out to right fielder Aaron Judge.",
+        "scores": {
+          "local": [
+            0,
+            0
+          ],
+          "official": [
+            0,
+            7
+          ]
+        }
+      }
+    ],
+    "fetch_estimate": {
+      "new_official_feed_downloads": 0,
+      "statcast_game_ids_to_check": 2,
+      "physical_pitch_key_differences": 249,
+      "note": "逐球鍵差異不保證皆能取得追蹤值；2024 單球需核對來源修訂，2026 是明確截斷。"
+    },
+    "provenance": {
+      "schedule": "sources/schedule_YEAR.json.gz + per-year URL/UTC/SHA-256 manifests; public GET, no key/cookie",
+      "cached_feeds": "feed_inventory_YEAR.parquet records existing compressed SHA-256, file mtime and feed timestamp",
+      "local_sources": "summary_YEAR.json records read-only DuckDB size/mtime; start/end stability checked",
+      "fresh_schedule_get_requests": 6,
+      "game_feed_download_requests": 0
+    },
+    "limitations": [
+      "Cancelled 不能以 abstractGameState=Final 當作已完成，須檢查 detailedState。",
+      "賽程 ID 齊全不等於逐球與事件齊全；此次只產出清單，沒有修復來源。",
+      "完成 play 可能是零球保送、牽制或跑壘事件，不等於完成打者打席。",
+      "來源 pitch_number 可能受自動壞球／好球與來源修訂影響；不能按不匹配數直接刪資料。",
+      "完整官方 feed 可沿用，但仍須 Slice 3 建立換人與零球事件帳本。",
+      "2026 賽程與早期研究資料均為回溯來源，不代表當時可取得的能力特徵。"
+    ],
+    "checks": [
+      {
+        "year": 2021,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      },
+      {
+        "year": 2022,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      },
+      {
+        "year": 2023,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      },
+      {
+        "year": 2024,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      },
+      {
+        "year": 2025,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      },
+      {
+        "year": 2026,
+        "official_vs_local_ids_reconciled": true,
+        "cancelled_excluded": true,
+        "feed_scores_match_schedule": true,
+        "all_completed_games_have_readable_cached_feed": true
+      }
+    ],
+    "next_slice": "Slice 2 only after user instruction; use queue, reuse snapshots, preserve raw versions.",
+    "pitch_backfill_queue": [
+      {
+        "year": 2024,
+        "game_pk": 746731,
+        "date": "2024-04-06",
+        "missing_official_pitch_keys": 1,
+        "local_pitch_rows": 319,
+        "official_pitch_events": 319,
+        "classification": "source_revision_review",
+        "action": "按 game ID 比對公開 Statcast 原始紀錄與已保存 feed；保存修訂差異，不直接以 feed 補造追蹤值。"
+      },
+      {
+        "year": 2026,
+        "game_pk": 823244,
+        "date": "2026-03-25",
+        "missing_official_pitch_keys": 248,
+        "local_pitch_rows": 10,
+        "official_pitch_events": 258,
+        "classification": "partial_game",
+        "action": "按 game ID 比對公開 Statcast 原始紀錄與已保存 feed；保存修訂差異，不直接以 feed 補造追蹤值。"
+      }
+    ]
+  },
+  "dataFoundation": {
+    "updatedAt": "2026-11-14",
+    "repairs": [
+      {
+        "year": 2024,
+        "game_pk": 746731,
+        "before_rows": 319,
+        "after_rows": 320
+      },
+      {
+        "year": 2026,
+        "game_pk": 823244,
+        "before_rows": 10,
+        "after_rows": 258
+      }
+    ],
+    "ledger": {
+      "games": 14577,
+      "events": 4866152,
+      "plays": 1099754,
+      "appearances": 125429,
+      "physical_pitches": 4270416,
+      "zero_pitch_appearances": 21,
+      "unpriced_wpa_plays": 386
+    },
+    "workload": {
+      "slice": 4,
+      "years": [
+        {
+          "year": 2021,
+          "decisions": 182162,
+          "missing_time": 0,
+          "missing_prior_role": 8741,
+          "left_censored_14d": 13187
+        },
+        {
+          "year": 2022,
+          "decisions": 182468,
+          "missing_time": 0,
+          "missing_prior_role": 2270,
+          "left_censored_14d": 0
+        },
+        {
+          "year": 2023,
+          "decisions": 184506,
+          "missing_time": 0,
+          "missing_prior_role": 2187,
+          "left_censored_14d": 0
+        },
+        {
+          "year": 2024,
+          "decisions": 182903,
+          "missing_time": 0,
+          "missing_prior_role": 1919,
+          "left_censored_14d": 0
+        },
+        {
+          "year": 2025,
+          "decisions": 183387,
+          "missing_time": 0,
+          "missing_prior_role": 1750,
+          "left_censored_14d": 0
+        },
+        {
+          "year": 2026,
+          "decisions": 184328,
+          "missing_time": 0,
+          "missing_prior_role": 1498,
+          "left_censored_14d": 0
+        }
+      ],
+      "sessions": 125412,
+      "strict_time_violations": 0,
+      "duplicate_decisions": 0,
+      "source_clock_issue_games": 3,
+      "scope": "All teams and SP/RP roles by MLBAM ID; regular-season physical pitches only; 1/3/7/14 rolling days, strict t'<t.",
+      "same_day_order": "UTC event time, with New York calendar dates for consecutive-day flags; no game-ID ordering.",
+      "resumed_games": "Physical sessions split after >8h gap; closed history waits for observed exit or 8h inactivity.",
+      "limitations": [
+        "Spring training, minor-league pitches, warm-up, health and pre-2021 role history are unknown.",
+        "A former starter is historical context, not automatic readiness credit.",
+        "Missing-time and early-source lookback rows retain explicit flags."
+      ],
+      "independent_window_check": {
+        "independent_sample_boundaries": 200,
+        "windows_days": [
+          1,
+          3,
+          7,
+          14
+        ],
+        "count_disagreements": 0,
+        "clock_status_counts": [
+          [
+            "uncertain_source_clock",
+            234
+          ],
+          [
+            "strictly_prior_event_time",
+            1099520
+          ]
+        ]
+      }
+    },
+    "candidates": {
+      "slice": 5,
+      "years": [
+        {
+          "year": 2021,
+          "decisions": 182162,
+          "with_nominal_candidates": 136702,
+          "nominal_candidate_rows": 1637227,
+          "low_confidence_boundaries": 865,
+          "candidate_profiles": 2415870
+        },
+        {
+          "year": 2022,
+          "decisions": 182468,
+          "with_nominal_candidates": 138342,
+          "nominal_candidate_rows": 1649088,
+          "low_confidence_boundaries": 647,
+          "candidate_profiles": 2398973
+        },
+        {
+          "year": 2023,
+          "decisions": 184506,
+          "with_nominal_candidates": 141064,
+          "nominal_candidate_rows": 1603376,
+          "low_confidence_boundaries": 559,
+          "candidate_profiles": 2328442
+        },
+        {
+          "year": 2024,
+          "decisions": 182903,
+          "with_nominal_candidates": 139295,
+          "nominal_candidate_rows": 1603843,
+          "low_confidence_boundaries": 699,
+          "candidate_profiles": 2330943
+        },
+        {
+          "year": 2025,
+          "decisions": 183387,
+          "with_nominal_candidates": 139583,
+          "nominal_candidate_rows": 1606674,
+          "low_confidence_boundaries": 471,
+          "candidate_profiles": 2338086
+        },
+        {
+          "year": 2026,
+          "decisions": 184328,
+          "with_nominal_candidates": 140640,
+          "nominal_candidate_rows": 1613393,
+          "low_confidence_boundaries": 462,
+          "candidate_profiles": 2351501
+        }
+      ],
+      "strict_time_violations": 0,
+      "dated_roster_probe_games": 72,
+      "probe_results": {
+        "dated_active_exact": 66,
+        "dated_roster_conflict": 6
+      },
+      "roster_confidence_boundaries": {
+        "official_game_roster_date_unverified": 1096673,
+        "insufficient_roster": 373,
+        "dated_roster_conflict": 232,
+        "dated_active_exact": 2476
+      },
+      "roster_basis": "Full official game-day player roster, not final used-pitcher list; 72 explicit-date API cross-checks, not all-date certification.",
+      "operational_status": "Warm-up, medical clearance, suspension and exact intraday transaction timing unknown; all individual ranking gates CLOSED.",
+      "eligibility": "Nominal position P or two-way Y; exclude current, removed, previously used and unsupported position-switch players; statutory three-batter gate.",
+      "limitations": [
+        "Unverified dates remain medium-confidence game-roster observations; future game usage does not define the pool.",
+        "Active starters can be nominal legal relievers; role/workload is a feature, not automatic available readiness.",
+        "Candidate workload uses strict timestamps across all teams/roles; historical starter counts begin in 2021."
+      ],
+      "data_checks": [
+        {
+          "year": 2021,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 16590,
+          "observed_incoming_in_nominal_pool": 16026,
+          "candidate_vs_exact_sql_rows": 176835,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        },
+        {
+          "year": 2022,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 15950,
+          "observed_incoming_in_nominal_pool": 15433,
+          "candidate_vs_exact_sql_rows": 176534,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        },
+        {
+          "year": 2023,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 15703,
+          "observed_incoming_in_nominal_pool": 15234,
+          "candidate_vs_exact_sql_rows": 178742,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        },
+        {
+          "year": 2024,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 15756,
+          "observed_incoming_in_nominal_pool": 15268,
+          "candidate_vs_exact_sql_rows": 177571,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        },
+        {
+          "year": 2025,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 15920,
+          "observed_incoming_in_nominal_pool": 15442,
+          "candidate_vs_exact_sql_rows": 177861,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        },
+        {
+          "year": 2026,
+          "duplicate_candidate_keys": 0,
+          "time_violations": 0,
+          "illegal_nominal_candidates": 0,
+          "invented_availability_or_ranking": 0,
+          "statutorily_supported_observed_changes": 15907,
+          "observed_incoming_in_nominal_pool": 15406,
+          "candidate_vs_exact_sql_rows": 178767,
+          "candidate_vs_exact_sql_window_disagreements": 0
+        }
+      ]
+    },
+    "years": [
+      {
+        "year": 2021,
+        "pitches": 709852,
+        "plays": 182162,
+        "appearances": 21545,
+        "zeroPitchAppearances": 5,
+        "withCandidates": 136702,
+        "candidateProfiles": 2415870
+      },
+      {
+        "year": 2022,
+        "pitches": 708540,
+        "plays": 182468,
+        "appearances": 20883,
+        "zeroPitchAppearances": 5,
+        "withCandidates": 138342,
+        "candidateProfiles": 2398973
+      },
+      {
+        "year": 2023,
+        "pitches": 717945,
+        "plays": 184506,
+        "appearances": 20634,
+        "zeroPitchAppearances": 5,
+        "withCandidates": 141064,
+        "candidateProfiles": 2328442
+      },
+      {
+        "year": 2024,
+        "pitches": 709512,
+        "plays": 182903,
+        "appearances": 20695,
+        "zeroPitchAppearances": 2,
+        "withCandidates": 139295,
+        "candidateProfiles": 2330943
+      },
+      {
+        "year": 2025,
+        "pitches": 710084,
+        "plays": 183387,
+        "appearances": 20870,
+        "zeroPitchAppearances": 2,
+        "withCandidates": 139583,
+        "candidateProfiles": 2338086
+      },
+      {
+        "year": 2026,
+        "pitches": 714483,
+        "plays": 184328,
+        "appearances": 20802,
+        "zeroPitchAppearances": 2,
+        "withCandidates": 140640,
+        "candidateProfiles": 2351501
+      }
+    ],
+    "individualRankingAllowed": false
+  },
+  "temporalResearch": {
+    "updatedAt": "2026-11-14",
+    "version": "decision_temporal_research_v1",
+    "protocolHash": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+    "folds": [
+      {
+        "id": "2021_h2",
+        "train_end": "2021-07-01",
+        "score_start": "2021-07-01",
+        "score_end": "2022-01-01"
+      },
+      {
+        "id": "2022",
+        "train_end": "2022-01-01",
+        "score_start": "2022-01-01",
+        "score_end": "2023-01-01"
+      },
+      {
+        "id": "2023",
+        "train_end": "2023-01-01",
+        "score_start": "2023-01-01",
+        "score_end": "2024-01-01"
+      },
+      {
+        "id": "frozen_2024",
+        "train_end": "2024-01-01",
+        "score_start": "2024-01-01",
+        "score_end": "2027-01-01"
+      }
+    ],
+    "researchMethod": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+    "years": [
+      {
+        "year": 2021,
+        "physical_pitches": 709852,
+        "scored_window": 363419,
+        "stuff_available": 362335,
+        "location_available": 362095,
+        "stuff_median": 98.15393192325449,
+        "location_median": 103.33784023057464,
+        "spAppearances": 875,
+        "rpAppearances": 2909,
+        "context": {
+          "year": 2021,
+          "decisions": 182162,
+          "scored_window": 93458,
+          "we": 93112,
+          "re": 93112,
+          "li": 93112
+        },
+        "decisionStates": {
+          "year": 2021,
+          "decisions": 182162,
+          "quality": 15188,
+          "physical": 15188,
+          "command": 15176
+        }
+      },
+      {
+        "year": 2022,
+        "physical_pitches": 708540,
+        "scored_window": 708540,
+        "stuff_available": 703011,
+        "location_available": 702960,
+        "stuff_median": 99.8463498861513,
+        "location_median": 103.70591497128642,
+        "spAppearances": 4704,
+        "rpAppearances": 13854,
+        "context": {
+          "year": 2022,
+          "decisions": 182468,
+          "scored_window": 182468,
+          "we": 181989,
+          "re": 181989,
+          "li": 181989
+        },
+        "decisionStates": {
+          "year": 2022,
+          "decisions": 182468,
+          "quality": 84236,
+          "physical": 84133,
+          "command": 84234
+        }
+      },
+      {
+        "year": 2023,
+        "physical_pitches": 717945,
+        "scored_window": 717945,
+        "stuff_available": 712999,
+        "location_available": 712920,
+        "stuff_median": 100.2354278865225,
+        "location_median": 103.61387158520031,
+        "spAppearances": 4634,
+        "rpAppearances": 13658,
+        "context": {
+          "year": 2023,
+          "decisions": 184506,
+          "scored_window": 184506,
+          "we": 183979,
+          "re": 183979,
+          "li": 183979
+        },
+        "decisionStates": {
+          "year": 2023,
+          "decisions": 184506,
+          "quality": 84062,
+          "physical": 84005,
+          "command": 84048
+        }
+      },
+      {
+        "year": 2024,
+        "physical_pitches": 709512,
+        "scored_window": 709512,
+        "stuff_available": 705309,
+        "location_available": 705248,
+        "stuff_median": 100.46568119388517,
+        "location_median": 103.18883577754406,
+        "spAppearances": 4716,
+        "rpAppearances": 13529,
+        "context": {
+          "year": 2024,
+          "decisions": 182903,
+          "scored_window": 182903,
+          "we": 182351,
+          "re": 182351,
+          "li": 182351
+        },
+        "decisionStates": {
+          "year": 2024,
+          "decisions": 182903,
+          "quality": 80872,
+          "physical": 80748,
+          "command": 80853
+        }
+      },
+      {
+        "year": 2025,
+        "physical_pitches": 710084,
+        "scored_window": 710084,
+        "stuff_available": 704196,
+        "location_available": 704285,
+        "stuff_median": 101.00326852784126,
+        "location_median": 103.32078676537694,
+        "spAppearances": 4731,
+        "rpAppearances": 13690,
+        "context": {
+          "year": 2025,
+          "decisions": 183387,
+          "scored_window": 183387,
+          "we": 182916,
+          "re": 182916,
+          "li": 182916
+        },
+        "decisionStates": {
+          "year": 2025,
+          "decisions": 183387,
+          "quality": 77145,
+          "physical": 77170,
+          "command": 77160
+        }
+      },
+      {
+        "year": 2026,
+        "physical_pitches": 714483,
+        "scored_window": 714483,
+        "stuff_available": 702036,
+        "location_available": 701979,
+        "stuff_median": 101.27311544620758,
+        "location_median": 102.74576873355335,
+        "spAppearances": 4615,
+        "rpAppearances": 13719,
+        "context": {
+          "year": 2026,
+          "decisions": 184328,
+          "scored_window": 184328,
+          "we": 183866,
+          "re": 183866,
+          "li": 183866
+        },
+        "decisionStates": {
+          "year": 2026,
+          "decisions": 184328,
+          "quality": 72695,
+          "physical": 72644,
+          "command": 72690
+        }
+      }
+    ],
+    "plusValidation": {
+      "n": 705272,
+      "mean_rmse": 0.24801742346095956,
+      "location_rmse": 0.2449974820159202,
+      "location_plus_residual_stuff_rmse": 0.24499276653069368,
+      "scope": "Fixed 2024 diagnostic, no post-diagnostic tuning. No 2025/26 outcome metrics."
+    },
+    "weValidation": {
+      "n": 182351,
+      "brier": 0.157961225166938,
+      "log_loss": 0.4721712942449774,
+      "constant_train_home_win_brier": 0.25005339816462213,
+      "calibration_bins": [
+        {
+          "lower": 0.0,
+          "n": 24564,
+          "predicted": 0.04536871887470828,
+          "observed": 0.0351327145416056
+        },
+        {
+          "lower": 0.1,
+          "n": 13005,
+          "predicted": 0.15398622127757228,
+          "observed": 0.14232987312572087
+        },
+        {
+          "lower": 0.2,
+          "n": 14991,
+          "predicted": 0.2558980842566693,
+          "observed": 0.25548662530851846
+        },
+        {
+          "lower": 0.3,
+          "n": 15349,
+          "predicted": 0.35189089822148045,
+          "observed": 0.3559189523747475
+        },
+        {
+          "lower": 0.4,
+          "n": 9002,
+          "predicted": 0.4446325097934241,
+          "observed": 0.4289046878471451
+        },
+        {
+          "lower": 0.5,
+          "n": 37842,
+          "predicted": 0.548067972348202,
+          "observed": 0.5474604936314148
+        },
+        {
+          "lower": 0.6,
+          "n": 12859,
+          "predicted": 0.6557929472259109,
+          "observed": 0.6318531767633564
+        },
+        {
+          "lower": 0.7,
+          "n": 12207,
+          "predicted": 0.7534053772605455,
+          "observed": 0.731629392971246
+        },
+        {
+          "lower": 0.8,
+          "n": 15366,
+          "predicted": 0.8480061952988533,
+          "observed": 0.8447221137576467
+        },
+        {
+          "lower": 0.9,
+          "n": 27166,
+          "predicted": 0.9561079312516525,
+          "observed": 0.956048001177943
+        }
+      ],
+      "scope": "Fixed validation diagnostic; observations clustered by game, not independent rows. No 2025/2026 performance examination."
+    },
+    "stateValidation": [
+      {
+        "model_id": "frozen_state_2024:SP",
+        "cutoff": "2024-01-01",
+        "train_rows": 608028,
+        "train_appearances": 11721,
+        "maximum_label_available_at": 1696198858.767,
+        "signals": {
+          "quality": {
+            "training_prefixes": 543550,
+            "residual_sd": 2.3457906570424063
+          },
+          "command": {
+            "training_prefixes": 543496,
+            "residual_sd": 2.0945854491461904
+          }
+        },
+        "physical_components": [
+          {
+            "column": "release_speed",
+            "center": -0.1817561930686281,
+            "sd": 0.6114526140942033
+          },
+          {
+            "column": "release_spin_rate",
+            "center": -1.0951006546175732,
+            "sd": 42.55244136124508
+          },
+          {
+            "column": "pfx_x",
+            "center": 0.006453262029654656,
+            "sd": 0.06909154231052232
+          },
+          {
+            "column": "pfx_z",
+            "center": -0.006856252456772845,
+            "sd": 0.06441288050342844
+          },
+          {
+            "column": "release_pos_x",
+            "center": 0.009648549173267934,
+            "sd": 0.07786275204750107
+          },
+          {
+            "column": "release_pos_z",
+            "center": -0.03242237845461103,
+            "sd": 0.04589596595389504
+          },
+          {
+            "column": "release_extension",
+            "center": 0.026734924620775063,
+            "sd": 0.06932155091338053
+          },
+          {
+            "column": "arm_angle",
+            "center": -0.05560570162285746,
+            "sd": 1.107847829517386
+          }
+        ],
+        "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+        "features": [
+          "prefix_pitches",
+          "log_pitch_count",
+          "early_quality",
+          "early_command",
+          "early_velocity",
+          "days_observed_history",
+          "prior_same_type_pitches",
+          "pitches_1d_before",
+          "pitches_3d_before",
+          "pitches_7d_before",
+          "pitches_14d_before",
+          "rest_hours_since_closed_session",
+          "prior_session_consecutive_days",
+          "appeared_earlier_today",
+          "prior_observed_starts",
+          "prior_observed_relief",
+          "previous_session_pitches",
+          "days_since_start",
+          "days_since_long",
+          "latest_boundary_li"
+        ],
+        "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+        "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+        "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+        "formal_replacement": false,
+        "validation_2024_expected_path": {
+          "quality": {
+            "n": 215661,
+            "full_rmse": 2.2868888724700667,
+            "count_only_rmse": 2.445450376102165,
+            "recent_workload_rmse": 2.4408175747795307,
+            "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+          },
+          "command": {
+            "n": 215595,
+            "full_rmse": 2.0889694178837295,
+            "count_only_rmse": 2.9141232255459144,
+            "recent_workload_rmse": 2.9138686819828035,
+            "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+          }
+        },
+        "validation_2024": {
+          "matched_prefix_pairs": 194403,
+          "quality_state_next_prefix_correlation": 0.9774870380350528,
+          "scope": "Overlapping descriptive persistence only, not disjoint future predictive validation. No promotion on this diagnostic."
+        }
+      },
+      {
+        "model_id": "frozen_state_2024:RP",
+        "cutoff": "2024-01-01",
+        "train_rows": 401883,
+        "train_appearances": 34987,
+        "maximum_label_available_at": 1696198858.767,
+        "signals": {
+          "quality": {
+            "training_prefixes": 261799,
+            "residual_sd": 4.842177404456138
+          },
+          "command": {
+            "training_prefixes": 261700,
+            "residual_sd": 4.9966692720316885
+          }
+        },
+        "physical_components": [
+          {
+            "column": "release_speed",
+            "center": 0.287311477642069,
+            "sd": 0.8068286219257965
+          },
+          {
+            "column": "release_spin_rate",
+            "center": 8.485453333492963,
+            "sd": 71.24725944581957
+          },
+          {
+            "column": "pfx_x",
+            "center": 0.004991842949010375,
+            "sd": 0.12213368330416478
+          },
+          {
+            "column": "pfx_z",
+            "center": -0.005459983816609361,
+            "sd": 0.11705760369008722
+          },
+          {
+            "column": "release_pos_x",
+            "center": 0.015531443194509366,
+            "sd": 0.11482544460969396
+          },
+          {
+            "column": "release_pos_z",
+            "center": -0.025065588992157994,
+            "sd": 0.06228874134354353
+          },
+          {
+            "column": "release_extension",
+            "center": 0.03374150251108802,
+            "sd": 0.10022779236563101
+          },
+          {
+            "column": "arm_angle",
+            "center": 0.21006301973950506,
+            "sd": 1.759491669516281
+          }
+        ],
+        "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+        "features": [
+          "prefix_pitches",
+          "log_pitch_count",
+          "early_quality",
+          "early_command",
+          "early_velocity",
+          "days_observed_history",
+          "prior_same_type_pitches",
+          "pitches_1d_before",
+          "pitches_3d_before",
+          "pitches_7d_before",
+          "pitches_14d_before",
+          "rest_hours_since_closed_session",
+          "prior_session_consecutive_days",
+          "appeared_earlier_today",
+          "prior_observed_starts",
+          "prior_observed_relief",
+          "previous_session_pitches",
+          "days_since_start",
+          "days_since_long",
+          "latest_boundary_li"
+        ],
+        "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+        "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+        "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+        "formal_replacement": false,
+        "validation_2024_expected_path": {
+          "quality": {
+            "n": 93785,
+            "full_rmse": 4.959771315862197,
+            "count_only_rmse": 5.361734748738559,
+            "recent_workload_rmse": 5.361393599602785,
+            "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+          },
+          "command": {
+            "n": 93784,
+            "full_rmse": 4.7607672682964735,
+            "count_only_rmse": 6.452839400385103,
+            "recent_workload_rmse": 6.453874488228475,
+            "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+          }
+        },
+        "validation_2024": {
+          "matched_prefix_pairs": 55604,
+          "quality_state_next_prefix_correlation": 0.940886986593331,
+          "scope": "Overlapping descriptive persistence only, not disjoint future predictive validation. No promotion on this diagnostic."
+        }
+      }
+    ],
+    "formalReplacement": false,
+    "individualRankingAllowed": false,
+    "compositeEnergyAvailable": false,
+    "minimumPrefix": {
+      "SP": 35,
+      "RP": 10
+    }
+  }
+}

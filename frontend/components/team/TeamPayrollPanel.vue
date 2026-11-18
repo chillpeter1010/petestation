@@ -188,7 +188,7 @@ function statusLabel(status: string | undefined) {
 .summary-grid article { min-height: 88px; display: grid; align-content: center; gap: 7px; border: 1px solid var(--team-panel-border); border-radius: 13px; padding: 14px 16px; background: color-mix(in srgb, var(--color-background) 60%, transparent); }
 .summary-grid span { color: var(--color-muted-text); font-size: 10px; font-weight: 850; text-transform: uppercase; }
 .summary-grid strong { font: 900 21px "Fira Code", monospace; } .summary-grid .due { color: #f59e0b; }
-.snapshot-note { display: flex; align-items: center; gap: 9px; margin: 0 26px 16px; border-radius: 10px; padding: 10px 13px; color: var(--color-muted-text); background: color-mix(in srgb, var(--team-primary) 10%, var(--color-background)); font-size: 12px; }
+.snapshot-note { display: flex; align-items: center; gap: 9px; margin: 0 26px 16px; border-radius: 10px; padding: 10px 13px; color: var(--color-muted-text); background: #000; font-size: 12px; }
 .payroll-tabs { display: flex; gap: 5px; overflow-x: auto; border-block: 1px solid var(--team-panel-border); padding: 9px 26px; background: color-mix(in srgb, var(--color-background) 58%, transparent); }
 .payroll-tabs button { min-height: 38px; display: inline-flex; align-items: center; gap: 7px; border: 0; border-radius: 9px; padding: 8px 13px; color: var(--color-muted-text); background: transparent; font-size: 11px; font-weight: 850; white-space: nowrap; cursor: pointer; }
 .payroll-tabs button[aria-pressed="true"] { color: #fff; background: var(--team-primary); }

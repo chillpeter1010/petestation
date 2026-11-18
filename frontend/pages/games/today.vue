@@ -114,7 +114,7 @@
       <div v-if="gameVideoOpen" class="game-video-backdrop" @click.self="gameVideoOpen = false">
         <section class="game-video-modal" role="dialog" aria-modal="true" aria-label="Selected pitch video">
           <header><div><span class="eyebrow">Selected pitch</span><h2>{{ selectedGamePitchLabel }}</h2></div><button type="button" aria-label="Close video" @click="gameVideoOpen = false">×</button></header>
-          <iframe :src="selectedGamePitchVideoUrl" title="Selected pitch video" />
+          <PitchVideoPlayer :url="selectedGamePitchVideoUrl" />
           <footer><a :href="selectedGamePitchVideoUrl" target="_blank" rel="noreferrer">Open in Baseball Savant</a></footer>
         </section>
       </div>
@@ -123,8 +123,9 @@
 </template>
 
 <script setup lang="ts">
+import PitchVideoPlayer from '~/components/charts/PitchVideoPlayer.vue'
 import { getPitchColor } from '~/utils/pitchColors'
-import { GAME_YEARS, gameContext, gameDate, gameFitsScope } from '~/utils/gameCenterContext'
+import { GAME_YEARS, gameContext, gameDate, gameFitsScope, preferredGame } from '~/utils/gameCenterContext'
 
 type GameRow = { game_pk?: number | string; game_date?: string; away_team?: string; home_team?: string; total_pitches?: number | string; away_score?: number | string | null; home_score?: number | string | null; status?: string }
 type PitchMixSlice = { pitch: string; pitches: number; color: string }
@@ -144,6 +145,7 @@ type PitcherAnalysisMode = 'location' | 'sequence' | 'movement' | 'replay'
 const api = useApi()
 const route = useRoute()
 const router = useRouter()
+const { user } = useAuth()
 const yearOptions = GAME_YEARS
 const initialContext = gameContext(route.query)
 const year = ref(initialContext.year)
@@ -161,7 +163,7 @@ const selectedPitcherId = ref<number | null>(null)
 const loadingList = ref(false), loadingDetail = ref(false), loadError = ref(''), contextNotice = ref('')
 const loading = computed(() => loadingList.value || loadingDetail.value)
 let listVersion = 0, detailVersion = 0, routeWrites = 0
-const tabs: Array<{ value: TabValue; label: string }> = [{ value: 'feed', label: 'Feed' }, { value: 'box', label: 'Box Score' }, { value: 'location', label: 'Location' }, { value: 'sequence', label: 'Sequence' }, { value: 'movement', label: 'Movement' }, { value: 'replay', label: 'Replay' }]
+const tabs: Array<{ value: TabValue; label: string }> = [{ value: 'feed', label: 'Feed' }, { value: 'box', label: 'Box Score' }, { value: 'location', label: 'Location' }, { value: 'sequence', label: 'Sequence' }, { value: 'movement', label: 'Movement' }, { value: 'replay', label: 'In game' }]
 
 const selectedGame = computed(() => gameDetail.value?.game || games.value.find(game => Number(game.game_pk) === selectedGamePk.value) || null)
 const gameTeams = computed(() => gameDetail.value?.teams || [])
@@ -171,7 +173,7 @@ const plays = computed(() => gameDetail.value?.plays || [])
 const gamePitchers = computed(() => gameTeams.value.flatMap(team => team.pitchers))
 const selectedPitcher = computed(() => gamePitchers.value.find(pitcher => pitcher.pitcher_id === selectedPitcherId.value) || null)
 const analysisMode = computed<PitcherAnalysisMode | null>(() => ['location', 'sequence', 'movement', 'replay'].includes(activeTab.value) ? activeTab.value as PitcherAnalysisMode : null)
-const activeAnalysisLabel = computed(() => ({ location: 'Pitch Location', sequence: 'Pitch Sequence', movement: 'Pitch Movement', replay: 'Pitch Replay' } as Record<PitcherAnalysisMode, string>)[analysisMode.value || 'location'])
+const activeAnalysisLabel = computed(() => ({ location: 'Pitch Location', sequence: 'Pitch Sequence', movement: 'Pitch Movement', replay: 'In game' } as Record<PitcherAnalysisMode, string>)[analysisMode.value || 'location'])
 const selectedPlay = computed(() => plays.value.find(play => play.at_bat_number === selectedAtBat.value) || plays.value[0] || null)
 const locatedPitches = computed(() => (selectedPlay.value?.pitches || []).filter(pitch => pitch.plate_x !== null && pitch.plate_z !== null))
 const selectedGamePitchKey = computed(() => selectedGamePitch.value ? pitchPointKey(selectedGamePitch.value) : null)
@@ -218,7 +220,7 @@ async function loadGames(restore = false) {
     selectedDate.value = scope.date
     games.value = ((response.games || []) as GameRow[]).filter(game => gameFitsScope(game,scope))
     if (Array.isArray(response.warnings) && response.warnings.length) contextNotice.value = 'Some local snapshot sources are unavailable.'
-    const next = games.value.find(game => Number(game.game_pk) === requested.gamePk) || games.value[0]
+    const next = preferredGame(games.value,requested.gamePk,user.value?.favorite_team_code)
     if (restore && requested.gamePk && Number(next?.game_pk) !== requested.gamePk) contextNotice.value = 'Requested game is unavailable in this year/date/team scope. Showing an available game, if any.'
     if (next) await selectGame(Number(next.game_pk),false,Number(cached?.game?.game_pk)===Number(next.game_pk)?cached:undefined,requested.pitcherId)
     if (token === listVersion) await syncGameQuery()
@@ -268,6 +270,11 @@ function pitchVideoUrl(pitch: Record<string, unknown> | null) { if (!pitch) retu
 function selectGamePitch(pitch: Record<string, unknown>) { selectedGamePitch.value = pitch; if (pitchVideoUrl(pitch)) gameVideoOpen.value = true }
 function pitchMixGradient(mix: PitchMixSlice[] = []) { const total = mix.reduce((sum, row) => sum + Number(row.pitches || 0), 0); if (!total) return getPitchColor('Unknown'); let start = 0; const stops = mix.map(row => { const end = start + (Number(row.pitches || 0) / total) * 100; const stop = `${getPitchColor(row.pitch)} ${start.toFixed(2)}% ${end.toFixed(2)}%`; start = end; return stop }); return `conic-gradient(${stops.join(', ')})` }
 watch(selectedAtBat, () => { selectedGamePitch.value = null; gameVideoOpen.value = false })
+watch(() => user.value?.favorite_team_code, favorite => {
+  if (!favorite || loading.value) return
+  const next = preferredGame(games.value,undefined,favorite)
+  if (next && (next.home_team === favorite || next.away_team === favorite) && Number(next.game_pk) !== selectedGamePk.value) void selectGame(Number(next.game_pk))
+})
 watch([activeTab,selectedPitcherId], () => { if (!loading.value && !routeWrites) void syncGameQuery() })
 watch(() => [route.query.year,route.query.date,route.query.team,route.query.game_pk,route.query.tab,route.query.pitcher_id], () => {
   if (routeWrites) return
@@ -279,7 +286,7 @@ onBeforeUnmount(() => { ++listVersion; ++detailVersion })
 </script>
 
 <style scoped>
-.games-page{min-height:100vh;padding:24px clamp(16px,3vw,42px) 48px;color:var(--color-foreground);background:radial-gradient(circle at top right,color-mix(in srgb,var(--color-primary) 20%,transparent),transparent 32rem),var(--color-background)}
+.games-page{min-height:100vh;padding:24px clamp(16px,3vw,42px) 48px;color:var(--color-foreground);background:#000}
 .games-header,.games-controls,.games-list,.game-detail,.empty-detail{max-width:1440px;margin-inline:auto}.games-header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:20px;background:var(--color-surface)}
 .eyebrow{color:var(--color-primary);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}h1,h2,p{margin:0}h1{margin-top:4px;font-size:clamp(34px,4vw,58px)}.games-header p,.snapshot-note{color:var(--color-muted-text)}.header-links{display:flex;gap:8px}.pill-link,.games-controls>button,.report-link{border:1px solid var(--color-primary);border-radius:999px;padding:9px 14px;color:#111;background:var(--color-primary);font-weight:900;text-decoration:none}.pill-link.secondary{color:var(--color-primary);background:transparent}
 .games-controls{display:grid;grid-template-columns:120px minmax(250px,330px) 130px minmax(0,1fr);align-items:end;gap:12px;margin-top:16px;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:16px;background:var(--color-surface)}.games-controls label{display:grid;gap:6px;color:var(--color-muted-text);font-size:11px;font-weight:900;text-transform:uppercase}.games-controls select,.games-controls input{width:100%;min-height:42px;box-sizing:border-box;border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:8px 10px;color:var(--color-foreground);background:var(--color-background);font-weight:800}.date-picker{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;gap:8px}.date-step{min-height:42px;border:1px solid var(--color-border);border-radius:var(--radius-sm);color:var(--color-foreground);background:var(--color-background);font-size:20px;cursor:pointer}.scope-summary{display:grid;justify-items:end;gap:2px}.scope-summary span,.scope-summary a{color:var(--color-muted-text);font-size:12px}.scope-summary a{color:var(--color-primary)}
@@ -290,7 +297,7 @@ onBeforeUnmount(() => { ++listVersion; ++detailVersion })
 .feed-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(330px,.75fr);gap:16px;margin-top:16px}.plate-appearance-card,.play-feed,.team-card{border:1px solid var(--color-border);border-radius:14px;background:var(--color-surface)}.plate-appearance-card{padding:20px}.plate-appearance-card>header,.play-feed>header,.team-card>header{display:flex;align-items:center;justify-content:space-between;gap:12px}.plate-appearance-card>header>div>span{color:var(--color-primary);font-size:11px;font-weight:900;text-transform:uppercase}.plate-appearance-card h2{margin-top:4px}.plate-appearance-card>header>strong{font-size:28px}.plate-appearance-card>p{margin-top:10px;color:var(--color-muted-text)}.matchup-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}.matchup-title em{color:var(--color-muted-text);font-size:14px;font-style:normal}.matchup-player{display:inline-flex;align-items:center;gap:8px;color:var(--color-foreground);text-decoration:none}.matchup-player:hover{color:var(--color-primary)}.pitch-visual{display:grid;grid-template-columns:minmax(300px,1fr) minmax(260px,.82fr);gap:28px;align-items:start;margin-top:22px}.game-zone-chart{width:100%;min-width:0}.pitch-list{max-height:470px;display:grid;gap:8px;overflow:auto;margin:0;padding:0;list-style:none}.pitch-list li{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--color-border);padding:8px 0}.pitch-list i{width:10px;height:10px;border-radius:50%}.pitch-list span{display:grid}.pitch-list small{color:var(--color-muted-text)}
 .play-feed{max-height:620px;overflow:auto}.play-feed>header{position:sticky;z-index:2;top:0;padding:14px;background:var(--color-surface);border-bottom:1px solid var(--color-border)}.play-feed>header small{color:var(--color-muted-text)}.play-feed button{position:relative;width:100%;display:grid;gap:3px;border:0;border-bottom:1px solid var(--color-border);padding:13px 52px 13px 14px;color:var(--color-foreground);background:transparent;cursor:pointer;text-align:left}.play-feed button:hover,.play-feed button.active{background:color-mix(in srgb,var(--color-primary) 11%,transparent)}.play-feed button>span,.play-feed button>small{color:var(--color-muted-text);font-size:11px}.play-feed button>b{position:absolute;top:14px;right:14px}
 .box-score-sections{display:grid;gap:22px;margin-top:16px}.box-score-group{display:grid;gap:10px}.box-score-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;border-bottom:1px solid var(--color-border);padding:0 2px 9px}.box-score-heading h2{margin-top:3px;font-size:22px}.team-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.team-card{overflow:hidden}.team-card>header{padding:13px 15px;color:#fff;background:color-mix(in srgb,var(--color-primary) 72%,#502010)}.team-card>header span{font-size:11px;font-weight:900;text-transform:uppercase}.table-wrap{overflow:auto}.stats-table{width:100%;min-width:650px;border-collapse:collapse}.batting-table{min-width:740px}.pitching-table{min-width:860px}.stats-table th,.stats-table td{padding:10px;border-bottom:1px solid var(--color-border);text-align:center;white-space:nowrap}.stats-table th:first-child,.stats-table td:first-child{text-align:left}.stats-table th{color:var(--color-muted-text);font-size:11px;text-transform:uppercase}.stats-table a{color:var(--color-foreground);font-weight:850;text-decoration:none}.stats-table a:hover{color:var(--color-primary)}.player-cell{display:inline-flex;align-items:center;gap:9px}.lineup-marker{width:18px;flex:0 0 18px;color:var(--color-muted-text);font:800 12px "Fira Code",monospace;text-align:center}.substitute-row .player-cell{padding-left:12px}.substitute-row .lineup-marker{color:var(--color-primary)}.mini-pie{display:inline-block;width:30px;height:30px;border:1px solid #0005;border-radius:50%}.report-link{display:inline-block;padding:5px 9px!important;font-size:11px}.analysis-view{display:grid;gap:12px;margin-top:16px;border:1px solid var(--color-border);border-radius:14px;overflow:hidden;background:var(--color-surface)}.analysis-toolbar{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:1px solid var(--color-border);padding:16px 18px}.analysis-toolbar h2{margin-top:3px}.analysis-toolbar label{width:min(360px,100%);display:grid;gap:6px;color:var(--color-muted-text);font-size:11px;font-weight:900;text-transform:uppercase}.analysis-toolbar select{width:100%;min-height:44px;border:1px solid var(--color-border);border-radius:8px;padding:8px 11px;color:var(--color-foreground);background:var(--color-background);font:inherit;font-weight:800}.snapshot-note{margin-top:16px;border-left:3px solid var(--color-primary);padding:10px 13px;font-size:12px}.empty-detail{margin-top:18px;border:1px dashed var(--color-border);border-radius:var(--radius-md);padding:24px;color:var(--color-muted-text);background:var(--color-surface)}
-.game-video-backdrop{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:24px;background:rgba(2,6,23,.82);backdrop-filter:blur(6px)}.game-video-modal{width:min(920px,96vw);overflow:hidden;border:1px solid var(--color-primary);border-radius:16px;background:var(--color-surface);box-shadow:0 28px 90px #000b}.game-video-modal header,.game-video-modal footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px}.game-video-modal header{border-bottom:1px solid var(--color-border)}.game-video-modal header button{width:38px;height:38px;border:1px solid var(--color-border);border-radius:50%;color:var(--color-foreground);background:transparent;font-size:24px;cursor:pointer}.game-video-modal iframe{display:block;width:100%;height:min(68vh,620px);border:0;background:#000}.game-video-modal footer{border-top:1px solid var(--color-border)}.game-video-modal footer a{color:var(--color-primary);font-weight:850}
+.game-video-backdrop{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:24px;background:rgb(0 0 0 / 0.82);backdrop-filter:blur(6px)}.game-video-modal{width:min(920px,96vw);overflow:hidden;border:1px solid var(--color-primary);border-radius:16px;background:var(--color-surface);box-shadow:0 28px 90px #000b}.game-video-modal header,.game-video-modal footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px}.game-video-modal header{border-bottom:1px solid var(--color-border)}.game-video-modal header button{width:38px;height:38px;border:1px solid var(--color-border);border-radius:50%;color:var(--color-foreground);background:transparent;font-size:24px;cursor:pointer}.game-video-modal iframe{display:block;width:100%;height:min(68vh,620px);border:0;background:#000}.game-video-modal footer{border-top:1px solid var(--color-border)}.game-video-modal footer a{color:var(--color-primary);font-weight:850}
 @media(max-width:980px){.games-header,.games-controls,.team-grid,.feed-layout{grid-template-columns:1fr}.scope-summary{justify-items:start}.pitch-visual{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.games-page{padding-inline:12px}.games-header{align-items:start;grid-template-columns:1fr}.header-links{flex-wrap:wrap}.score-hero{grid-template-columns:1fr}.score-team--home{flex-direction:row-reverse;justify-content:flex-start}.score-team--home>b{margin-left:auto;order:-1}.game-state{grid-row:1}.pitch-visual{grid-template-columns:1fr}.strike-zone{margin:auto}.game-tabs button{min-height:44px}.box-score-heading,.analysis-toolbar{align-items:start;flex-direction:column}.analysis-toolbar label{width:100%}}
 </style>

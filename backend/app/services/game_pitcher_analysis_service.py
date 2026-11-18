@@ -217,6 +217,7 @@ def build_game_pitch_replay_response(
     year: int,
     game_pk: int,
     pitcher_id: int,
+    player_bios: dict[int, dict[str, Any]] | None = None,
 ) -> AnalysisResponse:
     working = pitch_df.copy()
     if "game_pk" in working.columns:
@@ -253,12 +254,17 @@ def build_game_pitch_replay_response(
         "pitch_name", "pitch_type", "description", "events", "stand", "p_throws", "balls", "strikes",
         "bb_type", "fielder_2", "catcher_name", "release_speed", "release_extension", "release_pos_x",
         "release_pos_y", "release_pos_z", "plate_x", "plate_z", "sz_top", "sz_bot", "play_id", "video_url",
-        "pitch_result_group", "in_play_result_group", "pa_result_group",
+        "pitch_result_group", "in_play_result_group", "pa_result_group", "arm_angle", "home_team", "away_team", "inning_topbot",
+        "pitch_stuff_plus", "location_plus_pitch", "stamina_plus_trait", "stamina_expected_retention_delta", "stamina_expected_stuff_plus",
     ]
     rows: list[dict[str, Any]] = []
     for _, source_row in working.sort_values(["at_bat_number", "pitch_number"], kind="stable").iterrows():
         replay_row = {column: clean_value(source_row.get(column)) for column in scalar_columns if column in working.columns}
         replay_row.update(build_pitch_trajectory(source_row))
+        if player_bios is not None:
+            replay_row["pitcher_bio"] = player_bios.get(int(pitcher_id))
+            batter_id = source_row.get("batter")
+            replay_row["batter_bio"] = player_bios.get(int(batter_id)) if pd.notna(batter_id) else None
         rows.append(replay_row)
 
     statuses = pd.Series([row["trajectory_status"] for row in rows], dtype="object")
@@ -305,9 +311,15 @@ def build_game_pitch_replay_response(
 
 def get_game_pitch_replay(year: int, game_pk: int, pitcher_id: int) -> AnalysisResponse:
     from app.services.pitch_matchup_service import resolve_replay_names
+    from app.services.player_bio_service import get_player_bios
     frame = load_personal_pitch_df(year=year, pitcher_id=pitcher_id, game_pk=game_pk)
+    frame = load_pitch_stamina_state(frame, year=year, data_dir=settings.data_dir)
+    if not frame.empty:
+        frame["pitch_stuff_plus"] = load_pitch_stuff_scores(frame).round(1)
+        frame["location_plus_pitch"] = load_pitch_location_scores(frame).round(1)
     ids = tuple({pitcher_id, *pd.to_numeric(frame.get("batter", pd.Series(dtype=float)), errors="coerce").dropna().astype(int).tolist()})
     names = resolve_replay_names(year, ids)
+    bios = {key: bio.model_dump() for key, bio in get_player_bios(ids if not frame.empty else ()).items()}
     frame["batter_name"] = frame["batter"].map(names) if "batter" in frame else None
     frame["pitcher_name"] = names.get(pitcher_id)
     return build_game_pitch_replay_response(
@@ -315,6 +327,7 @@ def get_game_pitch_replay(year: int, game_pk: int, pitcher_id: int) -> AnalysisR
         year=year,
         game_pk=game_pk,
         pitcher_id=pitcher_id,
+        player_bios=bios,
     )
 
 

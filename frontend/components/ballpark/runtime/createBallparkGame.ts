@@ -96,7 +96,6 @@ export async function createBallparkGame(options: BallparkRuntimeOptions): Promi
     private nearby: Portal | null = null
     private nearbyObject: Interaction | null = null
     private guides: ReturnType<typeof createBallparkCharacter>[] = []
-    private prompt!: Phaser.GameObjects.Text
     private triggered = false
     private lastReport = 0
 
@@ -128,13 +127,11 @@ export async function createBallparkGame(options: BallparkRuntimeOptions): Promi
       this.player = this.character.root.setPosition(spawn[0], spawn[1]).setDepth(spawn[1])
       this.character.setFacing(restored.position.facing)
 
-      this.prompt = this.add.text(0,0,'', { fontFamily:'monospace', fontSize:'20px', fontStyle:'bold', color:'#ffffff', backgroundColor:'#071318', stroke:'#071318', strokeThickness:3, padding:{x:12,y:8} }).setResolution(2).setOrigin(.5,1).setDepth(20000).setVisible(false)
       for (const object of objects) {
         if (object.npc) {
           const guide = createBallparkCharacter(this, { ...DEFAULT_APPEARANCE, palette_id:'teal' }, options.reducedMotion)
           guide.root.setPosition(...object.approach).setDepth(object.approach[1])
           this.guides.push(guide)
-          this.add.text(object.approach[0],object.approach[1]-135,'GUIDE · generic', {fontFamily:'monospace',fontSize:'18px',fontStyle:'bold',color:'#e7fbff',backgroundColor:'#071318',stroke:'#071318',strokeThickness:3,padding:{x:10,y:6}}).setResolution(2).setOrigin(.5,1).setDepth(10000)
         }
         const [x,y,w,h]=object.bounds
         const links=object.kind==='links'&&object.links.length>1?object.links.map(l=>l.path):[undefined]
@@ -180,7 +177,6 @@ export async function createBallparkGame(options: BallparkRuntimeOptions): Promi
       if (destroyed) return
       if (movementBlocked()) {
         options.onFrame?.(false,false)
-        this.prompt.setVisible(false)
         this.character.animate(0, 0, false, 0); this.clearInput()
         for (const guide of this.guides) guide.animate(0,0,false,0)
         if (time - this.lastReport >= 150) this.report('idle')
@@ -205,8 +201,6 @@ export async function createBallparkGame(options: BallparkRuntimeOptions): Promi
       // Room exits and the C-door always win. Route-only legacy portals share object intents.
       const portalWins = Boolean(this.nearby?.target.room)
       if (portalWins) this.nearbyObject = null
-      const label = this.nearbyObject ? `${this.nearbyObject.label} · E / Enter` : this.nearby ? `${this.nearby.label} · ${this.nearby.id === 'return' ? 'R' : this.nearby.activation_key || 'E / Enter'}` : ''
-      this.prompt.setText(label).setPosition(next.x,next.y-140).setVisible(Boolean(label))
       const enterPressed = this.enterKeys.some(key => P.Input.Keyboard.JustDown(key))
       const exitPressed = P.Input.Keyboard.JustDown(this.exitKey)
       const sideDoorPressed = P.Input.Keyboard.JustDown(this.sideDoorKey)

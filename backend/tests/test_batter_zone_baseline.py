@@ -67,3 +67,17 @@ def test_missing_and_stale_references_never_fall_back_to_absolute_colors(tmp_pat
     assert result.benchmark_status == "stale" and result.cells[0].rates["whiff"].color_pr is None
     baseline.baseline_path(db).unlink()
     assert baseline.apply_benchmark(response(100), db).benchmark_status == "unavailable"
+
+
+def test_signature_tracks_pitch_content_not_video_tables_or_file_metadata(tmp_path):
+    import duckdb
+    db = tmp_path / "season.duckdb"
+    with duckdb.connect(str(db)) as conn:
+        conn.execute("CREATE TABLE pitches AS SELECT 672695 AS batter, 'R' AS game_type, 'foul' AS description")
+    before = baseline.signature(db)
+    with duckdb.connect(str(db)) as conn:
+        conn.execute("CREATE TABLE pitch_play_lookup AS SELECT 'video-1' AS play_id")
+    assert baseline.signature(db) == before
+    with duckdb.connect(str(db)) as conn:
+        conn.execute("UPDATE pitches SET description = 'swinging_strike'")
+    assert baseline.signature(db) != before

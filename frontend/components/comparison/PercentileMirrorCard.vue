@@ -87,8 +87,7 @@ function dotStyle(metric: ComparisonMetric) {
   border-radius: var(--radius-md);
   padding: 18px;
   background:
-    radial-gradient(circle at 50% 0, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 34%),
-    var(--color-surface);
+    #000;
   box-shadow: var(--shadow-md);
 }
 

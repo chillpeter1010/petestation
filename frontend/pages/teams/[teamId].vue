@@ -140,14 +140,12 @@ const teamTheme = computed(() => ({
 <style scoped>
 .team-dashboard-page {
   --team-accent: color-mix(in srgb, var(--team-primary) 82%, var(--color-text));
-  --team-panel-bg: color-mix(in srgb, var(--color-surface) 96%, var(--team-primary) 4%);
+  --team-panel-bg: #000;
   --team-panel-border: color-mix(in srgb, var(--color-border) 82%, var(--team-primary) 18%);
   min-height: 100vh;
   padding: 78px clamp(16px, 3vw, 40px) 64px;
   background:
-    radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--team-primary) 13%, transparent), transparent 30rem),
-    radial-gradient(circle at 92% 40%, color-mix(in srgb, var(--team-secondary) 9%, transparent), transparent 34rem),
-    var(--color-background);
+    #000;
 }
 
 .team-dashboard {

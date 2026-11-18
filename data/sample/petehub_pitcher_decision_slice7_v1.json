@@ -1,0 +1,302 @@
+{
+  "slice": 7,
+  "version": "decision_temporal_research_v1",
+  "years": [
+    {
+      "year": 2021,
+      "physical_pitches": 709852,
+      "scored_window": 363419,
+      "stuff_available": 362335,
+      "location_available": 362095,
+      "stuff_median": 98.15393192325449,
+      "location_median": 103.33784023057464
+    },
+    {
+      "year": 2022,
+      "physical_pitches": 708540,
+      "scored_window": 708540,
+      "stuff_available": 703011,
+      "location_available": 702960,
+      "stuff_median": 99.8463498861513,
+      "location_median": 103.70591497128642
+    },
+    {
+      "year": 2023,
+      "physical_pitches": 717945,
+      "scored_window": 717945,
+      "stuff_available": 712999,
+      "location_available": 712920,
+      "stuff_median": 100.2354278865225,
+      "location_median": 103.61387158520031
+    },
+    {
+      "year": 2024,
+      "physical_pitches": 709512,
+      "scored_window": 709512,
+      "stuff_available": 705309,
+      "location_available": 705248,
+      "stuff_median": 100.46568119388517,
+      "location_median": 103.18883577754406
+    },
+    {
+      "year": 2025,
+      "physical_pitches": 710084,
+      "scored_window": 710084,
+      "stuff_available": 704196,
+      "location_available": 704285,
+      "stuff_median": 101.00326852784126,
+      "location_median": 103.32078676537694
+    },
+    {
+      "year": 2026,
+      "physical_pitches": 714483,
+      "scored_window": 714483,
+      "stuff_available": 702036,
+      "location_available": 701979,
+      "stuff_median": 101.27311544620758,
+      "location_median": 102.74576873355335
+    }
+  ],
+  "models": [
+    {
+      "model_id": "decision_temporal_research_v1:plus:2021_h2",
+      "fold": {
+        "id": "2021_h2",
+        "train_end": "2021-07-01",
+        "score_start": "2021-07-01",
+        "score_end": "2022-01-01"
+      },
+      "protocol_sha256": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+      "train_rows": 299977,
+      "maximum_training_observed_at": 1625096706.581,
+      "maximum_label_available_at": 1625096706.581,
+      "features": {
+        "stuff": [
+          "release_speed",
+          "release_spin_rate",
+          "release_extension",
+          "release_pos_x",
+          "release_pos_z",
+          "pfx_x",
+          "pfx_z",
+          "spin_cos",
+          "spin_sin",
+          "arm_angle",
+          "prior_velo_delta",
+          "prior_hb_delta",
+          "prior_ivb_delta",
+          "pitch_type_code",
+          "throw_left"
+        ],
+        "location": [
+          "plate_x",
+          "plate_z_norm",
+          "balls_before",
+          "strikes_before",
+          "outs_before",
+          "base_state_before",
+          "pitch_type_code",
+          "throw_left",
+          "bat_left"
+        ]
+      },
+      "scales": {
+        "stuff": {
+          "mean": -4.24771944740205e-06,
+          "sd": 0.0065234432018020615
+        },
+        "location": {
+          "mean": 0.0008100250341118317,
+          "sd": 0.035322645570825234
+        }
+      },
+      "method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:plus:2022",
+      "fold": {
+        "id": "2022",
+        "train_end": "2022-01-01",
+        "score_start": "2022-01-01",
+        "score_end": "2023-01-01"
+      },
+      "protocol_sha256": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+      "train_rows": 299899,
+      "maximum_training_observed_at": 1633302425.764,
+      "maximum_label_available_at": 1633302425.764,
+      "features": {
+        "stuff": [
+          "release_speed",
+          "release_spin_rate",
+          "release_extension",
+          "release_pos_x",
+          "release_pos_z",
+          "pfx_x",
+          "pfx_z",
+          "spin_cos",
+          "spin_sin",
+          "arm_angle",
+          "prior_velo_delta",
+          "prior_hb_delta",
+          "prior_ivb_delta",
+          "pitch_type_code",
+          "throw_left"
+        ],
+        "location": [
+          "plate_x",
+          "plate_z_norm",
+          "balls_before",
+          "strikes_before",
+          "outs_before",
+          "base_state_before",
+          "pitch_type_code",
+          "throw_left",
+          "bat_left"
+        ]
+      },
+      "scales": {
+        "stuff": {
+          "mean": -3.2621005578089727e-06,
+          "sd": 0.006762179021355536
+        },
+        "location": {
+          "mean": 0.0006783659221581151,
+          "sd": 0.033947664842908926
+        }
+      },
+      "method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:plus:2023",
+      "fold": {
+        "id": "2023",
+        "train_end": "2023-01-01",
+        "score_start": "2023-01-01",
+        "score_end": "2024-01-01"
+      },
+      "protocol_sha256": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+      "train_rows": 299934,
+      "maximum_training_observed_at": 1665017081.533,
+      "maximum_label_available_at": 1665017128.617,
+      "features": {
+        "stuff": [
+          "release_speed",
+          "release_spin_rate",
+          "release_extension",
+          "release_pos_x",
+          "release_pos_z",
+          "pfx_x",
+          "pfx_z",
+          "spin_cos",
+          "spin_sin",
+          "arm_angle",
+          "prior_velo_delta",
+          "prior_hb_delta",
+          "prior_ivb_delta",
+          "pitch_type_code",
+          "throw_left"
+        ],
+        "location": [
+          "plate_x",
+          "plate_z_norm",
+          "balls_before",
+          "strikes_before",
+          "outs_before",
+          "base_state_before",
+          "pitch_type_code",
+          "throw_left",
+          "bat_left"
+        ]
+      },
+      "scales": {
+        "stuff": {
+          "mean": -3.0347422160925576e-06,
+          "sd": 0.0064969435187714475
+        },
+        "location": {
+          "mean": 0.001016983537473467,
+          "sd": 0.03295578451838884
+        }
+      },
+      "method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:plus:frozen_2024",
+      "fold": {
+        "id": "frozen_2024",
+        "train_end": "2024-01-01",
+        "score_start": "2024-01-01",
+        "score_end": "2027-01-01"
+      },
+      "protocol_sha256": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+      "train_rows": 299956,
+      "maximum_training_observed_at": 1696198687.486,
+      "maximum_label_available_at": 1696198858.767,
+      "features": {
+        "stuff": [
+          "release_speed",
+          "release_spin_rate",
+          "release_extension",
+          "release_pos_x",
+          "release_pos_z",
+          "pfx_x",
+          "pfx_z",
+          "spin_cos",
+          "spin_sin",
+          "arm_angle",
+          "prior_velo_delta",
+          "prior_hb_delta",
+          "prior_ivb_delta",
+          "pitch_type_code",
+          "throw_left"
+        ],
+        "location": [
+          "plate_x",
+          "plate_z_norm",
+          "balls_before",
+          "strikes_before",
+          "outs_before",
+          "base_state_before",
+          "pitch_type_code",
+          "throw_left",
+          "bat_left"
+        ]
+      },
+      "scales": {
+        "stuff": {
+          "mean": 9.13306092061387e-07,
+          "sd": 0.006976233213842321
+        },
+        "location": {
+          "mean": 0.0008027025844643678,
+          "sd": 0.03219227875851231
+        }
+      },
+      "method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+      "formal_replacement": false,
+      "validation_2024": {
+        "n": 705272,
+        "mean_rmse": 0.24801742346095956,
+        "location_rmse": 0.2449974820159202,
+        "location_plus_residual_stuff_rmse": 0.24499276653069368,
+        "scope": "Fixed 2024 diagnostic, no post-diagnostic tuning. No 2025/26 outcome metrics."
+      }
+    }
+  ],
+  "formal_replacement": false,
+  "method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+  "holdout_policy": "2025/2026 score/coverage only; no outcome performance selection in Slices 6–10. Existing years already examined elsewhere; not prospective.",
+  "source_only_validation": {
+    "formal_metadata_changes": 0,
+    "training_label_time_violations": 0,
+    "prior_fastball_time_violations": 0,
+    "prefix_boundary_time_violations": 0,
+    "candidate_history_time_violations": 0,
+    "duplicate_pitch_feature_keys": 0,
+    "missing_li_filled_with_one": false,
+    "individual_ranking_allowed": false
+  }
+}

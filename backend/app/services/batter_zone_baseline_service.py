@@ -18,16 +18,34 @@ MIN_DENOMINATOR = 10
 MIN_PEERS = 5
 
 
+@lru_cache(maxsize=8)
+def _pitch_fingerprint(path: str, mtime: int, size: int, wal_mtime: int, wal_size: int) -> dict:
+    import duckdb
+    from app.repositories.pitch_repository import resolve_pitch_table
+    from app.services.batter_zone_rates_service import COLUMNS
+    with duckdb.connect(path, read_only=True) as conn:
+        table = resolve_pitch_table({r[0] for r in conn.execute("SHOW TABLES").fetchall()})
+        if not table:
+            raise ValueError("Regular-season pitch table unavailable")
+        columns = {r[0] for r in conn.execute(f"DESCRIBE {table}").fetchall()}
+        fields = ', '.join(f'"{c}"' if c in columns else 'NULL' for c in ('batter', *COLUMNS))
+        # Order-independent content signature of ONLY the rows/columns used by
+        # zone rates. Video lookup writes must not invalidate the PR population.
+        count, xor, total = conn.execute(f"SELECT count(*), bit_xor(hash({fields})), sum(hash({fields})::HUGEINT) FROM {table} WHERE game_type = 'R'").fetchone()
+    # Compare the actual content hashes, not a producer's patch-version label.
+    return dict(rows=count, xor=str(xor), total=str(total))
+
+
 def signature(db: Path) -> dict:
-    from app.services.batter_zone_rates_service import aggregate_zone_rates, COLUMNS, METRICS
+    from app.services.batter_zone_rates_service import aggregate_zone_rates, read_rows, COLUMNS, METRICS
     from app.services.batter_service import _count_plate_appearances
     from app.services.discipline_service import add_discipline_flags, SWING_EVENTS, WHIFF_EVENTS, HIT_EVENTS, NON_AB_EVENTS, IN_PLAY_EVENTS, FOUL_EVENTS, CALLED_STRIKE_EVENTS
-    algorithm = inspect.getsource(aggregate_zone_rates) + inspect.getsource(_count_plate_appearances) + inspect.getsource(add_discipline_flags) + repr((COLUMNS, METRICS))
+    algorithm = inspect.getsource(aggregate_zone_rates) + inspect.getsource(read_rows) + inspect.getsource(_count_plate_appearances) + inspect.getsource(add_discipline_flags) + repr((COLUMNS, METRICS))
     algorithm += repr([sorted(s) for s in (SWING_EVENTS, WHIFF_EVENTS, HIT_EVENTS, NON_AB_EVENTS, IN_PLAY_EVENTS, FOUL_EVENTS, CALLED_STRIKE_EVENTS)])
     wal = db.with_suffix(db.suffix + ".wal")
-    return {"database": str(db.resolve()), "mtime_ns": db.stat().st_mtime_ns, "bytes": db.stat().st_size,
-            "wal_mtime_ns": wal.stat().st_mtime_ns if wal.exists() else 0,
-            "wal_bytes": wal.stat().st_size if wal.exists() else 0,
+    stat, wal_stat = db.stat(), wal.stat() if wal.exists() else None
+    return {"database": str(db.resolve()),
+            "pitches": _pitch_fingerprint(str(db), stat.st_mtime_ns, stat.st_size, wal_stat.st_mtime_ns if wal_stat else 0, wal_stat.st_size if wal_stat else 0),
             "algorithm_sha256": hashlib.sha256(algorithm.encode()).hexdigest()}
 
 

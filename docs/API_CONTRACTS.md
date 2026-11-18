@@ -1,5 +1,81 @@
 # API Contracts
 
+## Swing Timing 回歸研究區（2026-11-15）
+
+既有 `GET /api/batters/lab/swing-timing` 新增可選 `include_regression=false`；一般排行榜不執行額外回歸軸聚合。使用者展開「指標散點圖與回歸分析」時才傳 true，原查詢條件與最低 PA／Swing 門檻完整保留。回應 leaderboard 新增 `axis_metrics`／`axis_samples`（一般查詢為空），filters 新增 `axis_options`：保留 Stuff Attack 原 20 軸，加 21 項 K／BB 與三維對位軸，再加 Age／Season PA／Filtered Swings／Filtered Terminal PA 共 45 個不重複選項。此區不套用 Stuff Attack 的 Stuff+ 分箱門檻，原 Stuff Attack 功能不改。
+
+事件軸依同年度正式 regular-season DB 精確鍵去重、球種／左右投打／打者球隊／投手球隊篩選；competitive 棒速門檻來自全季，再於選定條件內聚合。共用原 `_add_metric_flags` 情境定義（球種、球數、站側、投手手別、粗位置）與相同 Adjusted 置中公式；以向量化群組統計避免逐球員重複掃描。對位、Whiff、棒速、Ideal、K／BB 等重疊軸直接沿用本排行榜數值；距離／時間偏差以表格相同的絕對幅度供回歸，Attack Angle／RV／K−BB 等有方向的值保留符號。無法取得的軸維持缺值，指定對方球隊時 X／Y／Z 對位仍依既有契約缺值。
+
+前端共用 `linearRegression.ts` 之單變量 OLS／Pearson r／R²／斜率／Student-t 雙尾 p；使用實際值、所有符合條件與姓名搜尋且 X／Y 有限的球員，不截前 200 名、不以缺值填零、不按 PA 加權。顯示合格／有效／排除樣本數；同軸或少於三人停用、無變異提示不能估計。換條件或軸清除舊結果，使用 request ID 拒絕過期回應，關閉折疊區卸載。原排行榜 PR／上色不改回歸資料尺度。16 項相關 Python 測試與 JS 數學檢查完成；正式 DB 首次聚合約 2.575 秒、同條件快取約 0.004 秒，不含瀏覽器。無畫面驗收。
+
+## Swing Timing 五項篩選統計（2026-11-15）
+
+`/batters/lab/swing-timing` 的 Horizontal／Timing／Vertical 共用主欄位在 Swing 後、Avg Miss Dist. 前加入 Avg Bat Speed、Ideal Bat Angle%、K%、BB%、K−BB%。沿用實際值／PR／Heatmap 與欄頭排序，表格使用可水平捲動的 1572px 最小寬度並填滿較寬容器；畫面待使用者驗收。
+
+既有 timing API 的 leaderboard 新增 nullable `ideal_attack_angle_pct`／`k_pct`／`bb_pct`／`k_bb_pct`，填入既有 `avg_bat_speed`，並提供 `context_pa`／`bat_speed_swings`／`attack_angle_swings`。資料來自正式球季逐球 DB，以球種群／球種、投手手別、打者站側、打者球隊、投手球隊精確篩選；不使用整季排行榜 K／BB 替代條件結果。原 PA 欄與最低 PA 篩選仍是整季樣本，欄位提示另顯示新增數據的實際分母。
+
+Avg Bat Speed 沿用 competitive swings 棒速口徑：門檻為球員整季非觸擊揮棒棒速第 10 百分位，或棒速≥60 mph 且擊球初速≥90 mph，再於當前條件內取合格棒速平均。Ideal Bat Angle% 沿用專案 Stuff Attack 的 Attack Angle 5°–20°（含邊界），分母為條件內有該欄位的非觸擊揮棒，並非 launch angle 或整季比例。K／BB 分母為條件內終結 PA（球種依最後一球），保留沒有追蹤的 PA，排除 truncated_pa；BB 含 intent_walk、不含 HBP，K 含 strikeout_double_play，K−BB 為百分點差。精確投球鍵去重，未知來源／零分母留 null，不從 summary 對位比例推算。新增 SQL 聚合依來源 DB mtime／size／WAL 版本快取；summary model 用 copy 合併，避免污染 Savant 既有快取。
+
+實際 DB 2026 李灝宇：全條件棒速 71.348、Ideal 51.033%、K 23.901%、BB 8.242%、K−BB 15.659%（364 PA）；FF＋R 棒速 70.450、Ideal 30.275%、K 27.119%、BB 22.034%、K−BB 5.085%（59 PA）。指定 NYY 同樣精確篩選，但原 X／Y／Z summary 指標仍遵循既有 event 模式缺值契約。
+
+## Batter Period 篩選、逐球分數與影片（2026-11-15）
+
+`pitch_result=Hit` 僅保留該球形成 single／double／triple／home_run 的終結球；`pa_result=Hit` 先依日期窗內終結結果選出安打 PA，再與球種／球數／左右手等逐球條件取交集，保留該 PA 中符合條件的球。AVG 仍僅由面板內終結打數 H／AB 計算，不能把最終 PA 結果回填到前面的每一球；無終結 AB 顯示缺值而非零。
+
+比較頁讀取正式逐球 Stuff／Location 快取，依既有精確投球鍵對位，未覆蓋仍留缺值，不訓練或補造分數。Discipline rows 保留影片識別／URL、投球鍵、balls／strikes／is_swing／zone，點選事件由 ZonePanel → Section → Board 傳到 PeriodDiscipline，使用既有 ComparisonPeriodVideos 解析播放器；換篩選清空選球。這不代表遠端影片保證可播放。Null 進階分數不轉成 0。
+
+同球員年度來源快取最多 8 組、120 秒時間桶，依來源 DB／WAL、分數快取／WAL 與 Stuff metadata 的路徑、mtime、size 失效；回傳 copy 防止篩選污染。面板 flags 每次資料集只計一次，不變更統計口徑。2026 李灝宇（701678）6/12 前 0-0：87 球，終結 AB 8／H 0；PA Hit 保留 17 顆 0-0 球，Pitch Hit 為 0。該 87 球皆有正式 Stuff／Location／影片映射。量測同一服務查詢原約 1.713 秒，修改後冷載 1.610 秒、重複 0.703 秒；不含 HTTP／瀏覽器渲染。人工畫面驗收待使用者。
+
+## In game 熱圖改用 Batter Personal 逐球平滑（2026-11-15）
+
+使用者指定直接共用 Batter Personal 熱圖，預設 Swing%／Heatmap Blend=100%。Game／Pitcher Personal In game 改讀既有 `GET /api/batters/personal/discipline` 的 `tables.location_points`；該表新增 `p_throws`／`stand` 供前端正確篩選，既有列與統計不變。使用所選年度整季打者資料，按投手手別及當前打擊側篩選，可選僅看當前球數；這是整季描述圖，不宣稱當時已知的情蒐預測。
+
+`StrikeZoneScatter` 與 In game 共用 `pitchLocationHeatmap.ts` 的原有 64×52 逐球高斯平滑、bandwidth、密度淡出及 Personal 配色。Swing% 是局部加權揮棒比例，另可選 Density／Bat speed，不讀取舊九宮格／17 區 PR 基準。3D 依原 plate_x／plate_z 投影，僅反轉一次 Personal 的顯示 X，熱圖延伸範圍依實際平滑區域建立，保留真實好球帶邊界。原始投球、球路、影片與 Pitch Scout API 不變；舊分區 API 保留但不再供此圖上色。未做畫面／瀏覽器驗收。
+
+## Pitcher Decision 歷史特徵 Slices 6–10（2026-11-14）
+
+無新增 HTTP API。Lab 快照新增 `temporalResearch`，由 `data/sample/petehub_pitcher_decision_slice6_v1.json` 至 `slice10_v1.json` 摘要產生，包含凍結參考期、研究方法、各年覆蓋、2024 固定驗證與限制。頁面不執行補抓／訓練，不提供行動建議；新增畫面只由使用者驗收。
+
+獨立離線研究根目錄為 `data/research/decision_support_temporal_20261114/`；正式 Plus／Stamina／Performance State 保留。`observations`、`features`、`scored` 是訓練／稽核用倉儲，含結果欄位，不可整列傳入決策模型。下游只能明列選用以下契約：
+
+- `pitch_features_YEAR.parquet`：官方 event ID、投手／打者 ID、投球完成時間、物理／位置前置欄位、獨立研究 Plus、模型與 cutoff、來源／角色／打者身分一致性、暖機或缺值原因；不含全場結束、失分或下一狀態。
+- `decision_states_YEAR.parquet`：每個決策僅接嚴格早於當下的已觀測 prefix；Quality／Physical／Command 各有分數、近似 80% 抽樣區間、收縮權重、模型與支援狀態。SP 至少 35 球、RP 至少 10 球，>8h 中斷須重新暖機；本版 SP 評到 100 球、RP 評到 60 球，超出範圍決策保留缺值。`reliability` 是 n/(n+20) 收縮權重，非校準正確機率。三項分開，沒有生理電量百分比。
+- `context_features_YEAR.parquet`：每個官方決策一列，包括暖機列；研究中性 WE、收縮 RE、PA-LI、參考樣本／回退旗標及模型 cutoff。不可靠壘包或時間保留缺值，缺 LI 不補 1。研究 PA-LI 是過去完成打者轉移下的預期絕對 WE 波動，非 FanGraphs 精確復刻。
+- `candidate_state_priors_YEAR.parquet`：候選在本次登板前已結束登板的最後觀測狀態；`prior_state_available_at=max(退出事件時間, 納入投球的完成時間)` 必須嚴格小於 cutoff。不是本場前五球、準備度預測或實際可用性證明；`individual_ranking_allowed=false`。
+- `pitch_labels_YEAR.parquet`／`context_labels_YEAR.parquet`：另存實現結果及標籤可用時間。模型參考下的 WPA／守方 RE24 不等於換人因果效果；原始來源 WPA 保留在既有 play 表。
+
+2021 上半年無可用研究 Plus／參考模型；prefix 模型另以 7–8 月暖機至 9 月。2024–2026 均使用截至 2023 年底的凍結模型，2025／2026 僅評分與覆蓋，未以其結果挑選模型。研究分數 100 是過去參考中心，當年中位數不保證 100；110 不代表改善 10%。狀態收縮後的當年標準差仍可不同。
+
+`validation.json` 與 `manifest.json` 保存時間／唯一性／正式 metadata 保留檢查及產物 SHA。2024 驗證僅為參考模型與已觀測 prefix 的描述；下一段預測、xWPA／xRE24 行動模型、因果效果、個別牛棚排名與預警晉升仍關閉。Slice 6 另修正代跑誤改當下打者的 parser，僅更新事件／決策 `batter_id`；剩餘來源身分歧異另列，後續對戰研究須確認或排除。
+
+## Pitcher Decision 資料層 Slices 2–5（2026-11-14）
+
+無新增 HTTP API。Lab build-time 快照新增 `dataFoundation`，由 `data/sample/petehub_pitcher_decision_slice2_v1.json` 至 `slice5_v1.json` 產生；只包含修復摘要、逐年事件／負荷／名義候選覆蓋與限制，不載入大型 Parquet 或執行下載／訓練。
+
+離線資料在 `data/research/decision_support_pipeline_20261114/`：`events_YEAR` 是官方 eventIndex 鍵（實投與非投球事件分開）；`plays_YEAR` 是單一結果歸屬；`decisions_YEAR` 是前置局面與規則狀態；`appearances_YEAR` 保留零球登板；`roster_YEAR` 是完整比賽名單，非事後出賽名單；`runners_YEAR` 保留官方 runner movement／responsible pitcher（僅結果用途）。結果 WPA／RE 不複製到每球或前置特徵；無法定價的相鄰 WE／RE 邊界保留 null。時鐘與來源修訂造成的 Statcast／官方逐球對位不得僅依 pitch_number 假定相同。
+
+`workload_YEAR` 以 UTC 決策時點只計 t'<t 的全隊全角色實投；1／3／7／14 日為滾動小時窗。`workload_sessions`／`closed_role_history` 處理同日多場、>8h 中斷、連續日及封閉後才可知的登板總用球／角色歷史。早期資料、未知時間／壘包與 3 場來源時鐘異常保留旗標。
+
+`bullpen_sets_YEAR`／`bullpen_candidates_YEAR` 是名義候選及其過去負荷。72 組 active-roster 指定日期來源覆核不等於全日期驗證；其餘為 `official_game_roster_date_unverified`，衝突／不足與非法／已使用／被換下者拒絕。熱身、醫療及精確同日異動均未知；`warmup_available`／`body_available` 保留 null，`individual_ranking_allowed=false`。這些資料不能宣稱完整的當下可用牛棚或最佳決策。
+
+## Pitcher Decision Lab 規劃快照（2026-11-12）
+
+Slice 1 更新：快照新增 `sourceAudit`，來源為版本化 `data/sample/petehub_pitcher_decision_slice1_audit_v1.json`，展示逐年完成賽程／本機 IDs／既有 feed／實投鍵差異／官方換投事件及兩場待查清單。此區是資料核對結果，不提供下載或修復動作；六份公開 schedule GET 不使用 API key／cookie。完整逐場問題、逐日覆蓋與來源 SHA 保存在 `data/research/decision_support_slice1_20261112/`，不由頁面讀取本機任意檔案。
+
+`/lab/decision-support` 是研究規劃與離線結果摘要頁，由 `/lab?area=pitcher` 的 Pitcher Decision Lab 入口進入。頁面沒有新增 API、下載、模型訓練或預警執行功能；離線研究進度見上述 Slices 契約，不修改既有授權。
+
+唯一 Slice 狀態來源為 `PROJECT_TRACKER.json` 的 `pitcher-decision-support`。執行 `backend/scripts/export_pitcher_decision_plan.py` 會驗證依賴順序，產生 `frontend/data/pitcherDecisionPlan.json` 的 build-time 規劃／覆蓋快照及 `docs/PITCHER_DECISION_SUPPORT.md`。資料是 2026-11-12 本機例行賽盤點；WPA／RE24／LI、逐球快取與合格先發場次有各自分母，不代表正式因果訓練資料。缺年度單場成績檔保留 null。未來模型 API 於相應 Slice 先定義契約再實作。
+
+## In game prior-date context / Pitch scout v1（2026-11-09）
+
+`GET /api/batters/personal/pitch-scout` 沿既有 batters API 授權。必要 query：`year,batter_id,pitcher_hand=L|R|All,stand=L|R,before_date=YYYY-MM-DD,balls=0..3,strikes=0..2`；選填 `previous_type,previous_result`，首球兩者為 `__first__`，相鄰前球不在未篩選來源中則 `__missing__`。**不接收當球球種、結果或落點。**
+
+回應 `pitch_scout_context_v1`／`mode=historical_conditional_reference`，只讀所選年度正規賽、`game_date < before_date`（整個當日排除）。固定打者／投手手別／打者站側，先以 game／PA／pitcher／pitch_number 精確相鄰建立前球，缺號不跳接；排除 PO／IN、automatic penalties 與未知描述。打者過去完成 PA>30，採樣至少30球：exact count＋previous type/result → exact count＋previous family → exact count → broad count（兩好球優先、打者領先、投手領先、平手／淺球數）。每層樣本不足才退；全不足明示 insufficient_history，不補聯盟或假球員資料。
+
+`heatmap` 只含 Swing／HardHit／Whiff／Contact／Called Strike 五率，沿原 Discipline flags／分母；HardHit只計有終局事件且有效EV的fair BBE。17區、17吋與逐球高度正規化、缺位置與高度fallback數保留。`benchmark_status=context_rates`：**絕對比率，不是PR**；每格分母至少5才上色，Whiff／Called Strike反向，缺格中性灰。原整季PR API不改，前端可切回。
+
+Scout 回傳條件樣本數、Swing／Take百分比、歷史揮棒球種family分布、集中區標靶（該區至少3次揮棒及分母）。標靶是zone/group中心，非實測瞄準點；位置不隨當球落點移動，環的收縮僅由原球路progress驅動。未訓練或驗證預測模型，不輸出個人意圖、最佳配球、早晚／切球上下緣。回應包含 cutoff、tier、source_version；後端來源DB／WAL版本鍵LRU，前端64項／120秒、同請求合併、有限下一球預讀與late-response guard。冷情境未就緒時Play等待；Pause／切球／離頁取消待播，不修改歷史球路。原側欄Sequence仍是全季描述性branch，非此prior-date預測器。
+
 ## In game exact-count season context（2026-11-05）
 
 `GET /api/games/matchup-context?year=2026&pitcher_id=...&batter_id=...&batter_side=L&pitcher_hand=R&balls=1&strikes=2` 沿用現有 API 授權。year 2021–2100、正球員 ID、side／hand `L|R|unknown`、balls 0–3、strikes 0–2；固定路徑先於 game_pk 動態路徑宣告。
@@ -199,6 +275,8 @@ Returns:
 - `tables.stand_split`: L/R batter split table
 
 #### `GET /api/personal/sequence`
+
+2026-11-07: optional `previous_pitch` conditions anchor pitches on the immediately preceding `pitch_number` in the same game/PA, annotated before side/count/result filters. `__first__` selects pitch number 1 (no previous pitch); omitted/`All` preserves existing behavior. Gaps remain unavailable and do not borrow an earlier pitch. In game uses the pitcher's season scope plus current `stand`, exact `count` and this previous-pitch condition; `condition_count` is the current count and `condition_pitch=All`. `conditioned_count_pitch_mix` uses the existing Conditioned branch rule: retain matched anchors and their actual downstream PA rows/count descendants, without re-applying the previous-pitch predicate to those descendants. It does not filter on the currently selected pitch type or treat the distribution as a prediction.
 
 Query:
 

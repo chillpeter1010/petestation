@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.api.routes.motion_review import router as motion_review_router
 
 from app.api.schemas.common import AnalysisResponse
 from app.api.schemas.personal import PersonalOverviewResponse
@@ -16,6 +17,7 @@ from app.services.personal_service import (
 )
 
 router = APIRouter()
+router.include_router(motion_review_router, prefix="/motion-review")
 
 
 @router.get("/overview", response_model=PersonalOverviewResponse)
@@ -123,6 +125,7 @@ def read_personal_sequence(
     condition_pitch: str | None = None,
     detail_count: str | None = "0-0",
     followup_pitch: str | None = None,
+    previous_pitch: str | None = None,
 ) -> AnalysisResponse:
     return get_personal_sequence(
         year=year,
@@ -140,6 +143,7 @@ def read_personal_sequence(
         condition_pitch=condition_pitch,
         detail_count=detail_count,
         followup_pitch=followup_pitch,
+        previous_pitch=previous_pitch,
     )
 
 

@@ -1,3 +1,22 @@
+export interface PlayerBio {
+  contract_version: 'player_bio_v1'
+  player_id: number
+  name: string | null
+  height_raw: string | null
+  height_inches: number | null
+  height_m: number | null
+  weight_lb: number | null
+  weight_kg: number | null
+  bats: 'R' | 'L' | 'S' | null
+  throws: 'R' | 'L' | 'S' | null
+  source: string
+  source_url: string
+  retrieved_at: string | null
+  temporal_scope: string
+  freshness: 'fresh' | 'stale' | 'unavailable'
+  warning: string | null
+}
+
 export interface BatterZoneRate {
   numerator: number
   denominator: number
@@ -832,6 +851,15 @@ export interface SwingTimingLeaderboardRow {
   avg_under_distance: number | null
   sample_status: string
   avg_bat_speed: number | null
+  ideal_attack_angle_pct: number | null
+  k_pct: number | null
+  bb_pct: number | null
+  k_bb_pct: number | null
+  context_pa: number
+  bat_speed_swings: number
+  attack_angle_swings: number
+  axis_metrics?: Record<string, number | null>
+  axis_samples?: Record<string, number>
   season_bat_speed: number | null
   bat_speed_delta: number | null
   fast_swing_pct: number | null
@@ -859,6 +887,7 @@ export interface SwingTimingResponse {
   league: SwingTimingLeaderboardRow | null
   leaderboard: SwingTimingLeaderboardRow[]
   filters: {
+    axis_options?: Array<{ key: string; label: string; unit: string; population: string; description: string }>
     available_years: number[]
     pitch_groups: Array<{ value: string; label: string }>
     pitch_type_groups: Array<{ key: string; label: string; options: Array<{ value: string; label: string }> }>

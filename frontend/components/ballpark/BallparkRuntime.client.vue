@@ -256,10 +256,10 @@ function downloadReport(){
   overflow: hidden;
   border: 1px solid #3a414c;
   border-radius: 14px;
-  background: #070707;
+  background: #000;
   box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
 }
-.ballpark-runtime__diagnostics{padding:14px;color:#d7e4df;background:#111c19;border-top:1px solid #46554a;font-size:13px}.ballpark-runtime__diagnostics summary{cursor:pointer;font-weight:800}.diagnostic-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}.diagnostic-actions button{min-height:42px;padding:8px 12px;border:1px solid #d49d43;border-radius:6px;background:#1b2824;color:#ffe3af;cursor:pointer}.ballpark-runtime__diagnostics a{color:#ffc668}
+.ballpark-runtime__diagnostics{padding:14px;color:#d7e4df;background:#000;border-top:1px solid #46554a;font-size:13px}.ballpark-runtime__diagnostics summary{cursor:pointer;font-weight:800}.diagnostic-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}.diagnostic-actions button{min-height:42px;padding:8px 12px;border:1px solid #d49d43;border-radius:6px;background:#000;color:#ffe3af;cursor:pointer}.ballpark-runtime__diagnostics a{color:#ffc668}
 
 .ballpark-runtime__viewport {
   position: relative;
@@ -290,7 +290,7 @@ function downloadReport(){
   padding: 28px;
   color: #f3efe3;
   text-align: center;
-  background: radial-gradient(circle, rgb(36 75 43 / 55%), rgb(7 7 7 / 96%) 58%);
+  background: #000;
 }
 
 .ballpark-runtime__state p,
@@ -337,7 +337,7 @@ function downloadReport(){
   border-top: 1px solid #3a414c;
   padding: 12px;
   color: #f3efe3;
-  background: #141414;
+  background: #000;
 }
 
 .ballpark-runtime__hud div {
@@ -375,7 +375,7 @@ function downloadReport(){
   min-height: 48px;
   padding: 0;
   color: #f3efe3;
-  background: rgb(20 20 20 / 90%);
+  background: #000;
   touch-action: none;
 }
 
@@ -389,7 +389,7 @@ function downloadReport(){
   margin: 0;
   padding: 0 14px 14px;
   color: #aab2bd;
-  background: #141414;
+  background: #000;
   font-size: 13px;
 }
 

@@ -124,7 +124,7 @@ function playerLink(row: Record<string, unknown>) {
     <ComparisonPageHeader
       eyebrow="Pitcher Lab · Run & leverage"
       title="RE24 & Leverage Lab"
-      description="A 2025–2026 test bench for game-state value, leverage, reference validation, and reliever rankings."
+      description=""
       back-to="/lab"
       back-label="Pitcher Lab"
     />
@@ -132,6 +132,7 @@ function playerLink(row: Record<string, unknown>) {
     <p v-if="errorMessage" class="error-panel">{{ errorMessage }}</p>
 
     <section class="calculator-shell">
+      <div class="scenario-column">
       <form class="scenario-panel" @submit.prevent="calculate">
         <header class="section-header">
           <div><span>Scenario calculator</span><h2>Set entry and exit states</h2></div>
@@ -162,39 +163,40 @@ function playerLink(row: Record<string, unknown>) {
         </div>
       </form>
 
+      <section v-if="result" class="state-output panel" aria-label="Entry and exit context">
+        <div class="state-output-grid">
+          <article v-for="side in stateSides" :key="side">
+            <h3>{{ side === 'entry' ? 'Entry context' : 'Exit context' }}</h3>
+            <dl>
+              <div><dt>Win expectancy</dt><dd>{{ stateValue(result[side], 'win_expectancy') }}</dd></div>
+              <div><dt>LI</dt><dd>{{ stateValue(result[side], 'li') }}</dd></div>
+              <div><dt>Run expectancy</dt><dd>{{ stateValue(result[side], 'run_expectancy') }}</dd></div>
+              <div><dt>Samples</dt><dd>{{ display(result[side].state_samples, 0) }}</dd></div>
+            </dl>
+          </article>
+        </div>
+      </section>
+      </div>
+
       <aside class="result-panel" aria-live="polite">
         <div class="result-hero">
           <span>Estimated WPA</span><strong>{{ display(wpa) }}</strong><b>{{ outcome }}</b>
-          <small>{{ result?.model_version || 'Waiting for model' }} · through {{ result?.data_as_of || '—' }}</small>
         </div>
         <div v-if="result" class="metric-grid">
-          <article v-for="metric in result.metrics.filter(item => item.key !== 'result')" :key="metric.key">
+          <article v-for="metric in result.metrics.filter(item => item.key !== 'result' && item.key !== 'wpa')" :key="metric.key">
             <span>{{ metric.label }}</span><strong>{{ display(metric.value) }}</strong>
             <em v-if="metric.status !== 'estimated'">{{ metric.status.replace('_', ' ') }}</em>
-            <small>{{ metric.note }}</small>
           </article>
         </div>
       </aside>
     </section>
 
-    <section v-if="result" class="state-output panel">
-      <header class="section-header"><div><span>Matched model states</span><h2>Entry vs exit context</h2></div><small>Nearest state is used when an exact state has no sample.</small></header>
-      <div class="state-output-grid">
-        <article v-for="side in stateSides" :key="side">
-          <h3>{{ side === 'entry' ? 'Entry' : 'Exit' }}</h3>
-          <dl><div><dt>Win expectancy</dt><dd>{{ stateValue(result[side], 'win_expectancy') }}</dd></div><div><dt>LI</dt><dd>{{ stateValue(result[side], 'li') }}</dd></div><div><dt>Run expectancy</dt><dd>{{ stateValue(result[side], 'run_expectancy') }}</dd></div><div><dt>Samples</dt><dd>{{ stateValue(result[side], 'state_samples') }}</dd></div></dl>
-        </article>
-      </div>
-      <p>{{ result.warnings.join(' ') }}</p>
-    </section>
-
     <section class="validation-section panel">
-      <header class="section-header"><div><span>Regression check</span><h2>Local estimate vs collected league table</h2></div><small>{{ year }} · matched by MLBAM ID</small></header>
+      <header class="section-header"><div><span>Regression check</span><h2>Local estimate vs collected league table</h2></div><small>{{ year }}</small></header>
       <div class="validation-cards">
         <article v-for="item in validationHighlights" :key="item.metric"><span>{{ item.label }} R²</span><strong>{{ display(item.value) }}</strong></article>
       </div>
       <DataTable title="Validation diagnostics" :table="validationTable" :max-rows="30" />
-      <p class="method-note">Linear diagnostics compare the raw local estimate with the collected reference; the regression is not used to force-fit leaderboard values. 2026 counting stats may use different cutoff dates.</p>
     </section>
 
     <section class="leaderboard-section panel">
@@ -216,14 +218,79 @@ function playerLink(row: Record<string, unknown>) {
         headshot-id-key="player_id"
         :link-to="playerLink"
       />
-      <div v-if="overview" class="freshness-note">
-        <span>Local data through {{ overview.data_as_of || '—' }}</span><span>Reference file updated {{ overview.reference_updated_at?.slice(0, 10) || '—' }}</span><span>{{ overview.model_version }}</span><span>{{ overview.runs_per_win }} runs / win</span>
-      </div>
-      <p v-if="overview?.warnings.length" class="method-note">{{ overview.warnings.join(' ') }}</p>
     </section>
   </main>
 </template>
 
 <style scoped>
-.leverage-page{display:grid;gap:16px;min-width:0}.calculator-shell{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:14px;align-items:start}.scenario-panel,.result-panel,.panel{border:1px solid var(--color-border);border-radius:0;background:var(--color-surface);box-shadow:var(--shadow-sm);min-width:0}.scenario-panel{display:grid;gap:18px;padding:20px}.section-header{display:flex;align-items:center;justify-content:space-between;gap:14px}.section-header span,.result-hero>span,.validation-cards span{color:var(--color-primary);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.section-header h2{margin:4px 0 0;font-size:22px}.section-header small{color:var(--color-muted-text)}label{display:grid;gap:6px;color:var(--color-muted-text);font-size:11px;font-weight:850;text-transform:uppercase}select,input[type='number'],input[type='search']{min-height:41px;border:1px solid var(--color-border);border-radius:0;padding:0 10px;color:var(--color-foreground);background:var(--color-background);font:inherit}.year-control{min-width:120px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}fieldset{min-width:0;margin:0;border:1px solid var(--color-border);border-radius:0;padding:14px}legend{padding:0 7px;color:var(--color-foreground);font-weight:900}.input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.bases{display:flex;align-items:center;gap:12px;margin-top:14px;padding:10px;border:1px solid var(--color-border);background:var(--color-background)}.bases>span{margin-right:auto;color:var(--color-muted-text);font-size:11px;font-weight:900;text-transform:uppercase}.bases label{display:flex;align-items:center;gap:5px;color:var(--color-foreground)}input[type='checkbox']{accent-color:var(--color-primary)}.form-actions{display:flex;justify-content:flex-end;gap:10px}.form-actions button{min-height:44px;border:1px solid var(--color-primary);border-radius:0;padding:0 16px;color:var(--color-on-primary);background:var(--color-primary);font-weight:900;cursor:pointer}.form-actions button.secondary{color:var(--color-foreground);background:transparent;border-color:var(--color-border)}button:disabled{opacity:.55;cursor:wait}.result-panel{overflow:hidden}.result-hero{min-height:230px;display:grid;place-items:center;align-content:center;gap:8px;padding:24px;background:radial-gradient(circle at 50% 15%,color-mix(in srgb,var(--color-primary) 20%,transparent),transparent 52%)}.result-hero>strong{font:800 clamp(56px,7vw,92px)/1 var(--font-mono)}.result-hero>b{padding:6px 11px;border:1px solid var(--color-primary);color:var(--color-primary);font-size:14px;text-transform:uppercase}.result-hero small{color:var(--color-muted-text)}.metric-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--color-border)}.metric-grid article{min-height:132px;display:grid;align-content:start;gap:4px;padding:13px;border-right:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}.metric-grid article:nth-child(even){border-right:0}.metric-grid span{color:var(--color-muted-text);font-size:11px;font-weight:900;text-transform:uppercase}.metric-grid strong{font:800 22px var(--font-mono)}.metric-grid em{width:max-content;padding:2px 5px;color:var(--color-primary);background:color-mix(in srgb,var(--color-primary) 10%,transparent);font-size:9px;font-style:normal;text-transform:uppercase}.metric-grid small{color:var(--color-muted-text);font-size:10px;line-height:1.4}.panel>.section-header{padding:16px 18px;border-bottom:1px solid var(--color-border)}.state-output-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}.state-output-grid article{border:1px solid var(--color-border);padding:14px}.state-output-grid h3{margin:0 0 10px}.state-output dl{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin:0;background:var(--color-border)}.state-output dl div{padding:10px;background:var(--color-background)}dt{color:var(--color-muted-text);font-size:10px;text-transform:uppercase}dd{margin:4px 0 0;font:800 16px var(--font-mono)}.state-output>p,.method-note{margin:0;padding:0 18px 16px;color:var(--color-muted-text);font-size:12px;line-height:1.55}.validation-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;padding:16px;background:var(--color-border)}.validation-cards article{display:grid;gap:7px;padding:14px;background:var(--color-background)}.validation-cards strong{font:800 28px var(--font-mono)}.filters{display:grid;grid-template-columns:180px 160px minmax(220px,1fr) 160px;gap:10px;padding:14px;border-bottom:1px solid var(--color-border)}.disabled{opacity:.45}.freshness-note{display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 18px;border-top:1px solid var(--color-border);color:var(--color-muted-text);font-size:11px}.loading-panel{padding:28px;color:var(--color-muted-text)}.error-panel{margin:0;padding:15px;border:1px solid #c84b45;border-radius:0;color:#ff9d96;background:rgba(190,55,45,.1)}.validation-section :deep(.data-table-wrap),.leaderboard-section :deep(.data-table-wrap){border-right:0;border-left:0;border-radius:0}.leaderboard-section :deep(.table-scroll){max-height:650px}.leaderboard-section :deep(table){min-width:1700px}.leaderboard-section :deep(th),.leaderboard-section :deep(td){white-space:nowrap}.leaderboard-section :deep(th:nth-child(1)),.leaderboard-section :deep(td:nth-child(1)){position:sticky;left:0;z-index:2;background:var(--color-surface)}.leaderboard-section :deep(th:nth-child(2)),.leaderboard-section :deep(td:nth-child(2)){position:sticky;left:48px;z-index:2;min-width:190px;background:var(--color-surface)}.leaderboard-section :deep(th:nth-child(-n+2)){z-index:4}@media(max-width:1000px){.calculator-shell{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.validation-cards{grid-template-columns:1fr 1fr}}@media(max-width:680px){.state-grid,.state-output-grid{grid-template-columns:1fr}.input-grid{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.state-output dl{grid-template-columns:1fr 1fr}.section-header{align-items:flex-start;flex-direction:column}.year-control{width:100%}}
+.leverage-page{--leverage-number-font:var(--font-mono,ui-monospace,SFMono-Regular,Consolas,monospace);display:grid;gap:20px;min-width:0;font-size:16px}
+.leverage-page :deep(.comparison-page-header p){display:none}
+.calculator-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,.8fr);gap:18px;align-items:start}
+.scenario-column{display:grid;gap:16px;min-width:0}
+.scenario-panel,.result-panel,.panel{border:1px solid var(--color-border);border-radius:0;background:var(--color-surface);box-shadow:var(--shadow-sm);min-width:0}
+.scenario-panel{display:grid;gap:22px;padding:24px}
+.section-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.section-header span,.result-hero>span,.validation-cards span{color:var(--color-primary);font-size:14px;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+.section-header h2{margin:6px 0 0;font-size:26px;line-height:1.25}
+.section-header small{color:var(--color-muted-text);font-size:16px}
+label{display:grid;gap:8px;color:var(--color-muted-text);font-size:16px;font-weight:850;text-transform:uppercase}
+select,input[type='number'],input[type='search']{min-width:0;width:100%;min-height:50px;border:1px solid var(--color-border);border-radius:0;padding:0 12px;color:var(--color-foreground);background:var(--color-background);font:inherit;font-size:18px;box-sizing:border-box}
+.year-control{min-width:150px}
+.state-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+fieldset{min-width:0;margin:0;border:1px solid var(--color-border);border-radius:0;padding:18px}
+legend{padding:0 8px;color:var(--color-foreground);font-size:20px;font-weight:900}
+.input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.bases{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px;padding:12px;border:1px solid var(--color-border);background:var(--color-background)}
+.bases>span{margin-right:auto;color:var(--color-muted-text);font-size:15px;font-weight:900;text-transform:uppercase}
+.bases label{display:flex;align-items:center;gap:6px;color:var(--color-foreground);white-space:nowrap}
+input[type='checkbox']{width:18px;height:18px;margin:0;accent-color:var(--color-primary)}
+.form-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px}
+.form-actions button{min-height:50px;border:1px solid var(--color-primary);border-radius:0;padding:0 20px;color:var(--color-on-primary);background:var(--color-primary);font-size:17px;font-weight:900;cursor:pointer}
+.form-actions button.secondary{color:var(--color-foreground);background:transparent;border-color:var(--color-border)}
+button:disabled{opacity:.55;cursor:wait}
+.result-panel{overflow:hidden}
+.result-hero{min-height:180px;display:grid;place-items:center;align-content:center;gap:14px;padding:24px;background:#000}
+.result-hero>strong{font-family:var(--leverage-number-font);font-size:clamp(54px,4vw,76px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.result-hero>b{padding:7px 14px;border:1px solid var(--color-primary);color:var(--color-primary);font-size:17px;text-transform:uppercase}
+.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--color-border)}
+.metric-grid article{min-width:0;min-height:114px;display:grid;align-content:start;gap:10px;padding:18px;border-right:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}
+.metric-grid article:nth-child(even){border-right:0}
+.metric-grid article:nth-last-child(-n+2){border-bottom:0}
+.metric-grid span{color:var(--color-muted-text);font-size:16px;font-weight:900;text-transform:uppercase;overflow-wrap:anywhere}
+.metric-grid strong{font-family:var(--leverage-number-font);font-size:32px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.metric-grid em{max-width:100%;width:max-content;padding:4px 7px;color:var(--color-primary);background:color-mix(in srgb,var(--color-primary) 10%,transparent);font-size:12px;font-style:normal;text-transform:uppercase}
+.panel>.section-header{padding:20px 22px;border-bottom:1px solid var(--color-border)}
+.state-output{border:0;box-shadow:none;background:transparent}
+.state-output-grid{display:grid;gap:16px}
+.state-output-grid article{min-width:0;border:1px solid var(--color-border);padding:20px;background:var(--color-surface)}
+.state-output-grid h3{margin:0 0 18px;font-size:22px}
+.state-output dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0;background:var(--color-border)}
+.state-output dl div{min-width:0;padding:12px;background:var(--color-background)}
+dt{color:var(--color-muted-text);font-size:15px;line-height:1.4;text-transform:uppercase}
+dd{margin:10px 0 0;font-family:var(--leverage-number-font);font-size:28px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.validation-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:20px;background:var(--color-border)}
+.validation-cards article{display:grid;gap:12px;padding:18px;background:var(--color-background)}
+.validation-cards strong{font-family:var(--leverage-number-font);font-size:34px;font-weight:800}
+.filters{display:grid;grid-template-columns:180px 160px minmax(220px,1fr) 160px;gap:14px;padding:20px;border-bottom:1px solid var(--color-border)}
+.disabled{opacity:.45}
+.loading-panel{padding:28px;color:var(--color-muted-text);font-size:18px}
+.error-panel{margin:0;padding:16px;border:1px solid #c84b45;border-radius:0;color:#ff9d96;background:rgba(190,55,45,.1)}
+.validation-section :deep(.data-table-wrap),.leaderboard-section :deep(.data-table-wrap){min-width:0;border-right:0;border-left:0;border-radius:0}
+.validation-section :deep(.table-scroll),.leaderboard-section :deep(.table-scroll){max-width:100%;overflow-x:auto;scrollbar-width:auto;scrollbar-color:var(--color-border-strong) var(--color-background)}
+.validation-section :deep(.table-scroll::-webkit-scrollbar),.leaderboard-section :deep(.table-scroll::-webkit-scrollbar){height:12px;width:12px}
+.validation-section :deep(.table-scroll::-webkit-scrollbar-thumb),.leaderboard-section :deep(.table-scroll::-webkit-scrollbar-thumb){background:var(--color-border-strong);border:2px solid var(--color-background);border-radius:6px}
+.validation-section :deep(th),.leaderboard-section :deep(th){font-size:15px}
+.validation-section :deep(td),.leaderboard-section :deep(td){font-size:16px}
+.validation-section :deep(th),.validation-section :deep(td),.leaderboard-section :deep(th),.leaderboard-section :deep(td){padding:14px 16px;white-space:nowrap}
+.validation-section :deep(.sort-button),.leaderboard-section :deep(.sort-button){font-size:inherit}
+.validation-section :deep(.table-header h2),.leaderboard-section :deep(.table-header h2){font-size:22px}
+.validation-section :deep(.table-header>span),.leaderboard-section :deep(.table-header>span){font-size:15px}
+.leaderboard-section :deep(.table-scroll){max-height:650px}
+.leaderboard-section :deep(table){min-width:2000px}
+.leaderboard-section :deep(th:nth-child(1)),.leaderboard-section :deep(td:nth-child(1)){position:sticky;left:0;z-index:2;width:64px;min-width:64px;box-sizing:border-box;background:var(--color-surface)}
+.leaderboard-section :deep(th:nth-child(2)),.leaderboard-section :deep(td:nth-child(2)){position:sticky;left:64px;z-index:2;min-width:220px;background:var(--color-surface)}
+.leaderboard-section :deep(th:nth-child(-n+2)){z-index:4}
+@media(max-width:1500px) and (min-width:1101px){.input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.calculator-shell{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.validation-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.scenario-panel{padding:18px}.state-grid{grid-template-columns:1fr}.input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:1fr}.state-output dl{grid-template-columns:repeat(2,minmax(0,1fr))}.section-header{align-items:flex-start;flex-direction:column}.year-control{width:100%}.form-actions button{flex:1}.metric-grid article{padding:16px}.metric-grid strong{font-size:28px}.state-output-grid article{padding:16px}}
 </style>

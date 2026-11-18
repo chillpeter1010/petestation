@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
   buildDir: process.env.NUXT_BUILD_DIR || '.nuxt',
   modules: ['@pinia/nuxt'],
+  app: { head: { link: [{rel:'icon',type:'image/png',href:'/brand/dapeter-logo.png'}] } },
   css: ['~/assets/css/main.css'],
   components: [
     {

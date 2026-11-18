@@ -97,7 +97,7 @@ export const ROOM_LABELS: Record<Room,string> = {
   'game-center':'Game Center', 'batting-cages':'Batting Cages', 'pitcher-mound':'Pitcher Mound', 'clubhouse-smoking-area':'Smoking area'
 }
 for (const room of Object.keys(ROOM_LABELS) as Room[]) {
-  if (room === 'clubhouse-smoking-area') continue
+  if (room !== 'campus') continue
   const spawn = kit.scenes[room].spawn
   // Campus spawn offset falls behind the west entry-fence foreground (depth 815).
   // Keep the guide in the open plaza; do not raise actors above all scenery.
@@ -107,7 +107,9 @@ for (const room of Object.keys(ROOM_LABELS) as Room[]) {
 }
 
 export function roomInteractions(room: Room, allowAdmin = false) {
-  return INTERACTIONS.filter(o => o.room === room && (!o.adminOnly || allowAdmin))
+  // Current npc entries are generic guides, not roster players. Keep only the
+  // campus guide; indoor/courtyard placeholders must not leave invisible triggers.
+  return INTERACTIONS.filter(o => o.room === room && (!o.adminOnly || allowAdmin) && (!o.npc || room === 'campus'))
 }
 export function nearestInteraction(objects: Interaction[], x: number, y: number): Interaction | null {
   return objects.filter(o => !o.pointerOnly && Math.hypot(x-o.approach[0],y-o.approach[1]) <= 78)

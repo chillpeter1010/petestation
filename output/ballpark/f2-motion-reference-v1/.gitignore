@@ -1,0 +1,8 @@
+# Local analysis dependencies, pretrained weights and copyrighted reference media.
+# Keep provenance/pose estimates/review source; do not package these in the app.
+tools/
+pose-tools/
+*.task
+*.mp4
+*.png
+*-encode.log

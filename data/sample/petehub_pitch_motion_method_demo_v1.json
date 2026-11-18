@@ -1,0 +1,450 @@
+{
+  "version": "motion_method_screening_v1",
+  "date": "2026-11-07",
+  "status": "pending_user_method_review",
+  "demo": "output/ballpark/motion-method-demo-v1/index.html",
+  "methods": [
+    "MediaPipe Full 33-point baseline mapped to 17 proxies",
+    "Official MotionBERT-Lite H36M global, flip augmentation"
+  ],
+  "trainingPerformed": false,
+  "whamExecuted": false,
+  "holdoutProcessed": false,
+  "n5n10n20ExperimentComplete": false,
+  "trackerVersion": "appearance-lock-v3",
+  "fullSourceTimeline": true,
+  "releaseFrameVerified": false,
+  "userFeedback": {
+    "date": "2026-11-07",
+    "clip": "yesavage-reference-03",
+    "wrongIdentityDuringPreparation": true,
+    "reportedSourceSeconds": [
+      1.36,
+      2.518,
+      2.77
+    ],
+    "prematureEndBeforeRelease": true,
+    "methodPreference": "MotionBERT-Lite relatively preferred; NOT accepted"
+  },
+  "sourceVideos": 10,
+  "modelComparisons": 8,
+  "failedTracking": 2,
+  "frames": 4762,
+  "metricsMeaning": "Projection residuals against model INPUT estimates, not ground-truth error; bone CV reports instability. No measured 3D accuracy.",
+  "limitations": [
+    "MediaPipe to H36M proxy mapping is a domain shift",
+    "Camera-plane translation fitted; world root/depth/foot contact uncalibrated",
+    "No IK or character retarget in this demo",
+    "All visual/interaction acceptance belongs to user"
+  ],
+  "clips": [
+    {
+      "id": "thompson-reference-01",
+      "frames": 804,
+      "filled": 3,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 153,
+            "start": 0.5019498341625207,
+            "end": 2.5599441542288557,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 7.183760431284764,
+                "medianBoneLengthCV": 0.04451215184673101
+              },
+              "motionbert": {
+                "projectionRmsePx": 4.32718467807959,
+                "medianBoneLengthCV": 0.08765210211277008
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 0.574494800530374,
+      "sourceDuration": 13.452255555555555,
+      "availableFrames": 124,
+      "missingFrames": 680,
+      "error": null
+    },
+    {
+      "id": "thompson-reference-02",
+      "frames": 522,
+      "filled": 10,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 147,
+            "start": 0.502802043422733,
+            "end": 2.463730012771392,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 5.633310425116109,
+                "medianBoneLengthCV": 0.04141828851928821
+              },
+              "motionbert": {
+                "projectionRmsePx": 3.139845869917215,
+                "medianBoneLengthCV": 0.0392967164516449
+              }
+            }
+          },
+          {
+            "first": 222,
+            "last": 383,
+            "start": 3.7207351213282247,
+            "end": 6.419106087696892,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 6.202935709940155,
+                "medianBoneLengthCV": 0.058027946878573586
+              },
+              "motionbert": {
+                "projectionRmsePx": 2.9984519634674296,
+                "medianBoneLengthCV": 0.058989495038986206
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 1.4623641995713115,
+      "sourceDuration": 8.748755555555555,
+      "availableFrames": 280,
+      "missingFrames": 242,
+      "error": null
+    },
+    {
+      "id": "thompson-reference-03",
+      "frames": 412,
+      "filled": 3,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 119,
+            "start": 0.5035210355987055,
+            "end": 1.9973001078748653,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 34.31963577245765,
+                "medianBoneLengthCV": 0.044607174254085835
+              },
+              "motionbert": {
+                "projectionRmsePx": 6.002707700857696,
+                "medianBoneLengthCV": 0.12755295634269714
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 0.3924618000164628,
+      "sourceDuration": 6.915022222222222,
+      "availableFrames": 90,
+      "missingFrames": 322,
+      "error": null
+    },
+    {
+      "id": "thompson-reference-04",
+      "frames": 464,
+      "filled": 2,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 169,
+            "start": 0.5032262931034482,
+            "end": 2.8348414511494253,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 6.988474895374364,
+                "medianBoneLengthCV": 0.05697218973585492
+              },
+              "motionbert": {
+                "projectionRmsePx": 5.8744362375352805,
+                "medianBoneLengthCV": 0.07871650159358978
+              }
+            }
+          },
+          {
+            "first": 208,
+            "last": 342,
+            "start": 3.4890356321839078,
+            "end": 5.73677974137931,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 7.607734136659235,
+                "medianBoneLengthCV": 0.06943790315655397
+              },
+              "motionbert": {
+                "projectionRmsePx": 3.2260042284485793,
+                "medianBoneLengthCV": 0.063047394156456
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 1.451035600155592,
+      "sourceDuration": 7.7832333333333334,
+      "availableFrames": 275,
+      "missingFrames": 189,
+      "error": null
+    },
+    {
+      "id": "thompson-reference-05",
+      "frames": 358,
+      "filled": 7,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 169,
+            "start": 0.5039608938547486,
+            "end": 2.8389797020484173,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 6.7561176548066655,
+                "medianBoneLengthCV": 0.0542869309299195
+              },
+              "motionbert": {
+                "projectionRmsePx": 5.375209906335228,
+                "medianBoneLengthCV": 0.08062790334224701
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 0.6750071002170444,
+      "sourceDuration": 6.013933333333334,
+      "availableFrames": 140,
+      "missingFrames": 218,
+      "error": null
+    },
+    {
+      "id": "yesavage-reference-01",
+      "frames": 458,
+      "filled": 6,
+      "metrics": {
+        "segments": [
+          {
+            "first": 237,
+            "last": 270,
+            "start": 3.9784549490538574,
+            "end": 4.532417030567686,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 7.129932293610625,
+                "medianBoneLengthCV": 0.055565557510019375
+              },
+              "motionbert": {
+                "projectionRmsePx": 6.548879248300886,
+                "medianBoneLengthCV": 0.04093810170888901
+              }
+            }
+          },
+          {
+            "first": 377,
+            "last": 409,
+            "start": 6.3285971130519165,
+            "end": 6.865772464822902,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 9.91800826764497,
+                "medianBoneLengthCV": 0.04408341025828474
+              },
+              "motionbert": {
+                "projectionRmsePx": 4.030844118932325,
+                "medianBoneLengthCV": 0.01681393012404442
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 0.3936585998162627,
+      "sourceDuration": 7.688322222222222,
+      "availableFrames": 67,
+      "missingFrames": 391,
+      "error": null
+    },
+    {
+      "id": "yesavage-reference-02",
+      "frames": 434,
+      "filled": 0,
+      "metrics": {
+        "segments": []
+      },
+      "seconds": 0,
+      "sourceDuration": 7.276566666666667,
+      "availableFrames": 0,
+      "missingFrames": 434,
+      "error": "No reliable identity-locked segment; source video remains playable in full."
+    },
+    {
+      "id": "yesavage-reference-03",
+      "frames": 432,
+      "filled": 4,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 79,
+            "start": 0.503596450617284,
+            "end": 1.3261373199588478,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 7.6836437285272865,
+                "medianBoneLengthCV": 0.06400424521757844
+              },
+              "motionbert": {
+                "projectionRmsePx": 7.617349748015078,
+                "medianBoneLengthCV": 0.057604655623435974
+              }
+            }
+          },
+          {
+            "first": 347,
+            "last": 431,
+            "start": 5.8249322788065845,
+            "end": 7.2350023405349795,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 6.8776158634601785,
+                "medianBoneLengthCV": 0.04955110480181459
+              },
+              "motionbert": {
+                "projectionRmsePx": 3.413374730139118,
+                "medianBoneLengthCV": 0.041725464165210724
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 0.6975728999823332,
+      "sourceDuration": 7.251788888888889,
+      "availableFrames": 135,
+      "missingFrames": 297,
+      "error": null
+    },
+    {
+      "id": "yesavage-reference-04",
+      "frames": 494,
+      "filled": 0,
+      "metrics": {
+        "segments": []
+      },
+      "seconds": 0,
+      "sourceDuration": 8.277166666666666,
+      "availableFrames": 0,
+      "missingFrames": 494,
+      "error": "No reliable identity-locked segment; source video remains playable in full."
+    },
+    {
+      "id": "yesavage-reference-05",
+      "frames": 384,
+      "filled": 22,
+      "metrics": {
+        "segments": [
+          {
+            "first": 30,
+            "last": 130,
+            "start": 0.5028541666666666,
+            "end": 2.179034722222222,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 6.386535185075905,
+                "medianBoneLengthCV": 0.051442556991184815
+              },
+              "motionbert": {
+                "projectionRmsePx": 4.689673299018897,
+                "medianBoneLengthCV": 0.052562542259693146
+              }
+            }
+          },
+          {
+            "first": 147,
+            "last": 238,
+            "start": 2.4639854166666666,
+            "end": 3.989309722222222,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 8.231760401862644,
+                "medianBoneLengthCV": 0.11511222751502917
+              },
+              "motionbert": {
+                "projectionRmsePx": 7.026285135782115,
+                "medianBoneLengthCV": 0.11582055687904358
+              }
+            }
+          },
+          {
+            "first": 262,
+            "last": 383,
+            "start": 4.391593055555555,
+            "end": 6.419771527777778,
+            "metrics": {
+              "mediapipe": {
+                "projectionRmsePx": 7.048874597415216,
+                "medianBoneLengthCV": 0.06979958986523986
+              },
+              "motionbert": {
+                "projectionRmsePx": 2.4539457092777623,
+                "medianBoneLengthCV": 0.052279889583587646
+              }
+            }
+          }
+        ]
+      },
+      "seconds": 5.134862300008535,
+      "sourceDuration": 6.436533333333333,
+      "availableFrames": 315,
+      "missingFrames": 69,
+      "error": null
+    }
+  ],
+  "model": {
+    "author": "MotionBERT authors / walterzhu",
+    "revision": "370a9196aa3c89198b134c82476143b01c0fb32c",
+    "official_repo": "https://github.com/Walter0807/MotionBERT",
+    "license": "Apache-2.0; retained upstream LICENSE",
+    "files": [
+      {
+        "path": "output\\ballpark\\motion-method-demo-v1\\vendor\\lib\\model\\DSTformer.py",
+        "url": "https://huggingface.co/walterzhu/MotionBERT/resolve/370a9196aa3c89198b134c82476143b01c0fb32c/lib/model/DSTformer.py",
+        "bytes": 16101,
+        "sha256": "0896b29872b10f55be8902ceceacb9febe7876fa2065d5f9dd670fbb902f2f47"
+      },
+      {
+        "path": "output\\ballpark\\motion-method-demo-v1\\vendor\\lib\\model\\drop.py",
+        "url": "https://huggingface.co/walterzhu/MotionBERT/resolve/370a9196aa3c89198b134c82476143b01c0fb32c/lib/model/drop.py",
+        "bytes": 1978,
+        "sha256": "44b1af7912ae46c62c5b74712dae31697afc697e788c8dd9c5050602a2397173"
+      },
+      {
+        "path": "output\\ballpark\\motion-method-demo-v1\\vendor\\LICENSE",
+        "url": "https://huggingface.co/walterzhu/MotionBERT/resolve/370a9196aa3c89198b134c82476143b01c0fb32c/LICENSE",
+        "bytes": 11372,
+        "sha256": "045ee95b545fb51f5c6e28e1a50644fe618f6278f3c8720852c6fe96f53b472f"
+      },
+      {
+        "path": "output\\ballpark\\motion-method-demo-v1\\vendor\\configs\\pose3d\\MB_ft_h36m_global_lite.yaml",
+        "url": "https://huggingface.co/walterzhu/MotionBERT/resolve/370a9196aa3c89198b134c82476143b01c0fb32c/configs/pose3d/MB_ft_h36m_global_lite.yaml",
+        "bytes": 725,
+        "sha256": "672bb3ae05e89966acfbf395d601c7a22df0d2c038942d8ac0e585bce23dc8da"
+      },
+      {
+        "path": "output\\ballpark\\motion-method-demo-v1\\weights\\motionbert-lite.bin",
+        "url": "https://huggingface.co/walterzhu/MotionBERT/resolve/370a9196aa3c89198b134c82476143b01c0fb32c/checkpoint/pose3d/FT_MB_lite_MB_ft_h36m_global_lite/best_epoch.bin",
+        "bytes": 64099897,
+        "sha256": "9811155371db4ca5d20f31a36a232d41012e12e1333882888a564d741861148f"
+      }
+    ],
+    "mode": "pretrained inference only; no individual-model training",
+    "WHAM": "not run: official Linux/CUDA pipeline; SMPL requires registration; local GPU is Intel Arc"
+  },
+  "hashes": {
+    "output\\ballpark\\motion-method-demo-v1\\dataset-manifest.json": "a6b56dab5f607acc4a0934e72a6e313c1312105824cc919c17b700c891ca4563",
+    "output\\ballpark\\motion-method-demo-v1\\index.html": "7cb83cf2fc7e60addf49a484ca1bb5c39b9958a19353bb8de1ff032c592a2270",
+    "backend\\scripts\\build_pitch_motion_demo.py": "d2208cdebaab857c9813916694fe9b02f457c8d3150df01d68d1979b3820a4bc",
+    "backend\\templates\\pitch_motion_demo.html": "bd9325e7dd2fdf271e61eed4b0e00cdc44d984da26cad58cd42abfa083ce1c90"
+  }
+}

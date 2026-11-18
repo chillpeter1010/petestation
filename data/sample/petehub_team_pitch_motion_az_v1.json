@@ -1,0 +1,199 @@
+{
+  "version": "team_pitch_motion_review_v1",
+  "date": "2026-11-07",
+  "status": "pending_user",
+  "scope": "Official current active pitchers with >=3 AZ first-inning appearances in local 2026 data; not a declared future rotation.",
+  "rosterRetrievedAt": "2026-11-06T16:50:58.663419+00:00",
+  "modelSha256": "9811155371db4ca5d20f31a36a232d41012e12e1333882888a564d741861148f",
+  "players": [
+    {
+      "playerId": 593958,
+      "playerName": "Eduardo Rodriguez",
+      "clipId": "az-593958-reference-01",
+      "date": "2026-09-24",
+      "sourceFrames": 442,
+      "availableFrames": 352,
+      "segments": [
+        {
+          "start": 0.5033054298642534,
+          "end": 3.0869399698340874
+        },
+        {
+          "start": 3.4560306184012064,
+          "end": 5.435698642533937
+        },
+        {
+          "start": 6.106772549019608,
+          "end": 7.398589819004525
+        }
+      ],
+      "changedLabelFrames": 2,
+      "sourceSha256": "e9762cef04976ea82f2ee5ee2154e39df9a856c6bca89e2c7a8e7f6b90d85dab",
+      "artifactSha256": "eaf82c98647ec4662a14beab2e0c18cdb6a2390e9f22004f6fe4215ead3ee64d",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=593958&tab=in-game"
+    },
+    {
+      "playerId": 518876,
+      "playerName": "Merrill Kelly",
+      "clipId": "az-518876-reference-01",
+      "date": "2026-09-23",
+      "sourceFrames": 464,
+      "availableFrames": 343,
+      "segments": [
+        {
+          "start": 0.5026831896551724,
+          "end": 6.233271551724138
+        }
+      ],
+      "changedLabelFrames": 0,
+      "sourceSha256": "415731f0df856f20dad3a122e2cdeaeba347e20440f66309c28b80ebae7d0842",
+      "artifactSha256": "13696b5889363c289f9453f46b9d64e4ad48b958efb6f0445146b8b2eaabd30b",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=518876&tab=in-game"
+    },
+    {
+      "playerId": 694297,
+      "playerName": "Brandon Pfaadt",
+      "clipId": "az-694297-reference-01",
+      "date": "2026-09-25",
+      "sourceFrames": 362,
+      "availableFrames": 272,
+      "segments": [
+        {
+          "start": 1.378460773480663,
+          "end": 3.076320994475138
+        },
+        {
+          "start": 3.22761546961326,
+          "end": 6.068589502762431
+        }
+      ],
+      "changedLabelFrames": 0,
+      "sourceSha256": "e9327cd3dc1822e2132ea4329e8ccf805ac7bc3fe2ce2c0404eee6c60f909e99",
+      "artifactSha256": "b677d36da739a02b73c864bb3d6ddebfa0ee78fe673872a80dc238d92d3fe9e4",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=694297&tab=in-game"
+    },
+    {
+      "playerId": 669194,
+      "playerName": "Ryne Nelson",
+      "clipId": "az-669194-reference-01",
+      "date": "2026-06-15",
+      "sourceFrames": 376,
+      "availableFrames": 238,
+      "segments": [
+        {
+          "start": 0.5041462765957447,
+          "end": 2.9744630319148935
+        },
+        {
+          "start": 3.2601459219858158,
+          "end": 4.755779875886525
+        }
+      ],
+      "changedLabelFrames": 6,
+      "sourceSha256": "0b195bf46f65c48cfbc3493f495790d8466f6b2a1484900db9dbe322ee802591",
+      "artifactSha256": "ce8c0230db04d7ddceee26ec199d546a808c8ac97dd38deaf2af20bc038bfb4f",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=669194&tab=in-game"
+    },
+    {
+      "playerId": 683352,
+      "playerName": "Mitch Bratt",
+      "clipId": "az-683352-reference-01",
+      "date": "2026-08-29",
+      "sourceFrames": 382,
+      "availableFrames": 147,
+      "segments": [
+        {
+          "start": 0.5037434554973822,
+          "end": 1.074652705061082
+        },
+        {
+          "start": 3.9963647469458987,
+          "end": 5.860215532286213
+        }
+      ],
+      "changedLabelFrames": 1,
+      "sourceSha256": "0ef7ebf31875470968b4f4eac75f2607eac98f9b2a04b81ca0a8a2e771bd7723",
+      "artifactSha256": "1e702455de5ca4c0971032fc740554995f4af8e859fcf9ad0fea27752cf6645a",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=683352&tab=in-game"
+    },
+    {
+      "playerId": 684442,
+      "playerName": "Kohl Drake",
+      "clipId": "az-684442-reference-01",
+      "date": "2026-08-28",
+      "sourceFrames": 924,
+      "availableFrames": 190,
+      "segments": [
+        {
+          "start": 0.5015616883116883,
+          "end": 3.6614003246753244
+        }
+      ],
+      "changedLabelFrames": 0,
+      "sourceSha256": "bf521c7ca8d4f17fe1d1fd921000d86b32853ee66304d12f5d777508929e3f8b",
+      "artifactSha256": "47993ce313edd033187385fcf63351d2dda7e82e0da80143024436b74ce6c1db",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=684442&tab=in-game"
+    },
+    {
+      "playerId": 703615,
+      "playerName": "Jose Cabrera",
+      "clipId": "az-703615-reference-01",
+      "date": "2026-08-27",
+      "sourceFrames": 376,
+      "availableFrames": 245,
+      "segments": [
+        {
+          "start": 0.5032712765957447,
+          "end": 2.8350948581560282
+        },
+        {
+          "start": 4.5462171985815605,
+          "end": 6.290890957446808
+        }
+      ],
+      "changedLabelFrames": 0,
+      "sourceSha256": "ab55df2d01fc22e7d6db2dd7adc6464ed709f3c2c125007080c5cdfc82e43e77",
+      "artifactSha256": "01d92fb82c54cca0f5f2f450b8dc3a0406742c87037deac66f55abde7911e24b",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=703615&tab=in-game"
+    },
+    {
+      "playerId": 669203,
+      "playerName": "Corbin Burnes",
+      "clipId": "az-669203-reference-01",
+      "date": "2026-09-20",
+      "sourceFrames": 412,
+      "availableFrames": 360,
+      "segments": [
+        {
+          "start": 0.5037281553398059,
+          "end": 6.531675080906149
+        }
+      ],
+      "changedLabelFrames": 17,
+      "sourceSha256": "a9aade26dff273ac13a801735262aacdc6d80c3456cecdd64ad96c359339010f",
+      "artifactSha256": "5a2eb4fbc853a24dc09510fed5f7663f44195e69e165a741243880382e4f1eeb",
+      "userAcceptance": "pending",
+      "url": "http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=669203&tab=in-game"
+    }
+  ],
+  "trainingPerformed": false,
+  "originalTwoPlayerHoldoutTouched": false,
+  "yesavageRef5Preserved": true,
+  "sourceChecks": "pass: roster/identity keys/full timeline/label permutations/finite arrays/hashes/route files",
+  "visualAcceptance": false,
+  "referenceNotSelectedGame": true,
+  "calibratedWorldRoot": false,
+  "rigRetargetEnabled": false,
+  "compilationChecks": {
+    "vueTsc": "pass",
+    "pythonSyntax": "pass",
+    "browserRun": false
+  }
+}

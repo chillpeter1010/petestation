@@ -60,9 +60,7 @@ function formatDate(value: string | null) {
   border-radius: 20px;
   padding: clamp(24px, 4vw, 44px);
   background:
-    radial-gradient(circle at 10% 12%, color-mix(in srgb, var(--team-primary) 24%, transparent), transparent 36%),
-    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--team-secondary) 12%, transparent), transparent 40%),
-    linear-gradient(125deg, #11151d, #07090d 68%);
+    #000;
   box-shadow: 0 28px 80px rgba(3, 7, 18, 0.28);
   color: #f8fafc;
 }
@@ -122,8 +120,7 @@ function formatDate(value: string | null) {
   border-radius: 22px;
   color: #ffffff;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.025)),
-    #0c1118;
+    #000;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.04),
     0 16px 40px color-mix(in srgb, var(--team-primary) 20%, transparent);

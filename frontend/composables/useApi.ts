@@ -274,7 +274,7 @@ export function useApi() {
           batter_id: params.batterId || undefined
         }
       }),
-    batterSwingTiming: (params: { year: number; pitchGroup: string; pitchType?: string; pitcherHand?: 'All' | 'L' | 'R'; batterSide?: 'All' | 'L' | 'R'; batterTeam?: string; pitcherTeam?: string; minimumSwings: number; minimumPlateAppearances: number }) =>
+    batterSwingTiming: (params: { year: number; pitchGroup: string; pitchType?: string; pitcherHand?: 'All' | 'L' | 'R'; batterSide?: 'All' | 'L' | 'R'; batterTeam?: string; pitcherTeam?: string; minimumSwings: number; minimumPlateAppearances: number; includeRegression?: boolean }) =>
       $fetch<SwingTimingResponse>(`${apiBase}/batters/lab/swing-timing`, {
         query: {
           year: params.year,
@@ -285,7 +285,8 @@ export function useApi() {
           batter_team: params.batterTeam || 'All',
           pitcher_team: params.pitcherTeam || 'All',
           minimum_swings: params.minimumSwings,
-          minimum_plate_appearances: params.minimumPlateAppearances
+          minimum_plate_appearances: params.minimumPlateAppearances,
+          include_regression: params.includeRegression || undefined
         }
       }),
     batterSwingTimingPlayer: (params: { year: number; batterId: number; pitchGroup: string; pitchType?: string; pitcherHand?: 'All' | 'L' | 'R'; batterSide?: 'All' | 'L' | 'R'; pitcherTeam?: string }) =>
@@ -301,6 +302,10 @@ export function useApi() {
           _ts: Date.now()
         },
         cache: 'no-store'
+      }),
+    pitchScout: (p: import('~/utils/pitchScout').ScoutRequest) =>
+      $fetch<import('~/utils/pitchScout').ScoutResponse>(`${apiBase}/batters/personal/pitch-scout`, {
+        query:{year:p.year,batter_id:p.batterId,pitcher_hand:p.pitcherHand,stand:p.stand,before_date:p.beforeDate,balls:p.balls,strikes:p.strikes,previous_type:p.previousType,previous_result:p.previousResult}
       }),
     batterZoneRates: (params: { year: number; batterId: number; pitcherHand: 'All' | 'L' | 'R' }) =>
       $fetch<BatterZoneRatesResponse>(`${apiBase}/batters/personal/zone-rates`, {
@@ -437,7 +442,7 @@ export function useApi() {
         query: { year: params.year, pitcher_id: params.pitcherId, stand: params.stand, count: params.count, pitch: params.pitch, catcher: params.catcher, _ts: Date.now() },
         cache: 'no-store'
       }),
-    personalSequence: (params: { year: number; pitcherId: number; startDate?: string; endDate?: string; currentPitch?: string; stand?: string; count?: string; pitch?: string; pitchResult?: string; catcher?: string; conditionCount?: string; conditionPitch?: string; detailCount?: string; followupPitch?: string }) =>
+    personalSequence: (params: { year: number; pitcherId: number; startDate?: string; endDate?: string; currentPitch?: string; stand?: string; count?: string; pitch?: string; pitchResult?: string; catcher?: string; conditionCount?: string; conditionPitch?: string; detailCount?: string; followupPitch?: string; previousPitch?:string }) =>
       $fetch<AnalysisResponse>(`${apiBase}/personal/sequence`, {
         query: {
           year: params.year,
@@ -454,6 +459,7 @@ export function useApi() {
           condition_pitch: params.conditionPitch,
           detail_count: params.detailCount,
           followup_pitch: params.followupPitch,
+          previous_pitch: params.previousPitch,
           _ts: Date.now()
         },
         cache: 'no-store'

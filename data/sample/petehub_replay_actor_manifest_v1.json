@@ -1,0 +1,63 @@
+{
+  "version": "replay_actor_v1",
+  "author": "Quaternius; Petehub adaptations",
+  "license": "CC0-1.0",
+  "source_url": "https://quaternius.itch.io/universal-base-characters",
+  "license_file": "output\\ballpark\\f2-character-source-v1\\LICENSE-Quaternius.txt",
+  "editable_source": "output\\ballpark\\f2-character-source-v1\\actor-base-v1.gltf",
+  "builder": "backend\\scripts\\build_replay_character.py",
+  "runtime": "frontend\\assets\\ballpark\\characters3d\\actor-base-v1.glb",
+  "sha256": "5acfb33f4646d637ea2e059acdd0ed26ba9aa475492038369cfc09e53da47696",
+  "bytes": 4107456,
+  "triangles": 13864,
+  "joints": 65,
+  "units": "metres/Y-up/+Z-front",
+  "clips": [
+    "ready",
+    "idle",
+    "batter_ready_R",
+    "batter_idle_R",
+    "batter_ready_L",
+    "batter_idle_L",
+    "pitcher_ready_R",
+    "pitcher_idle_R",
+    "pitcher_ready_L",
+    "pitcher_idle_L"
+  ],
+  "source_variant": "Superhero male (free tier); not the paid Regular male",
+  "model_scope": "generic, no player-specific face likeness",
+  "modifications": "Loose jersey and cuff bands use the same indexed sleeve surface, seam positions and skin weights; no rigid cuff rings. Bare-foot faces removed; independent closed cleat uppers, outsoles, four lace cords and eight studs per foot, bound to the respective foot joint. Collar and placket piping in editable TypeScript equipment recipe. Preserve corrected palm-socket grip and generic ready/idle; no individual face or historical uniform edition.",
+  "lod": "single 14k-class source mesh, no production LOD certification",
+  "visual_status": "user_accepted_generic_appearance",
+  "source_hashes": {
+    "actor-base-v1.bin": "e197c85bfcf34255443739312345db9fad6081ccc70fd519692c5e3822b02f0a",
+    "actor-base-v1.gltf": "74ae2bf09c391eb9edc978e225771c36fe35bc4a6e54579f41830483d3b15f48",
+    "LICENSE-Quaternius.txt": "0f4beaf0fe360a7732e58bbe3dbf60a2422367fbea60cb9ea4add968f383268e",
+    "original-male.gltf": "e7fcea214ecf8855afbf910b50de6f9c7d1decfb71ca28bad8a4481452dafeb4",
+    "README.md": "10e79b74b616abdb4de467b69931423c901e6658edaabb9148dbaa471005cc7b",
+    "Superhero_Male_FullBody.bin": "459003f9745853ae562a85506a2b94dd56515c1f37728f9fa3d2ce1a3e4cd92f",
+    "T_Eye_Brown.png": "d08e3356a83211bc6ca21fe3a8e39f4b5c1a3b8f85457fc2c0fb57be09935025",
+    "T_Hair_1_BaseColor.png": "bc7aa863bd22ab0a995cd838cceb4d3a5186ee54ee2fb0108fad85d20c057e6e",
+    "T_Superhero_Male_Dark.png": "df680cbc1967a61e85998bfafb8f7bc0a36dd604bb3266486c4b06b1a184bb45",
+    "T_Superhero_Male_Normal.png": "9b25cf9200216eb754b79cf4c63b5380c419780788322f3c57cdd2b3e02679a6",
+    "T_Superhero_Male_Roughness.png": "c70dabf48574cda55644d556beae1ee7cf1bdcf68a50d259d20f2f2358f27991"
+  },
+  "pose_exporter": "frontend/scripts/bake-replay-actors.mjs",
+  "runtime_pose_policy": "procedural handed IK over neutral ready/idle base; exported full poses available for DCC editing; no historical body mocap",
+  "recipe_hashes": {
+    "backend/scripts/build_replay_character.py": "5341a64acfe40eef1e714d0eba97b1163480930147936291944ae888871a125a",
+    "frontend/scripts/bake-replay-actors.mjs": "0e8b586d59aa22eafec1bc7275ac69d4731e937c5c05a1ad9fa6af24c55e023c",
+    "frontend/components/charts/replay3d/createReplayActors.ts": "740b426adfc4779499b6c2a5f72dffe1d9ff86167654af5cb50e98e89bd8a1c6",
+    "frontend/components/charts/replay3d/replayContract.ts": "d5b8c8b4c2da6946b3b199cbe899117d56f8c2952e6f17ebd6d35b8730c513b4"
+  },
+  "user_acceptance": {
+    "date": "2026-11-06",
+    "scope": "Generic F2.3 ready/idle appearance, jersey/cuff/cleats and camera follow-up; no agent visual testing",
+    "full_pitch_swing_motion": "F2.4 pending"
+  },
+  "motion_status": {
+    "F2.4": "user_rejected_pitcher_delivery_disabled",
+    "video_pose_pilot": "data/sample/petehub_pitch_video_pose_pilot_v1.json",
+    "retargeting": "Personal 3D candidate rejected; UI and runtime retarget disabled; accepted 2D overlay retained"
+  }
+}

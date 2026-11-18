@@ -1,0 +1,1370 @@
+{
+  "version": "pitch_motion_methods_v1",
+  "mode": "offline_method_selection",
+  "created": "2026-11-06",
+  "players": [
+    {
+      "name": "yesavage",
+      "playerId": 702056,
+      "holdoutGame": 776229,
+      "availableClips": 239,
+      "availableGames": 3,
+      "clips": [
+        {
+          "id": "yesavage-reference-01",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 23,
+          "pitchNumber": 4,
+          "playId": "0f5d0bd3-24da-365c-bed5-e0d74d79387b",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=0f5d0bd3-24da-365c-bed5-e0d74d79387b",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 63.3,
+          "sourceReleaseFt": [
+            -0.51,
+            54.32,
+            7.08
+          ],
+          "split": "reference",
+          "rank": 1,
+          "video": "videos/yesavage-reference-01.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/WnhXNk9fWGw0TUFRPT1fQmxkVUFGUldBZ0VBQ2xaV0J3QUhCd01GQUFOUUIxUUFWMVZSQndkUkJncFdDQVVF.mp4",
+          "videoSha256": "38636bcc935f1df7f390c86288b99401171c108441a1db2ece1f005defe151b1",
+          "videoBytes": 4674399
+        },
+        {
+          "id": "yesavage-reference-02",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 5,
+          "pitchNumber": 2,
+          "playId": "f19295c8-9165-39b7-8973-99804ba1a2b9",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=f19295c8-9165-39b7-8973-99804ba1a2b9",
+          "pitchType": "FS",
+          "sourceExtensionFt": 5.8,
+          "sourceArmAngleDeg": 65.4,
+          "sourceReleaseFt": [
+            -0.46,
+            54.66,
+            7.21
+          ],
+          "split": "reference",
+          "rank": 2,
+          "video": "videos/yesavage-reference-02.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/V0EyUllfWGw0TUFRPT1fVUFCWVZsMEJCUW9BQVZNRVV3QUhDRlJSQUZrTVZGSUFDMXdOQUFkWFVBSUVBbEJm.mp4",
+          "videoSha256": "6e5a886c21d426b8bf73937c38295418115662a7c7b75d034ce48828101980c0",
+          "videoBytes": 4376097
+        },
+        {
+          "id": "yesavage-reference-03",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 29,
+          "pitchNumber": 2,
+          "playId": "85014d9f-3639-312f-970d-b286076d3bca",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=85014d9f-3639-312f-970d-b286076d3bca",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 65.7,
+          "sourceReleaseFt": [
+            -0.45,
+            54.26,
+            7.11
+          ],
+          "split": "reference",
+          "rank": 3,
+          "video": "videos/yesavage-reference-03.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/WnhXNk9fWGw0TUFRPT1fRGdSUlZWQlFYMVFBQzFRQlh3QUhBQVFBQUZnQ1V3VUFVRmNOQmdNQ0IxZFdVbEVI.mp4",
+          "videoSha256": "c379c402e617245bcc32384097e50ca54f86818c85dac5a60ed635756f64b2e4",
+          "videoBytes": 5198845
+        },
+        {
+          "id": "yesavage-reference-04",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 11,
+          "pitchNumber": 1,
+          "playId": "32b85553-6380-3cb0-8ac8-c9b82818b5bb",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=32b85553-6380-3cb0-8ac8-c9b82818b5bb",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 64.9,
+          "sourceReleaseFt": [
+            -0.71,
+            54.43,
+            7.09
+          ],
+          "split": "reference",
+          "rank": 4,
+          "video": "videos/yesavage-reference-04.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/V0EyUllfWGw0TUFRPT1fQlFNRFhGRUJVd0VBRGxFS1ZnQUhVbFJXQUZsVUFGa0FVVnhYQ0FFTkFBc0hCVkFF.mp4",
+          "videoSha256": "8e5d27b9164fa9ab5f28f764d667c1a23e7b52b51c6f6067798656efa602df20",
+          "videoBytes": 5418147
+        },
+        {
+          "id": "yesavage-reference-05",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 22,
+          "pitchNumber": 2,
+          "playId": "3aec5d8d-12af-338a-8a8f-a51e5ebe7e84",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=3aec5d8d-12af-338a-8a8f-a51e5ebe7e84",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 69.4,
+          "sourceReleaseFt": [
+            -0.48,
+            54.3,
+            7.04
+          ],
+          "split": "reference",
+          "rank": 5,
+          "video": "videos/yesavage-reference-05.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/WnhXNk9fWGw0TUFRPT1fQlZBRUIxRlFYbFlBQ1ZCVEFBQUhBZzRIQUZsVVd3Y0FVMUFFVlFaUVUxWlNWUXBT.mp4",
+          "videoSha256": "92188104885966afca53639012cb37a61b242c12ad56bb0a896cb8e86b255cd5",
+          "videoBytes": 4424147
+        },
+        {
+          "id": "yesavage-reference-06",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 5,
+          "pitchNumber": 3,
+          "playId": "82911775-3f13-3483-add9-50b57089775e",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=82911775-3f13-3483-add9-50b57089775e",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 65.4,
+          "sourceReleaseFt": [
+            -0.54,
+            54.36,
+            7.11
+          ],
+          "split": "reference",
+          "rank": 6,
+          "video": "videos/yesavage-reference-06.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-07",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 35,
+          "pitchNumber": 1,
+          "playId": "0a658600-792a-3a3e-9f23-9d90044433ce",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=0a658600-792a-3a3e-9f23-9d90044433ce",
+          "pitchType": "SL",
+          "sourceExtensionFt": 5.9,
+          "sourceArmAngleDeg": 61.9,
+          "sourceReleaseFt": [
+            -0.63,
+            54.59,
+            7.11
+          ],
+          "split": "reference",
+          "rank": 7,
+          "video": "videos/yesavage-reference-07.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-08",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 38,
+          "pitchNumber": 4,
+          "playId": "b0b1c8a6-5772-3b6d-bf9b-c4f7588ed9cc",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=b0b1c8a6-5772-3b6d-bf9b-c4f7588ed9cc",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.0,
+          "sourceArmAngleDeg": 60.0,
+          "sourceReleaseFt": [
+            -0.75,
+            54.51,
+            6.92
+          ],
+          "split": "reference",
+          "rank": 8,
+          "video": "videos/yesavage-reference-08.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-09",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 37,
+          "pitchNumber": 1,
+          "playId": "72582bc3-27c5-3729-8c3d-71b27631696e",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=72582bc3-27c5-3729-8c3d-71b27631696e",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 63.2,
+          "sourceReleaseFt": [
+            -0.67,
+            54.42,
+            7.05
+          ],
+          "split": "reference",
+          "rank": 9,
+          "video": "videos/yesavage-reference-09.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-10",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 10,
+          "pitchNumber": 5,
+          "playId": "b8268120-e67e-39ac-b4e8-0d255e47c331",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=b8268120-e67e-39ac-b4e8-0d255e47c331",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 61.1,
+          "sourceReleaseFt": [
+            -0.71,
+            54.34,
+            7.27
+          ],
+          "split": "reference",
+          "rank": 10,
+          "video": "videos/yesavage-reference-10.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-11",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 6,
+          "pitchNumber": 1,
+          "playId": "63e8d47b-13f5-3d45-8958-e06994b5471b",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=63e8d47b-13f5-3d45-8958-e06994b5471b",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.0,
+          "sourceArmAngleDeg": 65.1,
+          "sourceReleaseFt": [
+            -0.44,
+            54.47,
+            7.23
+          ],
+          "split": "reference",
+          "rank": 11,
+          "video": "videos/yesavage-reference-11.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-12",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 29,
+          "pitchNumber": 5,
+          "playId": "118ebc6b-25f9-303c-be12-511288706ea1",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=118ebc6b-25f9-303c-be12-511288706ea1",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.3,
+          "sourceArmAngleDeg": 61.3,
+          "sourceReleaseFt": [
+            -0.55,
+            54.2,
+            7.04
+          ],
+          "split": "reference",
+          "rank": 12,
+          "video": "videos/yesavage-reference-12.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-13",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 31,
+          "pitchNumber": 2,
+          "playId": "abe4b2f1-7768-32d9-9c5c-196ae423aecc",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=abe4b2f1-7768-32d9-9c5c-196ae423aecc",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.5,
+          "sourceArmAngleDeg": 62.4,
+          "sourceReleaseFt": [
+            -0.38,
+            53.96,
+            6.94
+          ],
+          "split": "reference",
+          "rank": 13,
+          "video": "videos/yesavage-reference-13.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-14",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 19,
+          "pitchNumber": 2,
+          "playId": "999a2ff1-4700-380b-98dd-05e9c2faab17",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=999a2ff1-4700-380b-98dd-05e9c2faab17",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.3,
+          "sourceArmAngleDeg": 63.1,
+          "sourceReleaseFt": [
+            -0.61,
+            54.18,
+            7.01
+          ],
+          "split": "reference",
+          "rank": 14,
+          "video": "videos/yesavage-reference-14.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-15",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 15,
+          "pitchNumber": 3,
+          "playId": "acd0f265-1c47-34e5-8b8e-a11ffaef7649",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=acd0f265-1c47-34e5-8b8e-a11ffaef7649",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 67.4,
+          "sourceReleaseFt": [
+            -0.54,
+            54.34,
+            7.2
+          ],
+          "split": "reference",
+          "rank": 15,
+          "video": "videos/yesavage-reference-15.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-16",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 19,
+          "pitchNumber": 1,
+          "playId": "347cf75b-fec6-3d1b-9e3d-d6a6c71874d3",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=347cf75b-fec6-3d1b-9e3d-d6a6c71874d3",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.3,
+          "sourceArmAngleDeg": 60.7,
+          "sourceReleaseFt": [
+            -0.58,
+            54.2,
+            7.0
+          ],
+          "split": "reference",
+          "rank": 16,
+          "video": "videos/yesavage-reference-16.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-17",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 37,
+          "pitchNumber": 3,
+          "playId": "1ca51bcc-a586-307a-8553-96658ede19a6",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=1ca51bcc-a586-307a-8553-96658ede19a6",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 64.5,
+          "sourceReleaseFt": [
+            -0.54,
+            54.41,
+            7.05
+          ],
+          "split": "reference",
+          "rank": 17,
+          "video": "videos/yesavage-reference-17.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-18",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 35,
+          "pitchNumber": 5,
+          "playId": "aeb27b11-3e8c-3ce6-a2b7-bb9b7ab1d9fd",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=aeb27b11-3e8c-3ce6-a2b7-bb9b7ab1d9fd",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.3,
+          "sourceArmAngleDeg": 59.9,
+          "sourceReleaseFt": [
+            -0.61,
+            54.21,
+            6.91
+          ],
+          "split": "reference",
+          "rank": 18,
+          "video": "videos/yesavage-reference-18.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-19",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776316,
+          "date": "2025-09-15",
+          "atBat": 7,
+          "pitchNumber": 2,
+          "playId": "1566353e-0950-3bfa-a7a5-741a62bf555f",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=1566353e-0950-3bfa-a7a5-741a62bf555f",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.0,
+          "sourceArmAngleDeg": 63.6,
+          "sourceReleaseFt": [
+            -0.55,
+            54.5,
+            7.19
+          ],
+          "split": "reference",
+          "rank": 19,
+          "video": "videos/yesavage-reference-19.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-reference-20",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776159,
+          "date": "2025-09-27",
+          "atBat": 38,
+          "pitchNumber": 3,
+          "playId": "cfaa8729-1ba3-33f9-abf6-cd7f7e0cbf90",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=cfaa8729-1ba3-33f9-abf6-cd7f7e0cbf90",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 59.7,
+          "sourceReleaseFt": [
+            -0.56,
+            54.42,
+            7.01
+          ],
+          "split": "reference",
+          "rank": 20,
+          "video": "videos/yesavage-reference-20.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "yesavage-holdout-01",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776229,
+          "date": "2025-09-21",
+          "atBat": 35,
+          "pitchNumber": 1,
+          "playId": "33b95639-2f47-38f7-98f3-ab88d6f0c73f",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=33b95639-2f47-38f7-98f3-ab88d6f0c73f",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 65.3,
+          "sourceReleaseFt": [
+            -0.27,
+            54.38,
+            7.2
+          ],
+          "split": "holdout",
+          "rank": 1,
+          "video": "videos/yesavage-holdout-01.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "yesavage-holdout-02",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776229,
+          "date": "2025-09-21",
+          "atBat": 6,
+          "pitchNumber": 1,
+          "playId": "dded8c4b-2390-378c-9402-dc16b8cafd77",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=dded8c4b-2390-378c-9402-dc16b8cafd77",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.1,
+          "sourceArmAngleDeg": 65.9,
+          "sourceReleaseFt": [
+            -0.85,
+            54.38,
+            7.13
+          ],
+          "split": "holdout",
+          "rank": 2,
+          "video": "videos/yesavage-holdout-02.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "yesavage-holdout-03",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776229,
+          "date": "2025-09-21",
+          "atBat": 8,
+          "pitchNumber": 3,
+          "playId": "5ec2c50d-89a0-372d-bdfc-0264f747243d",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=5ec2c50d-89a0-372d-bdfc-0264f747243d",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.0,
+          "sourceArmAngleDeg": 64.1,
+          "sourceReleaseFt": [
+            -0.56,
+            54.53,
+            7.18
+          ],
+          "split": "holdout",
+          "rank": 3,
+          "video": "videos/yesavage-holdout-03.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "yesavage-holdout-04",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776229,
+          "date": "2025-09-21",
+          "atBat": 28,
+          "pitchNumber": 5,
+          "playId": "941132f9-8355-3657-991e-8468a0c618b4",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=941132f9-8355-3657-991e-8468a0c618b4",
+          "pitchType": "FS",
+          "sourceExtensionFt": 6.2,
+          "sourceArmAngleDeg": 65.2,
+          "sourceReleaseFt": [
+            -0.27,
+            54.26,
+            7.17
+          ],
+          "split": "holdout",
+          "rank": 4,
+          "video": "videos/yesavage-holdout-04.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "yesavage-holdout-05",
+          "playerId": 702056,
+          "name": "yesavage",
+          "gamePk": 776229,
+          "date": "2025-09-21",
+          "atBat": 8,
+          "pitchNumber": 2,
+          "playId": "d621faf3-43d8-33b2-b1d7-3508618074bf",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=d621faf3-43d8-33b2-b1d7-3508618074bf",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.4,
+          "sourceArmAngleDeg": 63.8,
+          "sourceReleaseFt": [
+            -0.44,
+            54.12,
+            6.99
+          ],
+          "split": "holdout",
+          "rank": 5,
+          "video": "videos/yesavage-holdout-05.mp4",
+          "status": "reserved",
+          "groups": []
+        }
+      ]
+    },
+    {
+      "name": "thompson",
+      "playerId": 657044,
+      "holdoutGame": 776355,
+      "availableClips": 650,
+      "availableGames": 48,
+      "clips": [
+        {
+          "id": "thompson-reference-01",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777887,
+          "date": "2025-05-17",
+          "atBat": 75,
+          "pitchNumber": 1,
+          "playId": "afaf50ec-3ebf-3bc6-980e-82084831cb9e",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=afaf50ec-3ebf-3bc6-980e-82084831cb9e",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.7,
+          "sourceArmAngleDeg": -8.3,
+          "sourceReleaseFt": [
+            -3.95,
+            53.78,
+            3.77
+          ],
+          "split": "reference",
+          "rank": 1,
+          "video": "videos/thompson-reference-01.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/dnZQOTRfWGw0TUFRPT1fVjFjQUFsRUVBMUVBQ3dkUUFBQUhVMVZRQUZnTlV3UUFDbGNGQ0FjTkFnSUdVZ3NE.mp4",
+          "videoSha256": "e8039db7b6222282d342c62ba2ddab904b2e8107f87ef6185010966977f05b5c",
+          "videoBytes": 8769800
+        },
+        {
+          "id": "thompson-reference-02",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776294,
+          "date": "2025-09-16",
+          "atBat": 65,
+          "pitchNumber": 3,
+          "playId": "1be01067-b999-3aa5-af27-21b2069f478a",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=1be01067-b999-3aa5-af27-21b2069f478a",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.9,
+          "sourceArmAngleDeg": -10.6,
+          "sourceReleaseFt": [
+            -3.88,
+            53.64,
+            3.43
+          ],
+          "split": "reference",
+          "rank": 2,
+          "video": "videos/thompson-reference-02.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/TkFWeEJfWGw0TUFRPT1fQjFNRVZGVUVVQVVBV2xzTFh3QUhVRmRUQUFCVFVWWUFBRlJYQWdNRENGVlJCd29I.mp4",
+          "videoSha256": "12fe489e77c2fdb062e9437b961176e74ca85d46c20dbb038fbb047b30aa7038",
+          "videoBytes": 5816640
+        },
+        {
+          "id": "thompson-reference-03",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777303,
+          "date": "2025-06-29",
+          "atBat": 45,
+          "pitchNumber": 3,
+          "playId": "57af37e4-d9c4-3be8-86af-7506ad09b424",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=57af37e4-d9c4-3be8-86af-7506ad09b424",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -9.4,
+          "sourceReleaseFt": [
+            -4.19,
+            53.7,
+            3.62
+          ],
+          "split": "reference",
+          "rank": 3,
+          "video": "videos/thompson-reference-03.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/QndvZUJfWGw0TUFRPT1fQXdZQUFsY0RBd1lBWEZ0UlVnQUhVMU5lQUZrREFnY0FCVkFGQmxKUkFRb0hCQUJT.mp4",
+          "videoSha256": "00e110d08c48bb14e8285aa91627554aa3ec3c37840cb1d070acbddeaf3d90a8",
+          "videoBytes": 3814575
+        },
+        {
+          "id": "thompson-reference-04",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 778413,
+          "date": "2025-04-07",
+          "atBat": 42,
+          "pitchNumber": 3,
+          "playId": "38aa7cae-2083-33e5-9141-8df60a3d24b4",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=38aa7cae-2083-33e5-9141-8df60a3d24b4",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -6.3,
+          "sourceReleaseFt": [
+            -4.09,
+            53.73,
+            3.8
+          ],
+          "split": "reference",
+          "rank": 4,
+          "video": "videos/thompson-reference-04.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/YkIzZ0JfWGw0TUFRPT1fQlFrQUJWTlhCMWNBQ2xJS1ZRQUhBbE5UQUZnRVYxQUFDZ0ZUQmdOVUFsZFhCRkJT.mp4",
+          "videoSha256": "9f73aeaebba6ae9f6b208fb22196c3669f83fab716fa536fe364c3631ea39eda",
+          "videoBytes": 4678574
+        },
+        {
+          "id": "thompson-reference-05",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 778543,
+          "date": "2025-03-28",
+          "atBat": 50,
+          "pitchNumber": 1,
+          "playId": "84e51acf-a253-354c-a61f-57dce346bea7",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=84e51acf-a253-354c-a61f-57dce346bea7",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.3,
+          "sourceArmAngleDeg": -6.9,
+          "sourceReleaseFt": [
+            -4.21,
+            54.2,
+            3.85
+          ],
+          "split": "reference",
+          "rank": 5,
+          "video": "videos/thompson-reference-05.mp4",
+          "status": "downloaded",
+          "groups": [
+            5,
+            10,
+            20
+          ],
+          "directUrl": "https://sporty-clips.mlb.com/dnZCQnpfWGw0TUFRPT1fRGdVRVVWVlZCVlFBV1ZBSFZRQUhCQUlGQUFBRFVnY0FCMUpSVTFZR0JRVUhWVk5S.mp4",
+          "videoSha256": "367fae52461e3af5651dcb18725262d1b29a61985b10bb93b0a3457ecca71135",
+          "videoBytes": 4095593
+        },
+        {
+          "id": "thompson-reference-06",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777248,
+          "date": "2025-07-04",
+          "atBat": 61,
+          "pitchNumber": 2,
+          "playId": "77592e44-2647-3a72-bc10-2a5cc9871c2b",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=77592e44-2647-3a72-bc10-2a5cc9871c2b",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.7,
+          "sourceArmAngleDeg": -7.3,
+          "sourceReleaseFt": [
+            -4.07,
+            53.75,
+            3.75
+          ],
+          "split": "reference",
+          "rank": 6,
+          "video": "videos/thompson-reference-06.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-07",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776193,
+          "date": "2025-09-24",
+          "atBat": 69,
+          "pitchNumber": 1,
+          "playId": "2d6b12d3-7ef9-3391-984b-7942825bfa71",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=2d6b12d3-7ef9-3391-984b-7942825bfa71",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.6,
+          "sourceArmAngleDeg": -15.3,
+          "sourceReleaseFt": [
+            -3.98,
+            53.88,
+            3.46
+          ],
+          "split": "reference",
+          "rank": 7,
+          "video": "videos/thompson-reference-07.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-08",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777654,
+          "date": "2025-06-04",
+          "atBat": 58,
+          "pitchNumber": 1,
+          "playId": "59d0ff21-5704-3206-86e0-8130a2ebaa1d",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=59d0ff21-5704-3206-86e0-8130a2ebaa1d",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.6,
+          "sourceArmAngleDeg": -11.4,
+          "sourceReleaseFt": [
+            -4.06,
+            53.92,
+            3.78
+          ],
+          "split": "reference",
+          "rank": 8,
+          "video": "videos/thompson-reference-08.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-09",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776415,
+          "date": "2025-09-07",
+          "atBat": 46,
+          "pitchNumber": 2,
+          "playId": "2495d9e6-7140-3db4-842e-fa3c1802397e",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=2495d9e6-7140-3db4-842e-fa3c1802397e",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -11.4,
+          "sourceReleaseFt": [
+            -4.07,
+            53.69,
+            3.58
+          ],
+          "split": "reference",
+          "rank": 9,
+          "video": "videos/thompson-reference-09.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-10",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777672,
+          "date": "2025-06-03",
+          "atBat": 75,
+          "pitchNumber": 2,
+          "playId": "62e42941-9118-346a-b8bc-fbb6bbf91dd8",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=62e42941-9118-346a-b8bc-fbb6bbf91dd8",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -12.6,
+          "sourceReleaseFt": [
+            -4.21,
+            53.66,
+            3.69
+          ],
+          "split": "reference",
+          "rank": 10,
+          "video": "videos/thompson-reference-10.mp4",
+          "status": "reserved",
+          "groups": [
+            10,
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-11",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 778059,
+          "date": "2025-05-04",
+          "atBat": 71,
+          "pitchNumber": 1,
+          "playId": "8e745b83-8586-3fc3-9a5d-11954f2eb446",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=8e745b83-8586-3fc3-9a5d-11954f2eb446",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.6,
+          "sourceArmAngleDeg": -8.8,
+          "sourceReleaseFt": [
+            -4.1,
+            53.91,
+            3.81
+          ],
+          "split": "reference",
+          "rank": 11,
+          "video": "videos/thompson-reference-11.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-12",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777761,
+          "date": "2025-05-26",
+          "atBat": 71,
+          "pitchNumber": 5,
+          "playId": "5a1fb0d9-d369-314f-940e-f81117431fe9",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=5a1fb0d9-d369-314f-940e-f81117431fe9",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -13.1,
+          "sourceReleaseFt": [
+            -3.82,
+            53.69,
+            3.5
+          ],
+          "split": "reference",
+          "rank": 12,
+          "video": "videos/thompson-reference-12.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-13",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776170,
+          "date": "2025-09-26",
+          "atBat": 78,
+          "pitchNumber": 3,
+          "playId": "a55c1be1-8661-38d3-bd48-13d9a0e7a2c6",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=a55c1be1-8661-38d3-bd48-13d9a0e7a2c6",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.9,
+          "sourceArmAngleDeg": -15.5,
+          "sourceReleaseFt": [
+            -4.02,
+            53.61,
+            3.31
+          ],
+          "split": "reference",
+          "rank": 13,
+          "video": "videos/thompson-reference-13.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-14",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 778039,
+          "date": "2025-05-05",
+          "atBat": 51,
+          "pitchNumber": 4,
+          "playId": "cbf14699-98e8-3e5d-b8b7-0afc0333e106",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=cbf14699-98e8-3e5d-b8b7-0afc0333e106",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": 1.4,
+          "sourceReleaseFt": [
+            -3.78,
+            53.73,
+            4.08
+          ],
+          "split": "reference",
+          "rank": 14,
+          "video": "videos/thompson-reference-14.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-15",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776213,
+          "date": "2025-09-23",
+          "atBat": 66,
+          "pitchNumber": 1,
+          "playId": "a97701b8-3cae-363a-8a37-a1a39e74c4d5",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=a97701b8-3cae-363a-8a37-a1a39e74c4d5",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.6,
+          "sourceArmAngleDeg": -16.2,
+          "sourceReleaseFt": [
+            -3.93,
+            53.95,
+            3.39
+          ],
+          "split": "reference",
+          "rank": 15,
+          "video": "videos/thompson-reference-15.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-16",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777988,
+          "date": "2025-05-09",
+          "atBat": 88,
+          "pitchNumber": 2,
+          "playId": "e9d142ce-2ef3-3247-8a18-bd928b0539b5",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=e9d142ce-2ef3-3247-8a18-bd928b0539b5",
+          "pitchType": "FS",
+          "sourceExtensionFt": 7.0,
+          "sourceArmAngleDeg": -0.1,
+          "sourceReleaseFt": [
+            -3.86,
+            53.51,
+            4.1
+          ],
+          "split": "reference",
+          "rank": 16,
+          "video": "videos/thompson-reference-16.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-17",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777577,
+          "date": "2025-06-09",
+          "atBat": 56,
+          "pitchNumber": 1,
+          "playId": "570dd33b-682c-3e27-8246-e0b516f54fc1",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=570dd33b-682c-3e27-8246-e0b516f54fc1",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -12.5,
+          "sourceReleaseFt": [
+            -4.1,
+            53.73,
+            3.53
+          ],
+          "split": "reference",
+          "rank": 17,
+          "video": "videos/thompson-reference-17.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-18",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777521,
+          "date": "2025-06-13",
+          "atBat": 60,
+          "pitchNumber": 4,
+          "playId": "95dca95e-e0e8-33c7-bbe7-1abef17a47fd",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=95dca95e-e0e8-33c7-bbe7-1abef17a47fd",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.9,
+          "sourceArmAngleDeg": -7.6,
+          "sourceReleaseFt": [
+            -4.08,
+            53.64,
+            3.48
+          ],
+          "split": "reference",
+          "rank": 18,
+          "video": "videos/thompson-reference-18.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-19",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 777515,
+          "date": "2025-06-14",
+          "atBat": 52,
+          "pitchNumber": 6,
+          "playId": "c3ef6b5a-d775-3806-8ff5-6933ce436b11",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=c3ef6b5a-d775-3806-8ff5-6933ce436b11",
+          "pitchType": "SI",
+          "sourceExtensionFt": 7.0,
+          "sourceArmAngleDeg": -9.2,
+          "sourceReleaseFt": [
+            -4.17,
+            53.5,
+            3.6
+          ],
+          "split": "reference",
+          "rank": 19,
+          "video": "videos/thompson-reference-19.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-reference-20",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 778364,
+          "date": "2025-04-11",
+          "atBat": 47,
+          "pitchNumber": 3,
+          "playId": "4aa57fd4-f4f3-3be4-8a4a-484448b287d4",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=4aa57fd4-f4f3-3be4-8a4a-484448b287d4",
+          "pitchType": "FF",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -0.2,
+          "sourceReleaseFt": [
+            -4.08,
+            53.65,
+            4.12
+          ],
+          "split": "reference",
+          "rank": 20,
+          "video": "videos/thompson-reference-20.mp4",
+          "status": "reserved",
+          "groups": [
+            20
+          ]
+        },
+        {
+          "id": "thompson-holdout-01",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776355,
+          "date": "2025-09-12",
+          "atBat": 54,
+          "pitchNumber": 2,
+          "playId": "6472494f-683f-305e-860d-dc37b928921f",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=6472494f-683f-305e-860d-dc37b928921f",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.9,
+          "sourceArmAngleDeg": -13.4,
+          "sourceReleaseFt": [
+            -3.8,
+            53.58,
+            3.47
+          ],
+          "split": "holdout",
+          "rank": 1,
+          "video": "videos/thompson-holdout-01.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "thompson-holdout-02",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776355,
+          "date": "2025-09-12",
+          "atBat": 53,
+          "pitchNumber": 2,
+          "playId": "b03ee9a2-6ea7-320b-8340-a508625256be",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=b03ee9a2-6ea7-320b-8340-a508625256be",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.7,
+          "sourceArmAngleDeg": -10.8,
+          "sourceReleaseFt": [
+            -4.09,
+            53.76,
+            3.52
+          ],
+          "split": "holdout",
+          "rank": 2,
+          "video": "videos/thompson-holdout-02.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "thompson-holdout-03",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776355,
+          "date": "2025-09-12",
+          "atBat": 53,
+          "pitchNumber": 3,
+          "playId": "8decf323-cee5-3bbf-9ccd-190812816f1d",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=8decf323-cee5-3bbf-9ccd-190812816f1d",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.7,
+          "sourceArmAngleDeg": -15.1,
+          "sourceReleaseFt": [
+            -3.78,
+            53.76,
+            3.44
+          ],
+          "split": "holdout",
+          "rank": 3,
+          "video": "videos/thompson-holdout-03.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "thompson-holdout-04",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776355,
+          "date": "2025-09-12",
+          "atBat": 54,
+          "pitchNumber": 1,
+          "playId": "724727d4-51d0-3ee0-a31f-1505dbec1c49",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=724727d4-51d0-3ee0-a31f-1505dbec1c49",
+          "pitchType": "SI",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -13.3,
+          "sourceReleaseFt": [
+            -3.96,
+            53.7,
+            3.56
+          ],
+          "split": "holdout",
+          "rank": 4,
+          "video": "videos/thompson-holdout-04.mp4",
+          "status": "reserved",
+          "groups": []
+        },
+        {
+          "id": "thompson-holdout-05",
+          "playerId": 657044,
+          "name": "thompson",
+          "gamePk": 776355,
+          "date": "2025-09-12",
+          "atBat": 53,
+          "pitchNumber": 4,
+          "playId": "3b25478a-4ff8-353d-a169-2da067bafefd",
+          "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=3b25478a-4ff8-353d-a169-2da067bafefd",
+          "pitchType": "SL",
+          "sourceExtensionFt": 6.8,
+          "sourceArmAngleDeg": -11.9,
+          "sourceReleaseFt": [
+            -3.99,
+            53.67,
+            3.48
+          ],
+          "split": "holdout",
+          "rank": 5,
+          "video": "videos/thompson-holdout-05.mp4",
+          "status": "reserved",
+          "groups": []
+        }
+      ]
+    }
+  ],
+  "trainingPerformed": false,
+  "experiment": "Nested 5/10/20 reference groups; 5 held-out pitches/player from a separate game. No frame-level random split.",
+  "currentBatch": "First five reference clips/player for method screening only; holdout not processed or used to tune.",
+  "visualAcceptance": "pending_user",
+  "numerical3DGroundTruthAvailable": false
+}

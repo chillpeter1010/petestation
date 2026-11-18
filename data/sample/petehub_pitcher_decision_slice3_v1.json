@@ -1,0 +1,257 @@
+{
+  "slice": 3,
+  "date": "2026-11-14",
+  "years": [
+    {
+      "slice": 3,
+      "year": 2021,
+      "games": 2429,
+      "rows": {
+        "events": 787709,
+        "plays": 182162,
+        "decisions": 182162,
+        "appearances": 21545,
+        "roster": 127261,
+        "runners": 244629
+      },
+      "counts": {
+        "physical_pitches": 709852,
+        "pitch_change_actions": 16692,
+        "completed_batters": 181818,
+        "zero_pitch_plays": 565,
+        "zero_pitch_appearances": 5,
+        "mid_pa_changes": 63,
+        "unpriced_wpa_plays": 62,
+        "uncertain_base_decisions": 530,
+        "removed_current_pitcher_boundaries": 4073,
+        "source_clock_issue_games": 1,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    },
+    {
+      "slice": 3,
+      "year": 2022,
+      "games": 2430,
+      "rows": {
+        "events": 781319,
+        "plays": 182468,
+        "decisions": 182468,
+        "appearances": 20883,
+        "roster": 128901,
+        "runners": 243978
+      },
+      "counts": {
+        "physical_pitches": 708540,
+        "pitch_change_actions": 16047,
+        "completed_batters": 182052,
+        "zero_pitch_plays": 397,
+        "zero_pitch_appearances": 5,
+        "mid_pa_changes": 60,
+        "unpriced_wpa_plays": 70,
+        "uncertain_base_decisions": 479,
+        "removed_current_pitcher_boundaries": 11,
+        "source_clock_issue_games": 0,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    },
+    {
+      "slice": 3,
+      "year": 2023,
+      "games": 2430,
+      "rows": {
+        "events": 818768,
+        "plays": 184506,
+        "decisions": 184506,
+        "appearances": 20634,
+        "roster": 127033,
+        "runners": 248887
+      },
+      "counts": {
+        "physical_pitches": 717945,
+        "pitch_change_actions": 15804,
+        "completed_batters": 184104,
+        "zero_pitch_plays": 399,
+        "zero_pitch_appearances": 5,
+        "mid_pa_changes": 62,
+        "unpriced_wpa_plays": 56,
+        "uncertain_base_decisions": 450,
+        "removed_current_pitcher_boundaries": 18,
+        "source_clock_issue_games": 1,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    },
+    {
+      "slice": 3,
+      "year": 2024,
+      "games": 2429,
+      "rows": {
+        "events": 816024,
+        "plays": 182903,
+        "decisions": 182903,
+        "appearances": 20695,
+        "roster": 127639,
+        "runners": 245213
+      },
+      "counts": {
+        "physical_pitches": 709512,
+        "pitch_change_actions": 15850,
+        "completed_batters": 182449,
+        "zero_pitch_plays": 420,
+        "zero_pitch_appearances": 2,
+        "mid_pa_changes": 58,
+        "unpriced_wpa_plays": 68,
+        "uncertain_base_decisions": 472,
+        "removed_current_pitcher_boundaries": 15,
+        "source_clock_issue_games": 1,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    },
+    {
+      "slice": 3,
+      "year": 2025,
+      "games": 2430,
+      "rows": {
+        "events": 826030,
+        "plays": 183387,
+        "decisions": 183387,
+        "appearances": 20870,
+        "roster": 127665,
+        "runners": 246292
+      },
+      "counts": {
+        "physical_pitches": 710084,
+        "pitch_change_actions": 16032,
+        "completed_batters": 182926,
+        "zero_pitch_plays": 467,
+        "zero_pitch_appearances": 2,
+        "mid_pa_changes": 65,
+        "unpriced_wpa_plays": 50,
+        "uncertain_base_decisions": 471,
+        "removed_current_pitcher_boundaries": 11,
+        "source_clock_issue_games": 0,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    },
+    {
+      "slice": 3,
+      "year": 2026,
+      "games": 2429,
+      "rows": {
+        "events": 836302,
+        "plays": 184328,
+        "decisions": 184328,
+        "appearances": 20802,
+        "roster": 127335,
+        "runners": 248660
+      },
+      "counts": {
+        "physical_pitches": 714483,
+        "pitch_change_actions": 16021,
+        "completed_batters": 183849,
+        "zero_pitch_plays": 458,
+        "zero_pitch_appearances": 2,
+        "mid_pa_changes": 46,
+        "unpriced_wpa_plays": 80,
+        "uncertain_base_decisions": 462,
+        "removed_current_pitcher_boundaries": 14,
+        "source_clock_issue_games": 0,
+        "invalid_known_base_states": 0
+      },
+      "checks": {
+        "duplicate_event_keys": 0,
+        "duplicate_play_keys": 0,
+        "duplicate_decision_keys": 0,
+        "unmatched_outcome_keys": 0
+      },
+      "source_drift": [],
+      "outcomes_stored_once": true,
+      "formal_models_refitted": false,
+      "limitations": [
+        "Minimum-batter permission is statutory, not knowledge of warm-up or medical clearance.",
+        "Unpriced adjacent WE/RE boundaries remain null for Slice 10, not interpolated.",
+        "Rare pitcher position switches, missing runner event indexes and compound substitutions remain explicit filters."
+      ]
+    }
+  ],
+  "games": 14577,
+  "events": 4866152,
+  "plays": 1099754,
+  "appearances": 125429,
+  "physical_pitches": 4270416,
+  "zero_pitch_appearances": 21,
+  "unpriced_wpa_plays": 386,
+  "outcomes_stored_once": true,
+  "source_drift": false,
+  "seven_inning_era_supported": true,
+  "bf_reconciles_existing_official_ledger": true
+}

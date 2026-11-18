@@ -1,0 +1,10 @@
+{
+  "version": "replay_motion_f2_4_v1",
+  "status": "user_rejected",
+  "reason": "Frontal delivery then twisted legs in manual IK revision; release numerical fit did not establish valid anatomy or natural motion.",
+  "pitcher_delivery_enabled": false,
+  "next_gate": "output/ballpark/f2-motion-reference-v1/pose-review.html",
+  "source_ball_path": "unchanged",
+  "accepted_F2_3_ready_idle": "preserved",
+  "visual_acceptance": false
+}

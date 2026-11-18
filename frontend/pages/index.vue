@@ -1,8 +1,7 @@
 <template>
   <main class="site-home" :class="isPetehub ? 'site-home--petehub' : 'site-home--peteclub'">
     <header class="site-home__top">
-      <PetehubLogo v-if="isPetehub" size="home" :aria-label="`${brandName} home`" />
-      <NuxtLink v-else class="site-home__brand" to="/" :aria-label="`${brandName} home`">Peteclub</NuxtLink>
+      <PetehubLogo size="home" :aria-label="`${brandName} home`" />
       <div class="site-home__actions">
         <nav class="site-home__nav" aria-label="Site sections">
           <NuxtLink class="site-home__ballpark-entry" to="/ballpark">Ballpark</NuxtLink>
@@ -144,8 +143,7 @@ function refreshVideos() {
   padding: 16px clamp(18px, 4vw, 58px) 32px;
   color: var(--home-text);
   background:
-    radial-gradient(circle at 86% 82%, rgba(200, 138, 47, 0.065), transparent 22rem),
-    linear-gradient(145deg, #0b0d10 0%, #111318 58%, #0b0d10 100%);
+    #000;
 }
 
 .site-home__top,
@@ -256,8 +254,7 @@ function refreshVideos() {
   border-radius: 12px;
   padding: clamp(38px, 5vw, 68px) clamp(24px, 4vw, 54px);
   background:
-    radial-gradient(circle at 69% 56%, rgba(200, 138, 47, 0.08), transparent 17rem),
-    linear-gradient(100deg, #101217 0%, #111318 64%, #0e1014 100%);
+    #000;
 }
 
 .site-home__hero::before {
@@ -271,11 +268,7 @@ function refreshVideos() {
   content: "";
   color: rgba(230, 233, 238, 0.055);
   background-image:
-    linear-gradient(currentColor 1px, transparent 1px),
-    linear-gradient(90deg, currentColor 1px, transparent 1px),
-    radial-gradient(circle at 21% 72%, currentColor 0 2px, transparent 2.5px),
-    radial-gradient(circle at 57% 36%, currentColor 0 2px, transparent 2.5px),
-    radial-gradient(circle at 76% 61%, currentColor 0 2px, transparent 2.5px);
+    none;
   background-size: 25% 25%, 25% 25%, 100% 100%, 100% 100%, 100% 100%;
   transform: perspective(520px) rotateY(-7deg);
 }
@@ -335,7 +328,7 @@ function refreshVideos() {
   border-radius: 10px;
   padding: 10px 15px;
   color: var(--home-text);
-  background: linear-gradient(90deg, rgba(255,153,0,.13), rgba(16,16,16,.9) 48%);
+  background: #000;
   text-decoration: none;
   transition: border-color .15s ease, transform .15s ease;
 }
@@ -379,9 +372,7 @@ function refreshVideos() {
   --home-muted: #b7b7b7;
   padding: 26px clamp(18px, 4vw, 58px) 32px;
   background:
-    radial-gradient(circle at 78% 8%, rgba(255, 153, 0, 0.24), transparent 28rem),
-    radial-gradient(circle at 12% 76%, rgba(255, 153, 0, 0.1), transparent 24rem),
-    linear-gradient(135deg, #070707 0%, #141414 52%, #060606 100%);
+    #000;
 }
 
 .site-home--petehub .site-home__top {
@@ -402,7 +393,7 @@ function refreshVideos() {
   border-radius: 999px;
   padding: 9px 15px;
   color: var(--home-muted);
-  background: rgba(255, 255, 255, 0.045);
+  background: #000;
   font-family: inherit;
   font-size: inherit;
   font-weight: 900;
@@ -424,9 +415,7 @@ function refreshVideos() {
   border-radius: 10px;
   padding: clamp(24px, 4vw, 48px);
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.44) 56%, rgba(255, 153, 0, 0.11)),
-    radial-gradient(circle at 82% 32%, rgba(255, 153, 0, 0.16), transparent 28rem),
-    rgba(18, 18, 18, 0.84);
+    #000;
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.44);
 }
 

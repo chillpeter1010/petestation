@@ -1,0 +1,35 @@
+{
+  "status": "user_rejected_runtime_disabled",
+  "builder": "frontend/scripts/build-pitch-video-poses.mjs",
+  "clips": [
+    {
+      "name": "yesavage",
+      "playerId": 702056,
+      "bytes": 39857,
+      "frames": 56,
+      "sha256": "7a205ce018fd2a4e1ff5deede1c6110a647bfead6c7c043c8a371415ea52394f",
+      "maximumRootStep": 0.12000000000000002
+    },
+    {
+      "name": "thompson",
+      "playerId": 657044,
+      "bytes": 39989,
+      "frames": 56,
+      "sha256": "c0b12395417548c1cd0c4833254fc39da5b87d2369bdc020155a3654f159acf7",
+      "maximumRootStep": 0.12000000000000005
+    }
+  ],
+  "notMeasured3DMocap": true,
+  "scope": "Personal-only isolated reference preview; never applied to another game pitch",
+  "user_findings": [
+    "Both right legs twist",
+    "Body twists",
+    "Lead stride pinned in place"
+  ],
+  "checks": {
+    "fixed_bone_knee_sign_and_seek": "source checks passed; insufficient for full-body validity",
+    "vue_tsc_before_rejection": "pass",
+    "visual_acceptance": false
+  },
+  "next_step": "User accepted two 2D joint overlays but REJECTED both Personal 3D retarget previews: right-leg/body twisting and planted-in-place lead stride. Both preview playback and runtime retarget gates now disabled; original general pitcher delivery stays disabled. Before another candidate, resolve camera orientation, root translation and support-foot/stride timing using a single bounded reference clip with projection residuals and explicit depth uncertainty. No more blind joint-angle tuning; F2.4 unaccepted, G3 in progress, F2.5-F3 deferred."
+}

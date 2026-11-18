@@ -1,0 +1,79 @@
+{
+  "slice": 4,
+  "years": [
+    {
+      "year": 2021,
+      "decisions": 182162,
+      "missing_time": 0,
+      "missing_prior_role": 8741,
+      "left_censored_14d": 13187
+    },
+    {
+      "year": 2022,
+      "decisions": 182468,
+      "missing_time": 0,
+      "missing_prior_role": 2270,
+      "left_censored_14d": 0
+    },
+    {
+      "year": 2023,
+      "decisions": 184506,
+      "missing_time": 0,
+      "missing_prior_role": 2187,
+      "left_censored_14d": 0
+    },
+    {
+      "year": 2024,
+      "decisions": 182903,
+      "missing_time": 0,
+      "missing_prior_role": 1919,
+      "left_censored_14d": 0
+    },
+    {
+      "year": 2025,
+      "decisions": 183387,
+      "missing_time": 0,
+      "missing_prior_role": 1750,
+      "left_censored_14d": 0
+    },
+    {
+      "year": 2026,
+      "decisions": 184328,
+      "missing_time": 0,
+      "missing_prior_role": 1498,
+      "left_censored_14d": 0
+    }
+  ],
+  "sessions": 125412,
+  "strict_time_violations": 0,
+  "duplicate_decisions": 0,
+  "source_clock_issue_games": 3,
+  "scope": "All teams and SP/RP roles by MLBAM ID; regular-season physical pitches only; 1/3/7/14 rolling days, strict t'<t.",
+  "same_day_order": "UTC event time, with New York calendar dates for consecutive-day flags; no game-ID ordering.",
+  "resumed_games": "Physical sessions split after >8h gap; closed history waits for observed exit or 8h inactivity.",
+  "limitations": [
+    "Spring training, minor-league pitches, warm-up, health and pre-2021 role history are unknown.",
+    "A former starter is historical context, not automatic readiness credit.",
+    "Missing-time and early-source lookback rows retain explicit flags."
+  ],
+  "independent_window_check": {
+    "independent_sample_boundaries": 200,
+    "windows_days": [
+      1,
+      3,
+      7,
+      14
+    ],
+    "count_disagreements": 0,
+    "clock_status_counts": [
+      [
+        "uncertain_source_clock",
+        234
+      ],
+      [
+        "strictly_prior_event_time",
+        1099520
+      ]
+    ]
+  }
+}

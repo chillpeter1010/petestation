@@ -121,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { heatColor, heatStroke, contourLevel } from '~/utils/heatmapPalette'
+import { buildPitchHeatmap } from '~/utils/pitchLocationHeatmap'
 const props = withDefaults(defineProps<{
   points: Array<Record<string, unknown>>
   totalPitches?: number | null
@@ -289,91 +289,9 @@ const pointOpacity = computed(() => {
   return Math.max(0.16, 0.78 * (1 - heatmapBlend.value * 0.78))
 })
 
-const heatmapCells = computed(() => {
-  if (heatmapBlend.value <= 0 || plottedPoints.value.length < 8) {
-    return []
-  }
-  const xBins = 64
-  const zBins = 52
-  const activeXDomain = xDomain.value
-  const activeYDomain = yDomain.value
-  const xStep = (activeXDomain[1] - activeXDomain[0]) / xBins
-  const zStep = (activeYDomain[1] - activeYDomain[0]) / zBins
-  const sigmaX = 0.18
-  const sigmaZ = 0.2
-  const usablePoints = plottedPoints.value.filter((point) => (
-    point.x >= activeXDomain[0]
-    && point.x <= activeXDomain[1]
-    && point.z >= activeYDomain[0]
-    && point.z <= activeYDomain[1]
-  ))
-  const densityCells: Array<{ xi: number; zi: number; density: number; metric: number | null }> = []
-  let maxDensity = 0
-
-  for (let xi = 0; xi < xBins; xi += 1) {
-    const xCenter = activeXDomain[0] + (xi + 0.5) * xStep
-    for (let zi = 0; zi < zBins; zi += 1) {
-      const zCenter = activeYDomain[0] + (zi + 0.5) * zStep
-      let density = 0
-      let metricTotal = 0
-      let metricWeight = 0
-      for (const point of usablePoints) {
-        const dx = (xCenter - point.x) / sigmaX
-        const dz = (zCenter - point.z) / sigmaZ
-        const distanceSquared = dx * dx + dz * dz
-        if (distanceSquared <= 9) {
-          const weight = Math.exp(-0.5 * distanceSquared)
-          density += weight
-          const metricValue = heatmapMode.value === 'bat-speed'
-            ? point.batSpeed
-            : heatmapMode.value === 'choice'
-              ? (point.swung ? 1 : 0)
-              : null
-          if (metricValue !== null) {
-            metricTotal += metricValue * weight
-            metricWeight += weight
-          }
-        }
-      }
-      if (density > 0 && (heatmapMode.value === 'density' || metricWeight > 0)) {
-        densityCells.push({ xi, zi, density, metric: metricWeight ? metricTotal / metricWeight : null })
-        maxDensity = Math.max(maxDensity, density)
-      }
-    }
-  }
-
-  if (!maxDensity) {
-    return []
-  }
-  const metricValues = densityCells.map((cell) => cell.metric).filter((value): value is number => value !== null)
-  const sharedDomain = props.heatmapMetricDomain
-  const metricMin = sharedDomain?.length === 2 ? Number(sharedDomain[0]) : (metricValues.length ? Math.min(...metricValues) : 0)
-  const metricMax = sharedDomain?.length === 2 ? Number(sharedDomain[1]) : (metricValues.length ? Math.max(...metricValues) : 1)
-  return densityCells.flatMap(({ xi, zi, density, metric }) => {
-    const normalized = density / maxDensity
-    if (normalized < 0.045) {
-      return []
-    }
-    const rawColorValue = heatmapMode.value === 'density'
-      ? Math.min(1, Math.pow(normalized, 0.58))
-      : heatmapMode.value === 'choice'
-        ? Number(metric)
-        : (Number(metric) - metricMin) / (metricMax - metricMin || 1)
-    const colorValue = heatmapMode.value === 'density' ? contourLevel(rawColorValue) : Math.max(0, Math.min(1, rawColorValue))
-    return {
-      x: xi,
-      z: zi,
-      x0: activeXDomain[0] + xi * xStep - xStep * 0.16,
-      x1: activeXDomain[0] + (xi + 1) * xStep + xStep * 0.16,
-      z0: activeYDomain[0] + zi * zStep - zStep * 0.16,
-      z1: activeYDomain[0] + (zi + 1) * zStep + zStep * 0.16,
-      color: heatColor(colorValue),
-      stroke: heatStroke(colorValue),
-      strokeOpacity: heatmapBlend.value * 0.34,
-      opacity: heatmapBlend.value * (0.35 + 0.65 * Math.min(1, Math.pow(normalized, 0.5)))
-    }
-  })
-})
+const heatmapCells = computed(() => buildPitchHeatmap(plottedPoints.value, {
+  blend:heatmapBlend.value,mode:heatmapMode.value,xDomain:xDomain.value,zDomain:yDomain.value,metricDomain:props.heatmapMetricDomain
+}))
 
 const subtitle = computed(() => {
   const sample = plottedPoints.value.length.toLocaleString()
@@ -437,18 +355,18 @@ function pitchPointKey(point: Record<string, unknown>) {
 }
 
 function formatVelo(value: unknown) {
-  const numberValue = Number(value)
-  return Number.isFinite(numberValue) ? `${numberValue.toFixed(1)} mph` : '-'
+  const numberValue = nullableNumber(value)
+  return numberValue !== null ? `${numberValue.toFixed(1)} mph` : '-'
 }
 
 function formatPlusScore(value: unknown) {
-  const numberValue = Number(value)
-  return Number.isFinite(numberValue) ? numberValue.toFixed(1) : '—'
+  const numberValue = nullableNumber(value)
+  return numberValue !== null ? numberValue.toFixed(1) : '—'
 }
 
 function formatSignedScore(value: unknown) {
-  const numberValue = Number(value)
-  return Number.isFinite(numberValue) ? `${numberValue > 0 ? '+' : ''}${numberValue.toFixed(1)}` : '—'
+  const numberValue = nullableNumber(value)
+  return numberValue !== null ? `${numberValue > 0 ? '+' : ''}${numberValue.toFixed(1)}` : '—'
 }
 
 function nullableNumber(value: unknown) {

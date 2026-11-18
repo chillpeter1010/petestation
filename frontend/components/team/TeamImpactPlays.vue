@@ -152,7 +152,7 @@ function formatEvent(value: string | null) { return (value || 'impact play').rep
 .impact-plays__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .impact-card { min-width: 0; display: flex; flex-direction: column; align-items: stretch; border: 1px solid var(--team-panel-border); border-radius: 14px; padding: 0; overflow: hidden; color: inherit; background: var(--color-surface); text-align: left; cursor: pointer; transition: transform .16s ease, border-color .16s ease; }
 .impact-card:hover, .impact-card:focus-visible { border-color: var(--team-primary); transform: translateY(-2px); outline: none; }
-.impact-card__visual { position: relative; min-height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; background: #05070a; }
+.impact-card__visual { position: relative; min-height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; background: #000; }
 .impact-card__visual video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .impact-card__visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72), transparent 58%); pointer-events: none; }
 .impact-card__visual > strong { position: absolute; z-index: 1; right: 12px; bottom: 10px; border-radius: 999px; padding: 5px 9px; background: color-mix(in srgb, var(--team-primary) 88%, #090b10); font: 900 13px "Fira Code", monospace; }
@@ -164,13 +164,13 @@ function formatEvent(value: string | null) { return (value || 'impact play').rep
 .impact-card__description { display: -webkit-box; margin-top: 7px; overflow: hidden; color: var(--color-muted-text); font-size: 12px; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .impact-card__pitch { margin-top: 12px; margin-bottom: 15px; color: var(--color-muted-text); font: 700 10px "Fira Code", monospace; text-transform: capitalize; }
 .impact-plays__empty { color: var(--color-muted-text); }
-:global(.impact-dialog__overlay) { position: fixed; z-index: 100; inset: 0; background: rgba(2, 5, 10, .8); backdrop-filter: blur(7px); }
-:global(.impact-dialog__content) { position: fixed; z-index: 101; top: 50%; left: 50%; width: min(920px, calc(100vw - 28px)); max-height: calc(100vh - 28px); overflow: auto; transform: translate(-50%, -50%); border: 1px solid color-mix(in srgb, var(--team-primary) 50%, #394150); border-radius: 16px; padding: 18px; color: #f8fafc; background: #0a0d13; box-shadow: 0 28px 100px rgba(0,0,0,.55); }
+:global(.impact-dialog__overlay) { position: fixed; z-index: 100; inset: 0; background: rgb(0 0 0 / 0.8); backdrop-filter: blur(7px); }
+:global(.impact-dialog__content) { position: fixed; z-index: 101; top: 50%; left: 50%; width: min(920px, calc(100vw - 28px)); max-height: calc(100vh - 28px); overflow: auto; transform: translate(-50%, -50%); border: 1px solid color-mix(in srgb, var(--team-primary) 50%, #394150); border-radius: 16px; padding: 18px; color: #f8fafc; background: #000; box-shadow: 0 28px 100px rgba(0,0,0,.55); }
 :global(.impact-dialog__header) { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 15px; }
 :global(.impact-dialog__title) { display: block; font-size: 19px; font-weight: 900; }
 :global(.impact-dialog__description) { display: block; max-width: 760px; margin-top: 6px; color: #aeb5c0; font-size: 12px; line-height: 1.45; }
-:global(.impact-dialog__close) { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid #313844; border-radius: 9px; color: #fff; background: #151a22; cursor: pointer; }
-:global(.impact-dialog__player) { aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; border-radius: 12px; background: #020305; }
+:global(.impact-dialog__close) { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid #313844; border-radius: 9px; color: #fff; background: #000; cursor: pointer; }
+:global(.impact-dialog__player) { aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; border-radius: 12px; background: #000; }
 :global(.impact-dialog__player video) { width: 100%; height: 100%; object-fit: contain; }
 :global(.impact-dialog__loading), :global(.impact-dialog__fallback) { color: #aeb5c0; text-align: center; }
 :global(.impact-dialog__fallback a) { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; color: #fff; font-weight: 800; }

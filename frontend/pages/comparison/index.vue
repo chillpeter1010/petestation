@@ -37,8 +37,7 @@
   border-radius: var(--radius-md);
   padding: 28px;
   background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent 34%),
-    var(--color-surface);
+    #000;
   box-shadow: var(--shadow-md);
 }
 

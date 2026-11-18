@@ -7,7 +7,7 @@ export function objectClassicDestination(target:Interaction,context:{team:string
   let path=context.path && target.links.some(l=>l.path===context.path)?context.path:target.links[0]?.path
   const query:Record<string,string|number|undefined>={year,team:team||undefined}
   if(target.id==='batting-cages/batter-analysis')path='/batter-personal'
-  if(target.kind==='in-game'){path='/pitcher-personal';query.tab='in-game';query.game_pk=game}
+  if(target.kind==='in-game'){path='/pitcher-personal';query.tab='in-game';query.game_pk=game;query.bullpen=target.id.endsWith('in-game-west')?'west':'east'}
   if(target.id==='pitcher-mound/pitch-analysis'){path='/pitcher-personal';query.tab='movement'}
   if(target.kind==='games'){path='/games/today';query.game_pk=game;query.pitcher_id=player;query.date=gameDate(context.date,year)||undefined;query.tab=target.id.endsWith('replay-screen')?'replay':target.id.endsWith('game-analysis-console')?'box':'feed'}
   if(path==='/batter-personal')query.batter_id=player

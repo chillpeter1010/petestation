@@ -1,0 +1,162 @@
+{
+  "slice": 6,
+  "version": "decision_temporal_research_v1",
+  "status": "implemented_and_checked",
+  "protocol_sha256": "3827bd46d6fd52ecc8604562fd2b2c373688726760ce2507260983366452fdd4",
+  "folds": [
+    {
+      "id": "2021_h2",
+      "train_end": "2021-07-01",
+      "score_start": "2021-07-01",
+      "score_end": "2022-01-01"
+    },
+    {
+      "id": "2022",
+      "train_end": "2022-01-01",
+      "score_start": "2022-01-01",
+      "score_end": "2023-01-01"
+    },
+    {
+      "id": "2023",
+      "train_end": "2023-01-01",
+      "score_start": "2023-01-01",
+      "score_end": "2024-01-01"
+    },
+    {
+      "id": "frozen_2024",
+      "train_end": "2024-01-01",
+      "score_start": "2024-01-01",
+      "score_end": "2027-01-01"
+    }
+  ],
+  "warmup": "2021 H1; state baseline warmup additionally Jul–Aug",
+  "formal_models_preserved": true,
+  "feature_registry": {
+    "pitch_physics": "after delivery only",
+    "prefix_state": "strictly before decision",
+    "candidate": "prior appearances only",
+    "roster": "confidence flags, no individual ranking",
+    "outcomes": "label table only"
+  },
+  "holdout_policy": "2025/2026 score/coverage only; no outcome performance selection in Slices 6–10. Existing years already examined elsewhere; not prospective.",
+  "research_plus_method": "Research Location: expected run value from location/context. Research Stuff: physical prediction of residual after location/context model. Distinct from frozen formal marginal-context Stuff+.",
+  "individual_ranking_allowed": false,
+  "prior_reference_time_violations": 0,
+  "alignment": [
+    {
+      "year": 2021,
+      "validated_order": 708788,
+      "unmatched_or_ambiguous": 1064,
+      "rows": 709852,
+      "source_valid": 709423
+    },
+    {
+      "year": 2022,
+      "validated_order": 705763,
+      "unmatched_or_ambiguous": 2777,
+      "rows": 708540,
+      "source_valid": 708439
+    },
+    {
+      "year": 2023,
+      "validated_order": 715354,
+      "unmatched_or_ambiguous": 2591,
+      "rows": 717945,
+      "source_valid": 717574
+    },
+    {
+      "year": 2024,
+      "validated_order": 705763,
+      "unmatched_or_ambiguous": 3749,
+      "rows": 709512,
+      "source_valid": 709130
+    },
+    {
+      "year": 2025,
+      "validated_order": 705219,
+      "unmatched_or_ambiguous": 4865,
+      "rows": 710084,
+      "source_valid": 710007
+    },
+    {
+      "year": 2026,
+      "validated_order": 702995,
+      "unmatched_or_ambiguous": 11488,
+      "rows": 714483,
+      "source_valid": 714388
+    }
+  ],
+  "source_only_validation": {
+    "formal_metadata_changes": 0,
+    "training_label_time_violations": 0,
+    "prior_fastball_time_violations": 0,
+    "prefix_boundary_time_violations": 0,
+    "candidate_history_time_violations": 0,
+    "duplicate_pitch_feature_keys": 0,
+    "missing_li_filled_with_one": false,
+    "individual_ranking_allowed": false
+  },
+  "identity_repair": {
+    "reason": "Pinch-runner offensive substitution was incorrectly treated as batter substitution.",
+    "only_changed_field": "batter_id",
+    "pitcher_and_time_and_count_unchanged": true,
+    "model_features_unchanged": true,
+    "years": [
+      {
+        "year": 2021,
+        "reviewed_games": 552,
+        "changed": {
+          "events": 3768,
+          "decisions": 624
+        },
+        "remaining_source_batter_disagreements": 7
+      },
+      {
+        "year": 2022,
+        "reviewed_games": 716,
+        "changed": {
+          "events": 5209,
+          "decisions": 871
+        },
+        "remaining_source_batter_disagreements": 4
+      },
+      {
+        "year": 2023,
+        "reviewed_games": 719,
+        "changed": {
+          "events": 5337,
+          "decisions": 885
+        },
+        "remaining_source_batter_disagreements": 6
+      },
+      {
+        "year": 2024,
+        "reviewed_games": 703,
+        "changed": {
+          "events": 5431,
+          "decisions": 876
+        },
+        "remaining_source_batter_disagreements": 1
+      },
+      {
+        "year": 2025,
+        "reviewed_games": 718,
+        "changed": {
+          "events": 5410,
+          "decisions": 895
+        },
+        "remaining_source_batter_disagreements": 5
+      },
+      {
+        "year": 2026,
+        "reviewed_games": 734,
+        "changed": {
+          "events": 5488,
+          "decisions": 916
+        },
+        "remaining_source_batter_disagreements": 4
+      }
+    ]
+  },
+  "feature_contract": "pitch_features_YEAR + decision_states_YEAR + context_features_YEAR + candidate_state_priors_YEAR; labels separate"
+}

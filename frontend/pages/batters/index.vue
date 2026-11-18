@@ -61,7 +61,7 @@ function openSelectedBatter() {
 <style scoped>
 .batter-hub { max-width: 1280px; min-height: 100vh; margin: 0 auto; padding: 92px clamp(16px, 3vw, 38px) 64px; color: var(--color-text); }
 .hub-hero, .search-panel, .portal-card { border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.hub-hero { display: flex; align-items: end; justify-content: space-between; gap: 32px; border-radius: 20px; padding: clamp(24px, 4vw, 46px); background: radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 23%, transparent), transparent 34%), var(--color-surface); }
+.hub-hero { display: flex; align-items: end; justify-content: space-between; gap: 32px; border-radius: 20px; padding: clamp(24px, 4vw, 46px); background: #000; }
 .hub-hero span, .search-panel header span, .portal-card > span { color: var(--color-primary); font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .hub-hero h1 { margin: 10px 0 0; color: var(--color-foreground); font-size: clamp(38px, 5vw, 62px); font-weight: 750; line-height: 1.06; letter-spacing: -.012em; }
 .hub-hero p, .portal-card p { max-width: 680px; color: var(--color-muted-text); line-height: 1.65; }
@@ -88,7 +88,7 @@ select, input { min-height: 44px; border: 1px solid var(--color-border); border-
 .portal-card { min-height: 230px; border-radius: 16px; padding: 22px; color: inherit; text-decoration: none; transition: border-color 160ms ease, transform 160ms ease; }
 .portal-card.comparison { border-radius: 0; }
 .portal-card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
-.portal-card.lab { background: linear-gradient(145deg, color-mix(in srgb, var(--color-primary) 13%, transparent), transparent 58%), var(--color-surface); }
+.portal-card.lab { background: #000; }
 .portal-card h2 { margin: 12px 0 0; color: var(--color-foreground); font-size: 26px; }
 .portal-card strong { display: inline-flex; margin-top: 20px; border-radius: 999px; padding: 8px 13px; color: var(--color-on-primary); background: var(--color-primary); font-size: 12px; }
 @media (max-width: 900px) { .results { grid-template-columns: repeat(2, minmax(0, 1fr)); } .portal-grid { grid-template-columns: 1fr; } }

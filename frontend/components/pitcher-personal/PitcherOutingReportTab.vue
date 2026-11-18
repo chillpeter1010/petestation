@@ -27,7 +27,7 @@
             <p>{{ pitcherHandLabel }} / USA / C: {{ catcherName }}</p>
           </div>
           <div class="poster-brand">
-            <strong>Pete<span>hub</span></strong>
+            <SiteBrandMark />
           </div>
         </div>
 
@@ -641,7 +641,7 @@ function directionClass(direction: string) {
   --poster-cyan: #f5a12b;
   --poster-pink: #ff7a2f;
   --poster-yellow: #f8bd45;
-  --poster-panel: #151515;
+  --poster-panel: #000;
   --poster-muted: #b8b0a6;
   display: grid;
   gap: 12px;
@@ -651,8 +651,7 @@ function directionClass(direction: string) {
   padding: 18px 20px 20px;
   color: #f7f8ff;
   background:
-    radial-gradient(circle at 88% 0%, rgba(245, 161, 43, 0.2), transparent 34%),
-    linear-gradient(180deg, #171717 0%, #111111 100%);
+    #000;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
 }
 
@@ -690,22 +689,7 @@ function directionClass(direction: string) {
   text-align: right;
 }
 
-.poster-brand strong {
-  display: block;
-  font-size: 46px;
-  line-height: 1;
-  font-weight: 900;
-}
-
-.poster-brand strong span {
-  display: inline-block;
-  margin-left: 4px;
-  padding: 3px 8px 5px;
-  border-radius: 8px;
-  color: #111;
-  background: var(--poster-cyan);
-  font-weight: 900;
-}
+.poster-brand :deep(.site-brand-mark) { width: 230px; }
 
 .poster-subtitle {
   justify-self: center;
@@ -973,8 +957,7 @@ function directionClass(direction: string) {
   border-top: 0;
   border-radius: 0 0 8px 8px;
   background:
-    radial-gradient(circle at 88% 0%, rgba(245, 161, 43, 0.12), transparent 32%),
-    linear-gradient(180deg, #171717 0%, #111111 100%);
+    #000;
 }
 
 .poster-analysis-board :deep(.movement-chart),

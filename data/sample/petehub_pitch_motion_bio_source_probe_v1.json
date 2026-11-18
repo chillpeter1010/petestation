@@ -1,0 +1,84 @@
+{
+  "schema_version": "pitch_motion_bio_source_probe_v1",
+  "retrieved_at_utc": "2026-11-05T20:09:21.471916+00:00",
+  "pybaseball_version": "2.2.7",
+  "scope": "Small source probes only; no production cache, whole-season fetch, package changes, UI or model implementation.",
+  "installed_lahman_url_probe": {
+    "url": "https://github.com/chadwickbureau/baseballdatabank/archive/master.zip",
+    "status": 404,
+    "final_url": "https://github.com/chadwickbureau/baseballdatabank/archive/master.zip",
+    "content_type": "text/plain; charset=utf-8",
+    "full_download": false
+  },
+  "mlb_people_probe": {
+    "source_url": "https://statsapi.mlb.com/api/v1/people?personIds=605483%2C669222%2C672515%2C592450%2C660271&fields=people%2Cid%2CfullName%2Cheight%2Cweight%2CbatSide%2Ccode%2CpitchHand",
+    "status": 200,
+    "requested_players": 5,
+    "returned_players": 5,
+    "people": [
+      {
+        "id": 605483,
+        "fullName": "Blake Snell",
+        "height": "6' 4\"",
+        "weight": 225,
+        "batSide": {
+          "code": "L"
+        },
+        "pitchHand": {
+          "code": "L"
+        }
+      },
+      {
+        "id": 669222,
+        "fullName": "Nick Senzel",
+        "height": "6' 0\"",
+        "weight": 217,
+        "batSide": {
+          "code": "R"
+        },
+        "pitchHand": {
+          "code": "R"
+        }
+      },
+      {
+        "id": 672515,
+        "fullName": "Gabriel Moreno",
+        "height": "5' 9\"",
+        "weight": 200,
+        "batSide": {
+          "code": "R"
+        },
+        "pitchHand": {
+          "code": "R"
+        }
+      },
+      {
+        "id": 592450,
+        "fullName": "Aaron Judge",
+        "height": "6' 7\"",
+        "weight": 282,
+        "batSide": {
+          "code": "R"
+        },
+        "pitchHand": {
+          "code": "R"
+        }
+      },
+      {
+        "id": 660271,
+        "fullName": "Shohei Ohtani",
+        "height": "6' 4\"",
+        "weight": 210,
+        "batSide": {
+          "code": "L"
+        },
+        "pitchHand": {
+          "code": "R"
+        }
+      }
+    ],
+    "height_present": 5,
+    "weight_present": 5,
+    "temporal_scope": "Current listed bio at retrieval, not a historical per-season body measurement."
+  }
+}

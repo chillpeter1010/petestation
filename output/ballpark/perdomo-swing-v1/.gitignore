@@ -1,0 +1,6 @@
+videos/
+raw/
+raw-v2/
+diagnostic-*.jpg
+*.log
+*.part

@@ -35,6 +35,15 @@ class SwingTimingLeaderboardRow(BaseModel):
     avg_under_distance: float | None = None
     sample_status: str = "Developing"
     avg_bat_speed: float | None = None
+    ideal_attack_angle_pct: float | None = None
+    k_pct: float | None = None
+    bb_pct: float | None = None
+    k_bb_pct: float | None = None
+    context_pa: int = 0
+    bat_speed_swings: int = 0
+    attack_angle_swings: int = 0
+    axis_metrics: dict[str, float | None] = Field(default_factory=dict)
+    axis_samples: dict[str, int] = Field(default_factory=dict)
     season_bat_speed: float | None = None
     bat_speed_delta: float | None = None
     fast_swing_pct: float | None = None
@@ -45,6 +54,7 @@ class SwingTimingLeaderboardRow(BaseModel):
 
 
 class SwingTimingFilters(BaseModel):
+    axis_options: list[dict[str, str]] = Field(default_factory=list)
     available_years: list[int] = Field(default_factory=list)
     pitch_groups: list[dict[str, str]] = Field(default_factory=list)
     pitch_type_groups: list[dict] = Field(default_factory=list)

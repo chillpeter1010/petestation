@@ -100,7 +100,7 @@ function handleFocusOut(event: FocusEvent) {
   border-radius: 999px;
   padding: 9px 15px;
   color: var(--home-muted);
-  background: rgba(255, 255, 255, 0.045);
+  background: #000;
   font-family: inherit;
   font-size: inherit;
   font-weight: 900;
@@ -126,7 +126,7 @@ function handleFocusOut(event: FocusEvent) {
   border: 1px solid rgba(255, 153, 0, 0.38);
   border-radius: 10px;
   padding: 12px;
-  background: rgba(15, 15, 15, 0.98);
+  background: #000;
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.62);
 }
 

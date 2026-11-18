@@ -1652,7 +1652,7 @@ def build_count_state_descendants(anchor_count_key: str) -> set[str]:
     return descendants
 
 
-def build_conditioned_count_subset(data: pd.DataFrame, anchor_count_key: str | None, selected_pitch: str | None) -> pd.DataFrame:
+def build_conditioned_count_subset(data: pd.DataFrame, anchor_count_key: str | None, selected_pitch: str | None, eligible_anchors: pd.DataFrame | None = None) -> pd.DataFrame:
     required_cols = {"game_pk", "at_bat_number", "pitch_number", "balls", "strikes", "pitch_name"}
     if data.empty or not selected_pitch or not required_cols.issubset(data.columns):
         return pd.DataFrame()
@@ -1675,6 +1675,8 @@ def build_conditioned_count_subset(data: pd.DataFrame, anchor_count_key: str | N
     if selected_pitch != "All":
         anchor_mask &= working["Pitch"].eq(selected_pitch)
     anchor_rows = working.loc[anchor_mask, ["game_pk", "at_bat_number", "pitch_number"]].copy()
+    if eligible_anchors is not None:
+        anchor_rows = anchor_rows.merge(eligible_anchors[["game_pk", "at_bat_number", "pitch_number"]].drop_duplicates(), on=["game_pk", "at_bat_number", "pitch_number"], how="inner")
     if anchor_rows.empty:
         return pd.DataFrame()
 
@@ -1868,6 +1870,8 @@ def annotate_sequence_context(data: pd.DataFrame) -> pd.DataFrame:
     working["_next_balls"] = working.groupby(group_keys, dropna=False)["balls"].shift(-1)
     working["_next_strikes"] = working.groupby(group_keys, dropna=False)["strikes"].shift(-1)
     working["_next_pitch_name"] = working.groupby(group_keys, dropna=False)["pitch_name"].shift(-1)
+    previous_number = working.groupby(group_keys, dropna=False)["pitch_number"].shift(1)
+    working["_previous_pitch_name"] = working.groupby(group_keys, dropna=False)["pitch_name"].shift(1).where(working["pitch_number"].sub(previous_number).eq(1))
     working["_shallow_sequence_full"] = pd.NA
     working["_two_strike_sequence_full"] = pd.NA
 
@@ -2034,6 +2038,16 @@ def build_sequence_outcome_tables(pitch_df: pd.DataFrame, current_pitch_filter: 
     return summarize("shallow_sequence", "Shallow Count", 3), summarize("two_strike_count_sequence", "Two-Strike Count", 1)
 
 
+def filter_sequence_previous_pitch(data: pd.DataFrame, previous_pitch: str | None) -> pd.DataFrame:
+    if not previous_pitch or previous_pitch == "All":
+        return data
+    if previous_pitch == "__first__":
+        return data[pd.to_numeric(data.get("pitch_number", pd.Series(index=data.index, dtype="float")), errors="coerce").eq(1)].copy()
+    if "_previous_pitch_name" not in data.columns:
+        return data.iloc[:0].copy()
+    return data[data["_previous_pitch_name"].fillna("").astype(str).map(display_pitch_name).eq(display_pitch_name(previous_pitch))].copy()
+
+
 def get_personal_sequence(
     year: int,
     pitcher_id: int,
@@ -2050,6 +2064,7 @@ def get_personal_sequence(
     condition_pitch: str | None = None,
     detail_count: str | None = "0-0",
     followup_pitch: str | None = None,
+    previous_pitch: str | None = None,
 ) -> AnalysisResponse:
     pitch_df = load_personal_pitch_df(
         year=year,
@@ -2060,10 +2075,17 @@ def get_personal_sequence(
     )
     pitch_df = add_pitcher_wpa_column(attach_plate_appearance_wpa(pitch_df, year, settings.data_dir))
     pitch_df = annotate_sequence_context(pitch_df)
-    filtered_df = apply_sequence_filters(pitch_df, stand=stand, count=count, pitch=pitch, pitch_result=pitch_result, catcher=catcher)
+    anchor_df = filter_sequence_previous_pitch(pitch_df, previous_pitch)
+    filtered_df = apply_sequence_filters(anchor_df, stand=stand, count=count, pitch=pitch, pitch_result=pitch_result, catcher=catcher)
     shallow_df, two_strike_df = build_sequence_outcome_tables(filtered_df, current_pitch_filter=current_pitch)
     snapshot = build_filter_snapshot_stats(filtered_df)
     conditioned_df = build_conditioned_count_subset(filtered_df, condition_count, condition_pitch)
+    if previous_pitch and previous_pitch != "All":
+        # Match anchors on current count/side/previous pitch, then retain the
+        # actual downstream PA rows. Re-filtering descendants by previous pitch
+        # would erase the branch the user is asking to inspect.
+        branch_source = apply_sequence_filters(pitch_df, stand=stand, catcher=catcher)
+        conditioned_df = build_conditioned_count_subset(branch_source, condition_count or detail_count, condition_pitch or "All", eligible_anchors=filtered_df)
     conditioned_wpa_df = build_conditioned_wpa_summary_table(filtered_df, condition_count)
     current_count_df = build_count_state_detail_table(filter_exact_count(filtered_df, detail_count))
     next_count_df = build_next_count_state_detail_table(filtered_df, detail_count)

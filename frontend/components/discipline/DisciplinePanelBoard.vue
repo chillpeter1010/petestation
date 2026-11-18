@@ -32,6 +32,7 @@
         :panels="section.panels"
         :heatmap-blend="heatmapBlend"
         :side-mode="sideMode"
+        @select-point="emit('select-point', $event)"
       />
     </template>
 
@@ -43,6 +44,7 @@
         :panels="section.panels"
         :heatmap-blend="heatmapBlend"
         :side-mode="sideMode"
+        @select-point="emit('select-point', $event)"
       />
     </template>
 
@@ -52,6 +54,7 @@
         :panels="situationPanels"
         :heatmap-blend="heatmapBlend"
         :side-mode="sideMode"
+        @select-point="emit('select-point', $event)"
       />
     </template>
   </section>
@@ -72,6 +75,7 @@ const props = defineProps<{
   exactCountPanels: DisciplinePanel[]
   initialGroup?: PanelGroup | 'All'
 }>()
+const emit = defineEmits<{ 'select-point': [point: Record<string, unknown>] }>()
 
 const activeGroup = ref<PanelGroup>('result')
 const sideMode = ref<'pitch' | 'info'>('pitch')

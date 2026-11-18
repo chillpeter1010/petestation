@@ -63,8 +63,7 @@ defineProps<{
   border-radius: 24px;
   padding: clamp(28px, 5vw, 64px);
   background:
-    radial-gradient(circle at 12% 12%, rgba(255, 153, 0, 0.2), transparent 28rem),
-    linear-gradient(128deg, #090a0d 5%, #101722 58%, #21170c 125%);
+    #000;
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
 }
 
@@ -133,7 +132,7 @@ h1 em { color: #ff9900; font-style: normal; }
   border-radius: 15px;
   padding: 14px 16px;
   color: #f8fafc;
-  background: rgba(15, 21, 31, 0.8);
+  background: #000;
   text-decoration: none;
   transition: border-color 180ms ease, background 180ms ease;
 }

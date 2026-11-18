@@ -1,0 +1,279 @@
+{
+  "contract_version": "pitcher_decision_slice1_source_audit_v1",
+  "audit_date": "2026-11-12",
+  "scope": "2021–2026 MLB regular season; schedule snapshots and preexisting official feeds; source databases read-only",
+  "years": [
+    {
+      "year": 2021,
+      "completedGames": 2429,
+      "localGames": 2429,
+      "missingGames": 0,
+      "cachedFeeds": 2429,
+      "missingPitchKeys": 0,
+      "unmatchedLocalKeys": 2468,
+      "completedPlaysWithoutLocalRows": 30,
+      "localPlaysWithoutTerminal": 80,
+      "officialPitchingSubstitutions": 16692,
+      "scoreReviewGames": 0
+    },
+    {
+      "year": 2022,
+      "completedGames": 2430,
+      "localGames": 2430,
+      "missingGames": 0,
+      "cachedFeeds": 2430,
+      "missingPitchKeys": 0,
+      "unmatchedLocalKeys": 1670,
+      "completedPlaysWithoutLocalRows": 34,
+      "localPlaysWithoutTerminal": 84,
+      "officialPitchingSubstitutions": 16047,
+      "scoreReviewGames": 1
+    },
+    {
+      "year": 2023,
+      "completedGames": 2430,
+      "localGames": 2430,
+      "missingGames": 0,
+      "cachedFeeds": 2430,
+      "missingPitchKeys": 0,
+      "unmatchedLocalKeys": 2739,
+      "completedPlaysWithoutLocalRows": 28,
+      "localPlaysWithoutTerminal": 102,
+      "officialPitchingSubstitutions": 15804,
+      "scoreReviewGames": 2
+    },
+    {
+      "year": 2024,
+      "completedGames": 2429,
+      "localGames": 2429,
+      "missingGames": 0,
+      "cachedFeeds": 2429,
+      "missingPitchKeys": 1,
+      "unmatchedLocalKeys": 2387,
+      "completedPlaysWithoutLocalRows": 34,
+      "localPlaysWithoutTerminal": 104,
+      "officialPitchingSubstitutions": 15850,
+      "scoreReviewGames": 0
+    },
+    {
+      "year": 2025,
+      "completedGames": 2430,
+      "localGames": 2430,
+      "missingGames": 0,
+      "cachedFeeds": 2430,
+      "missingPitchKeys": 0,
+      "unmatchedLocalKeys": 2444,
+      "completedPlaysWithoutLocalRows": 25,
+      "localPlaysWithoutTerminal": 117,
+      "officialPitchingSubstitutions": 16027,
+      "scoreReviewGames": 0
+    },
+    {
+      "year": 2026,
+      "completedGames": 2429,
+      "localGames": 2429,
+      "missingGames": 0,
+      "cachedFeeds": 2429,
+      "missingPitchKeys": 248,
+      "unmatchedLocalKeys": 2309,
+      "completedPlaysWithoutLocalRows": 111,
+      "localPlaysWithoutTerminal": 111,
+      "officialPitchingSubstitutions": 15971,
+      "scoreReviewGames": 1
+    }
+  ],
+  "totals": {
+    "completedGames": 14577,
+    "localGames": 14577,
+    "missingGames": 0,
+    "cachedFeeds": 14577,
+    "missingPitchKeys": 249,
+    "unmatchedLocalKeys": 14017,
+    "completedPlaysWithoutLocalRows": 262,
+    "localPlaysWithoutTerminal": 598,
+    "officialPitchingSubstitutions": 96391,
+    "scoreReviewGames": 4
+  },
+  "cancelled_games": [
+    {
+      "year": 2021,
+      "game_pk": 632457,
+      "date": "2021-09-16",
+      "status": "Cancelled",
+      "count_as_missing": false
+    },
+    {
+      "year": 2024,
+      "game_pk": 746577,
+      "date": "2024-09-29",
+      "status": "Cancelled",
+      "count_as_missing": false
+    },
+    {
+      "year": 2026,
+      "game_pk": 823490,
+      "date": "2026-09-27",
+      "status": "Cancelled",
+      "count_as_missing": false
+    }
+  ],
+  "missing_whole_dates": [],
+  "score_semantics_review": [
+    {
+      "year": 2022,
+      "game_pk": 663053,
+      "last_event_type": "balk",
+      "classification": "nonpitch_terminal_balk",
+      "description": "With Tyler Naquin batting, Mark Kolozsvary scores on a balk. Albert Almora Jr. advances to 2nd on a balk.",
+      "scores": {
+        "local": [
+          1,
+          1
+        ],
+        "official": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "year": 2023,
+      "game_pk": 716704,
+      "last_event_type": "balk",
+      "classification": "nonpitch_terminal_balk",
+      "description": "With Edward Olivares batting, Maikel Garcia scores on a balk. Bobby Witt Jr. advances to 3rd on a balk. MJ Melendez advances to 2nd on a balk.",
+      "scores": {
+        "local": [
+          6,
+          6
+        ],
+        "official": [
+          7,
+          6
+        ]
+      }
+    },
+    {
+      "year": 2023,
+      "game_pk": 717170,
+      "last_event_type": "balk",
+      "classification": "nonpitch_terminal_balk",
+      "description": "With Michael Massey batting, MJ Melendez scores on a balk. Dairon Blanco advances to 3rd on a balk. Drew Waters advances to 2nd on a balk.",
+      "scores": {
+        "local": [
+          6,
+          6
+        ],
+        "official": [
+          7,
+          6
+        ]
+      }
+    },
+    {
+      "year": 2026,
+      "game_pk": 823244,
+      "last_event_type": "field_out",
+      "classification": "pitch_or_source_gap",
+      "description": "Casey Schmitt flies out to right fielder Aaron Judge.",
+      "scores": {
+        "local": [
+          0,
+          0
+        ],
+        "official": [
+          0,
+          7
+        ]
+      }
+    }
+  ],
+  "fetch_estimate": {
+    "new_official_feed_downloads": 0,
+    "statcast_game_ids_to_check": 2,
+    "physical_pitch_key_differences": 249,
+    "note": "逐球鍵差異不保證皆能取得追蹤值；2024 單球需核對來源修訂，2026 是明確截斷。"
+  },
+  "provenance": {
+    "schedule": "sources/schedule_YEAR.json.gz + per-year URL/UTC/SHA-256 manifests; public GET, no key/cookie",
+    "cached_feeds": "feed_inventory_YEAR.parquet records existing compressed SHA-256, file mtime and feed timestamp",
+    "local_sources": "summary_YEAR.json records read-only DuckDB size/mtime; start/end stability checked",
+    "fresh_schedule_get_requests": 6,
+    "game_feed_download_requests": 0
+  },
+  "limitations": [
+    "Cancelled 不能以 abstractGameState=Final 當作已完成，須檢查 detailedState。",
+    "賽程 ID 齊全不等於逐球與事件齊全；此次只產出清單，沒有修復來源。",
+    "完成 play 可能是零球保送、牽制或跑壘事件，不等於完成打者打席。",
+    "來源 pitch_number 可能受自動壞球／好球與來源修訂影響；不能按不匹配數直接刪資料。",
+    "完整官方 feed 可沿用，但仍須 Slice 3 建立換人與零球事件帳本。",
+    "2026 賽程與早期研究資料均為回溯來源，不代表當時可取得的能力特徵。"
+  ],
+  "checks": [
+    {
+      "year": 2021,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    },
+    {
+      "year": 2022,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    },
+    {
+      "year": 2023,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    },
+    {
+      "year": 2024,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    },
+    {
+      "year": 2025,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    },
+    {
+      "year": 2026,
+      "official_vs_local_ids_reconciled": true,
+      "cancelled_excluded": true,
+      "feed_scores_match_schedule": true,
+      "all_completed_games_have_readable_cached_feed": true
+    }
+  ],
+  "next_slice": "Slice 2 only after user instruction; use queue, reuse snapshots, preserve raw versions.",
+  "pitch_backfill_queue": [
+    {
+      "year": 2024,
+      "game_pk": 746731,
+      "date": "2024-04-06",
+      "missing_official_pitch_keys": 1,
+      "local_pitch_rows": 319,
+      "official_pitch_events": 319,
+      "classification": "source_revision_review",
+      "action": "按 game ID 比對公開 Statcast 原始紀錄與已保存 feed；保存修訂差異，不直接以 feed 補造追蹤值。"
+    },
+    {
+      "year": 2026,
+      "game_pk": 823244,
+      "date": "2026-03-25",
+      "missing_official_pitch_keys": 248,
+      "local_pitch_rows": 10,
+      "official_pitch_events": 258,
+      "classification": "partial_game",
+      "action": "按 game ID 比對公開 Statcast 原始紀錄與已保存 feed；保存修訂差異，不直接以 feed 補造追蹤值。"
+    }
+  ]
+}

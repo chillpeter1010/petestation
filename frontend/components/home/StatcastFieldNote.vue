@@ -109,9 +109,9 @@ onBeforeUnmount(() => {
 <style scoped>
 .note-trigger { border: 0; padding: 0; color: var(--home-text); background: transparent; cursor: pointer; font-family: "Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive; font-size: clamp(26px, 3vw, 42px); line-height: 1; transition: color .16s ease; }
 .note-trigger:hover, .note-trigger:focus-visible { color: var(--home-orange); }
-.note-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: rgba(3, 7, 14, .78); backdrop-filter: blur(8px); }
+.note-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: rgb(0 0 0 / 0.78); backdrop-filter: blur(8px); }
 .note-dialog { width: min(1180px, 100%); max-height: min(880px, calc(100vh - 48px)); display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; overflow: hidden; border: 1px solid var(--color-border-strong); border-radius: 20px; color: var(--color-text); background: var(--color-surface); box-shadow: 0 28px 100px rgba(0, 0, 0, .48); }
-.note-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; border-bottom: 1px solid var(--color-border); padding: 24px 26px 20px; background: radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent 23rem); }
+.note-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; border-bottom: 1px solid var(--color-border); padding: 24px 26px 20px; background: #000; }
 .note-header span, .note-controls label > span { color: var(--color-primary); font-size: 11px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
 .note-header h2 { margin: 6px 0 0; color: var(--color-foreground); font-size: clamp(28px, 4vw, 42px); line-height: 1.1; letter-spacing: -.01em; }
 .note-header p { margin: 8px 0 0; color: var(--color-muted-text); font-size: 14px; }

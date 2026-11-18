@@ -1,5 +1,5 @@
 <template>
-  <LazyPitchReplayPanel v-if="mode === 'replay'" :year="year" :game-pk="gamePk" :pitcher-id="pitcherId" :pitcher-name="pitcherName" @select-pitch="emit('select-pitch', $event)" />
+  <PitchReplayPanel v-if="mode === 'replay'" title="In game" :year="year" :game-pk="gamePk" :pitcher-id="pitcherId" :pitcher-name="pitcherName" @select-pitch="emit('select-pitch', $event)" />
   <section v-else class="game-analysis" :aria-label="`${pitcherName} ${mode} analysis`">
     <header class="analysis-header">
       <div>
@@ -133,8 +133,10 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
 import type { AnalysisResponse } from '~/types/api'
 
+const PitchReplayPanel = defineAsyncComponent(() => import('~/components/charts/PitchReplayPanel.vue'))
 type Mode = 'location' | 'sequence' | 'movement' | 'replay'
 
 const props = defineProps<{ mode: Mode; year: number; gamePk: number; pitcherId: number; pitcherName: string }>()

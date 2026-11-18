@@ -5,7 +5,7 @@
     :to="to"
     :aria-label="ariaLabel"
   >
-    <span>Pete</span><strong>hub</strong>
+    <SiteBrandMark />
   </NuxtLink>
 </template>
 
@@ -17,7 +17,7 @@ withDefaults(defineProps<{
 }>(), {
   size: 'compact',
   to: '/',
-  ariaLabel: 'Petehub home'
+  ariaLabel: 'DaPeter home'
 })
 </script>
 
@@ -33,14 +33,9 @@ withDefaults(defineProps<{
   text-decoration: none;
 }
 
-.petehub-logo--home { font-size: clamp(34px, 5vw, 62px); }
-.petehub-logo--compact { font-size: 25px; }
+.petehub-logo--home { width:clamp(180px,20vw,240px); }
+.petehub-logo--compact { width:160px; }
+.petehub-logo :deep(.site-brand-mark){width:100%}
+.petehub-logo:focus-visible{outline:2px solid #00d4cc;outline-offset:4px;border-radius:5px}
 
-.petehub-logo strong {
-  margin-left: 5px;
-  border-radius: 7px;
-  padding: 1px 9px 5px;
-  color: #111;
-  background: #ff9900;
-}
 </style>

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from typing import Any
+from functools import lru_cache
+from time import monotonic
 
 import duckdb
 import numpy as np
@@ -17,6 +19,8 @@ from app.core.config import settings
 from app.repositories.pitch_repository import available_db_years, get_season_duckdb_path, resolve_pitch_table
 from app.services.batter_service import list_batter_leaderboard, list_batter_options
 from app.services.discipline_service import build_discipline_panel_groups
+from app.services.pitch_stuff_cache_service import load_pitch_stuff_scores
+from app.services.pitch_location_score_service import load_pitch_location_scores
 
 SWING_EVENTS = {
     "swinging_strike", "swinging_strike_blocked", "foul", "foul_tip",
@@ -121,6 +125,18 @@ def load_batter_period_rows(year: int, batter_id: int) -> pd.DataFrame:
     db_path = get_season_duckdb_path(year, settings.data_dir)
     if not db_path.exists():
         return pd.DataFrame()
+    # Reuse the same season rows across filter changes; source/cache writes invalidate it.
+    sources = [db_path, db_path.with_suffix(db_path.suffix + ".wal"), settings.data_dir / "derived" / "pitch_stuff_scores.sqlite3",
+               settings.data_dir / "derived" / "pitch_stuff_scores.sqlite3-wal",
+               settings.data_dir / "derived" / "location_plus_scores.duckdb",
+               settings.data_dir / "derived" / "location_plus_scores.duckdb.wal",
+               settings.data_dir / "models" / "stuff_plus" / "pete_stuff_metadata.json"]
+    version = tuple((str(path), path.stat().st_mtime_ns, path.stat().st_size) for path in sources if path.exists())
+    return _cached_batter_period_rows(str(db_path), batter_id, version, int(monotonic() // 120)).copy()
+
+
+@lru_cache(maxsize=8)
+def _cached_batter_period_rows(db_path: str, batter_id: int, version: tuple, time_bucket: int) -> pd.DataFrame:
     with duckdb.connect(str(db_path), read_only=True) as conn:
         tables = {row[0] for row in conn.execute("SHOW TABLES").fetchall()}
         source_table = resolve_pitch_table(tables)
@@ -130,7 +146,13 @@ def load_batter_period_rows(year: int, batter_id: int) -> pd.DataFrame:
             f"SELECT * FROM {source_table} WHERE game_type = 'R' AND batter = ?",
             [batter_id],
         ).fetchdf()
-    return normalize_batter_period_rows(rows)
+    result = normalize_batter_period_rows(rows)
+    if result.empty:
+        return result
+    for column, loader in (("pitch_stuff_plus", load_pitch_stuff_scores), ("location_plus_pitch", load_pitch_location_scores)):
+        existing = pd.to_numeric(result.get(column, pd.Series(np.nan, index=result.index)), errors="coerce")
+        result[column] = existing.fillna(loader(result)).round(1)
+    return result
 
 
 def normalize_batter_period_rows(rows: pd.DataFrame) -> pd.DataFrame:
@@ -186,6 +208,25 @@ def apply_batter_period_filters(
     if rows.empty:
         return rows.copy()
     filtered = rows[rows["game_date"].between(start_date, end_date)].copy()
+    # PA outcome selects whole plate appearances BEFORE pitch-level filters.
+    # A first pitch may belong to a hit PA that finishes at a different count/type.
+    pa_values = _filter_values(pa_result)
+    if pa_values:
+        terminal = _terminal_pa_rows(filtered)
+        mask = pd.Series(False, index=terminal.index)
+        for value in pa_values:
+            normalized = value.lower().replace(" ", "_")
+            if normalized == "hit":
+                outcomes = HIT_EVENTS
+            elif normalized == "out":
+                outcomes = OUT_EVENTS
+            elif normalized == "strikeout":
+                outcomes = {"strikeout", "strikeout_double_play"}
+            else:
+                outcomes = {normalized}
+            mask |= terminal["events"].isin(outcomes)
+        pa_keys = terminal.loc[mask, ["game_pk", "at_bat_number"]].drop_duplicates()
+        filtered = filtered.merge(pa_keys, on=["game_pk", "at_bat_number"], how="inner")
     for column, value in (("stand", batter_side), ("p_throws", pitcher_hand), ("count", count)):
         values = _filter_values(value)
         if values:
@@ -207,28 +248,14 @@ def apply_batter_period_filters(
                 mask |= filtered["is_whiff"]
             elif normalized == "in_play":
                 mask |= filtered["description"].eq("hit_into_play")
+            elif normalized == "hit":
+                mask |= filtered["events"].isin(HIT_EVENTS)
             else:
                 mask |= filtered["description"].eq(normalized)
         filtered = filtered[mask]
     in_play_values = _filter_values(in_play_result)
     if in_play_values:
         filtered = filtered[filtered["bb_type"].str.lower().isin([value.lower() for value in in_play_values])]
-    pa_values = _filter_values(pa_result)
-    if pa_values:
-        terminal = _terminal_pa_rows(filtered)
-        mask = pd.Series(False, index=terminal.index)
-        for value in pa_values:
-            normalized = value.lower().replace(" ", "_")
-            if normalized == "hit":
-                mask |= terminal["events"].isin(HIT_EVENTS)
-            elif normalized == "out":
-                mask |= terminal["events"].isin(OUT_EVENTS)
-            elif normalized == "strikeout":
-                mask |= terminal["events"].isin({"strikeout", "strikeout_double_play"})
-            else:
-                mask |= terminal["events"].eq(normalized)
-        pa_keys = terminal.loc[mask, ["game_pk", "at_bat_number"]].drop_duplicates()
-        filtered = filtered.merge(pa_keys, on=["game_pk", "at_bat_number"], how="inner")
     return filtered
 
 
@@ -340,7 +367,7 @@ def get_batter_period_comparison(
     pa_result: str | None = None,
 ) -> BatterPeriodComparisonResponse:
     left_all = load_batter_period_rows(left_year, batter_id)
-    right_all = left_all.copy() if right_year == left_year else load_batter_period_rows(right_year, batter_id)
+    right_all = left_all if right_year == left_year else load_batter_period_rows(right_year, batter_id)
     filter_args = dict(batter_side=batter_side, pitcher_hand=pitcher_hand, pitch_family=pitch_family, count=count, pitch=pitch, pitch_result=pitch_result, in_play_result=in_play_result, pa_result=pa_result)
     left = apply_batter_period_filters(left_all, start_date=left_start, end_date=left_end, **filter_args)
     right = apply_batter_period_filters(right_all, start_date=right_start, end_date=right_end, **filter_args)
@@ -460,6 +487,7 @@ def _discipline_location_rows(rows: pd.DataFrame) -> list[dict[str, Any]]:
     columns = [
         column for column in (
             "game_date", "game_pk", "at_bat_number", "pitch_number", "plate_x", "plate_z",
+            "balls", "strikes", "is_swing", "zone",
             "pitch_name", "pitch_type", "description", "events", "count", "release_speed",
             "launch_speed", "bat_speed", "play_id", "video_url", "pitch_stuff_plus", "location_plus_pitch",
         ) if column in rows.columns
@@ -537,7 +565,7 @@ def _filter_options(rows: pd.DataFrame) -> dict[str, list[str]]:
         "pitch_family": ["All", "Fastball", "Breaking", "Offspeed", "Other"],
         "count": ["All", *values("count")],
         "pitch": ["All", *values("pitch_name")],
-        "pitch_result": ["All", "Swing", "Whiff", "In Play", *values("description")],
+        "pitch_result": ["All", "Swing", "Whiff", "In Play", "Hit", *values("description")],
         "in_play_result": ["All", *values("bb_type")],
         "pa_result": ["All", "Hit", "Out", "home_run", "Strikeout"],
     }

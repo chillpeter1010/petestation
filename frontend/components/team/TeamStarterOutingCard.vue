@@ -133,12 +133,12 @@ watch(() => props.gamePk, () => { activeView.value = 'summary' })
 .outing-card__tabs { display: flex; gap: 5px; border-bottom: 1px solid var(--team-panel-border); padding: 7px 10px; }
 .outing-card__tabs button { min-height: 32px; border: 0; border-radius: 7px; padding: 6px 11px; color: var(--color-muted-text); background: transparent; font-size: 10px; font-weight: 900; cursor: pointer; }
 .outing-card__tabs button[aria-pressed="true"] { color: #fff; background: var(--team-primary); }
-.outing-card__hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; min-height: 178px; padding: 20px 28px; color: #fff; background: radial-gradient(circle at 85% 0, color-mix(in srgb, var(--team-primary) 46%, transparent), transparent 48%), linear-gradient(135deg, color-mix(in srgb, var(--team-secondary) 50%, #090b10), #090b10); }
+.outing-card__hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px; min-height: 178px; padding: 20px 28px; color: #fff; background: #000; }
 .outing-card__hero-copy { min-width: 0; }
 .outing-card__hero span { color: color-mix(in srgb, var(--team-primary) 56%, #fff); font-size: 10px; font-weight: 900; text-transform: uppercase; }
 .outing-card__hero h4 { margin: 8px 0 10px; font-size: clamp(25px, 3vw, 38px); line-height: 1; }
 .outing-card__hero p { margin: 0; color: #cbd5e1; font: 700 12px "Fira Code", monospace; }
-.outing-card__headshot { border: 2px solid color-mix(in srgb, var(--team-primary) 72%, #fff); color: var(--team-primary); background: color-mix(in srgb, var(--team-secondary) 55%, #0b0d13); box-shadow: 0 14px 34px rgb(0 0 0 / 32%); }
+.outing-card__headshot { border: 2px solid color-mix(in srgb, var(--team-primary) 72%, #fff); color: var(--team-primary); background: #000; box-shadow: 0 14px 34px rgb(0 0 0 / 32%); }
 .outing-card__scores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; border-bottom: 1px solid var(--team-panel-border); background: var(--team-panel-border); }
 .outing-card__scores article { padding: 15px; background: var(--color-surface); }
 .outing-card__scores span, .outing-card__context span { display: block; color: var(--color-muted-text); font-size: 9px; font-weight: 900; text-transform: uppercase; }

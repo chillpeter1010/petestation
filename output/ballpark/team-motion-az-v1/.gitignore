@@ -1,0 +1,5 @@
+videos/
+poses-identity-v3/
+poses-mound-v1/
+*.log
+*.part

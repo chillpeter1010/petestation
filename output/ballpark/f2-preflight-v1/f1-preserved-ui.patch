@@ -1,0 +1,123 @@
+diff --git a/frontend/components/charts/BatterInGameHeatmap.vue b/frontend/components/charts/BatterInGameHeatmap.vue
+index 38adfee..34ae5e6 100644
+--- a/frontend/components/charts/BatterInGameHeatmap.vue
++++ b/frontend/components/charts/BatterInGameHeatmap.vue
+@@ -78,6 +78,7 @@ onBeforeUnmount(() => { version += 1; emit('overlay', null) })
+ <style scoped>
+ .batter-heatmap{display:grid;gap:9px;margin-top:12px;padding:12px;border:1px solid var(--color-border);border-radius:8px;background:var(--color-surface)}
+ header,.heatmap-controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}
++header a,header a:visited{color:#fff}header a:focus-visible{outline:2px solid #fff;outline-offset:4px}
+ .heatmap-controls{justify-content:flex-start}.heatmap-controls label{display:grid;gap:4px}select,button{padding:7px;color:var(--color-foreground);background:var(--color-plot-bg);border:1px solid var(--color-border);border-radius:5px}
+ p{margin:0;color:var(--color-muted-text);font-size:12px}.legend{display:flex;align-items:center;gap:8px}.legend i{width:100px;height:10px;flex-shrink:0;background:linear-gradient(90deg,#0050ff,#fafaff 50%,#ff142d)}
+ details{overflow-x:auto}summary{cursor:pointer}table{width:100%;font-size:12px;text-align:left;border-collapse:collapse}th,td{padding:6px;border-bottom:1px solid var(--color-border);font-variant-numeric:tabular-nums}
+diff --git a/frontend/pages/games/today.vue b/frontend/pages/games/today.vue
+index 7624e79..c92960d 100644
+--- a/frontend/pages/games/today.vue
++++ b/frontend/pages/games/today.vue
+@@ -124,7 +124,7 @@
+ 
+ <script setup lang="ts">
+ import { getPitchColor } from '~/utils/pitchColors'
+-import { GAME_YEARS, gameContext, gameDate, gameFitsScope } from '~/utils/gameCenterContext'
++import { GAME_YEARS, gameContext, gameDate, gameFitsScope, preferredGame } from '~/utils/gameCenterContext'
+ 
+ type GameRow = { game_pk?: number | string; game_date?: string; away_team?: string; home_team?: string; total_pitches?: number | string; away_score?: number | string | null; home_score?: number | string | null; status?: string }
+ type PitchMixSlice = { pitch: string; pitches: number; color: string }
+@@ -144,6 +144,7 @@ type PitcherAnalysisMode = 'location' | 'sequence' | 'movement' | 'replay'
+ const api = useApi()
+ const route = useRoute()
+ const router = useRouter()
++const { user } = useAuth()
+ const yearOptions = GAME_YEARS
+ const initialContext = gameContext(route.query)
+ const year = ref(initialContext.year)
+@@ -218,7 +219,7 @@ async function loadGames(restore = false) {
+     selectedDate.value = scope.date
+     games.value = ((response.games || []) as GameRow[]).filter(game => gameFitsScope(game,scope))
+     if (Array.isArray(response.warnings) && response.warnings.length) contextNotice.value = 'Some local snapshot sources are unavailable.'
+-    const next = games.value.find(game => Number(game.game_pk) === requested.gamePk) || games.value[0]
++    const next = preferredGame(games.value,requested.gamePk,user.value?.favorite_team_code)
+     if (restore && requested.gamePk && Number(next?.game_pk) !== requested.gamePk) contextNotice.value = 'Requested game is unavailable in this year/date/team scope. Showing an available game, if any.'
+     if (next) await selectGame(Number(next.game_pk),false,Number(cached?.game?.game_pk)===Number(next.game_pk)?cached:undefined,requested.pitcherId)
+     if (token === listVersion) await syncGameQuery()
+@@ -268,6 +269,11 @@ function pitchVideoUrl(pitch: Record<string, unknown> | null) { if (!pitch) retu
+ function selectGamePitch(pitch: Record<string, unknown>) { selectedGamePitch.value = pitch; if (pitchVideoUrl(pitch)) gameVideoOpen.value = true }
+ function pitchMixGradient(mix: PitchMixSlice[] = []) { const total = mix.reduce((sum, row) => sum + Number(row.pitches || 0), 0); if (!total) return getPitchColor('Unknown'); let start = 0; const stops = mix.map(row => { const end = start + (Number(row.pitches || 0) / total) * 100; const stop = `${getPitchColor(row.pitch)} ${start.toFixed(2)}% ${end.toFixed(2)}%`; start = end; return stop }); return `conic-gradient(${stops.join(', ')})` }
+ watch(selectedAtBat, () => { selectedGamePitch.value = null; gameVideoOpen.value = false })
++watch(() => user.value?.favorite_team_code, favorite => {
++  if (!favorite || loading.value) return
++  const next = preferredGame(games.value,undefined,favorite)
++  if (next && (next.home_team === favorite || next.away_team === favorite) && Number(next.game_pk) !== selectedGamePk.value) void selectGame(Number(next.game_pk))
++})
+ watch([activeTab,selectedPitcherId], () => { if (!loading.value && !routeWrites) void syncGameQuery() })
+ watch(() => [route.query.year,route.query.date,route.query.team,route.query.game_pk,route.query.tab,route.query.pitcher_id], () => {
+   if (routeWrites) return
+diff --git a/frontend/scripts/check-ballpark-f1.mjs b/frontend/scripts/check-ballpark-f1.mjs
+index 07cc03f..13596ab 100644
+--- a/frontend/scripts/check-ballpark-f1.mjs
++++ b/frontend/scripts/check-ballpark-f1.mjs
+@@ -26,7 +26,7 @@ for (const [id,tab] of [['schedule-board','feed'],['game-analysis-console','box'
+ }
+ assert.equal(destinations.objectClassicDestination({id:'campus/scoreboard',kind:'links',links:[{path:'/leaderboards'}]},{year:2025,team:'AZ'}).query.team,'AZ')
+ assert.deepEqual(details.inGamePitchDetails({pitcher_name:'Pitcher Test',batter_name:'Batter Test'}).filter(f=>f.key.endsWith('_name')&&f.key!=='pitch_name'&&f.key!=='catcher_name').map(f=>f.value),['Pitcher Test','Batter Test'])
+-const fixture = id => ({game:{game_pk:id,game_date:id===44?'2025-08-01':'2025-09-27',home_team:'AZ',away_team:'LAD'},teams:[{pitchers:[{pitcher_id:100,name:'Pitcher Test'},{pitcher_id:200,name:'Other Pitcher'}]}],plays:[],scoreboard:{}})
++const fixture = id => ({game:{game_pk:id,game_date:id===44?'2025-08-01':'2025-09-27',home_team:id===45?'NYY':'AZ',away_team:id===45?'BOS':'LAD'},teams:[{pitchers:[{pitcher_id:100,name:'Pitcher Test'},{pitcher_id:200,name:'Other Pitcher'}]}],plays:[],scoreboard:{}})
+ assert.equal(context.gameFitsScope(fixture(42).game,{year:2025,date:'2025-09-27',team:'AZ'}),true)
+ assert.equal(context.gameFitsScope(fixture(42).game,{year:2026,date:'',team:'AZ'}),false)
+ assert.equal(context.gameFitsScope(fixture(42).game,{year:2025,date:'',team:'NYY'}),false)
+@@ -37,17 +37,18 @@ const page=read('pages/games/today.vue')
+ const source=parse(page).descriptor.scriptSetup.content.replace(/^import .+$/gm,'').replaceAll('import.meta.client','false')
+ const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText.replace(/^export \{\};?$/gm,'')
+ const setup=new (Object.getPrototypeOf(async function(){}).constructor)('env',`with(env){${compiled};return {games,selectedGamePk,selectedPitcherId,activeTab,selectedDate,loadError,contextNotice,selectGame,loadGames}}`)
+-async function run(query) {
++async function run(query,favorite='') {
++  const user=vue.ref({favorite_team_code:favorite})
+   const route=vue.reactive({query:{...query},path:'/games/today',fullPath:'/games/today'})
+   const resolve=target=>({fullPath:'/games/today?'+new URLSearchParams(Object.entries(target.query).filter(([,v])=>v!==undefined).map(([k,v])=>[k,String(v)]))})
+   const router={resolve,replace:async target=>{route.query={...target.query};route.fullPath=resolve(target).fullPath;await vue.nextTick()}}
+   let delayed=null
+-  const api={gamesList:async ({date})=>({games:(date==='2025-08-01'?[44]:[42,43]).map(id=>fixture(id).game),latest_game_date:'2025-09-27'}),gamePitching:async ({gamePk})=>delayed?.id===gamePk?await delayed.promise:gamePk===999?{teams:[]}:fixture(gamePk)}
++  const api={gamesList:async ({date})=>({games:(date==='2025-08-01'?[44]:[42,43,45]).map(id=>fixture(id).game),latest_game_date:'2025-09-27'}),gamePitching:async ({gamePk})=>delayed?.id===gamePk?await delayed.promise:gamePk===999?{teams:[]}:fixture(gamePk)}
+   const scope=vue.effectScope()
+   let ready
+-  scope.run(()=>{ready=setup({...vue,...context,watch:(...args)=>scope.run(()=>vue.watch(...args)),useApi:()=>api,useRoute:()=>route,useRouter:()=>router,onBeforeUnmount:()=>{},getPitchColor:()=>'',definePageMeta:()=>{}})})
++  scope.run(()=>{ready=setup({...vue,...context,watch:(...args)=>scope.run(()=>vue.watch(...args)),useAuth:()=>({user}),useApi:()=>api,useRoute:()=>route,useRouter:()=>router,onBeforeUnmount:()=>{},getPitchColor:()=>'',definePageMeta:()=>{}})})
+   const state=await ready
+-  return {state,route,scope,failList(){api.gamesList=async()=>{throw new Error('Unavailable snapshot')}},delay(id){let release;delayed={id,promise:new Promise(resolve=>{release=resolve})};return ()=>{delayed=null;release(fixture(id))}}}
++  return {state,route,scope,user,failList(){api.gamesList=async()=>{throw new Error('Unavailable snapshot')}},delay(id){let release;delayed={id,promise:new Promise(resolve=>{release=resolve})};return ()=>{delayed=null;release(fixture(id))}}}
+ }
+ const exact=await run({year:'2025',team:'AZ',date:'2025-09-27',game_pk:'43',pitcher_id:'200',tab:'replay',ballpark_from:'/ballpark/play?room=game-center'})
+ assert.equal(exact.state.selectedGamePk.value,43);assert.equal(exact.state.selectedPitcherId.value,200);assert.equal(exact.state.activeTab.value,'replay')
+@@ -60,7 +61,15 @@ const historic=await run({year:'2025',team:'AZ',game_pk:'44',tab:'box'})
+ assert.equal(historic.state.selectedDate.value,'2025-08-01');assert.equal(historic.state.selectedGamePk.value,44)
+ const missing=await run({year:'2025',team:'AZ',game_pk:'999',tab:'box'})
+ assert.equal(missing.state.selectedGamePk.value,42);assert.match(missing.state.contextNotice.value,/unavailable/)
++const favorite=await run({year:'2025',date:'2025-09-27'},'NYY')
++assert.equal(favorite.state.selectedGamePk.value,45)
++favorite.user.value.favorite_team_code='AZ';await vue.nextTick();await vue.nextTick()
++assert.equal(favorite.state.selectedGamePk.value,42)
++favorite.user.value.favorite_team_code='SEA';await vue.nextTick()
++assert.equal(favorite.state.selectedGamePk.value,42)
++const explicit=await run({year:'2025',game_pk:'43'},'NYY')
++assert.equal(explicit.state.selectedGamePk.value,43)
+ exact.failList();await exact.state.loadGames()
+ assert.match(exact.state.loadError.value,/could not load/);assert.equal(exact.state.selectedGamePk.value,null)
+-for(const instance of [exact,historic,missing])instance.scope.stop()
++for(const instance of [exact,historic,missing,favorite,explicit])instance.scope.stop()
+ console.log('F1 source/data contracts PASS: canonical destinations, year/date/team identities, doubleheader game PK, requested tab/pitcher, historical date recovery, unavailable fallback, stale detail exclusion, preserved origin and names. No visual acceptance.')
+diff --git a/frontend/utils/gameCenterContext.ts b/frontend/utils/gameCenterContext.ts
+index 7336980..c1da666 100644
+--- a/frontend/utils/gameCenterContext.ts
++++ b/frontend/utils/gameCenterContext.ts
+@@ -26,6 +26,11 @@ export function gameFitsScope(game: { game_pk?: unknown; game_date?: unknown; ho
+   return Boolean(game && contextId(game.game_pk) && date && (!scope.date || date === scope.date)
+     && (!scope.team || game.home_team === scope.team || game.away_team === scope.team))
+ }
++export function preferredGame<T extends { game_pk?: unknown; home_team?: unknown; away_team?: unknown }>(games: T[], requested: unknown, favorite: unknown): T | undefined {
++  const id = contextId(requested), team = normalizeMlbTeamCode(favorite)
++  return games.find(game => id !== undefined && Number(game.game_pk) === id)
++    || games.find(game => team && (game.home_team === team || game.away_team === team)) || games[0]
++}
+ export function leaderboardContext(query: Record<string, unknown>) {
+   const views = ['basic', 'stuff', 'location', 'pitching', 'stamina'] as const
+   const tab = views.includes(query.tab as typeof views[number]) ? query.tab as typeof views[number] : 'basic'

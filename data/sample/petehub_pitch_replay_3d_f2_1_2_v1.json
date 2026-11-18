@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-06",
+  "project_id": "petehub-ballpark-game-system",
+  "scope": [
+    "F1 white-link closeout",
+    "F2.1 preservation/renderer/data contract",
+    "F2.2 first geometry/camera delivery"
+  ],
+  "status": {
+    "F1": "done_by_user_conditional_acceptance_white_link_now_applied",
+    "F2": "in_progress",
+    "F2_1": "done_contract_and_source_scope",
+    "F2_2": "implemented_pending_user_geometry_acceptance",
+    "F2_3_to_F2_7": "planned_in_order_after_required_manual_gates",
+    "E6": "quantitative_device_gate_still_pending"
+  },
+  "authorization": "User explicitly requested white name link, F1 completion on that edit, and start F2/subitems. Follow previously planned geometry acceptance before formal rig appearance.",
+  "checkpoint": {
+    "base_commit": "b7d720c",
+    "preserved_F1_delta": "output/ballpark/f2-preflight-v1/f1-preserved-ui.patch",
+    "automatic_restore_commit_push": false,
+    "notes": "Existing favorite-team/default-selection changes preserved; patch adds only latest F1 source differences to existing pushed base. No original approved assets removed."
+  },
+  "contract": {
+    "version": "historical_replay_scene_v1",
+    "mode": "historical_replay_not_synthetic_simulation",
+    "source_units": "feet",
+    "source_axes": {
+      "x": "lateral",
+      "y": "plate to mound",
+      "z": "up"
+    },
+    "renderer_units": "metres",
+    "renderer_axes": "right-handed Y-up",
+    "source_to_renderer": "(x_ft, z_ft, -y_ft) * 0.3048",
+    "rubber_y_ft": 60.5,
+    "plate_front_y_ft": 1.4166666666666667,
+    "zone_width_in": 17,
+    "zone_height": "selected source sz_bot/top; prior explicit fallback when unavailable",
+    "release": "source trajectory_points[0], originating from per-pitch release_pos_x/y/z; never snapped to rubber/mound centre",
+    "clock": "source progress/time_seconds; exact endpoints, interpolation between source samples, no modified source coordinates",
+    "generic_guides": "Foot ring plus generic 1.65m height line only, not measured stature or formal player model",
+    "handedness": "L/R changes only stand-position guide; source path is not mirrored",
+    "bat_data": "No measured bat-tip/handle timeline; F2.5 must audit coverage. No fake real swing or contact."
+  },
+  "renderer_decision": {
+    "name": "Three.js",
+    "version": "0.187.0",
+    "types_version": "0.187.0",
+    "license": "MIT",
+    "engine_install_scope": "Only local historical analysis; no global app or Ballpark engine replacement",
+    "load_boundary": "PitchReplayChart -> defineAsyncComponent(client) -> onMounted dynamic createReplayScene import",
+    "capability": "WebGL2",
+    "fallback": "Photo-free/player-image-free SVG schematic with DOM data/video links retained",
+    "asset_sources": "Original repo-native deterministic primitives; no imported human model, new generated art, unknown-license textures or third-party stadium scan",
+    "asset_inventory": "No existing GLB/glTF/FBX/Blend rig found in inspected frontend/assets/output; Blender CLI not detected; formal rigs remain F2.3",
+    "motion_system_scope": "F2.2 only spatial geometry; no procedural guide passed off as animated human"
+  },
+  "lifecycle": {
+    "render_policy": "on demand, RAF coalescing, no idle loop or damping, pixel-ratio cap1.5, no hidden rendering",
+    "progress_updates": "retains path geometry when only progress changes",
+    "cleanup": "cancel RAF, disconnect ResizeObserver, remove visibility/key/pointer/context listeners, dispose OrbitControls/world geometry/material/heatmap texture/renderer, lose context, remove owned canvas; late import guarded",
+    "meaning": "Source implementation and numeric evidence, not measured GPU/browser leak certification"
+  },
+  "budgets_not_measurements": {
+    "incremental_renderer_gzip_bytes_max": 512000,
+    "desktop_active_frame_p95_ms_max": 20,
+    "classic_initial_bytes_max": 300000,
+    "production_bundle_device_input_gpu": "not_measured_not_certified"
+  },
+  "verification": {
+    "numeric_command": "node scripts/check-pitch-replay-3d.mjs",
+    "numeric_status": "pass",
+    "checks": [
+      "axis/unit conversion and 60.5ft rubber",
+      "per-pitch source release distinct from ground/rubber",
+      "17-inch true-zone frame and 4x6ft ground boxes",
+      "nonuniform-progress interpolation and exact source endpoints",
+      "source values unchanged across L/R stand and timeline",
+      "100 progress updates retain static path geometry",
+      "geometry disposal and lazy import/lifecycle source boundaries"
+    ],
+    "typecheck_command": "vue-tsc --noEmit -p .nuxt/tsconfig.json",
+    "typecheck_status": "pass",
+    "unchanged_backend_and_PR_services": true,
+    "no_browser_or_DOM_visual_or_screenshots": true,
+    "no_frontend_server_or_login_fixture": true,
+    "no_build_or_full_old_audit": true
+  },
+  "references": [
+    "https://threejs.org/docs/pages/OrbitControls.html",
+    "https://threejs.org/docs/pages/WebGLRenderer.html"
+  ],
+  "input_hashes": {
+    "frontend/components/charts/replay3d/replayContract.ts": "36357cb371f2ba47903a1ab15bf2b9417ff8ec7cc44dd437d5999a7d43dd8245",
+    "frontend/components/charts/replay3d/buildReplayWorld.ts": "ded27c4887fa642567224ec8a4b92b35bd86ee8eec57be7beb6db7b97bf1bbbf",
+    "frontend/components/charts/replay3d/createReplayScene.ts": "2abc7b1f0396ccf9aa01cf5c1f7e268d54bb1a3185980e8c6b7120c89229d7c6",
+    "frontend/components/charts/PitchReplayScene3D.client.vue": "12fd616790157f6eddf215c9b93da6f761378196b4637655d637514a3de0d60f",
+    "frontend/components/charts/PitchReplayChart.vue": "36e8bf2be7b5a22fcde24fe761a89d3312a300b02fbbb8b6eab29019a844f05a",
+    "frontend/components/charts/BatterInGameHeatmap.vue": "81490bcc6d08fa6dd19e196f0249ca7852df3259013ef28c0b336e013bd88fde",
+    "frontend/scripts/check-pitch-replay-3d.mjs": "1080b7afc5b8cd225e64a3872cddfab35bd6537d0b1983dccd11e3c04306b0df",
+    "frontend/package.json": "2a8f960f2829db8b10985beaf5887556a389e92c6b3864e7c11a467187b3e488",
+    "frontend/package-lock.json": "3406b266b8b8711facbb9a53eff124b84e826a1bb60fa941f6ddc5aa8be243af",
+    "output/ballpark/f2-preflight-v1/f1-preserved-ui.patch": "86e6be2816a07d486eb4f5a934cd817c77ed12dff33dc2ce96ec5c9b35a62923"
+  },
+  "manual_acceptance": "pending_user",
+  "manual_checklist": [
+    "Personal In game opens 3D field; player-name link white; old photo and fixed PNG absent",
+    "Drag/arrows orbit; wheel/+/- dolly; Catcher/Pitcher/Side/Home/Reset coherent",
+    "0%/play/slow/seek start at gold source release above/in front of mound; no hand-side mirroring",
+    "Ground plate/boxes, zone/heatmap and pitch paths maintain relation through camera moves; guides are not formal art",
+    "Game and Personal switching/video/cards, 2D/3D fallback and leave/return/R preserve function; numeric/device release not implied"
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "version": "petehub_perdomo_swing_pilot_v1",
+  "date": "2026-11-07",
+  "slice": "G5",
+  "status": "paused_by_user",
+  "playerId": 672695,
+  "playerName": "Geraldo Perdomo",
+  "scope": "User approved one actual L and one actual R source landmark/B comparison, mother-site In game only.",
+  "trainingPerformed": false,
+  "characterRetarget": false,
+  "sideMirrored": false,
+  "batEndpointsAvailable": false,
+  "contactTime": null,
+  "modelProvenance": "output/ballpark/motion-method-demo-v1/model-provenance.json",
+  "mediaPipeModel": "output/ballpark/f2-motion-reference-v1/pose_landmarker_full.task",
+  "modelVersion": "pretrained MotionBERT-Lite FT_MB_lite_MB_ft_h36m_global_lite",
+  "tracking": "batter-source-window-v2; fixed per-source crop and temporal torso/appearance lock; identity not yet human accepted",
+  "missing": "Raw low confidence remains absent in source overlay; B corresponding joints gray/dashed. Short interpolated input context frames are hidden in UI; source video plays in full.",
+  "sides": [
+    {
+      "stand": "L",
+      "clip": {
+        "id": "perdomo-l-01",
+        "playerId": 672695,
+        "playerName": "Geraldo Perdomo",
+        "year": 2026,
+        "gamePk": 823246,
+        "date": "2026-09-27",
+        "atBat": 3,
+        "pitchNumber": 2,
+        "playId": "46b5fdec-eae1-36da-ae94-f3e446297bce",
+        "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=46b5fdec-eae1-36da-ae94-f3e446297bce",
+        "stand": "L",
+        "pitcherId": 681190,
+        "description": "hit_into_play",
+        "event": "single",
+        "pitchType": "FC",
+        "sourceBatSpeedMph": 66.2,
+        "sourceSwingLengthFt": 6.5,
+        "pitchHand": "R",
+        "video": "videos/perdomo-l-01.mp4",
+        "status": "candidate",
+        "directUrl": "https://sporty-clips.mlb.com/WU9WeXJfWGw0TUFRPT1fQWdjRFVRSlFBMUVBWFFOWFZ3QUhCMUlIQUFCUVdsVUFWRlpRQkFjREF3cFNVbEVE.mp4",
+        "videoSha256": "031842de708f836c84abfd09dec96c3850aee2b3bf77229bcd79d431d744ae0f",
+        "quality": {
+          "score": 47.25,
+          "bodyCoverage": 0.8021978021978022,
+          "bothWristsCoverage": 0.14285714285714285,
+          "analysisWindow": [
+            1.05,
+            4.1
+          ],
+          "denominatorFrames": 182,
+          "observedWindow": [
+            1.0553515804597702,
+            4.0873934227330775
+          ],
+          "armVisibility": {
+            "left": 0.25274725274725274,
+            "right": 0.554945054945055
+          },
+          "limitation": "Torso/wrist visibility only; not swing completeness, bat tracking or correct 3D motion."
+        }
+      },
+      "reviewPath": "output\\ballpark\\perdomo-swing-v1\\L-review.json",
+      "reviewSha256": "ee22a95e71c8c380d449a95b740d7c3be5862e5702bd4fe1d839fe59d0fac5cd",
+      "sourceFrames": 696,
+      "estimatedBFrames": 182,
+      "filledContextFramesHidden": 36,
+      "quality": {
+        "score": 47.25,
+        "bodyCoverage": 0.8021978021978022,
+        "bothWristsCoverage": 0.14285714285714285,
+        "analysisWindow": [
+          1.05,
+          4.1
+        ],
+        "denominatorFrames": 182,
+        "observedWindow": [
+          1.0553515804597702,
+          4.0873934227330775
+        ],
+        "armVisibility": {
+          "left": 0.25274725274725274,
+          "right": 0.554945054945055
+        },
+        "limitation": "Torso/wrist visibility only; not swing completeness, bat tracking or correct 3D motion."
+      }
+    },
+    {
+      "stand": "R",
+      "clip": {
+        "id": "perdomo-r-01",
+        "playerId": 672695,
+        "playerName": "Geraldo Perdomo",
+        "year": 2026,
+        "gamePk": 823248,
+        "date": "2026-09-25",
+        "atBat": 51,
+        "pitchNumber": 1,
+        "playId": "1c4b6ea8-d661-3560-97d8-b87e61bf959d",
+        "sourcePage": "https://baseballsavant.mlb.com/sporty-videos?playId=1c4b6ea8-d661-3560-97d8-b87e61bf959d",
+        "stand": "R",
+        "pitcherId": 606996,
+        "description": "hit_into_play",
+        "event": "double",
+        "pitchType": "SL",
+        "sourceBatSpeedMph": 77.7,
+        "sourceSwingLengthFt": 7.2,
+        "pitchHand": "L",
+        "video": "videos/perdomo-r-01.mp4",
+        "status": "candidate",
+        "directUrl": "https://sporty-clips.mlb.com/NXk5QU5fWGw0TUFRPT1fQjFKVkJsSlJCd29BWEZRRVZ3QUhCQUJXQUZnQ0Ixa0FVRjBDVlFVRVUxVmNCUXND.mp4",
+        "videoSha256": "842e1a26e5675012b98a34c3802cda27e1c5729b9ef7f028d76953be986eb087",
+        "quality": {
+          "score": 44.24,
+          "bodyCoverage": 0.8477366255144033,
+          "bothWristsCoverage": 0.037037037037037035,
+          "analysisWindow": [
+            0.05,
+            4.1
+          ],
+          "denominatorFrames": 243,
+          "observedWindow": [
+            0.050167737870195336,
+            4.097031926065952
+          ],
+          "armVisibility": {
+            "left": 0.6255144032921811,
+            "right": 0.053497942386831275
+          },
+          "limitation": "Torso/wrist visibility only; not swing completeness, bat tracking or correct 3D motion."
+        }
+      },
+      "reviewPath": "output\\ballpark\\perdomo-swing-v1\\R-review.json",
+      "reviewSha256": "121b37456f6b083fca0652785a7c7ee53313f170da577c2eea83e403483f862f",
+      "sourceFrames": 1058,
+      "estimatedBFrames": 209,
+      "filledContextFramesHidden": 13,
+      "quality": {
+        "score": 44.24,
+        "bodyCoverage": 0.8477366255144033,
+        "bothWristsCoverage": 0.037037037037037035,
+        "analysisWindow": [
+          0.05,
+          4.1
+        ],
+        "denominatorFrames": 243,
+        "observedWindow": [
+          0.050167737870195336,
+          4.097031926065952
+        ],
+        "armVisibility": {
+          "left": 0.6255144032921811,
+          "right": 0.053497942386831275
+        },
+        "limitation": "Torso/wrist visibility only; not swing completeness, bat tracking or correct 3D motion."
+      }
+    }
+  ],
+  "sourceOnlyChecks": {
+    "sourceIdentityAndSide": "pass",
+    "fullTimestampsAndNulls": "pass",
+    "videoHashAndFiniteData": "pass",
+    "declaredWindowDenominators": "pass",
+    "pythonSyntax": "pass",
+    "vueTypecheck": "pass",
+    "directRouteFilesAndUnknownSource404": "pass",
+    "pitcherSourceHashesUnchanged": true
+  },
+  "userVisualAcceptance": "not accepted; user paused all actor-motion work",
+  "browserUsed": false,
+  "limitations": [
+    "Camera-relative human pose/depth is estimated; no calibrated world root, ground contact or stride.",
+    "Both-arm high-confidence coverage is only L14.3%/R3.7%; NOT sufficient for reliable full swing or bat-path reconstruction.",
+    "Independent reference clips, not motion for the currently selected historical pitch.",
+    "Pitcher G3/G4 remain deferred; pitcher actor/delivery/retarget switches remain false."
+  ],
+  "externalRepository": {
+    "url": "https://github.com/sernadesigns/baseball-game",
+    "reviewedFiles": [
+      "README.md",
+      "app.js",
+      "lib/Game.js",
+      "lib/Inning.js",
+      "lib/Scoreboard.js",
+      "lib/events.js",
+      "lib/Umpire.js",
+      "package.json"
+    ],
+    "reusableIdeas": [
+      "domain event separation",
+      "count/inning/base/score responsibilities"
+    ],
+    "notPresent": [
+      "3D actor assets",
+      "swing animation",
+      "pose capture"
+    ],
+    "historicalReplaySuitability": "Random outcomes must not replace source historical results; not integrated.",
+    "licenseObservation": "package.json declares ISC; repository root had no standalone LICENSE in inspected listing.",
+    "codeCopied": false,
+    "dependenciesInstalled": false
+  },
+  "retargetFirstBatch": {
+    "status": "paused_by_user",
+    "authorization": "User confirmed B skeleton -> same 3D batter, in batches.",
+    "mode": "Scene playback: Perdomo B swing reference",
+    "controls": "Main Play/Pause/Replay/Speed/Timeline, actual L/R source selection; Historical pitch remains separate.",
+    "sourceClock": "Each frozen clip processingWindow; not aligned to selected historical pitch release/contact.",
+    "sourceToWorld": "Rigid camera-relative Y-axis rotation pi; fixed rig lengths, estimated root/limb rotations; no calibrated world stride.",
+    "constraints": [
+      "Generic hand/palm grip, wrist rotation bounded .60 rad; bat is an unmeasured prop.",
+      "Generic lowest-foot ground clearance and neutral foot orientation; no foot X/Z pin.",
+      "Missing/interpolated-context frames hide actor, source caches unchanged."
+    ],
+    "checks": {
+      "vueCompile": "pass",
+      "rigSourceOnly": "pass",
+      "fixedBoneTranslations": 0,
+      "deterministicSeek": true,
+      "rootLateralTravelM": {
+        "L": 0.2723541966494658,
+        "R": 0.16919052032077353
+      },
+      "maximumGripSocketDistanceM": {
+        "L": 0.16789802397932158,
+        "R": 0.11610918472621427
+      },
+      "maximumRadialPalmGapM": 4.1e-16,
+      "minimumFootAnchorY": 0.0773842207620275
+    },
+    "visualAcceptance": false,
+    "runtimeEnabled": false
+  },
+  "heatmapRepair": {
+    "cause": "Whole DuckDB file mtime/size changed with video lookup writes, so PR artifact marked stale and color_pr was null. Explanation was hidden in collapsed notes.",
+    "fix": "Relevant regular-season pitch-column fingerprint: count, xor and exact HUGEINT sum plus algorithm version. Cache invalidation ignores video-only changes, preserves pitch-change invalidation.",
+    "year": 2026,
+    "qualifiedBatters": 571,
+    "groups": 705,
+    "sourceResponseCheck": "Perdomo vs L/R: benchmark ready; swing/whiff all nine in-zone cells have color_pr; low-sample outcome cells remain null.",
+    "tests": "7 targeted backend tests pass; new test covers video-table writes vs relevant pitch change.",
+    "ui": "Stale/empty status visible with Retry; no stale response cache.",
+    "visualAcceptance": false,
+    "secondCause": "Global Python producer DuckDB 1.5.2 vs running backend venv DuckDB 1.5.5 label mismatch with identical row/xor/exact-sum fingerprints. Version label removed from content comparison; artifact synchronized after equality check using backend venv."
+  },
+  "runtimeEnabled": false,
+  "currentPresentation": "Static ready batter and pitcher only. Historical ball-flight playback, release metrics and heatmap retained."
+}

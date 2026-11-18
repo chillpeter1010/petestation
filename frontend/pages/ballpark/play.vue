@@ -1,7 +1,7 @@
 <template>
   <main class="walk-shell">
     <header class="walk-header">
-      <PetehubLogo size="compact" aria-label="Petehub Ballpark" />
+      <PetehubLogo size="compact" aria-label="DaPeter home" />
       <span class="walk-version">BALLPARK WALK · E5 / E6 · SCENES V4</span>
       <NuxtLink class="static-link" to="/ballpark">Static map</NuxtLink>
     </header>
@@ -191,20 +191,19 @@ function handlePortal(target: BallparkPortalTarget) {
 </script>
 
 <style scoped>
-:global(body) { background: #080a08; }
-.walk-shell { width: min(2000px, 70vw); max-width: 100%; min-height: 100dvh; margin: auto; padding: 12px clamp(12px, 2vw, 28px) 32px; color: #f6f0dd; background: radial-gradient(circle at 50% 0, #273b22, #080a08 42rem); }
+.walk-shell { width: min(2000px, 70vw); max-width: 100%; min-height: 100dvh; margin: auto; padding: 12px clamp(12px, 2vw, 28px) 32px; color: #f6f0dd; background: #000; }
 .walk-header { display: flex; align-items: center; gap: 14px; min-height: 56px; }
 .walk-version { color: #f3a22c; font: 850 12px/1.2 Consolas, monospace; letter-spacing: .08em; }
 .static-link { margin-left: auto; color: #f6f0dd; text-decoration: none; }
 .room-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-.room-nav a, .static-link { border: 1px solid #465044; border-radius: 7px; padding: 9px 14px; background: #151a15; font-weight: 800; }
+.room-nav a, .static-link { border: 1px solid #465044; border-radius: 7px; padding: 9px 14px; background: #000; font-weight: 800; }
 .room-nav a { color: #f6f0dd; text-decoration: none; }
 .room-nav a[aria-current="page"] { color: #121923; background: #f3a22c; border-color: #f3a22c; }
 .team-selector { margin-left: auto; display: flex; align-items: center; gap: 10px; font-weight: 800; }
-.team-selector select { max-width: 230px; border: 1px solid #465044; border-radius: 7px; padding: 9px 12px; color: #f6f0dd; background: #151a15; font: inherit; }
+.team-selector select { max-width: 230px; border: 1px solid #465044; border-radius: 7px; padding: 9px 12px; color: #f6f0dd; background: #000; font: inherit; }
 .direct-nav { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 16px 2px; }
 .direct-nav a, .direct-nav button { color: #e7c080; background: none; border: 0; font: inherit; text-decoration: underline; cursor: pointer; }
-.object-directory{display:grid;grid-template-columns:2fr 1fr;gap:16px}.object-directory details{border:1px solid #465044;border-radius:9px;padding:14px}.object-directory summary{font-weight:800;cursor:pointer}.object-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.object-buttons button,.object-directory select{min-height:44px;padding:8px 12px;border:1px solid #6d705c;border-radius:6px;background:#19241c;color:#f6f0dd;font:inherit;cursor:pointer}.mini-map{width:100%;max-height:260px;margin:12px 0}.object-directory label{display:grid;gap:8px}@media(max-width:800px){.object-directory{grid-template-columns:1fr}}
+.object-directory{display:grid;grid-template-columns:2fr 1fr;gap:16px}.object-directory details{border:1px solid #465044;border-radius:9px;padding:14px}.object-directory summary{font-weight:800;cursor:pointer}.object-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.object-buttons button,.object-directory select{min-height:44px;padding:8px 12px;border:1px solid #6d705c;border-radius:6px;background:#000;color:#f6f0dd;font:inherit;cursor:pointer}.mini-map{width:100%;max-height:260px;margin:12px 0}.object-directory label{display:grid;gap:8px}@media(max-width:800px){.object-directory{grid-template-columns:1fr}}
 @media (max-width: 1100px) { .walk-shell { width: 100%; } }
 .loading { min-height: 400px; display: grid; place-items: center; }
 </style>

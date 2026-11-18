@@ -40,8 +40,7 @@
 .station-card {
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  background: radial-gradient(circle at top right, rgba(247, 166, 52, 0.16), transparent 38%),
-    var(--color-surface);
+  background: #000;
   box-shadow: var(--shadow-card);
 }
 

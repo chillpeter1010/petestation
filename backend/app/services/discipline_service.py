@@ -245,7 +245,7 @@ def build_pitcher_panel_metrics(data: pd.DataFrame) -> list[dict[str, Any]]:
             {"label": "AVG", "value": None},
         ]
 
-    working = add_discipline_flags(data)
+    working = data if "_is_strike" in data and "_events_norm" in data else add_discipline_flags(data)
     events = working["_events_norm"]
     swings = working["_is_swing"]
     whiffs = working["_is_whiff"]
@@ -360,6 +360,8 @@ def build_exact_count_frames(data: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
 
 def build_discipline_panel_groups(data: pd.DataFrame, location_builder: LocationPayloadBuilder) -> dict[str, Any]:
+    # All panels use the same flags; derive them once rather than 32 times.
+    data = add_discipline_flags(data)
     return {
         "result": {
             "pitch_result": frames_to_panel_payloads(RESULT_PANEL_SPECS, build_result_panel_frames(data), location_builder),

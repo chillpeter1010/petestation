@@ -1,0 +1,22 @@
+[
+  {
+    "name": "yesavage",
+    "play_id": "469fb129-ee71-3287-b610-6e86df79c1b8",
+    "page": "https://baseballsavant.mlb.com/sporty-videos?playId=469fb129-ee71-3287-b610-6e86df79c1b8",
+    "direct_url": "https://sporty-clips.mlb.com/cU8yemxfV0ZRVkV3dEdEUT09X0FnZFlBZ1lGVkFzQVhRY0ZWd0FIQXc1UkFBTURVbEVBQkFBTkJsZFRCZ29HQVZCZQ==.mp4",
+    "bytes": 4383429,
+    "sha256": "22a2f239e306ae20051dc230f534bf25ef2db4a954204b28e6455cd5a70a1492",
+    "title": "Trey Yesavage K&#x27;s Ben Rice for his 10th strikeout",
+    "usage": "reference analysis only; not a runtime art asset or learned motion"
+  },
+  {
+    "name": "thompson",
+    "play_id": "716aaf3c-bc99-3360-9f44-27e29c85ca7d",
+    "page": "https://baseballsavant.mlb.com/sporty-videos?playId=716aaf3c-bc99-3360-9f44-27e29c85ca7d",
+    "direct_url": "https://sporty-clips.mlb.com/MTZxNVJfWGw0TUFRPT1fQVFCWEJRVlNWVkVBV2dFTFh3QUhBZ0JXQUZoVFYxVUFBRkpRQWdwV0NRWUdVUVVD.mp4",
+    "bytes": 4431544,
+    "sha256": "c7be8636b0a62348a221bc9afa5bda69d1781b87c82c4f2907585e5b121ac029",
+    "title": "Ryan Thompson Foul to Shohei Ohtani",
+    "usage": "reference analysis only; not a runtime art asset or learned motion"
+  }
+]

@@ -1,8 +1,36 @@
 # Game Center Analysis Modules
 
 > 狀態：In progress
-> 更新：2026-11-06
+> 更新：2026-11-09
 > Tracker project：`game-center-analysis-modules`
+
+## 2026-11-09：Slice 3I 逐球情境熱區與 Pitch scout 第一版（待人工）
+
+使用者已接受上一批換打者熱圖加速，接著授權兩個短批：逐球情境熱區＋Pitch scout，不做人物動作、節點或缺乏資料的早／晚與上下緣。Game／Personal同用現行Panel／Chart；預設勾選「逐球情境熱區」，沿打者、投手手別、打者站側、pre-pitch count、相鄰前球type/result及比賽日期更新。取消勾選保留原整季PR。每球重新判斷情境，不保證相同情境或回退層級的顏色每球不同。
+
+新 API `/batters/personal/pitch-scout` 限當日以前，PA>30／context至少30，exact previous type/result → previous family → exact count → broad count，低樣本明示回退或不足。五率與原分母共用語意、context色為絕對率非PR、每格分母至少5，其餘中性灰；不用整季PR母體替窄情境冒充百分位。詳見API契約。
+
+Pitch scout按鍵可開關；顯示歷史Swing／Take、球種family分布、揮棒集中區樣本與世界座標金色收縮環。這是歷史條件參考，不是意圖或經驗證預測；API不收當球球種／落點／結果。原靜態打者與球路不改，Batter scout仍未啟用。共用Chart使用未篩選allRows找精確前球；64-entry／120s快取合併請求，預讀下一球，冷資料時等待再播；Pause／換球／離頁取消待播。原側欄Branch保持全季描述契約，未改成預測。
+
+局部後端5 tests、前球／cutoff request contract、Vue快取late/error/retry與純Three幾何標靶／immutable source、contour PR/rate分離檢查通過；一次vue-tsc與後續局部SFC編譯只屬source檢查。實際來源Perdomo 2026/R、9/27前資料：0-0首讀414ms、0-1新情境196ms、快取重讀0.3ms，非HTTP／畫面量測。Slice3I維持in_progress，等待使用者測逐球／快速跳球、PR切回、Scout標靶、低樣本及播放暫停；未開瀏覽器／server／DOM／截圖。
+
+## 2026-11-09：接續 This PA／逐球資訊修正（待人工）
+
+熱圖切換加速批（待人工）：移除相同投手手別下不必要的 pitcherId 取數依賴；BatterInGameHeatmap 與共用 Chart 均用 shallowRef 保存不可變資料快照。新增元件範圍的 32-entry／120 秒快取、相同 key 進行中請求合併；非 ready PR 基準只短存 5 秒，Retry 可重取。主打者完成後僅預讀下一位不同打者，切換時同步命中快取／接手同一請求，未來打者資料不提前顯示；晚到回應有 identity／version guard。輪廓按原 cells identity＋metric 以 WeakMap 重用，不改統計／PR。來源層級實測：熱圖 2026/R 的 672695 冷讀 865 ms、701675 新打者 232 ms、672695 重讀 6 ms；branch 2026/R、投手 671111、0-0／首球條件兩次為 1305／850 ms。這些是本機 service 耗時（首次熱圖含 profiler overhead），非 HTTP／畫面延遲或效能 gate。後續逐球 branch 需另設有來源版本的情境快取／有限預讀或離線彙總，本輪未改 branch 公式。Vue 型別與請求合併／identity／TTL／Retry source checks 通過；不宣稱使用者視覺驗收完成。
+
+This PA 改只包含同 game／pitcher／PA、且 pitch_number 小於目前選球的比較球，不提前顯示未播放的同打席球；This game 保留全場比較。白球納入 hover／點擊候選並綁 selectedKey，資訊卡沿原始 row 顯示投打 Personal 連結與 Open video，移入卡片可操作；單開影片不改回放／branch 的選球。Replay API 沿用現有 Stuff／Location／Stamina loader 並將相應逐球欄位帶入 payload，缺值仍保留空值，不另建評分公式。Ballpark 移除建築入口上方浮動 E／Enter／R 提示，NEARBY／原鍵盤與入口操作保留。局部 PA／前球 source checks、回放 payload pytest（1 passed）及一次 vue-tsc 通過；沒有瀏覽器／截圖／畫面驗收。不恢復 density、動作或捕捉，不變更 Slice 狀態。
+
+## 2026-11-08：Game／Personal 共用現行 In game
+
+本日後續調整（待人工驗收）：共用控制區新增一鍵收合，使用 `v-show` 保留選球／播放／熱圖元件狀態；PR／低樣本格改不透明中性灰，不能當作有效 PR。3D 球路與比較球落點新增 hover（日期、球種、球速、球數、結果、Stuff+／Location+／Stamina+、影片可用性；缺值仍為 —），另有可展開的 Stuff 共用逐球好球帶。換打席自動回 This PA，識別使用 game／pitcher／PA，清空前球 hover；This game 可手動重開。使用者隨後取消新增 density，因此沒有新增密度模式或 Discipline API／來源欄位變更，現有 Discipline 保留。來源型別、PR contour、舊打席 geometry／候選清除與中性格 opacity 檢查通過，不代表畫面／互動通過；無瀏覽器、截圖、新 server 或動態重建。
+
+Game 的 In game 入口與投手 Personal 明確 async 引用同一個 `PitchReplayPanel.vue`，再共用 `PitchReplayChart.vue`；Game 頁籤／標題統一顯示 In game，既有 `tab=replay` URL 保留。現行規格：左側原寬回放、同寬篩選；右側 290–340px 資訊欄上移，兩張資訊卡下方接縮小的 Conditioned branch；Show heatmap 旁有逐球「點擊續播」，未勾選保留原自動播放方式；外圍熱區預設包含。兩處影片彈窗皆使用 `PitchVideoPlayer.vue` 原生影片播放器。保留靜態打者／實際出手點與數據，投手模型及動態重建維持停用。此次只同步入口、命名與文件，無新增資料公式／查詢契約；Game 實際畫面與操作仍待使用者驗收，不改 Slice 完成狀態。
+
+## 2026-11-06：F1接受、共用三維第一批待驗
+
+使用者接受 F1 主隊預設選場，姓名改白色後結案；白色連結（含 visited）已完成。母站新增 `PitchReplayScene3D.client.vue`，由共用 Chart async載入，內部 mounted後才dynamic import Three.js 0.187.0；原場地照片／PNG人物／前景像素位移已撤接，素材檔保留。F2.1 契約技術範圍Done；使用者已明確接受F2.2三維幾何／相機及遠端紅土半徑小修，F2.2 Done。F2.3／F2.4開工前本機資料初查另見Ballpark主文件最上方及 `petehub_pitch_motion_data_audit_v1.json`：arm_angle有庫但replay尚未帶出，身高／體重未保存，逐球揮棒scalar不等於逐幀動作。未改資料/API／模型，沒有重跑母站畫面或開啟瀏覽器；正式release仍屬F2.6。
+
+Game／Personal 同一 source path、選球／影片／熱圖／兩卡與Personal連結保留。新場景有同世界地面／本壘／框／丘／踏板／進壘區、source出手金點、捕手／投手／側面orbit-dolly；cyan僅站位guide，沒有正式人物或揮棒，不宣稱完成F2.3/F2.4。失敗可2D schematic，無舊照片／人物貼圖。來源數值檢查與一次vue-tsc PASS不等於WebGL／視覺／裝置通過；source backend公式未改，原3H done保留，整體三維接受及正式gate仍屬F2/F2.6。沒有瀏覽器／截圖／新server或重跑資料／模型。
 
 ## 2026-11-06 呈現方案否決與 F2 重建規劃
 

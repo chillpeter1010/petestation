@@ -626,6 +626,8 @@ def _batter_location_point_rows(rows: pd.DataFrame) -> list[dict[str, Any]]:
 def _build_batter_location_points(rows: pd.DataFrame) -> TablePayload:
     columns = [
         "game_date",
+        "p_throws",
+        "stand",
         "plate_x",
         "plate_z",
         "pitch_name",

@@ -1,7 +1,9 @@
 from typing import Literal
+from datetime import date
 
 from fastapi import APIRouter, Query
 from app.api.schemas.batter_zone_rates import BatterZoneRatesResponse
+from app.api.schemas.pitch_scout import PitchScoutResponse
 from app.services.batter_zone_rates_service import get_batter_zone_rates
 
 from app.api.schemas.batter_swing_timing import SwingTimingPlayerDetailResponse, SwingTimingResponse
@@ -17,6 +19,15 @@ from app.services.batter_service import (
 )
 
 router = APIRouter()
+
+
+@router.get("/personal/pitch-scout", response_model=PitchScoutResponse)
+def read_pitch_scout(year: int = Query(2026), batter_id: int = Query(..., gt=0),
+                     pitcher_hand: Literal["All", "L", "R"] = Query(...), stand: Literal["L", "R"] = Query(...),
+                     before_date: date = Query(...), balls: int = Query(..., ge=0, le=3), strikes: int = Query(..., ge=0, le=2),
+                     previous_type: str = Query("__missing__", max_length=32), previous_result: str = Query("__missing__", max_length=64)) -> PitchScoutResponse:
+    from app.services.pitch_scout_service import get_pitch_scout
+    return get_pitch_scout(year,batter_id,pitcher_hand,stand,before_date,balls,strikes,previous_type,previous_result)
 
 
 @router.get("/personal/zone-rates", response_model=BatterZoneRatesResponse)
@@ -66,8 +77,9 @@ def read_batter_swing_timing(
     pitcher_team: str = Query("All"),
     minimum_swings: int = Query(50, ge=0),
     minimum_plate_appearances: int = Query(100, ge=5, le=700),
+    include_regression: bool = Query(False),
 ) -> SwingTimingResponse:
-    return get_batter_swing_timing(
+    response = get_batter_swing_timing(
         year=year,
         pitch_group=pitch_group,
         pitch_type=pitch_type,
@@ -78,6 +90,10 @@ def read_batter_swing_timing(
         minimum_swings=minimum_swings,
         minimum_plate_appearances=minimum_plate_appearances,
     )
+    if include_regression:
+        from app.services.batter_swing_regression_service import add_swing_timing_regression
+        return add_swing_timing_regression(response)
+    return response
 
 
 @router.get("/lab/swing-timing/player", response_model=SwingTimingPlayerDetailResponse)

@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>Petehub 投手關節辨識原型</title>
+<style>body{margin:24px auto;max-width:1200px;padding:0 20px;background:#111b25;color:#edf1f4;font:17px/1.6 system-ui}section{padding:20px;margin:24px 0;border:1px solid #587081;border-radius:10px}video{width:100%;max-height:700px}input{width:80%}button{font:inherit;padding:8px;margin:4px;background:#253847;color:white;border:1px solid #8ea4b3;border-radius:5px}a{color:#8bd6ff}td{padding:3px 18px}summary{cursor:pointer}</style>
+<h1>投手關節辨識原型：先驗標點，再接三維骨架</h1>
+<p>這是預訓練 MediaPipe 模型的影片推論，尚未訓練球員專屬模型。投手身分、左右肢體和追蹤結果待使用者確認。網站的問題投手動畫已停用，沒有把這批預測接回模型。</p>
+<p>青色為解剖左側，橘色為右側；紅叉為低信心。低信心部位不連骨架線，遺失幀保留遺失。影片以 0.5×供檢查，頂端時間仍為來源影片時間。</p>
+<ol><li>標點是否一直跟著投手，沒有切到打者、捕手或裁判？</li><li>髖、膝、踝有沒有左右互換、瞬間跳點或落在錯誤位置？</li><li>肩、肘、腕在揮臂與遮擋時是否可信？請指出影片、來源秒數與部位。</li></ol>
+<p>JSON 的影像座標對應原影片像素；三維數值是以髖部為中心的單眼估測，尚未做球場相機校準，不能當 Statcast 三維座標或實測動作。</p><section><h2>Yesavage</h2>
+<video id="yesavage" controls preload="metadata" src="yesavage-pose-review.mp4"></video>
+<p id="yesavage-time" aria-live="polite">Source video keypoints · pending review</p>
+<label>逐幀：<input aria-label="yesavage frame" type="range" min="0" max="55" value="0" oninput="seekFrame('yesavage',Number(this.value))"></label>
+<p><button onclick="step('yesavage',-1)">上一幀</button> <button onclick="step('yesavage',1)">下一幀</button>
+<button onclick="seekTime('yesavage',2.15)">抬腿／下沉附近</button> <button onclick="seekTime('yesavage',2.85)">放球附近</button></p>
+<p>模型返回投手候選 56 / 56 幀；此數量不代表辨識正確。<a href="https://baseballsavant.mlb.com/sporty-videos?playId=469fb129-ee71-3287-b610-6e86df79c1b8">官方來源影片</a> · <a href="yesavage-pose.json">逐幀 JSON</a></p>
+<details><summary>各關節信心 ≥ 0.65 的幀數</summary><table><tr><td>left_shoulder</td><td>56 / 56</td></tr><tr><td>right_shoulder</td><td>56 / 56</td></tr><tr><td>left_elbow</td><td>28 / 56</td></tr><tr><td>right_elbow</td><td>44 / 56</td></tr><tr><td>left_wrist</td><td>17 / 56</td></tr><tr><td>right_wrist</td><td>40 / 56</td></tr><tr><td>left_hip</td><td>56 / 56</td></tr><tr><td>right_hip</td><td>56 / 56</td></tr><tr><td>left_knee</td><td>55 / 56</td></tr><tr><td>right_knee</td><td>52 / 56</td></tr><tr><td>left_ankle</td><td>55 / 56</td></tr><tr><td>right_ankle</td><td>55 / 56</td></tr></table></details></section><section><h2>Thompson</h2>
+<video id="thompson" controls preload="metadata" src="thompson-pose-review.mp4"></video>
+<p id="thompson-time" aria-live="polite">Source video keypoints · pending review</p>
+<label>逐幀：<input aria-label="thompson frame" type="range" min="0" max="55" value="0" oninput="seekFrame('thompson',Number(this.value))"></label>
+<p><button onclick="step('thompson',-1)">上一幀</button> <button onclick="step('thompson',1)">下一幀</button>
+<button onclick="seekTime('thompson',2.15)">抬腿／下沉附近</button> <button onclick="seekTime('thompson',2.85)">放球附近</button></p>
+<p>模型返回投手候選 55 / 56 幀；此數量不代表辨識正確。<a href="https://baseballsavant.mlb.com/sporty-videos?playId=716aaf3c-bc99-3360-9f44-27e29c85ca7d">官方來源影片</a> · <a href="thompson-pose.json">逐幀 JSON</a></p>
+<details><summary>各關節信心 ≥ 0.65 的幀數</summary><table><tr><td>left_shoulder</td><td>55 / 56</td></tr><tr><td>right_shoulder</td><td>55 / 56</td></tr><tr><td>left_elbow</td><td>30 / 56</td></tr><tr><td>right_elbow</td><td>46 / 56</td></tr><tr><td>left_wrist</td><td>23 / 56</td></tr><tr><td>right_wrist</td><td>43 / 56</td></tr><tr><td>left_hip</td><td>55 / 56</td></tr><tr><td>right_hip</td><td>55 / 56</td></tr><tr><td>left_knee</td><td>41 / 56</td></tr><tr><td>right_knee</td><td>53 / 56</td></tr><tr><td>left_ankle</td><td>45 / 56</td></tr><tr><td>right_ankle</td><td>53 / 56</td></tr></table></details></section><script>
+const times={"yesavage": [1.812422, 1.845789, 1.879156, 1.912522, 1.945889, 1.979256, 2.012622, 2.045989, 2.079356, 2.112722, 2.146089, 2.179456, 2.212822, 2.246189, 2.279556, 2.312922, 2.346289, 2.379656, 2.413022, 2.446389, 2.479756, 2.513122, 2.546489, 2.579856, 2.613222, 2.646589, 2.679956, 2.713322, 2.746689, 2.780056, 2.813422, 2.846789, 2.880156, 2.913522, 2.946889, 2.980256, 3.013622, 3.046989, 3.080356, 3.113722, 3.147089, 3.180456, 3.213822, 3.247189, 3.280556, 3.313922, 3.347289, 3.380656, 3.414022, 3.447389, 3.480756, 3.514122, 3.547489, 3.580856, 3.614222, 3.647589], "thompson": [1.804811, 1.838178, 1.871544, 1.904911, 1.938278, 1.971644, 2.005011, 2.038378, 2.071744, 2.105111, 2.138478, 2.171844, 2.205211, 2.238578, 2.271944, 2.305311, 2.338678, 2.372044, 2.405411, 2.438778, 2.472144, 2.505511, 2.538878, 2.572244, 2.605611, 2.638978, 2.672344, 2.705711, 2.739078, 2.772444, 2.805811, 2.839178, 2.872544, 2.905911, 2.939278, 2.972644, 3.006011, 3.039378, 3.072744, 3.106111, 3.139478, 3.172844, 3.206211, 3.239578, 3.272944, 3.306311, 3.339678, 3.373044, 3.406411, 3.439778, 3.473144, 3.506511, 3.539878, 3.573244, 3.606611, 3.639978]};
+function seekFrame(id,i){const v=document.getElementById(id);v.pause();v.currentTime=Math.max(0,Math.min(times[id].length-1,i))/15;label(id)}
+function seekTime(id,t){let i=0;times[id].forEach((s,k)=>{if(Math.abs(s-t)<Math.abs(times[id][i]-t))i=k});seekFrame(id,i)}
+function step(id,d){seekFrame(id,Math.round(document.getElementById(id).currentTime*15)+d)}
+function label(id){const v=document.getElementById(id),i=Math.min(times[id].length-1,Math.floor(v.currentTime*15+.01));document.getElementById(id+'-time').textContent='來源 '+times[id][i].toFixed(3)+' s · 取樣幀 '+i+' / '+(times[id].length-1)}
+Object.keys(times).forEach(id=>document.getElementById(id).addEventListener('timeupdate',()=>label(id)));
+</script></html>

@@ -74,11 +74,11 @@ onBeforeUnmount(() => { clearInterval(timer); media?.removeEventListener('change
 </script>
 
 <style scoped>
-.character-study { display: grid; justify-items: center; gap: 10px; padding: 14px; color: #f3efe3; background: #17232b; border: 1px solid #465363; border-radius: 8px; }
+.character-study { display: grid; justify-items: center; gap: 10px; padding: 14px; color: #f3efe3; background: #000; border: 1px solid #465363; border-radius: 8px; }
 .character-study__sprite { width: 144px; height: 216px; overflow: hidden; image-rendering: pixelated; }
 .character-study p { margin: 0; font: 700 11px/1.5 Consolas, monospace; text-align: center; }
 .character-study__options { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
-.character-study button { min-height: 34px; padding: 5px 8px; border: 1px solid #65717a; border-radius: 5px; background: #111923; color: #f3efe3; font: 700 11px/1.2 Consolas, monospace; cursor: pointer; }
+.character-study button { min-height: 34px; padding: 5px 8px; border: 1px solid #65717a; border-radius: 5px; background: #000; color: #f3efe3; font: 700 11px/1.2 Consolas, monospace; cursor: pointer; }
 .character-study button[aria-pressed="true"] { color: #111923; background: #f3a22c; }
 .character-study button:focus-visible { outline: 3px solid #ffd166; outline-offset: 2px; }
 </style>

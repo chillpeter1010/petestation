@@ -1,0 +1,105 @@
+{
+  "version": "petehub_static_release_plan_v1",
+  "date": "2026-11-07",
+  "status": "planning_only",
+  "uiImplemented": false,
+  "userVisualAcceptance": "pending",
+  "mode": "static_source_release_analysis",
+  "scope": "Shared mother-site Game/Personal In game. Static figures, source arm-angle/release guide and historical ball-only playback.",
+  "sources": [
+    "https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles",
+    "https://baseballsavant.mlb.com/csv-docs"
+  ],
+  "sourceFields": [
+    "arm_angle",
+    "p_throws",
+    "release_pos_x",
+    "release_pos_y",
+    "release_pos_z",
+    "release_extension"
+  ],
+  "missingSourceFields": [
+    "shoulder coordinates",
+    "elbow coordinates",
+    "wrist coordinates",
+    "measured arm length"
+  ],
+  "dataScope": "Existing local 2026 regular-season pitch table, backend .venv read-only",
+  "coverage": {
+    "total": 716544,
+    "armAngle": 711723,
+    "releaseX": 713878,
+    "releaseY": 713878,
+    "releaseZ": 713878,
+    "extension": 713203,
+    "allFive": 711697,
+    "negativeArmAngle": 4906
+  },
+  "examples": [
+    {
+      "playerId": 702056,
+      "name": "Trey Yesavage",
+      "hand": "R",
+      "pitches": 1619,
+      "meanArmAngleDeg": 65.8,
+      "meanReleaseXFt": -0.35,
+      "meanReleaseYFt": 54.46,
+      "meanReleaseZFt": 7.12,
+      "meanExtensionFt": 6.04
+    },
+    {
+      "playerId": 657044,
+      "name": "Ryan Thompson",
+      "hand": "R",
+      "pitches": 667,
+      "meanArmAngleDeg": -12.2,
+      "meanReleaseXFt": -3.86,
+      "meanReleaseYFt": 53.83,
+      "meanReleaseZFt": 3.52,
+      "meanExtensionFt": 6.67
+    }
+  ],
+  "contract": {
+    "angle": "At release relative to horizontal; 0 horizontal, 90 overhead; negatives retained. Not ball-flight elevation or joint Euler rotation.",
+    "point": "Immutable source release XYZ. Do not move point/path to fit body or recalculate Y from extension.",
+    "illustration": "Generic normalized silhouette, shoulder anchor and line length explicitly schematic; arm angle plus release cannot uniquely identify shoulder/elbow/torso or real motion.",
+    "views": "Front/back/side camera transformations only; original handed source X unchanged. Label source angle in declared reference plane rather than screen-projected apparent angle.",
+    "missing": "Keep available source fields; unavailable angle/point stays missing, never filled with 45 degrees.",
+    "averages": "Per-pitch first. Future game/pitch-type means labeled with scope/sample/coverage, never substituted for a pitch.",
+    "extension": "Independent source depth measure; not stride, arm length or measured shoulder location."
+  },
+  "progress": {
+    "overallDone": 40,
+    "overallTotal": 66,
+    "currentRequiredF2": [
+      "F2.1",
+      "F2.2",
+      "F2.3",
+      "F2.4",
+      "F2.6",
+      "F2.7"
+    ],
+    "currentRequiredF2Done": 3,
+    "deferred": [
+      "F2.5",
+      "G1",
+      "G2",
+      "G3",
+      "G4",
+      "G5",
+      "G6"
+    ],
+    "next": [
+      "F2.4",
+      "F2.6",
+      "F2.7",
+      "F3"
+    ],
+    "releaseGateStillRequired": [
+      "E6",
+      "F2.6"
+    ]
+  },
+  "browserUsed": false,
+  "implementationWorkPerformed": false
+}

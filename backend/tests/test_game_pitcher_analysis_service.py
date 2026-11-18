@@ -358,7 +358,7 @@ def test_pitch_trajectory_accepts_slow_pitch_positive_root():
 def test_game_pitch_replay_scopes_rows_and_preserves_unavailable_and_limited(monkeypatch):
     pitches = pd.DataFrame(
         [
-            _trajectory_pitch(),
+            _trajectory_pitch(pitch_stuff_plus=103.6, location_plus_pitch=82.7, stamina_plus_trait=102.7, stamina_expected_retention_delta=0.0, stamina_expected_stuff_plus=106.0),
             _trajectory_pitch(pitch_number=2, pitch_uid="824948-80-2", release_pos_y=None),
             _trajectory_pitch(pitch_number=3, pitch_uid="824948-80-3", plate_x=10.0),
             _trajectory_pitch(game_pk=999999, pitch_uid="other-game"),
@@ -380,6 +380,10 @@ def test_game_pitch_replay_scopes_rows_and_preserves_unavailable_and_limited(mon
     assert [row["trajectory_status"] for row in rows] == ["supported", "unavailable", "limited_trajectory"]
     assert rows[0]["catcher_name"] == "Test Catcher"
     assert rows[0]["video_url"] == "https://example.test/replay-1"
+    assert {key: rows[0][key] for key in ("pitch_stuff_plus", "location_plus_pitch", "stamina_plus_trait", "stamina_expected_retention_delta", "stamina_expected_stuff_plus")} == {
+        "pitch_stuff_plus": 103.6, "location_plus_pitch": 82.7, "stamina_plus_trait": 102.7, "stamina_expected_retention_delta": 0.0, "stamina_expected_stuff_plus": 106.0,
+    }
+    assert rows[1]["pitch_stuff_plus"] is None
     assert rows[1]["trajectory_points"] == []
     assert rows[2]["closure_error_x_in"] > 3
     assert payload.charts["game_scope"] == {"game_pk": 824948, "pitcher_id": 837227}

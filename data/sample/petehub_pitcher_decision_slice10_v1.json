@@ -1,0 +1,279 @@
+{
+  "slice": 10,
+  "version": "decision_temporal_research_v1",
+  "years": [
+    {
+      "year": 2021,
+      "decisions": 182162,
+      "scored_window": 93458,
+      "we": 93112,
+      "re": 93112,
+      "li": 93112
+    },
+    {
+      "year": 2022,
+      "decisions": 182468,
+      "scored_window": 182468,
+      "we": 181989,
+      "re": 181989,
+      "li": 181989
+    },
+    {
+      "year": 2023,
+      "decisions": 184506,
+      "scored_window": 184506,
+      "we": 183979,
+      "re": 183979,
+      "li": 183979
+    },
+    {
+      "year": 2024,
+      "decisions": 182903,
+      "scored_window": 182903,
+      "we": 182351,
+      "re": 182351,
+      "li": 182351
+    },
+    {
+      "year": 2025,
+      "decisions": 183387,
+      "scored_window": 183387,
+      "we": 182916,
+      "re": 182916,
+      "li": 182916
+    },
+    {
+      "year": 2026,
+      "decisions": 184328,
+      "scored_window": 184328,
+      "we": 183866,
+      "re": 183866,
+      "li": 183866
+    }
+  ],
+  "models": [
+    {
+      "model_id": "decision_temporal_research_v1:context:2021_h2",
+      "fold": {
+        "id": "2021_h2",
+        "train_end": "2021-07-01",
+        "score_start": "2021-07-01",
+        "score_end": "2022-01-01"
+      },
+      "reference_games": 1186,
+      "fit_games": 948,
+      "calibration_games": 238,
+      "reference_rows": 88308,
+      "maximum_label_available_at": 1625096706.581,
+      "we_features": [
+        "inning",
+        "bottom",
+        "scheduled_innings",
+        "score_diff",
+        "outs",
+        "base_state",
+        "balls",
+        "strikes"
+      ],
+      "re_states": 48,
+      "li_normalizer": 0.028128133722887725,
+      "li_scope": "Research PA-LI: expected absolute neutral-WE swing over completed batter transitions; not an exact FanGraphs LI reproduction.",
+      "we_calibration": "Chronological 80/20 game split, fixed Platt logistic; no held-out-year calibration.",
+      "limitations": [
+        "No team-strength, park, roster or forthcoming action effects in neutral WE.",
+        "Partial-pooling RE sampling SE omits model and clustering uncertainty.",
+        "Walkoffs and seven-inning termination explicit; extra innings use automatic runner at second.",
+        "LI does not include bullpen opportunity cost or recommend an action."
+      ],
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:context:2022",
+      "fold": {
+        "id": "2022",
+        "train_end": "2022-01-01",
+        "score_start": "2022-01-01",
+        "score_end": "2023-01-01"
+      },
+      "reference_games": 2428,
+      "fit_games": 1942,
+      "calibration_games": 486,
+      "reference_rows": 181551,
+      "maximum_label_available_at": 1633302425.764,
+      "we_features": [
+        "inning",
+        "bottom",
+        "scheduled_innings",
+        "score_diff",
+        "outs",
+        "base_state",
+        "balls",
+        "strikes"
+      ],
+      "re_states": 48,
+      "li_normalizer": 0.027811444217733128,
+      "li_scope": "Research PA-LI: expected absolute neutral-WE swing over completed batter transitions; not an exact FanGraphs LI reproduction.",
+      "we_calibration": "Chronological 80/20 game split, fixed Platt logistic; no held-out-year calibration.",
+      "limitations": [
+        "No team-strength, park, roster or forthcoming action effects in neutral WE.",
+        "Partial-pooling RE sampling SE omits model and clustering uncertainty.",
+        "Walkoffs and seven-inning termination explicit; extra innings use automatic runner at second.",
+        "LI does not include bullpen opportunity cost or recommend an action."
+      ],
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:context:2023",
+      "fold": {
+        "id": "2023",
+        "train_end": "2023-01-01",
+        "score_start": "2023-01-01",
+        "score_end": "2024-01-01"
+      },
+      "reference_games": 4858,
+      "fit_games": 3886,
+      "calibration_games": 972,
+      "reference_rows": 363538,
+      "maximum_label_available_at": 1665017128.617,
+      "we_features": [
+        "inning",
+        "bottom",
+        "scheduled_innings",
+        "score_diff",
+        "outs",
+        "base_state",
+        "balls",
+        "strikes"
+      ],
+      "re_states": 48,
+      "li_normalizer": 0.03173870514462282,
+      "li_scope": "Research PA-LI: expected absolute neutral-WE swing over completed batter transitions; not an exact FanGraphs LI reproduction.",
+      "we_calibration": "Chronological 80/20 game split, fixed Platt logistic; no held-out-year calibration.",
+      "limitations": [
+        "No team-strength, park, roster or forthcoming action effects in neutral WE.",
+        "Partial-pooling RE sampling SE omits model and clustering uncertainty.",
+        "Walkoffs and seven-inning termination explicit; extra innings use automatic runner at second.",
+        "LI does not include bullpen opportunity cost or recommend an action."
+      ],
+      "formal_replacement": false
+    },
+    {
+      "model_id": "decision_temporal_research_v1:context:frozen_2024",
+      "fold": {
+        "id": "frozen_2024",
+        "train_end": "2024-01-01",
+        "score_start": "2024-01-01",
+        "score_end": "2027-01-01"
+      },
+      "reference_games": 7287,
+      "fit_games": 5829,
+      "calibration_games": 1458,
+      "reference_rows": 547517,
+      "maximum_label_available_at": 1696198858.767,
+      "we_features": [
+        "inning",
+        "bottom",
+        "scheduled_innings",
+        "score_diff",
+        "outs",
+        "base_state",
+        "balls",
+        "strikes"
+      ],
+      "re_states": 48,
+      "li_normalizer": 0.030160268294603703,
+      "li_scope": "Research PA-LI: expected absolute neutral-WE swing over completed batter transitions; not an exact FanGraphs LI reproduction.",
+      "we_calibration": "Chronological 80/20 game split, fixed Platt logistic; no held-out-year calibration.",
+      "limitations": [
+        "No team-strength, park, roster or forthcoming action effects in neutral WE.",
+        "Partial-pooling RE sampling SE omits model and clustering uncertainty.",
+        "Walkoffs and seven-inning termination explicit; extra innings use automatic runner at second.",
+        "LI does not include bullpen opportunity cost or recommend an action."
+      ],
+      "formal_replacement": false,
+      "validation_2024": {
+        "n": 182351,
+        "brier": 0.157961225166938,
+        "log_loss": 0.4721712942449774,
+        "constant_train_home_win_brier": 0.25005339816462213,
+        "calibration_bins": [
+          {
+            "lower": 0.0,
+            "n": 24564,
+            "predicted": 0.04536871887470828,
+            "observed": 0.0351327145416056
+          },
+          {
+            "lower": 0.1,
+            "n": 13005,
+            "predicted": 0.15398622127757228,
+            "observed": 0.14232987312572087
+          },
+          {
+            "lower": 0.2,
+            "n": 14991,
+            "predicted": 0.2558980842566693,
+            "observed": 0.25548662530851846
+          },
+          {
+            "lower": 0.3,
+            "n": 15349,
+            "predicted": 0.35189089822148045,
+            "observed": 0.3559189523747475
+          },
+          {
+            "lower": 0.4,
+            "n": 9002,
+            "predicted": 0.4446325097934241,
+            "observed": 0.4289046878471451
+          },
+          {
+            "lower": 0.5,
+            "n": 37842,
+            "predicted": 0.548067972348202,
+            "observed": 0.5474604936314148
+          },
+          {
+            "lower": 0.6,
+            "n": 12859,
+            "predicted": 0.6557929472259109,
+            "observed": 0.6318531767633564
+          },
+          {
+            "lower": 0.7,
+            "n": 12207,
+            "predicted": 0.7534053772605455,
+            "observed": 0.731629392971246
+          },
+          {
+            "lower": 0.8,
+            "n": 15366,
+            "predicted": 0.8480061952988533,
+            "observed": 0.8447221137576467
+          },
+          {
+            "lower": 0.9,
+            "n": 27166,
+            "predicted": 0.9561079312516525,
+            "observed": 0.956048001177943
+          }
+        ],
+        "scope": "Fixed validation diagnostic; observations clustered by game, not independent rows. No 2025/2026 performance examination."
+      }
+    }
+  ],
+  "missing_li_filled_with_one": false,
+  "outcomes_separate": true,
+  "xwpa_action_model_trained": false,
+  "individual_ranking_allowed": false,
+  "source_only_validation": {
+    "formal_metadata_changes": 0,
+    "training_label_time_violations": 0,
+    "prior_fastball_time_violations": 0,
+    "prefix_boundary_time_violations": 0,
+    "candidate_history_time_violations": 0,
+    "duplicate_pitch_feature_keys": 0,
+    "missing_li_filled_with_one": false,
+    "individual_ranking_allowed": false
+  }
+}

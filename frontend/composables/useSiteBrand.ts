@@ -8,7 +8,7 @@ export function useSiteBrand() {
   })
 
   const isPetehub = computed(() => mode.value === 'petehub')
-  const brandName = computed(() => isPetehub.value ? 'Petehub' : 'Peteclub')
+  const brandName = computed(() => 'DaPeter')
 
   function toggleBrand() {
     mode.value = isPetehub.value ? 'peteclub' : 'petehub'

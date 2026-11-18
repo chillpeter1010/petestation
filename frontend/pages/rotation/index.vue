@@ -50,8 +50,7 @@
   border-radius: var(--radius-md);
   padding: 28px;
   background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent 34%),
-    var(--color-surface);
+    #000;
   box-shadow: var(--shadow-md);
 }
 
@@ -119,8 +118,7 @@
 .mode-card.shortcut {
   min-height: 190px;
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 13%, transparent), transparent 52%),
-    var(--color-surface);
+    #000;
   transition: transform 140ms ease, border-color 140ms ease;
 }
 

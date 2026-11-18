@@ -26,6 +26,11 @@ export function gameFitsScope(game: { game_pk?: unknown; game_date?: unknown; ho
   return Boolean(game && contextId(game.game_pk) && date && (!scope.date || date === scope.date)
     && (!scope.team || game.home_team === scope.team || game.away_team === scope.team))
 }
+export function preferredGame<T extends { game_pk?: unknown; home_team?: unknown; away_team?: unknown }>(games: T[], requested: unknown, favorite: unknown): T | undefined {
+  const id = contextId(requested), team = normalizeMlbTeamCode(favorite)
+  return games.find(game => id !== undefined && Number(game.game_pk) === id)
+    || games.find(game => team && (game.home_team === team || game.away_team === team)) || games[0]
+}
 export function leaderboardContext(query: Record<string, unknown>) {
   const views = ['basic', 'stuff', 'location', 'pitching', 'stamina'] as const
   const tab = views.includes(query.tab as typeof views[number]) ? query.tab as typeof views[number] : 'basic'

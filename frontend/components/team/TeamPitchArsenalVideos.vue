@@ -114,7 +114,7 @@ function cleanVideoUrl(value: unknown) {
 .pitch-reel__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .pitch-video { min-width: 0; overflow: hidden; border: 1px solid var(--team-panel-border); border-radius: 13px; background: var(--color-surface); transition: border-color .16s ease, transform .16s ease; }
 .pitch-video:hover, .pitch-video:focus-within { border-color: var(--team-primary); transform: translateY(-2px); }
-.pitch-video__media { position: relative; aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; color: var(--color-muted-text); background: #030508; }
+.pitch-video__media { position: relative; aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; color: var(--color-muted-text); background: #000; }
 .pitch-video__media video { width: 100%; height: 100%; object-fit: cover; }
 .pitch-video__media > strong { position: absolute; right: 9px; bottom: 9px; border-radius: 999px; padding: 5px 8px; color: #fff; background: color-mix(in srgb, var(--team-primary) 88%, #080a0d); font: 900 12px "Fira Code", monospace; pointer-events: none; }
 .pitch-video__placeholder { display: grid; justify-items: center; gap: 7px; font-size: 10px; font-weight: 800; }

@@ -106,7 +106,7 @@ function signed(value: unknown) {
 
 <style scoped>
 .stuff-card { overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.stuff-card > header { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--color-border); padding: 15px 18px; background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 65%); }
+.stuff-card > header { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--color-border); padding: 15px 18px; background: #000; }
 header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 h2 { margin: 4px 0 0; color: var(--color-text); font-size: 20px; }
 .overall { display: grid; grid-template-columns: auto auto; align-items: center; gap: 0 10px; text-align: right; }

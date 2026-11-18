@@ -1,0 +1,588 @@
+{
+  "slice": 8,
+  "version": "decision_temporal_research_v1",
+  "role": "SP",
+  "years": [
+    {
+      "year": 2021,
+      "observed_scored_appearances": 2482,
+      "prefixes": 41566,
+      "eligible_appearances": 875,
+      "quality": 37065,
+      "physical": 37065,
+      "command": 37012
+    },
+    {
+      "year": 2022,
+      "observed_scored_appearances": 4857,
+      "prefixes": 244117,
+      "eligible_appearances": 4704,
+      "quality": 219164,
+      "physical": 219004,
+      "command": 219164
+    },
+    {
+      "year": 2023,
+      "observed_scored_appearances": 4860,
+      "prefixes": 246293,
+      "eligible_appearances": 4634,
+      "quality": 218559,
+      "physical": 218426,
+      "command": 218558
+    },
+    {
+      "year": 2024,
+      "observed_scored_appearances": 4857,
+      "prefixes": 249239,
+      "eligible_appearances": 4716,
+      "quality": 215661,
+      "physical": 215346,
+      "command": 215595
+    },
+    {
+      "year": 2025,
+      "observed_scored_appearances": 4859,
+      "prefixes": 247049,
+      "eligible_appearances": 4731,
+      "quality": 205040,
+      "physical": 205134,
+      "command": 205136
+    },
+    {
+      "year": 2026,
+      "observed_scored_appearances": 4857,
+      "prefixes": 239584,
+      "eligible_appearances": 4615,
+      "quality": 187730,
+      "physical": 187532,
+      "command": 187730
+    }
+  ],
+  "minimum_prefix": 35,
+  "signals_separate": true,
+  "composite_energy_available": false,
+  "prefix_leakage_violations": 0,
+  "models": [
+    {
+      "model_id": "2021_state:SP",
+      "cutoff": "2021-09-01",
+      "train_rows": 75911,
+      "train_appearances": 1506,
+      "maximum_label_available_at": 1630388699.031,
+      "signals": {
+        "quality": {
+          "training_prefixes": 68634,
+          "residual_sd": 2.131516649333079
+        },
+        "command": {
+          "training_prefixes": 68634,
+          "residual_sd": 2.012339907339767
+        }
+      },
+      "physical_components": [
+        {
+          "column": "release_speed",
+          "center": -0.17778906740247205,
+          "sd": 0.6262456082994671
+        },
+        {
+          "column": "release_spin_rate",
+          "center": -1.735523123624826,
+          "sd": 44.060084246752425
+        },
+        {
+          "column": "pfx_x",
+          "center": 0.0024995419884380095,
+          "sd": 0.06605610685052112
+        },
+        {
+          "column": "pfx_z",
+          "center": -0.0035445867310997517,
+          "sd": 0.06410995827376628
+        },
+        {
+          "column": "release_pos_x",
+          "center": 0.007420176135960988,
+          "sd": 0.07861752201717152
+        },
+        {
+          "column": "release_pos_z",
+          "center": -0.030914243400356707,
+          "sd": 0.04473191461999427
+        },
+        {
+          "column": "release_extension",
+          "center": 0.027692438126773057,
+          "sd": 0.06400368267459249
+        },
+        {
+          "column": "arm_angle",
+          "center": -0.06132563867373992,
+          "sd": 1.0110869241129612
+        }
+      ],
+      "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+      "features": [
+        "prefix_pitches",
+        "log_pitch_count",
+        "early_quality",
+        "early_command",
+        "early_velocity",
+        "days_observed_history",
+        "prior_same_type_pitches",
+        "pitches_1d_before",
+        "pitches_3d_before",
+        "pitches_7d_before",
+        "pitches_14d_before",
+        "rest_hours_since_closed_session",
+        "prior_session_consecutive_days",
+        "appeared_earlier_today",
+        "prior_observed_starts",
+        "prior_observed_relief",
+        "previous_session_pitches",
+        "days_since_start",
+        "days_since_long",
+        "latest_boundary_li"
+      ],
+      "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+      "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+      "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "2022_state:SP",
+      "cutoff": "2022-01-01",
+      "train_rows": 117618,
+      "train_appearances": 2383,
+      "maximum_label_available_at": 1633302425.764,
+      "signals": {
+        "quality": {
+          "training_prefixes": 105827,
+          "residual_sd": 2.2068503116606246
+        },
+        "command": {
+          "training_prefixes": 105774,
+          "residual_sd": 2.095876135808393
+        }
+      },
+      "physical_components": [
+        {
+          "column": "release_speed",
+          "center": -0.19429583573200815,
+          "sd": 0.6246588024644394
+        },
+        {
+          "column": "release_spin_rate",
+          "center": -2.9078920721428485,
+          "sd": 43.905969779551576
+        },
+        {
+          "column": "pfx_x",
+          "center": 0.003414085782044557,
+          "sd": 0.06609161189890658
+        },
+        {
+          "column": "pfx_z",
+          "center": -0.00460598559189086,
+          "sd": 0.06382122693544343
+        },
+        {
+          "column": "release_pos_x",
+          "center": 0.008473509243126714,
+          "sd": 0.07762721097393022
+        },
+        {
+          "column": "release_pos_z",
+          "center": -0.0305701281826765,
+          "sd": 0.04514833502614064
+        },
+        {
+          "column": "release_extension",
+          "center": 0.02795988388496455,
+          "sd": 0.06433476809622421
+        },
+        {
+          "column": "arm_angle",
+          "center": -0.05592268202918623,
+          "sd": 1.0399327186976282
+        }
+      ],
+      "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+      "features": [
+        "prefix_pitches",
+        "log_pitch_count",
+        "early_quality",
+        "early_command",
+        "early_velocity",
+        "days_observed_history",
+        "prior_same_type_pitches",
+        "pitches_1d_before",
+        "pitches_3d_before",
+        "pitches_7d_before",
+        "pitches_14d_before",
+        "rest_hours_since_closed_session",
+        "prior_session_consecutive_days",
+        "appeared_earlier_today",
+        "prior_observed_starts",
+        "prior_observed_relief",
+        "previous_session_pitches",
+        "days_since_start",
+        "days_since_long",
+        "latest_boundary_li"
+      ],
+      "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+      "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+      "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "2023_state:SP",
+      "cutoff": "2023-01-01",
+      "train_rows": 361735,
+      "train_appearances": 7087,
+      "maximum_label_available_at": 1665017128.617,
+      "signals": {
+        "quality": {
+          "training_prefixes": 324991,
+          "residual_sd": 2.37738901723559
+        },
+        "command": {
+          "training_prefixes": 324938,
+          "residual_sd": 2.0753221565827493
+        }
+      },
+      "physical_components": [
+        {
+          "column": "release_speed",
+          "center": -0.18202291455609637,
+          "sd": 0.6186211531710248
+        },
+        {
+          "column": "release_spin_rate",
+          "center": -0.8203602401676958,
+          "sd": 43.730594865511215
+        },
+        {
+          "column": "pfx_x",
+          "center": 0.005240433389931985,
+          "sd": 0.06856834432088618
+        },
+        {
+          "column": "pfx_z",
+          "center": -0.005533021215799278,
+          "sd": 0.06460297449443354
+        },
+        {
+          "column": "release_pos_x",
+          "center": 0.007367956977741338,
+          "sd": 0.0785756553521477
+        },
+        {
+          "column": "release_pos_z",
+          "center": -0.030858072025854236,
+          "sd": 0.04608253832353282
+        },
+        {
+          "column": "release_extension",
+          "center": 0.025742344374191848,
+          "sd": 0.06556929086338155
+        },
+        {
+          "column": "arm_angle",
+          "center": -0.05961449456535754,
+          "sd": 1.0842844618197578
+        }
+      ],
+      "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+      "features": [
+        "prefix_pitches",
+        "log_pitch_count",
+        "early_quality",
+        "early_command",
+        "early_velocity",
+        "days_observed_history",
+        "prior_same_type_pitches",
+        "pitches_1d_before",
+        "pitches_3d_before",
+        "pitches_7d_before",
+        "pitches_14d_before",
+        "rest_hours_since_closed_session",
+        "prior_session_consecutive_days",
+        "appeared_earlier_today",
+        "prior_observed_starts",
+        "prior_observed_relief",
+        "previous_session_pitches",
+        "days_since_start",
+        "days_since_long",
+        "latest_boundary_li"
+      ],
+      "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+      "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+      "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+      "formal_replacement": false
+    },
+    {
+      "model_id": "frozen_state_2024:SP",
+      "cutoff": "2024-01-01",
+      "train_rows": 608028,
+      "train_appearances": 11721,
+      "maximum_label_available_at": 1696198858.767,
+      "signals": {
+        "quality": {
+          "training_prefixes": 543550,
+          "residual_sd": 2.3457906570424063
+        },
+        "command": {
+          "training_prefixes": 543496,
+          "residual_sd": 2.0945854491461904
+        }
+      },
+      "physical_components": [
+        {
+          "column": "release_speed",
+          "center": -0.1817561930686281,
+          "sd": 0.6114526140942033
+        },
+        {
+          "column": "release_spin_rate",
+          "center": -1.0951006546175732,
+          "sd": 42.55244136124508
+        },
+        {
+          "column": "pfx_x",
+          "center": 0.006453262029654656,
+          "sd": 0.06909154231052232
+        },
+        {
+          "column": "pfx_z",
+          "center": -0.006856252456772845,
+          "sd": 0.06441288050342844
+        },
+        {
+          "column": "release_pos_x",
+          "center": 0.009648549173267934,
+          "sd": 0.07786275204750107
+        },
+        {
+          "column": "release_pos_z",
+          "center": -0.03242237845461103,
+          "sd": 0.04589596595389504
+        },
+        {
+          "column": "release_extension",
+          "center": 0.026734924620775063,
+          "sd": 0.06932155091338053
+        },
+        {
+          "column": "arm_angle",
+          "center": -0.05560570162285746,
+          "sd": 1.107847829517386
+        }
+      ],
+      "scale": "Separate past-reference residual SD, 100 + 10 SD; EB n/(n+20); not a shared physical energy unit.",
+      "features": [
+        "prefix_pitches",
+        "log_pitch_count",
+        "early_quality",
+        "early_command",
+        "early_velocity",
+        "days_observed_history",
+        "prior_same_type_pitches",
+        "pitches_1d_before",
+        "pitches_3d_before",
+        "pitches_7d_before",
+        "pitches_14d_before",
+        "rest_hours_since_closed_session",
+        "prior_session_consecutive_days",
+        "appeared_earlier_today",
+        "prior_observed_starts",
+        "prior_observed_relief",
+        "previous_session_pitches",
+        "days_since_start",
+        "days_since_long",
+        "latest_boundary_li"
+      ],
+      "workload_scope": "Most recent strictly earlier PA-boundary rolling load, rest, consecutive days, same-day use, prior observed roles/long outings, frozen-reference PA-LI. Not warmup or physiological availability.",
+      "partial_pooling": "Role-specific expected path with Ridge regularization; observed residual shrunk toward cohort expectation. Own closed same-type history used as support predictors.",
+      "interval": "80% approximate sampling interval; does not include full model/baseline selection uncertainty",
+      "formal_replacement": false,
+      "validation_2024_expected_path": {
+        "quality": {
+          "n": 215661,
+          "full_rmse": 2.2868888724700667,
+          "count_only_rmse": 2.445450376102165,
+          "recent_workload_rmse": 2.4408175747795307,
+          "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+        },
+        "command": {
+          "n": 215595,
+          "full_rmse": 2.0889694178837295,
+          "count_only_rmse": 2.9141232255459144,
+          "recent_workload_rmse": 2.9138686819828035,
+          "scope": "Observed prefix retention, equal appearance weights; not a next-pitch outcome or causal benefit validation."
+        }
+      },
+      "validation_2024": {
+        "matched_prefix_pairs": 194403,
+        "quality_state_next_prefix_correlation": 0.9774870380350528,
+        "scope": "Overlapping descriptive persistence only, not disjoint future predictive validation. No promotion on this diagnostic."
+      }
+    }
+  ],
+  "decision_coverage_all_roles": [
+    {
+      "year": 2021,
+      "decisions": 182162,
+      "quality": 15188,
+      "physical": 15188,
+      "command": 15176
+    },
+    {
+      "year": 2022,
+      "decisions": 182468,
+      "quality": 84236,
+      "physical": 84133,
+      "command": 84234
+    },
+    {
+      "year": 2023,
+      "decisions": 184506,
+      "quality": 84062,
+      "physical": 84005,
+      "command": 84048
+    },
+    {
+      "year": 2024,
+      "decisions": 182903,
+      "quality": 80872,
+      "physical": 80748,
+      "command": 80853
+    },
+    {
+      "year": 2025,
+      "decisions": 183387,
+      "quality": 77145,
+      "physical": 77170,
+      "command": 77160
+    },
+    {
+      "year": 2026,
+      "decisions": 184328,
+      "quality": 72695,
+      "physical": 72644,
+      "command": 72690
+    }
+  ],
+  "candidate_prior_coverage": [
+    {
+      "year": 2021,
+      "candidate_profiles": 2415870,
+      "with_prior_closed_state": 436681
+    },
+    {
+      "year": 2022,
+      "candidate_profiles": 2398973,
+      "with_prior_closed_state": 2366505
+    },
+    {
+      "year": 2023,
+      "candidate_profiles": 2328442,
+      "with_prior_closed_state": 2306382
+    },
+    {
+      "year": 2024,
+      "candidate_profiles": 2330943,
+      "with_prior_closed_state": 2318256
+    },
+    {
+      "year": 2025,
+      "candidate_profiles": 2338086,
+      "with_prior_closed_state": 2325865
+    },
+    {
+      "year": 2026,
+      "candidate_profiles": 2351501,
+      "with_prior_closed_state": 2337735
+    }
+  ],
+  "limitations": [
+    "Prefix is cumulative after fixed early baseline, not a monotonic fatigue percentage.",
+    "Short RP appearances remain unavailable; cohort shrinkage cannot replace missing deliveries.",
+    "Physical tracks public pitch measurements, not physiological fatigue.",
+    "Candidate/pre-entry state must not use the first five pitches; workload/candidate artifact remains separate.",
+    "Historical role, same-type support, workload and roster confidence remain separate; no individual recommendation.",
+    "2024 persistence diagnostic is descriptive, not evidence of next-segment benefit."
+  ],
+  "source_only_validation": {
+    "formal_metadata_changes": 0,
+    "training_label_time_violations": 0,
+    "prior_fastball_time_violations": 0,
+    "prefix_boundary_time_violations": 0,
+    "candidate_history_time_violations": 0,
+    "duplicate_pitch_feature_keys": 0,
+    "missing_li_filled_with_one": false,
+    "individual_ranking_allowed": false
+  },
+  "observed_prefix_distributions": [
+    {
+      "year": 2021,
+      "role": "SP",
+      "quality_median": 100.26577490372375,
+      "quality_sd": 7.100090823742862,
+      "physical_median": 101.10497248770099,
+      "physical_sd": 6.574063669681817,
+      "command_median": 100.29065757774724,
+      "command_sd": 6.367358586849574
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "quality_median": 99.1477419684752,
+      "quality_sd": 7.423666688789979,
+      "physical_median": 100.67321603521079,
+      "physical_sd": 6.6351948411077455,
+      "command_median": 99.69459803791065,
+      "command_sd": 6.156165563718573
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "quality_median": 99.357468711165,
+      "quality_sd": 6.336274399642121,
+      "physical_median": 100.65037065010603,
+      "physical_sd": 6.5673833238291355,
+      "command_median": 99.90374201965979,
+      "command_sd": 6.3689544654422825
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "quality_median": 99.73092692216073,
+      "quality_sd": 6.3989380803595965,
+      "physical_median": 100.53136167638681,
+      "physical_sd": 6.698727185108716,
+      "command_median": 100.96153387272051,
+      "command_sd": 6.104884157721931
+    },
+    {
+      "year": 2025,
+      "role": "SP",
+      "quality_median": 99.97322642655905,
+      "quality_sd": 6.503331550709756,
+      "physical_median": 100.78930416711145,
+      "physical_sd": 6.5677371432452984,
+      "command_median": 100.58050921307687,
+      "command_sd": 5.896138692917228
+    },
+    {
+      "year": 2026,
+      "role": "SP",
+      "quality_median": 99.96792088557373,
+      "quality_sd": 6.810386580234897,
+      "physical_median": 100.9004906854681,
+      "physical_sd": 6.5062273227425615,
+      "command_median": 97.63011295063438,
+      "command_sd": 6.4124483685951885
+    }
+  ]
+}

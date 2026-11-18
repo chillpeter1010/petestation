@@ -1,0 +1,40 @@
+{
+  "version": "lower_leg_side_review_v1",
+  "date": "2026-11-07",
+  "status": "user_accepted_scoped_B_candidate",
+  "clip": "thompson-reference-01",
+  "source": "output\\ballpark\\motion-method-demo-v1\\poses\\thompson-reference-01.json",
+  "sourceSha256": "b9726a56ce810ef36391f1e28aed66c62b5e4823c949fd6ef8713ef82a5c7876",
+  "mode": "label-association experiment on original user-reviewed source candidate; no ground locking or exact biomechanics",
+  "window": [
+    2.7,
+    3.02
+  ],
+  "endpointLabels": "original anatomical labels assumed at both window endpoints",
+  "changedFrames": 6,
+  "changedSourceSeconds": [
+    2.8443823935876176,
+    2.861114054726368,
+    2.877845715865119,
+    2.8945773770038694,
+    2.9113090381426203,
+    2.928040699281371
+  ],
+  "rawSourceModified": false,
+  "ref5PreservedSha256": "f2b3a65fefd7a2ea6856bbfa230b66cf35fd981a85db5c9ab1130c05a0ad0fe2",
+  "ref5UserReport": "User says Yesavage ref5 reasonable; snapshot version not established, do not generalize acceptance",
+  "demo": "output/ballpark/motion-method-demo-v1/thompson-foot-review.html",
+  "checks": "Source-only label permutation/raw/ref5-hash/syntax checks passed; user accepted this scoped B candidate separately.",
+  "sourceChecks": {
+    "script": "backend/scripts/check_pitch_foot_occlusion.py",
+    "status": "pass",
+    "visualAcceptance": false
+  },
+  "demoSha256": "812ba495cf0f7a88410c5592c3f75f76205fac636b325a3a17a6183ca55892d7",
+  "userAcceptance": {
+    "date": "2026-11-07",
+    "result": "accepted",
+    "scope": "B MotionBERT-Lite side-corrected Thompson local candidate only; no global or new batch acceptance",
+    "artifactSha256": "812ba495cf0f7a88410c5592c3f75f76205fac636b325a3a17a6183ca55892d7"
+  }
+}

@@ -507,7 +507,7 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .state-panel { margin: 0; border: 1px solid var(--color-border); border-radius: 14px; padding: 18px; color: var(--color-muted-text); background: var(--color-surface); }
 .state-panel--error { color: #ff8a8a; }
 .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.metric-strip article { display: grid; gap: 5px; min-height: 112px; border: 1px solid var(--color-border); border-radius: 16px; padding: 17px 19px; background: linear-gradient(145deg, color-mix(in srgb, var(--color-accent) 8%, var(--color-surface)), var(--color-surface) 62%); }
+.metric-strip article { display: grid; gap: 5px; min-height: 112px; border: 1px solid var(--color-border); border-radius: 16px; padding: 17px 19px; background: #000; }
 .metric-strip span, .mode-bar span, .cell-inspector header span { color: var(--color-accent); font-size: 11px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
 .metric-strip strong { color: var(--color-text); font: 900 29px "Fira Code", monospace; }
 .metric-strip small { color: var(--color-muted-text); font-size: 11px; }
@@ -524,12 +524,12 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .view-toggle button.active { color: #eef1ff; background: #3838dc; box-shadow: inset 0 0 0 1px #6868ff; }
 .map-layout { display: grid; grid-template-columns: minmax(580px, 1.25fr) minmax(310px, .65fr); min-height: 700px; }
 .analysis-row .map-layout { grid-template-columns: minmax(360px, 1fr) minmax(220px, .48fr); min-height: 620px; }
-.heatmap-panel { display: grid; grid-template-rows: auto 1fr auto; border-right: 1px solid var(--color-border); padding: 18px; background: #f7f7f4; }
+.heatmap-panel { display: grid; grid-template-rows: auto 1fr auto; border-right: 1px solid var(--color-border); padding: 18px; background: #000; }
 .map-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.map-heading div { display: flex; gap: 12px; color: #696969; font-size: 11px; }
-.map-heading b { color: #202020; }
-.map-heading small { color: #696969; }
-.heatmap-panel svg { width: min(100%, 690px); height: auto; margin: 0 auto; display: block; background: #f7f7f4; }
+.map-heading div { display: flex; gap: 12px; color: var(--color-muted-text); font-size: 11px; }
+.map-heading b { color: var(--color-text); }
+.map-heading small { color: var(--color-muted-text); }
+.heatmap-panel svg { width: min(100%, 690px); height: auto; margin: 0 auto; display: block; background: #000; }
 .analysis-row .heatmap-panel svg { width: min(100%, 500px); }
 .analysis-row .mode-bar { align-items: flex-start; padding: 13px 15px; }
 .analysis-row .mode-bar h2 { font-size: 21px; }
@@ -542,15 +542,15 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .analysis-row .cell-inspector footer { padding: 14px 16px; }
 .heat-cells polygon { cursor: crosshair; paint-order: stroke fill; transition: opacity .1s ease; }
 .heat-cells polygon:hover, .heat-cells polygon:focus { opacity: .78; outline: none; stroke: #161616; stroke-width: 2; }
-.strike-zone { fill: none; stroke: #242424; stroke-width: 2.5; pointer-events: none; }
-.plate { fill: none; stroke: #242424; stroke-width: 2.5; pointer-events: none; }
-.axis-label { fill: #484848; font: 800 10px "Fira Code", monospace; text-anchor: middle; letter-spacing: .12em; }
-.legend { display: grid; grid-template-columns: auto minmax(180px, 1fr) auto; align-items: center; gap: 12px; color: #5d5d5d; font-size: 11px; }
+.strike-zone { fill: none; stroke: var(--color-text); stroke-width: 2.5; pointer-events: none; }
+.plate { fill: none; stroke: var(--color-text); stroke-width: 2.5; pointer-events: none; }
+.axis-label { fill: var(--color-muted-text); font: 800 10px "Fira Code", monospace; text-anchor: middle; letter-spacing: .12em; }
+.legend { display: grid; grid-template-columns: auto minmax(180px, 1fr) auto; align-items: center; gap: 12px; color: var(--color-muted-text); font-size: 11px; }
 .legend i { height: 8px; border-radius: 99px; }
 .cell-inspector { display: flex; flex-direction: column; min-width: 0; }
 .cell-inspector header { display: grid; gap: 6px; border-bottom: 1px solid var(--color-border); padding: 22px; }
 .cell-inspector header strong { color: var(--color-text); font: 900 20px "Fira Code", monospace; }
-.inspector-score { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 5px 12px; padding: 28px 22px; background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent); }
+.inspector-score { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 5px 12px; padding: 28px 22px; background: #000; }
 .inspector-score span { color: var(--color-muted-text); font-size: 12px; font-weight: 800; }
 .inspector-score strong { grid-row: span 2; color: var(--color-accent); font: 900 50px "Fira Code", monospace; }
 .inspector-score small { color: var(--color-muted-text); font-size: 11px; }
@@ -563,7 +563,7 @@ function formatActiveValue(cell: LocationHeatmapCell) { return mode.value === 'l
 .cell-inspector > p { margin: 0; padding: 24px 22px; color: var(--color-muted-text); line-height: 1.55; }
 .cell-inspector footer { display: grid; gap: 7px; margin-top: auto; border-top: 1px solid var(--color-border); padding: 18px 22px; color: var(--color-muted-text); font-size: 12px; line-height: 1.45; }
 .cell-inspector footer b { color: var(--color-accent); }
-.method-note { border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border)); border-radius: 14px; padding: 15px 17px; background: color-mix(in srgb, var(--color-accent) 5%, var(--color-surface)); }
+.method-note { border: 1px solid color-mix(in srgb, var(--color-accent) 25%, var(--color-border)); border-radius: 14px; padding: 15px 17px; background: #000; }
 .method-note strong { color: var(--color-accent); }
 .method-note p { margin: 6px 0 0; color: var(--color-muted-text); font-size: 12px; }
 .league-lab { overflow: hidden; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); }
@@ -599,7 +599,7 @@ td small { display: block; margin-top: 3px; color: var(--color-muted-text); font
 td.plus { color: var(--color-accent); font-size: 14px; font-weight: 900; }
 .pitcher-detail { min-width: 0; }
 .compact-detail { overflow: auto; max-height: 760px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); box-shadow: var(--shadow-sm); }
-.pitcher-detail__hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 112px; padding: 20px; background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 62%); }
+.pitcher-detail__hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 112px; padding: 20px; background: #000; }
 .pitcher-detail__hero span { color: var(--color-muted-text); font-size: 11px; font-weight: 850; text-transform: uppercase; }
 .pitcher-detail__hero h2 { margin: 5px 0 0; color: var(--color-text); font-size: 25px; }
 .pitcher-detail__hero > strong { color: var(--color-accent); font: 900 42px "Fira Code", monospace; text-align: right; }

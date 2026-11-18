@@ -26,7 +26,7 @@ for (const [id,tab] of [['schedule-board','feed'],['game-analysis-console','box'
 }
 assert.equal(destinations.objectClassicDestination({id:'campus/scoreboard',kind:'links',links:[{path:'/leaderboards'}]},{year:2025,team:'AZ'}).query.team,'AZ')
 assert.deepEqual(details.inGamePitchDetails({pitcher_name:'Pitcher Test',batter_name:'Batter Test'}).filter(f=>f.key.endsWith('_name')&&f.key!=='pitch_name'&&f.key!=='catcher_name').map(f=>f.value),['Pitcher Test','Batter Test'])
-const fixture = id => ({game:{game_pk:id,game_date:id===44?'2025-08-01':'2025-09-27',home_team:'AZ',away_team:'LAD'},teams:[{pitchers:[{pitcher_id:100,name:'Pitcher Test'},{pitcher_id:200,name:'Other Pitcher'}]}],plays:[],scoreboard:{}})
+const fixture = id => ({game:{game_pk:id,game_date:id===44?'2025-08-01':'2025-09-27',home_team:id===45?'NYY':'AZ',away_team:id===45?'BOS':'LAD'},teams:[{pitchers:[{pitcher_id:100,name:'Pitcher Test'},{pitcher_id:200,name:'Other Pitcher'}]}],plays:[],scoreboard:{}})
 assert.equal(context.gameFitsScope(fixture(42).game,{year:2025,date:'2025-09-27',team:'AZ'}),true)
 assert.equal(context.gameFitsScope(fixture(42).game,{year:2026,date:'',team:'AZ'}),false)
 assert.equal(context.gameFitsScope(fixture(42).game,{year:2025,date:'',team:'NYY'}),false)
@@ -37,17 +37,18 @@ const page=read('pages/games/today.vue')
 const source=parse(page).descriptor.scriptSetup.content.replace(/^import .+$/gm,'').replaceAll('import.meta.client','false')
 const compiled=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText.replace(/^export \{\};?$/gm,'')
 const setup=new (Object.getPrototypeOf(async function(){}).constructor)('env',`with(env){${compiled};return {games,selectedGamePk,selectedPitcherId,activeTab,selectedDate,loadError,contextNotice,selectGame,loadGames}}`)
-async function run(query) {
+async function run(query,favorite='') {
+  const user=vue.ref({favorite_team_code:favorite})
   const route=vue.reactive({query:{...query},path:'/games/today',fullPath:'/games/today'})
   const resolve=target=>({fullPath:'/games/today?'+new URLSearchParams(Object.entries(target.query).filter(([,v])=>v!==undefined).map(([k,v])=>[k,String(v)]))})
   const router={resolve,replace:async target=>{route.query={...target.query};route.fullPath=resolve(target).fullPath;await vue.nextTick()}}
   let delayed=null
-  const api={gamesList:async ({date})=>({games:(date==='2025-08-01'?[44]:[42,43]).map(id=>fixture(id).game),latest_game_date:'2025-09-27'}),gamePitching:async ({gamePk})=>delayed?.id===gamePk?await delayed.promise:gamePk===999?{teams:[]}:fixture(gamePk)}
+  const api={gamesList:async ({date})=>({games:(date==='2025-08-01'?[44]:[42,43,45]).map(id=>fixture(id).game),latest_game_date:'2025-09-27'}),gamePitching:async ({gamePk})=>delayed?.id===gamePk?await delayed.promise:gamePk===999?{teams:[]}:fixture(gamePk)}
   const scope=vue.effectScope()
   let ready
-  scope.run(()=>{ready=setup({...vue,...context,watch:(...args)=>scope.run(()=>vue.watch(...args)),useApi:()=>api,useRoute:()=>route,useRouter:()=>router,onBeforeUnmount:()=>{},getPitchColor:()=>'',definePageMeta:()=>{}})})
+  scope.run(()=>{ready=setup({...vue,...context,watch:(...args)=>scope.run(()=>vue.watch(...args)),useAuth:()=>({user}),useApi:()=>api,useRoute:()=>route,useRouter:()=>router,onBeforeUnmount:()=>{},getPitchColor:()=>'',definePageMeta:()=>{}})})
   const state=await ready
-  return {state,route,scope,failList(){api.gamesList=async()=>{throw new Error('Unavailable snapshot')}},delay(id){let release;delayed={id,promise:new Promise(resolve=>{release=resolve})};return ()=>{delayed=null;release(fixture(id))}}}
+  return {state,route,scope,user,failList(){api.gamesList=async()=>{throw new Error('Unavailable snapshot')}},delay(id){let release;delayed={id,promise:new Promise(resolve=>{release=resolve})};return ()=>{delayed=null;release(fixture(id))}}}
 }
 const exact=await run({year:'2025',team:'AZ',date:'2025-09-27',game_pk:'43',pitcher_id:'200',tab:'replay',ballpark_from:'/ballpark/play?room=game-center'})
 assert.equal(exact.state.selectedGamePk.value,43);assert.equal(exact.state.selectedPitcherId.value,200);assert.equal(exact.state.activeTab.value,'replay')
@@ -60,7 +61,15 @@ const historic=await run({year:'2025',team:'AZ',game_pk:'44',tab:'box'})
 assert.equal(historic.state.selectedDate.value,'2025-08-01');assert.equal(historic.state.selectedGamePk.value,44)
 const missing=await run({year:'2025',team:'AZ',game_pk:'999',tab:'box'})
 assert.equal(missing.state.selectedGamePk.value,42);assert.match(missing.state.contextNotice.value,/unavailable/)
+const favorite=await run({year:'2025',date:'2025-09-27'},'NYY')
+assert.equal(favorite.state.selectedGamePk.value,45)
+favorite.user.value.favorite_team_code='AZ';await vue.nextTick();await vue.nextTick()
+assert.equal(favorite.state.selectedGamePk.value,42)
+favorite.user.value.favorite_team_code='SEA';await vue.nextTick()
+assert.equal(favorite.state.selectedGamePk.value,42)
+const explicit=await run({year:'2025',game_pk:'43'},'NYY')
+assert.equal(explicit.state.selectedGamePk.value,43)
 exact.failList();await exact.state.loadGames()
 assert.match(exact.state.loadError.value,/could not load/);assert.equal(exact.state.selectedGamePk.value,null)
-for(const instance of [exact,historic,missing])instance.scope.stop()
+for(const instance of [exact,historic,missing,favorite,explicit])instance.scope.stop()
 console.log('F1 source/data contracts PASS: canonical destinations, year/date/team identities, doubleheader game PK, requested tab/pitcher, historical date recovery, unavailable fallback, stale detail exclusion, preserved origin and names. No visual acceptance.')

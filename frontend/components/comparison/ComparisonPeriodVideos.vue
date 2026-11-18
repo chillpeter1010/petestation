@@ -263,7 +263,7 @@ function playIdFromSportyUrl(value: string) {
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: #020617;
+  background: #000;
   box-shadow: var(--shadow-sm);
   aspect-ratio: 16 / 9;
 }
@@ -276,7 +276,7 @@ function playIdFromSportyUrl(value: string) {
   width: 100%;
   height: 100%;
   border: 0;
-  background: #020617;
+  background: #000;
 }
 
 .video-slot :deep(video) {

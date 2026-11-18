@@ -188,7 +188,7 @@ summary { color: var(--color-foreground); font-weight: 900; cursor: pointer; }
 details p { color: var(--color-muted-text); font-size: 12px; }
 .control-panel .calculate-button { min-height: 50px; border-color: var(--color-primary); color: var(--color-on-primary); background: var(--color-primary); font-size: 15px; }
 .result-panel { overflow: hidden; }
-.result-card, .empty-result { min-height: 330px; display: grid; align-content: center; justify-items: center; gap: 9px; padding: 28px; background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--color-primary) 20%, transparent), transparent 48%); }
+.result-card, .empty-result { min-height: 330px; display: grid; align-content: center; justify-items: center; gap: 9px; padding: 28px; background: #000; }
 .result-card > span, .empty-result > span { color: var(--color-muted-text); font-size: 12px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .result-card > strong, .empty-result > strong { font: 800 clamp(64px, 7vw, 104px)/1 var(--font-mono); }
 .result-card > b { border-radius: 10px; padding: 7px 14px; color: var(--color-background); background: var(--color-primary); font-size: 24px; }

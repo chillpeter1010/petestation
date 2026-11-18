@@ -1,14 +1,7 @@
 <template>
   <main class="petehub-home">
     <header class="top-bar">
-      <NuxtLink class="pitcher-home-link" to="/" aria-label="Home">
-        <svg aria-hidden="true" viewBox="0 0 24 24">
-          <path d="m3 11 9-8 9 8" />
-          <path d="M5 10v10h14V10" />
-          <path d="M9 20v-6h6v6" />
-        </svg>
-        <span>Home</span>
-      </NuxtLink>
+      <PetehubLogo aria-label="DaPeter home" />
       <nav class="top-nav" aria-label="Primary">
         <NuxtLink to="/comparison">Comparison</NuxtLink>
         <NuxtLink to="/rotation">Rotation</NuxtLink>
@@ -193,8 +186,8 @@ function appearanceMeta(pitcher: PitcherOption) {
 .petehub-home {
   --hub-orange: #ff9900;
   --hub-orange-dark: #d47c00;
-  --hub-panel: #171717;
-  --hub-panel-soft: #222222;
+  --hub-panel: #000;
+  --hub-panel-soft: #000;
   --hub-line: #343434;
   --hub-text: #f5f5f5;
   --hub-muted: #a7a7a7;
@@ -203,8 +196,7 @@ function appearanceMeta(pitcher: PitcherOption) {
   padding: 26px clamp(18px, 4vw, 52px) 56px;
   color: var(--hub-text);
   background:
-    radial-gradient(circle at top right, rgba(255, 153, 0, 0.22), transparent 32rem),
-    linear-gradient(180deg, #111111 0%, #050505 100%);
+    #000;
 }
 
 .petehub-home .top-bar,
@@ -280,7 +272,7 @@ function appearanceMeta(pitcher: PitcherOption) {
   border-radius: 999px;
   padding: 8px 13px;
   color: var(--hub-muted);
-  background: rgba(255, 255, 255, 0.03);
+  background: #000;
   font-weight: 800;
   text-decoration: none;
 }
@@ -319,7 +311,7 @@ function appearanceMeta(pitcher: PitcherOption) {
 .petehub-home .portal-card {
   border: 1px solid var(--hub-line);
   border-radius: 8px;
-  background: rgba(23, 23, 23, 0.96);
+  background: #000;
   box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
 }
 
@@ -366,7 +358,7 @@ function appearanceMeta(pitcher: PitcherOption) {
 .petehub-home input {
   border: 1px solid var(--hub-line);
   border-radius: 6px;
-  background: #0d0d0d;
+  background: #000;
   color: var(--hub-text);
 }
 
@@ -475,8 +467,7 @@ function appearanceMeta(pitcher: PitcherOption) {
 .petehub-home .shortcut-card {
   border-color: color-mix(in srgb, var(--hub-orange) 72%, var(--hub-line));
   background:
-    linear-gradient(135deg, rgba(255, 153, 0, 0.14), transparent 58%),
-    rgba(23, 23, 23, 0.96);
+    #000;
 }
 
 .petehub-home .link-card span,

@@ -17,6 +17,93 @@ WHIFF_DESCRIPTIONS = {"swinging_strike", "swinging_strike_blocked", "swinging_pi
 BUNT_DESCRIPTIONS = {"foul_bunt", "missed_bunt", "bunt_foul_tip"}
 
 
+def filtered_batting_metrics(
+    year: int, pitch_codes: set[str] | None = None, pitcher_hand: str = "All",
+    batter_side: str = "All", batter_team: str = "All", pitcher_team: str = "All",
+    data_dir: Path | None = None,
+) -> dict[int, dict]:
+    """Tracking uses swings; K/BB use terminal PAs, including untracked takes."""
+    path = get_season_duckdb_path(year, Path(data_dir or settings.data_dir))
+    if not path.exists():
+        return {}
+    stat = path.stat()
+    wal = path.with_suffix(path.suffix + ".wal")
+    wal_stamp = wal.stat().st_mtime_ns if wal.exists() else 0
+    return _cached_filtered_batting_metrics(
+        str(path.resolve()), stat.st_mtime_ns, stat.st_size, wal_stamp,
+        tuple(sorted(pitch_codes or ())), pitcher_hand, batter_side, batter_team, pitcher_team,
+    )
+
+
+@lru_cache(maxsize=32)
+def _cached_filtered_batting_metrics(
+    path: str, modified_at: int, size: int, wal_stamp: int, pitch_codes: tuple[str, ...],
+    pitcher_hand: str, batter_side: str, batter_team: str, pitcher_team: str,
+) -> dict[int, dict]:
+    with duckdb.connect(path, read_only=True) as conn:
+        table = _pitch_table(conn)
+        columns = _columns(conn, table)
+        required = {"game_type", "game_pk", "at_bat_number", "pitch_number", "events", "description", "pitch_type"}
+        if not table or not required.issubset(columns):
+            return {}
+        batter_column = "batter_id" if "batter_id" in columns else "batter"
+        optional = ["bat_speed", "attack_angle", "launch_speed", "p_throws", "stand", "batter_team", "pitcher_team"]
+        fields = ", ".join(column if column in columns else f"NULL AS {column}" for column in optional)
+        conditions, params = [], []
+        if pitch_codes:
+            conditions.append(f"pitch_type IN ({','.join('?' for _ in pitch_codes)})")
+            params.extend(pitch_codes)
+        for column, value in (("p_throws", pitcher_hand), ("stand", batter_side), ("batter_team", batter_team), ("pitcher_team", pitcher_team)):
+            if value != "All":
+                conditions.append(f"{column} = ?")
+                params.append(value)
+        where = " AND ".join(conditions) or "TRUE"
+        frame = conn.execute(f"""
+            WITH season AS (
+                SELECT CAST({batter_column} AS BIGINT) AS batter_id, game_pk, at_bat_number, pitch_number,
+                       pitch_type, LOWER(TRIM(COALESCE(description, ''))) AS description,
+                       LOWER(TRIM(COALESCE(events, ''))) AS events, {fields}
+                FROM {table} WHERE game_type = 'R'
+                QUALIFY ROW_NUMBER() OVER (PARTITION BY game_pk, at_bat_number, pitch_number ORDER BY {batter_column}) = 1
+            ), swings AS (
+                SELECT * FROM season WHERE description IN (
+                    'swinging_strike', 'swinging_strike_blocked', 'swinging_pitchout',
+                    'foul', 'foul_tip', 'hit_into_play', 'hit_into_play_no_out', 'hit_into_play_score'
+                )
+            ), baseline AS (
+                SELECT batter_id, QUANTILE_CONT(bat_speed, 0.10) AS p10 FROM swings GROUP BY batter_id
+            ), tracked AS (
+                SELECT swings.* FROM swings WHERE {where}
+            ), tracking AS (
+                SELECT t.batter_id,
+                       AVG(bat_speed) FILTER (WHERE bat_speed >= p10 OR (bat_speed >= 60 AND launch_speed >= 90)) AS avg_bat_speed,
+                       COUNT(bat_speed) FILTER (WHERE bat_speed >= p10 OR (bat_speed >= 60 AND launch_speed >= 90)) AS bat_speed_swings,
+                       100.0 * COUNT(*) FILTER (WHERE attack_angle BETWEEN 5 AND 20) / NULLIF(COUNT(attack_angle), 0) AS ideal_attack_angle_pct,
+                       COUNT(attack_angle) AS attack_angle_swings
+                FROM tracked t LEFT JOIN baseline b USING (batter_id) GROUP BY t.batter_id
+            ), terminal AS (
+                SELECT * FROM season WHERE events NOT IN ('', 'truncated_pa')
+                QUALIFY ROW_NUMBER() OVER (PARTITION BY game_pk, at_bat_number ORDER BY pitch_number DESC) = 1
+            ), outcomes AS (
+                SELECT batter_id, COUNT(*) AS context_pa,
+                       100.0 * COUNT(*) FILTER (WHERE events IN ('strikeout', 'strikeout_double_play')) / COUNT(*) AS k_pct,
+                       100.0 * COUNT(*) FILTER (WHERE events IN ('walk', 'intent_walk')) / COUNT(*) AS bb_pct
+                FROM terminal WHERE {where} GROUP BY batter_id
+            )
+            SELECT COALESCE(t.batter_id, o.batter_id) AS batter_id, t.* EXCLUDE (batter_id),
+                   o.* EXCLUDE (batter_id), k_pct - bb_pct AS k_bb_pct
+            FROM tracking t FULL OUTER JOIN outcomes o USING (batter_id)
+        """, params + params).fetchdf()
+    count_fields = {"context_pa", "bat_speed_swings", "attack_angle_swings"}
+    return {
+        int(row["batter_id"]): {
+            key: (int(value) if pd.notna(value) else 0) if key in count_fields else
+                 (round(float(value), 3) if pd.notna(value) and np.isfinite(value) else None)
+            for key, value in row.items() if key != "batter_id"
+        } for row in frame.to_dict("records")
+    }
+
+
 def available_pitcher_teams(year: int, data_dir: Path | None = None) -> list[str]:
     path = get_season_duckdb_path(year, Path(data_dir or settings.data_dir))
     if not path.exists():

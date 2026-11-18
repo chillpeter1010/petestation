@@ -1,4 +1,6 @@
 import pandas as pd
+
+from app.services.personal_service import filter_sequence_previous_pitch
 import pytest
 
 import app.services.personal_service as personal_service
@@ -389,6 +391,30 @@ def test_sequence_annotations_preserve_true_next_pitch_after_anchor_filter():
     assert followup.iloc[0]["followup_event"] == "Next Count: 0-1"
     assert followup.iloc[0]["next_pitch"] == "Changeup"
     assert "Slider" not in followup["next_pitch"].tolist()
+
+
+def test_sequence_previous_pitch_preserves_adjacency_before_side_count_filters():
+    frame = pd.DataFrame([
+        {"game_pk": 1, "at_bat_number": 1, "pitch_number": 1, "balls": 0, "strikes": 0, "pitch_name": "Sinker", "stand": "L"},
+        {"game_pk": 1, "at_bat_number": 1, "pitch_number": 2, "balls": 0, "strikes": 1, "pitch_name": "Changeup", "stand": "L"},
+        {"game_pk": 1, "at_bat_number": 1, "pitch_number": 3, "balls": 1, "strikes": 1, "pitch_name": "Slider", "stand": "L"},
+        {"game_pk": 1, "at_bat_number": 2, "pitch_number": 1, "balls": 0, "strikes": 0, "pitch_name": "Slider", "stand": "R"},
+        {"game_pk": 1, "at_bat_number": 2, "pitch_number": 3, "balls": 0, "strikes": 1, "pitch_name": "Sinker", "stand": "R"},
+        {"game_pk": 2, "at_bat_number": 1, "pitch_number": 1, "balls": 0, "strikes": 0, "pitch_name": "Cutter", "stand": "L"},
+    ])
+    original = frame.copy(deep=True)
+    annotated = annotate_sequence_context(frame)
+    conditioned = filter_sequence_previous_pitch(annotated, "Sinker")
+    assert conditioned["pitch_name"].tolist() == ["Changeup"]
+    branch = build_conditioned_count_subset(annotated, "0-1", "All", eligible_anchors=conditioned)
+    assert branch["pitch_name"].tolist() == ["Changeup", "Slider"]  # Retain descendants even when their previous pitch differs.
+    assert set(branch["at_bat_number"]) == {1}
+    assert apply_sequence_filters(conditioned, stand="L", count="0-1")["pitch_name"].tolist() == ["Changeup"]
+    assert apply_sequence_filters(conditioned, stand="R", count="0-1").empty
+    assert filter_sequence_previous_pitch(annotated, "__first__")["pitch_name"].tolist() == ["Sinker", "Slider", "Cutter"]
+    assert filter_sequence_previous_pitch(annotated, "Slider").empty  # PA reset / missing pitch 2 cannot create an edge.
+    assert filter_sequence_previous_pitch(annotated, None).equals(annotated)
+    pd.testing.assert_frame_equal(frame, original)
 
 
 def test_build_movement_comparison_table_compares_same_hand_league():

@@ -3,7 +3,7 @@
     <header class="module-header">
       <div>
         <h2>Discipline</h2>
-        <p>Reusable discipline panels for each selected period.</p>
+        <p>AVG＝該面板球數／條件下終結打數的 H／AB；PA result 篩選保留符合最終結果之打席內的投球。點擊投球可查看影片。</p>
       </div>
     </header>
     <HeatmapBlendControl v-model="heatmapBlend" title="Period pitch location" />
@@ -19,6 +19,7 @@
           :count-situation-panels="leftPanels.countSituation"
           :count-swing-panels="leftPanels.countSwing"
           :exact-count-panels="leftPanels.exactCount"
+          @select-point="selectedLeftPoint = $event; videoOpen = true"
         />
       </section>
       <section class="period-side">
@@ -32,9 +33,23 @@
           :count-situation-panels="rightPanels.countSituation"
           :count-swing-panels="rightPanels.countSwing"
           :exact-count-panels="rightPanels.exactCount"
+          @select-point="selectedRightPoint = $event; videoOpen = true"
         />
       </section>
     </div>
+    <Teleport to="body">
+      <div v-if="videoOpen" class="period-video-backdrop" @click.self="videoOpen = false" @keydown.esc="videoOpen = false">
+        <section class="period-video-dialog" role="dialog" aria-modal="true" aria-label="Period selected pitch videos">
+          <button type="button" class="video-close" autofocus @click="videoOpen = false">關閉影片 ×</button>
+          <ComparisonPeriodVideos
+            :left="{ rows: [], total: left.total || 0 }"
+            :right="{ rows: [], total: right.total || 0 }"
+            :selected-left-point="selectedLeftPoint"
+            :selected-right-point="selectedRightPoint"
+          />
+        </section>
+      </div>
+    </Teleport>
   </section>
 </template>
 
@@ -54,6 +69,14 @@ const props = defineProps<{
 }>()
 
 const heatmapBlend = ref(0)
+const selectedLeftPoint = ref<Record<string, unknown> | null>(null)
+const selectedRightPoint = ref<Record<string, unknown> | null>(null)
+const videoOpen = ref(false)
+watch(() => [props.left, props.right], () => {
+  selectedLeftPoint.value = null
+  selectedRightPoint.value = null
+  videoOpen.value = false
+})
 const leftPanels = computed(() => panelSets(props.left))
 const rightPanels = computed(() => panelSets(props.right))
 const boardInitialGroup = computed(() => {
@@ -77,7 +100,7 @@ function normalizePanel(panel: Record<string, unknown>) {
     key: String(panel.key || ''),
     label: String(panel.label || panel.key || ''),
     rows,
-    pitches: rows.length,
+    pitches: hasPitchFilter ? rows.length : Number(panel.pitches ?? rows.length),
     metrics: hasPitchFilter ? [] : toRows(panel.metrics).map(normalizeMetric),
     pitchMix: hasPitchFilter ? [] : toRows(panel.pitch_mix).map((pitch) => ({
       pitch: String(pitch.pitch || 'Unknown'),
@@ -136,6 +159,9 @@ function panelSets(payload: PeriodDisciplinePayload) {
 </script>
 
 <style scoped>
+.period-video-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; background: rgb(0 0 0 / 78%); }
+.period-video-dialog { width: min(1180px, 96vw); max-height: 92vh; overflow: auto; border: 1px solid var(--color-border); padding: 16px; background: var(--color-surface); }
+.video-close { display: block; margin-left: auto; padding: 8px 14px; border: 1px solid var(--color-border); color: var(--color-text); background: var(--color-surface); cursor: pointer; }
 .period-module {
   display: grid;
   gap: 14px;

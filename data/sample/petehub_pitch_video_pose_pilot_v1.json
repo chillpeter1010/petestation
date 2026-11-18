@@ -1,0 +1,71 @@
+{
+  "version": "pitch_video_pose_pilot_v1",
+  "date": "2026-11-06",
+  "status": "user_accepted_two_2d_joint_overlays_only",
+  "method": "pretrained MediaPipe Full inference, not per-player training or field-calibrated motion capture",
+  "script": "backend/scripts/extract_pitch_video_pose.py",
+  "script_sha256": "66303c21a85b6b761efa7a271aece7be6fdb660507021d47de7da4965a6a947d",
+  "review": "output/ballpark/f2-motion-reference-v1/pose-review.html",
+  "schema_checks": "monotonic source timestamps, 33 points or explicit missing, finite image coordinates",
+  "visual_acceptance": true,
+  "retargeting_enabled": false,
+  "runtime_pitcher_delivery_enabled": false,
+  "clips": [
+    {
+      "name": "yesavage",
+      "summary": {
+        "frames": 56,
+        "detected": 56,
+        "missing": 0,
+        "joint_frames_above_065": {
+          "left_shoulder": 56,
+          "right_shoulder": 56,
+          "left_elbow": 28,
+          "right_elbow": 44,
+          "left_wrist": 17,
+          "right_wrist": 40,
+          "left_hip": 56,
+          "right_hip": 56,
+          "left_knee": 55,
+          "right_knee": 52,
+          "left_ankle": 55,
+          "right_ankle": 55
+        }
+      },
+      "source_sha256": "22a2f239e306ae20051dc230f534bf25ef2db4a954204b28e6455cd5a70a1492",
+      "model_sha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+      "pose_json": "output/ballpark/f2-motion-reference-v1/yesavage-pose.json",
+      "review_video": "output/ballpark/f2-motion-reference-v1/yesavage-pose-review.mp4",
+      "pose_json_sha256": "e2ac1b554c421dc93c522eb11d0c53ad9cca6666a5c76f3f3bd15f75e49d05e9",
+      "review_video_sha256": "dd08393b98f3acf85b0d68079e1373b6d30277635e92825ea688d439e62379cd"
+    },
+    {
+      "name": "thompson",
+      "summary": {
+        "frames": 56,
+        "detected": 55,
+        "missing": 1,
+        "joint_frames_above_065": {
+          "left_shoulder": 55,
+          "right_shoulder": 55,
+          "left_elbow": 30,
+          "right_elbow": 46,
+          "left_wrist": 23,
+          "right_wrist": 43,
+          "left_hip": 55,
+          "right_hip": 55,
+          "left_knee": 41,
+          "right_knee": 53,
+          "left_ankle": 45,
+          "right_ankle": 53
+        }
+      },
+      "source_sha256": "c7be8636b0a62348a221bc9afa5bda69d1781b87c82c4f2907585e5b121ac029",
+      "model_sha256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+      "pose_json": "output/ballpark/f2-motion-reference-v1/thompson-pose.json",
+      "review_video": "output/ballpark/f2-motion-reference-v1/thompson-pose-review.mp4",
+      "pose_json_sha256": "b54d4d7c0c2f204c68f02c19308a44aa566cac40f0a38c4610353f066004749c",
+      "review_video_sha256": "e444f4c6561123791490847a0b530dd3b6ad3c5063cf3bafd90028ed42f76d92"
+    }
+  ]
+}

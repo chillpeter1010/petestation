@@ -55,8 +55,7 @@ defineProps<{
   padding: clamp(24px, 4vw, 46px);
   color: #f8fafc;
   background:
-    radial-gradient(circle at 86% 30%, rgba(255, 153, 0, .17), transparent 22rem),
-    linear-gradient(125deg, #090b0f, #101827 62%, #24180b);
+    #000;
   box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
 }
 .player-hero::after { position: absolute; right: -120px; bottom: -250px; width: 500px; height: 500px; border: 78px solid rgba(255, 153, 0, .04); border-radius: 50%; content: ''; }
@@ -66,11 +65,11 @@ defineProps<{
 h1 { margin: 9px 0 6px; font-size: clamp(36px, 4.5vw, 58px); font-weight: 750; line-height: 1.08; letter-spacing: -.012em; }
 .player-hero__identity p { margin: 0; color: #a7b6cb; }
 dl { display: flex; flex-wrap: wrap; gap: 9px; margin: 22px 0 0; }
-dl div { min-width: 105px; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; padding: 9px 12px; background: rgba(7,10,15,.36); }
+dl div { min-width: 105px; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; padding: 9px 12px; background: #000; }
 dt { color: #8495ad; font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 dd { margin: 4px 0 0; color: #f4f7fb; font: 700 12px "Fira Code", monospace; }
 .player-hero__actions { align-self: stretch; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
-.status, .player-hero__actions a { display: inline-flex; align-items: center; min-height: 38px; border: 1px solid rgba(255,255,255,.13); border-radius: 999px; padding: 8px 13px; color: #b8c5d8; background: rgba(8,12,18,.55); font-size: 11px; font-weight: 800; }
+.status, .player-hero__actions a { display: inline-flex; align-items: center; min-height: 38px; border: 1px solid rgba(255,255,255,.13); border-radius: 999px; padding: 8px 13px; color: #b8c5d8; background: #000; font-size: 11px; font-weight: 800; }
 .status.ready::before { width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: #4ade80; content: ''; }
 .player-hero__actions a { gap: 7px; color: #f3f5f8; text-decoration: none; }
 .player-hero__actions a:hover { border-color: #ff9900; }

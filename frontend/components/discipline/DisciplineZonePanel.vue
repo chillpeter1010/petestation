@@ -6,6 +6,7 @@
       :total-pitches="panel.pitches ?? panel.rows.length"
       :heatmap-blend="heatmapBlend"
       compact
+      @select-point="emit('select-point', $event)"
     />
     <div v-if="sideMode === 'info'" class="panel-side">
       <div class="info-pie-wrap">
@@ -61,6 +62,7 @@ const props = defineProps<{
   heatmapBlend: number
   sideMode: 'pitch' | 'info'
 }>()
+const emit = defineEmits<{ 'select-point': [point: Record<string, unknown>] }>()
 
 const displayMetrics = computed(() => props.panel.metrics || fallbackMetrics(props.panel.rows))
 const displayPitchMix = computed(() => props.panel.pitchMix?.length ? props.panel.pitchMix : fallbackPitchMix(props.panel.rows))

@@ -1,11 +1,285 @@
 # Petehub Ballpark Game System
 
-更新日期：2026-11-06
+更新日期：2026-11-07
 
 專案 ID：`petehub-ballpark-game-system`
-狀態：In progress（Section A–D、E1～E5 與其子項已完成，36／66；新增七個 F2 Planned 子項，並非已完成進度退回；E6 效能／裝置 gate 尚未放行）
+狀態：In progress（A–D、E1～E5、F1、F2.1–F2.3 已完成，40／66；F2.4／F2.6／F2.7 靜態實作已交付待人工驗收，F2.5 跳過；E6 效能／裝置 gate 未放行）
+
+### 2026-11-07 F2.4／F2.6／F2.7 靜態版交付（最新）
+
+**本日最新修正優先：** 使用者要求移除投手、大張 Arm angle 圖卡與底部 Selected Pitch 表格，已移除。來源金點／球路／arm angle、XYZ、extension 數字與打者保留，動作開關不恢復。熱圖標題佔第一列，Outside／hand／Metric 與 View／Compare／Reset 在下一列上緣／底線對齊，自適應換行；segmented-control 縮到按鍵寬，不留刪除 close-up 後的空面板。投打 exact-count 資訊從 Chart 內移到 `PitchReplayPanel` 最右側 sidebar（原摘要／影片按鍵下方），不再縮小場地內欄；主表各六球種／More 保留，窄版換行。
+
+下方改 `InGameSequence` 的 **Conditioned branch**，不是僅目前球數的圓餅。隨所選球的投手／年度、pre-pitch balls-strikes、L/R 打者與前一球球種更新。前球取完整未經 UI 篩選的該場 rows、同 game/pitcher/PA 且 pitch_number−1；首球為 `__first__`，缺失／跨人／跨PA不借球。既有 `/personal/sequence` 新增可選 `previous_pitch`：先在完整資料註記相鄰，再挑條件 anchors；重用 `build_conditioned_count_subset` 的 downstream／count descendants 規則，保留同PA後續，不把 previous-pitch 篩選再套到 descendants。顯示完整既有分支樹／PA與後續球數，full-season descriptive，不是預測。既有未傳參數行為不變。
+
+Game 與 Personal 的影片彈窗改共用 `PitchVideoPlayer`，透過既有 `teamDirectVideo`／Savant metadata API 取得 MP4，原生 controls／playsinline，不再 iframe 嵌完整 Savant 頁。只有影片、關閉與原始來源連結；loading／unavailable／Retry、晚到回應排除與卸載保留，不增加抓取整季或資料回填。局部 backend 3 tests（既有分支／相鄰＋新 anchor 邊界）、frontend previous-context／native-video URL與late-response source checks、一次 vue-tsc PASS；無 browser／截圖／DOM畫面檢查。新佈局／播放／自動分支仍待使用者，40／66及未結 gate 不變。下方抱胸／伸臂／圖卡／內嵌側欄等為歷史候選，被此段覆蓋。
+
+本日後續使用者回報未通過：投手仍抱胸、手套像球塊、熱圖低樣本透明洞、close-up 按鈕與下方資訊位置不符。已改為每球 `arm_angle` 的固定伸臂示意（肩至腕方向依 L/R／負角度，腿／root 不動，不是動態重建，也不將人物手硬拉到獨立真實金點）；手套改淺掌袋／開口／拇指／指套並跟隨手部朝向。熱圖無足夠 PR／低樣本格以中性灰底呈現，不補造 PR、不參與鄰格插值，說明同步。移除 Batter close-up／Release close-up；投打 exact-count 資訊移到右側直排，寬度不足回下方，每張主表先六球種，More pitch types 展開／收合，切身份／球數重設收合。局部 static-rig math（L/R、−61至90°、腳/root不動、重複取樣）、contours（中性缺格／PR／不修改來源）及一次 vue-tsc PASS；沒有畫面／瀏覽器驗收。這批仍待用戶，F2.4／F2.6／F2.7 不改 done；下段 ready-only 與舊透明規則被此段覆蓋。
+
+依使用者「完成 F2.4–F2.7，2.5 跳過，不要再動態重建」指示，母站 Game／Pitcher Personal 共用 `PitchReplayChart` 新增 `PitchReleaseGuide`：逐球顯示姓名、手別、arm angle、來源 release XYZ／height／extension。正面為 catcher perspective，背面只反轉顯示 X 軸；金點依來源 X／Z，黑線依來源角度、示意臂長 2 ft 反向定位示意肩點，人形／肩／臂長均明示 schematic。負角度保留，缺角度／手別不畫黑線，缺 X／Z 不畫假金點；Y 與 extension 分開、不推算跨步。側面資訊由現有 3D Side 與獨立 release-Y／rubber 圖對照。逐球資料不改，不製作平均值、影片標點或動作重建。
+
+圖卡在 trajectory 可用條件之外，缺球路或 WebGL 失敗仍能看來源出手圖。共用 renderer 維持 lazy import、固定 ready 投打人物、按需繪製、切球／卸載／hidden 既有取消及 GPU dispose；顯示角色載入／失敗狀態，3D 失敗後保留 2D／資料／影片，並提供 Retry 3D。原熱圖、比率、投打資料卡、影片與鍵盤 R 不重寫。這是 source 整合檢查，不是 WebGL／記憶體／FPS 的裝置認證；E6／F2.6 發布門檻仍開放。
+
+F2.7 保留投打個人分析、比較、released Lab 的原 canonical 入口。兩牛棚直接進 `/pitcher-personal?tab=in-game&bullpen=west|east`，新增母站官方 roster 選單，顯示 fresh／stale／unavailable、retrieved_at／source_as_of，按 `position_type=Pitcher` 篩選；不以球季出賽者替代 active roster。手動／明確歷史投手優先，非 active snapshot 的歷史選擇保留且標示；沒有指定時選官方名單第一位，不冒稱隨機球員 NPC。可換年度／Viewing team，換投手清場次，場次選單預設最新並保留可用手動 game PK；過期 game PK 明示回退。URL 保留 bullpen／來源，R 回原房間與保存位置，不恢復浮動 R 按鈕。真實 NPC／巡遊／對話仍為 F4。
+
+最窄檢查：`node frontend/scripts/check-static-release.mjs` PASS（角度／左右投／正背／負值／缺值／來源不變、名單手動優先／錯誤／晚到回應、共用接線與靜態開關／cleanup source）；一次直接 `vue-tsc --noEmit -p .nuxt/tsconfig.json` PASS。無 browser、截圖、DOM 畫面檢查、server 或完整 build。證據 `data/sample/petehub_static_release_delivery_v1.json`。F2.4／F2.6／F2.7 皆維持 In progress 等人工與發布 evidence；40／66 不因交付自動加數。F2.5 與 G1–G6 繼續 Deferred，不再作動畫。
+
+使用者驗收（最多五組）：① Personal 切高／低／負角度及左右投，正背切換和 release 對齊；② Game In game 同圖卡、熱圖／選球／資料卡／影片；③ 西東牛棚名單、換人／隊伍／年度／場次與重新整理；④ 從房間直接進入後 R 返回，輸入框及影片 modal 不誤觸 R；⑤ 桌面／窄版／reduced-motion 的固定人物與球路、可用裝置／fallback／離頁資源表現。畫面結果由使用者回報；沒有實測效能數字時不稱 production-ready。
+
+### 2026-11-07 目前主線重排：靜態 Arm Angle＋出手點，不依賴動畫／標點
+
+此段為本日較早規劃，實作交付以最上方更新為準。投手參考 Savant Arm Angle 正／背面人形＋角度線。F2.1–F2.3 維持 Done；F2.4 靜態 arm-angle／出手點、F2.6／F2.7 靜態版本整合與設施功能已交付待驗。F2.5 與 G1–G6 暫緩並移出當前必要前置。總計仍 40／66，不把交付待驗或暫緩當完成；E6 是獨立待結案的效能／裝置關卡。
+
+靜態呈現契約：
+
+- 母站 Game／Personal 共用 In game：保留打擊區／投手丘靜態人物、現有相機、球路／熱圖／影片。逐球切換時，出手金點保持來源 release_pos_x/y/z；旁置通用人形、肩點水平基準與黑色角度線，線端標出 release。可正／背／側面對照；顯示角度、出手高度／左右位置、Extension 與投球手別。先逐球，後續再沿同一 scope 提供球種／所選場次平均、n 與 coverage；不把平均值當逐球來源。
+- 官方角度定義為出手時投球肩與球相對水平的角度，0° 水平、90° 正上方，負值保留；不是球飛行仰角、不是可直接套整支手臂骨架的 Euler angle。[Savant Arm Angle](https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles) 說明其人形視覺也正規化 center of mass，不表示站在相同投手丘位置。
+- 來源未提供肩／肘／腕座標。通用人形與肩點是 schematic，角度線長度為顯示用，不是實測臂長；如由手端／角度反向定位示意肩點，必須標示估測，不聲稱唯一重建。第一批不把原靜態模型的手或軀幹硬拉到金色點；出手點與原球路不為對模型而移動。
+- Canonical feet X/Y/Z 與 Three.js metres (X,Z,-Y) 轉換不變，正背面切換只轉相機；左右投有獨立側別規則，原始 x 不鏡射。角度在宣告的正／背參考平面畫弧與數字，斜視角下不以螢幕夾角冒充來源度數。release_pos_y 與 release_extension 分別保留；extension 不是跨步，不能重複扣除或拿來猜手臂／肩點。
+- 缺 arm_angle 時保留來源出手點，角度 unavailable；缺 release 時不畫假出手點／連線；不補 45°。不恢復動畫、影片辨識、ML、B 套模或全隊臉部製作。此暫緩針對 In game 投打動作，不回復已完成 Ballpark 2D 移動／角色，也不取消 F4 名單與互動規劃。
+
+來源初查（現有 backend .venv、read-only）：2026 正規賽 716,544 球，arm_angle 711,723，release XYZ 各 713,878，extension 713,203，五欄聯合可用 711,697；負角度 4,906 球。兩位正規賽來源平均範例：Yesavage 65.8°／出手高 7.12 ft，Thompson −12.2°／3.52 ft。只是 coverage／示例，不是新畫面驗收。證據 `data/sample/petehub_static_release_plan_v1.json`。
+
+| 當前 Slice | 狀態 | 靜態主線交付與結案條件 |
+|---|---|---|
+| F2.4 · Static arm angle and release visualization | In progress | 逐球靜態人形／角度線＋來源 release／height／extension；人工驗正背／左右投／高低及負角度／缺值，不再等待投打動畫 |
+| F2.5 · Measured swing source | Deferred | 保留來源／缺值規則與舊成果；真球棒軌跡、標點、揮棒不是 F2 結案前置 |
+| F2.6 · Static shared integration and release | In progress · delivered | Game／Personal 同元件、熱圖／卡片／影片／keyboard／R／fallback；待人工與資源／裝置關卡，只保留球的歷史播放 |
+| F2.7 · Pitching/batting facility parity | In progress · delivered | 母站兩牛棚官方 roster／freshness、投手／年度／隊伍／場次選單與 R；原分析／比較／Lab 直達保留，待人工 |
+
+F3–F6 的 Lab、roster NPC 與對話、Team Office、Video Room 內容不變。G1–G6 暫緩，僅新授權才恢復。新靜態功能仍須使用者本人驗收才可改 done；本輪不跑 browser／畫面、build 或額外 audit。
+
+### 2026-11-07 最新：使用者暫停全部動作設計，只保留靜態投打人物
+
+使用者明確要求暫停一切動作設計；G5 改 Deferred，G3／G4 保持 Deferred。主場景只在打擊區與投手丘各顯示一個 ready 固定站姿，關閉動作研究入口、自動載入、B 套模及投打動畫；Play／Timeline 僅播放既有來源球路。保留球衣、身高、球路／出手資訊與熱圖，舊素材／標點只存檔，不再開工、推進下一批或宣稱已接受。此次不跑畫面／瀏覽器／測試流程，修改後立即交回。
+
+此前熱圖再次 stale 已定位為全域 Python DuckDB 1.5.2 與現有 backend .venv 的 1.5.5 版本標籤不同，實際 count／XOR／精確 sum 相同。已移除版本標籤的失效比較、在 backend .venv 核對同內容後同步來源指紋；不再重跑全季前處理。動作功能本次全部暫停，先前「第一批已接」不是人工通過。
+
+### 2026-11-07 熱圖修正與 Perdomo 主場景套模第一批（歷史候選，已暫停）
+
+使用者回報熱圖消失、主場景未動，並追加授權「B 接到 3D 打者，分批完成」。先前僅獨立標點面板，不能稱人物已接線。本批共用 In game 的 Scene playback 可選 Historical pitch／Perdomo · B swing reference，後者由原 Play／Pause／Replay／Speed／Timeline 驅動相同 3D 場景；L／R 各用凍結原片時間。可在含 Perdomo 場次使用；參考模式選中 Perdomo，隱藏未同步的歷史球路／球／出手數字，熱圖保留並依來源實際投手手別選 split。
+
+沿用既有衣服／鞋子／rig，B 影像平面 root 位移與關節方向驅動身體；左右腳 X／Z 不釘原地，只有通用 ground clearance、neutral 腳向及共用握棒約束。遠側手臂／深度／步幅仍估測，球棒不是實測棒頭軌跡或 contact。缺失影格人物留空；未下載新影片、改美術或重開投手重構。驗收：熱圖／metric／手別；3D 左右打與來源；握棒、衣物、鞋子、腳步；暫停／拖軸與切回 Historical pitch。
+
+熱圖根因：原基準依整個 DuckDB mtime／bytes，影片表寫入後被判 stale，所有 color_pr 留空，訊息藏在收合區。改依正規賽投球使用欄位內容指紋（count／XOR／精確整數 sum＋算法版本）；影片表更新不失效，真投球資料變化仍失效。重建 2026 基準 571 合格打者／705 groups；Perdomo 左右投 Swing／Whiff 九格有 PR，低樣本仍留空。過期訊息直接顯示、有 Retry，stale 不進前端快取。
+
+7 個局部後端 tests、Vue 編譯與新 rig 數值檢查通過，沒有代理瀏覽器／畫面驗收。G5 in_progress、40／66 不變；入口同下節，先切 Scene playback → Perdomo · B swing reference 再 Play。下一批等用戶回饋，不稱完整個人揮棒還原。證據：`data/sample/petehub_perdomo_swing_pilot_v1.json`。
+
+### 2026-11-07 Perdomo 左右打標點候選（前一批，尚未套人物）
+
+使用者授權 Geraldo Perdomo（672695）實際左打／右打各一支，先比較來源人體點與 B · MotionBERT-Lite，接在母站共用 Game／Personal In game 的收合面板。未鏡射成另一側、未訓練個人模型、未套人物、未改歷史球路。投手動作 G3／G4 仍 deferred，原停用開關不重開。
+
+來源及快取在 `output/ballpark/perdomo-swing-v1/`；左打 2026-09-27 Game 823246／PA3／P2，右打 2026-09-25 Game 823248／PA51／P1。完整影片時間軸保留，明列分析區間左 1.05–4.1 秒、右 0.05–4.1 秒；左片開場特寫／切鏡不入模。第一輪只捕捉準備段的錯誤候選保留 rejected 紀錄，覆蓋率改以完整分析區間為分母。
+
+人體觀測率左 80.2%、右 84.8%，但雙肘／雙腕同時達信心門檻只有左 14.3%、右 3.7%；**遮擋不足以交付可靠完整揮棒或球棒軌跡**。來源低信心點留空，B 的相應估測骨段灰色虛線，短缺口雖供模型上下文插值，但顯示仍留空。三維是相機相對估測，不是實測步幅／接地／關節角；bat speed／swing length 只顯示來源摘要，bat endpoints／contact time unavailable。
+
+母站入口：`http://127.0.0.1:3000/pitcher-personal?year=2026&role=SP&team=SD&pitcher_id=681190&game_pk=823246&tab=in-game`，展開「Geraldo Perdomo · 左右打揮棒標點試作」切 L／R。兩片是獨立參考，不冒充下方所選每球動作。請用戶驗人物身分、準備至收棒時間與腳步、左右手標點／遮擋、播放／seek／相機及換側清理。G5 in_progress、40／66 不變。
+
+本批只做 Vue 編譯、Python syntax 與兩側來源／完整時間／缺失／hash／有限數值契約檢查；原投手快取 SHA 未變。無 app 瀏覽器、截圖、DOM 或代理畫面通過。證據：`data/sample/petehub_perdomo_swing_pilot_v1.json`。
+
+外部 repo 檢視：[sernadesigns/baseball-game](https://github.com/sernadesigns/baseball-game) 為 console／隨機結果的小型 JS 比賽，`lib/Game.js`／`Scoreboard.js`／`events.js` 可參考球數、局數、壘包、記分與事件拆分；沒有揮棒模型、人物素材或姿態擷取，不用它改寫歷史 In game。package 宣告 ISC，根目錄未見獨立 LICENSE；本批未複製程式、安裝依賴或引入素材。
+
+### 2026-11-06 授權 F2.4 至 F3；逐球出手與影片學習分工
+
+**2026-11-07 最新：使用者拒絕 Burnes／Kelly 人物套模，指出腳位固定、缺少實際大跨步，決定停止投手動作模仿，改保留來源出手資訊。** B 的相機相對深度與影像平面 hip 位移沒有可靠的球場前後 root／步幅；extension 不能當作跨步距離。兩支 B 標點的接受不等於人物動作接受。
+
+已撤下兩人人物動作預覽，關閉 B retarget、procedural delivery 與舊 video retarget，分析場景隱藏投手人物。共用 Game／Personal In game 僅播放原來源球路，獨立顯示 Release X／Y／Z（出手高度）、Arm angle、Extension；缺值 unavailable、不套 45°。保留金色真出手點／高度線，Release close-up 對焦來源點。標點研究區預設收合，來源資料保存，不再處理人物動畫。
+
+缺失診斷／快取候選覆蓋率研究保存在 `data/sample/petehub_pitch_motion_quality_v1.json`，僅啟發式，不證明合理投球。`petehub_b_reference_retarget_v1.json` 已記使用者拒絕；骨長、finite、seek 與旋轉數值檢查不可當步幅或自然度通過。
+
+40／66 不變。F2.4 改為來源出手資訊模式，待使用者驗新呈現；G3／G4 動作重構 deferred，未經新指示不再訓練、下載、辨識或套模。本次僅必要編譯檢查，無瀏覽器／截圖／DOM 畫面驗證。下方人物動作規劃為舊快照，本段優先。
+
+**2026-11-07 最新：使用者接受 Thompson「B · MotionBERT-Lite · 側別修正」局部版本，並授權響尾蛇先發每人先做 1 支、標點與 B 骨架接入母站 In game。** 此接受只涵蓋原局部候選，不等於全球員／完整重構／角色 retarget 通過。原 Thompson raw 與 Yesavage ref5 SHA `f2b3a65fefd7a2ea6856bbfa230b66cf35fd981a85db5c9ab1130c05a0ad0fe2` 保留。
+
+首批依當次官方 AZ active roster 快照，交集本機 2026 至少 3 場第一局投球的先發候選：Eduardo Rodriguez、Merrill Kelly、Brandon Pfaadt、Ryne Nelson、Mitch Bratt、Kohl Drake、Jose Cabrera、Corbin Burnes，共 8 人；這是明示篩選規則，不宣稱球隊正式輪值或補入所有 2026 出賽者。每人選定 1 支 2026 官方逐球影片，失敗替代來源／狀態均保留於 `output/ballpark/team-motion-az-v1/manifest.json`。共 3,738 個完整來源時間軸影格，2,147 幀有部分候選骨架；缺失段留空，來源影片可播完。這些數量不是身分、接地或三維正確率。
+
+`build_team_pitch_motion.py` 重用凍結 MotionBERT-Lite 權重，不訓練新模型、不碰原 5／10／20／holdout。逐片裁切與外觀／投手丘時間追蹤，短段不足的三人另保留原候選後改用 mound-crop-temporal-v1；身份仍需人工確認。沿每個連續有觀測且下肢信心足夠的區間，做兩狀態下肢標籤關聯；端點原解剖側別是待驗假設，不套 Thompson 的秒數、不搬動標點、不鎖腳、不跨缺失強補。原始／修正的二維與 B 三維可切換。
+
+母站 Game 與 Personal 的共用 In game 內新增「來源標點 / B · MotionBERT-Lite · 響尾蛇先發投手」，按需載入每人的來源影片＋二維標點／B 三維骨架，同影片時鐘、暫停、變速、重播、拖軸、相機旋轉與八人姓名連結。來源日期／game／PA／pitch 獨立標示，**不是下方所選場次每球的個人動作或已接回人物網格**。檔案經現有登入保護的 `/api/personal/motion-review` 讀取，不另開 HTML／server。舊失敗角色 delivery／video retarget 仍停用。
+
+依最新圖示移除共用 In game 的身高說明、Release／Plate、Character motion 控制與手動 2D schematic 按鈕；熱圖控制置左、View 置中、Compare／Reset view 置右並底部對齊，窄版換行。原 2D 失敗 fallback、來源球路／熱圖資料不改。此前工作使用者已明確回報通過；本批新排版與八人結果仍待用戶。
+
+證據 `data/sample/petehub_team_pitch_motion_az_v1.json`；最窄 source 檢查核對 roster／球員鍵／完整時間／原始不變／標籤置換／有限數值／影片及模型 hash／檔案路由；Vue 編譯檢查另記。沒有瀏覽器、DOM 畫面檢查、截圖或代理操作驗收。40／66、G1／G3／F2.4 維持 in_progress；F2.5–F3 仍等動作 gate，不直接放行。
+
+人工入口：`http://127.0.0.1:3000/pitcher-personal?year=2026&pitcher_id=593958&tab=in-game`；姓名列可換另外七人，Game 的 In game 選到同一批也可看。請驗：標點是否始終跟投手而非打者；遮擋時左右腳／真實離地是否保留；B 與來源放球／跨步的同步及缺失提示；播放／seek／變速／轉視角與換人清理；移除項目與控制列對齊。
+
+**最新F2.4未通過：使用者指出整段正對本壘、不自然，要求透過影片校正。** 已實際下載並分析兩支官方Savant短片作參考：Yesavage對Ben Rice（playId `469fb129-ee71-3287-b610-6e86df79c1b8`）、Thompson對Ohtani（`716aaf3c-bc99-3360-9f44-27e29c85ca7d`）。只分析來源影片的動作階段，沒有開瀏覽器、截取app畫面或代理操作驗收；兩支約60fps影片的2.0–3.5s取樣顯示側身／抬腿或下沉／分手／跨步／髖肩開啟／放球／後腿帶出。來源、hash與近似人工觀察區間記在`output/ballpark/f2-motion-reference-v1/`，影片與參考影格僅分析用途，不是runtime美術或可再散布的CC0角色資產。
+
+修正投手配方：準備／抬腿保持約90°側身、頭朝本壘；跨步髖先開、肩延後；前腳在放球前固定，後腳晚於落腳才帶出；較低slot以較低抬腿與較深軀幹下沉調整；放球後留在前移收勢位置，不再沿地板倒滑回踏板。逐球source release與arm angle仍保留，影片只提供階段順序與動作參考，角度／節奏常數是人工通用配方，**不是影片機器學習、實測3D關節或已還原兩位球員本人mechanics**。原打者與球路不變。新純數值檢查：左右高／低slot在準備側身、髖肩開啟有先後、前腳plant至release漂移<0.035m（fixture中<0.000001m），原release／angle與repeatable seek／bat grip亦通過；一次vue-tsc。F2.4仍in_progress、40/66；暫緩F2.5–F3，先收投手這項實際回報，不重開F2.3外觀。
+
+**F2.4 動作批已接線，待人工接受（40／66不變）：** Game／Personal共用`Pitch / bat timeline`，時間範圍為release前1.2秒＋source flight＋後0.8秒。只有飛行段時間來自原球路；前後段為明示generic，Release／Plate可直接seek。3D用全動作進度，2D與ready／idle仍可單獨看原球路；切模式／切球／離頁／分頁hidden會停播放，變速從目前進度接續，不改mph。
+
+- 投手：同一已接受rig依每球release XYZ、nullable arm_angle、列冊身高與投球側協調軀幹、肩肘、跨步／收勢；手部socket在release對真實球點，較低arm angle使用通用軀幹傾斜prior。前伸位置由source XYZ決定，extension仍顯示但不誤當步幅或覆寫Y。缺angle明示45° generic prior，沒有推斷真人肩點／肢段量測。準備段球隨手、放球後沿原path，金點是來源參考。
+- 打者：左右側load／stride／swing／follow-through／recover；來源called-strike／ball等為take，揮空／foul／in-play為generic swing，觸擊／未知description保留unknown，不用完整揮棒冒充觸擊。沒有來源contact幀與逐幀bat path，不造打中事件或擊球軌跡。握點跟軀幹轉動，原本收棒後段副手脫棒的數值問題已修；外觀自然度由使用者確認。
+- 檢查僅source：8種左右／高矮／高出手60°與低出手-12°fixture，release socket誤差<0.005m、肩至球角差<0.5°，實際抽樣最大誤差<0.000001m／0.00001°；重複seek還原完整骨架；左右打take／swing各61時間點握點不離棒超過0.035m。原場地／球路不可變、ball ownership、lazy／cleanup檢查與一次Vue typecheck通過。這些不是全聯盟資料覆蓋或真人動作精度，更不是畫面PASS。沒有browser／截圖／renderer／新server／完整build。
+
+人工網址：`http://127.0.0.1:3000/pitcher-personal?tab=in-game` 與 `/games/today` 的In game。
+
+1. 高出手與側投各選一球，按Release：投球手靠近金色真release點，出手高低／方向有差異；source angle缺值可辨識為generic。
+2. 左右投慢放：準備、跨步、放球、收勢，衣服／四肢／鞋子不應明顯分離或嚴重穿模。
+3. 左右打各選看球與揮空：有take／swing差異，雙手握棒與收棒合理；不要求接受未提供的真人mechanics或實測打擊接觸。
+4. 暫停／拖軸／Release／Plate／Replay及0.25×／0.5×／1×：同時間能回相同姿勢，放球與球路一致，標示mph不隨倍率改變。
+5. Game及Personal切球／切視角後用同一動作，返回ready／idle及2D仍可用；原熱圖／資料卡／影片在新播放期間可用。
+
+此批不將F2.4或F2父項改done。依已授權順序，先收這批動作回報再接F2.5→F2.6→F2.7→F3，不重問開工授權；G維持planned。
+
+使用者授權依序開始F2.4至F3；40／66不因授權增加，F2.4 in_progress，其餘仍planned。依賴與人工關卡按短批執行，不把母站局部動畫當全部設施完成。
+
+| 順序 | 本階段工作與邊界 |
+| --- | --- |
+| F2.4 第一批 | 共用可seek時鐘；逐球release XYZ／arm_angle／extension與身高約束通用投球姿勢。高出手、側投、下勾不共用同一放球姿勢；軀幹、肩肘及跨步協調，不能只旋轉一個肩關節。extension不等於步幅；arm_angle不等於肩Euler角；真球路不為人體改值 |
+| F2.4 後續 | 左右打load／stride／swing／follow-through／recover／take，依來源結果區分，不造實測接觸；pause／seek／speed／replay一致。外觀／動作由用戶驗 |
+| F2.5 | 實測bat-tip／handle來源盤點、同球時間座標adapter及unavailable；scalar不冒充逐幀軌跡，不自動全季補抓 |
+| F2.6 | Game／Personal共用、原資料卡／熱圖／影片／R返回與fallback；量測／裝置由用戶執行，證據不足不關release gate |
+| F2.7 | 兩牛棚官方名單投手、手動選人／場次優先、net depth、各設施personal／comparison／released Lab功能盤點；非全隊3D製作 |
+| F3 | Training & Lab接現有Plus／Stamina／Performance State／comparison／calculator，保留research／production標示，重用公式與API |
+
+影片學習已明列但不隨本次授權開工：G1核對影片逐球身分／可取得畫面／幀率與慢放／遮擋及初步資料，G3離線關節估測、相機場地校準、可信度、濾波與retarget到既有rig，G4球員／年度動作範本＋逐球出手約束，先以高出手與側投對比樣本試作。每幀估測不是實測mocap；保留原始來源、模型／版本／關節信心分數與generic fallback。影片可播放不代表已有可分析資料集；無須每次在瀏覽器即時跑辨識。既有G slices維持planned，未額外增加總slice數。
+
+### 2026-11-06 F2.3 人工驗收完成；下一步 F2.4
+
+使用者明確回報「這部分驗收完成」，包含最新球衣／袖口／立體釘鞋、通用ready／idle外觀及放寬上下拖曳角度（polar 1°–115°、鏡頭不低於地面0.12m）。**F2.3 Done，40／66**，依使用者回報記錄；代理未操作瀏覽器或驗畫面。接受範圍為通用骨架外觀，不代表球員專屬臉、歷史精準球衣、投球／揮棒動作或效能gate完成；下方待驗段落均為交付當時快照，不重問同項。
+
+下一步 **F2.4：投打動作與共用確定性時間軸**，尚未實作：第一短批接pre-pitch／release／plate／post-pitch與投手通用跨步、手部對source release XYZ；第二短批做左右打load／stride／swing／follow-through／recover／take。共用pause／seek／speed／replay；真實球路與球速不為人物改值。缺實測contact或逐幀bat path則明示generic／unknown，不造接觸或實測動作。後續由使用者驗左右投打、出手同步、拖軸重置、慢放及兩母站一致性；F2.5真實揮棒資料介面、F2.6整合／release另列。
+
+### 2026-11-06 球衣版型與獨立釘鞋修正（待使用者）
+
+使用者再次回報球衣不明顯、腳掌只塗黑而非釘鞋，上一候選未通過。本批加強母網格球衣的寬鬆胸腰／袖版型，保留相同接縫與蒙皮資料；新增隊色領口、袖口及開襟滾邊，胸標與鈕扣配合新外殼。刪除原裸腳面，改為左右腳各自獨立封閉鞋面、鞋底、四道鞋帶及八顆鞋釘，直接綁定各自foot joint，輸入editable glTF及GLB。保留已修的握棒姿勢、主客隊色規則、土丘及真實球路。
+
+後續使用者指出袖口環仍突出：已刪除剛性forearm-mounted圓環，袖口直接取原袖子的面與相同POSITION／JOINTS／WEIGHTS，隨袖同時變形，不再另套圓環。白色是目前generic主場款，客場上衣用當場隊色／褲灰色；不是精準還原當日球衣edition。
+
+新GLB **4,107,456 B／13,864 tris／65 joints／10 clips**；source／manifest／recipe同步。釘鞋批執行角色結構／主客球衣材質／釘鞋骨架數值與一次vue-tsc；袖口小修只重建資產與最窄角色結構／接縫檢查。沒有瀏覽器、截圖、圖片比較或畫面驗收。請使用者在Game／Personal的Batter／Pitcher close-up確認袖口在Ready／Idle與左右側是否仍突出。**F2.3 in_progress、F2.4 Planned、39／66不變**；下方歷次候選數字為舊紀錄，不當作驗收結果。
+
+### 2026-11-06 第二輪：衣物接縫與反腕根因修正（未人工接受）
+
+使用者再次指出衣服／襪子接縫斷裂與反腕，前版未通過，不能以數值PASS掩蓋畫面缺陷。已查[官方Two Bone IK持物範例](https://dev.epicgames.com/documentation/en-us/unreal-engine/two-bone-ik?application_version=4.27)與[模組化角色共用骨架](https://dev.epicgames.com/documentation/en-us/unreal-engine/working-with-modular-characters-in-unreal-engine)；這些是公開遊戲引擎做法，沒有聲稱取得MLB The Show私有動畫實作。
+
+- 握棒改為**主手palm socket決定球棒位置／方向，副手追蹤下握點做two-bone IK**。刪除上下手使用相反180度座標基底的寫法；前臂繞軸調整與手腕分開，手腕相對中性局部姿勢上限0.60rad（通用動畫限制，不是個人生物力學量測），保留每節手指握把目標。左右手不負scale鏡射。原先只驗指尖離棒不遠是不足的，新增掌心socket與手腕偏轉檢查。
+- 衣服改為**從同一母網格導出並重塑寬鬆外殼**，皮膚／球衣／褲／襪／鞋保留原始完整索引面集合，接縫共享完全相同的POSITION／JOINTS／WEIGHTS accessor及骨架；移除獨立圓管衣服、最近頂點移植權重及互不連接的袖口／褲管。衣物與皮膚分primitive／mesh，但交界在任何同骨架姿勢中是同一數據；這是幾何與蒙皮修正，不是遮住裂口或退回裸身上色。資產重烘焙：**4,052,180 B、14,318 triangles、65 joints**，source／manifest／recipe hashes同步。
+- Source檢查：接縫accessor完全一致、左右手腕偏轉上限／掌心距握把／球棒向上、腳位／pose reset／有限值、glTF及骨架結構，PASS；一次direct vue-tsc PASS。沒有browser／截圖／圖片比較／visual PASS，也沒有重跑無關場景／build。投手丘、extension readout與Statcast球路本輪不變。
+
+只待使用者驗：肩頸／袖口與褲襪交界是否仍斷裂；左右打握棒是否為正常掌向及手腕；idle是否再拉開接縫。**F2.3仍in_progress，F2.4仍Planned，39／66不變。** 下方獨立圓管／最近權重方案、上一版檔案數字及「握棒已修」屬被回報有缺陷的舊候選，不當作接受。
+
+### 2026-11-06 F2.3 第一輪人工回報後修正（仍待驗）
+
+使用者指出握棒手掌／手指不合、角色有裸身感、投手丘兩圓重疊，並詢問extension／release。這批不是人工通過，F2.3仍in_progress、39／66；F2.4仍未開始。已做精準修正：
+
+- 握棒：依球棒軸設定兩手掌座標與相反掌向，各節指骨朝握把圓柱目標收攏，另設拇指；移除所有手指共用Euler X旋轉。左右投打ready/idle姿勢已重烘焙，模型／source／hash更新，外觀由使用者確認。
+- 衣服：上一版只是裸身網格的材質分區，白色主場款會露出裸身輪廓，不能算真正衣服。現在隱藏被覆蓋的軀幹／腿部表面，改用**獨立寬鬆skinned球衣、袖子、領口／袖口及褲子**，轉移原body bind weights；保留皮膚／襪／鞋。腰帶、胸標及鈕扣跟衣料輪廓調整。新runtime **3,920,544 B、11,776 triangles／65 joints**，不是另做人體或重新生成圖片。
+- 投手丘：刪除遠端平面土色圓與截錐疊圖，改成單一LatheGeometry坡面：邊緣落地、向中央緩升、中央踏板區約0.254m高，踏板及人物腳底座標沿原尺度；本壘紅土保留。這是示意坡面，不宣稱精準重建某球場土坡。
+- 有逐球`release_extension`、`release_pos_x/y/z`，既有球路起點一直是該球source release XYZ。新增傳入並顯示**Source extension（ft）**，缺值顯示unavailable；不以人體位置、身高或踏板中心覆寫來源。現階段人物仍在ready／idle，沒有stride／放球姿勢，因此手與金色release marker不同是**尚未完成F2.4的接線**，不是把真球起點放在胸前。F2.4才以來源出手點、角度與explicit generic肢段做可取消／可seek的手部對位，不假造肩肘腕實測，也不為對位改球路。
+
+只執行受影響的glTF／骨架／手指距握把範圍／獨立衣服skin、單一坡面與無第二遠端圓盤、原球路幾何檢查及一次direct vue-tsc，PASS；沒有browser／截圖／視覺比較／build或全audit。新四項只需使用者確認握棒、主客球衣、土丘坡面與extension標示；其餘角色外觀關卡仍待接受，不直接開始F2.4。
+
+## 2026-11-06 F2.3 外觀第一批交付，F2.4 等外觀關卡
+
+使用者已接受Game熱圖修正，接著授權F2.3–F2.4；因工作超過10分鐘且有外觀先行關卡，使用者明確選擇「先完成 F2.3 外觀批，再接 F2.4」。本批**F2.3 in_progress，39／66不變；F2.4 Planned**，不把ready/idle當完整投打時間軸。以下舊「熱圖待驗／模型未開始」是先前快照。
+
+- 已接可轉視角的通用投手／打者skinned mesh（65 joints／14,318 triangles），不是照片billboard或primitive人體。來源Quaternius Universal Base Characters Standard免費包，包內授權CC0 1.0；**免費版只有Superhero Male，並非付費Regular Male或付費.blend來源**。本機未找到Blender執行檔；交付可編輯glTF＋bin＋三張原色貼圖、原始資產／授權、TypeScript握點／設備／IK配方與Python＋Node可重現匯出，不宣稱已製作.blend。臉／眼睛是真3D網格，但仍是通用外觀，不是所選球員臉或真人掃描。
+- runtime：`frontend/assets/ballpark/characters3d/actor-base-v1.glb`，3,898,236 B（約3.72MiB），兩角色複用網格／貼圖、獨立骨架與衣服材質；source：`output/ballpark/f2-character-source-v1/actor-base-v1.gltf`，具10個clips：neutral ready/idle＋投手/打者×L/R×ready/idle八個完整骨架姿勢。runtime以中性breathing加明確左右側IK目標，正scale、不直接負scale鏡射；球棒knob／shaft、手套、帽盔、腰帶與胸標是獨立可編輯網格／anchor。原始export有兩個optional normal URI不匹配，適配版有意省略normal maps，色圖原bytes不變。
+- 列冊身高縮放、未知身高1.83m generic、左右打腳位／握棒、左右投的對側手套已接。身高不是眼高／肢段量測；金色球點仍為真release，人物目前是ready，**尚未製作投球動作與手部release對齊**。不為人物改Statcast球路或結果。球衣有獨立jersey／pants／socks／cleats材質；根據該球home_team／away_team／inning_topbot分配當場攻守主客隊色，未知身份neutral，非帳號favorite或球員現在球隊。這是generic隊色款，不聲稱當日特定球衣edition；歷史背號、球員專屬臉／鬍鬚髮型變體仍未交付，需後續分批外觀工作，不能宣稱全隊／全聯盟建模完成。
+- 共用Game／Personal加入Batter close-up、Pitcher close-up、Show/Hide actors、Ready / pause idle、Idle preview。Idle是獨立呼吸預覽時鐘，選Ready即停止，reduced motion不自動播放、頁面hidden停止繪製；不是F2.4歷史投打clock。缺角色資產回定位參考，球路／熱圖／資料卡／影片繼續可用；角色load有timeout／abort，晚到不建場景，卸載dispose骨架／geometry／material／texture/ImageBitmap等。這些是source實作，未做WebGL記憶體／裝置驗證。
+- 證據：`data/sample/petehub_replay_actor_manifest_v1.json`（來源、授權、各檔hash、bytes、骨架、clips及資源範圍）。`check-replay-actors.mjs`為純glTF／骨架數值：載入結構、不解碼影像、雙手別／高矮身高有限值、腳位範圍、重置可重現；受影響的`check-pitch-replay-3d.mjs`保留球路／幾何／lazy及清理契約；兩項replay資料測試（含當場隊伍／上下局直通）PASS；direct vue-tsc找到一處ImageBitmap清理型別並修正後PASS。沒有browser／DOM畫面／截圖／新server／build／完整效能audit，不能記visual或device PASS。
+
+本批人工網址 `/pitcher-personal?tab=in-game`、`/games/today` 的In game。只驗這五項，不重問已接受資料／園區：
+
+1. Batter/Pitcher close-up與orbit下看身體比例、頭臉、帽盔、球衣；這是通用較壯碩候選，是否接受外觀或指出要改的部分。
+2. 換左右打／左右投：兩手握棒、左右打擊框與視線、對側手套是否合理，沒有嚴重穿身；不要求接受尚未交付的投球／揮棒。
+3. 換高矮球員、主客攻守：身高比例與地面腳位、球衣主客generic款是否清楚；不可把通用臉誤認為個人臉。
+4. Idle preview有微幅呼吸、Ready可停，人物不應持續滑腳；Show/Hide及兩種近看／Reset可用。
+5. Game／Personal角色出現後，原球路／熱圖／切球／影片仍可用，切2D fallback或離頁返回無明顯重複畫面。正式數值／裝置gate仍未測。
+
+外觀接受後才進F2.4 full pitching／ready-load-stride-swing-follow-through-recover-take與共用確定性clock；unknown contact或真實mechanics仍明示，不因本批idle或匯出clip宣稱F2.4完成。
+
+## 2026-11-06 身高接線交付；球速／球衣／臉部規劃補齊
+
+最新使用者回報：身高與其他項目通過；僅Game熱圖消失，Personal正常。共用Chart舊條件只在Catcher掛載Heatmap，Game切Pitcher會卸載並清overlay；已單行改成3D各視角均保留資料／控制，2D沿原Catcher條件。統計公式與材質不變，無瀏覽器／typecheck／build／完整audit；只待使用者驗Game新修正，不重問身高／Personal舊驗收，不因此結案F2.3或開始模型。
+
+使用者授權先接身高，並要求確認球速、球員主客球衣及臉部建模規劃。這批完成資料前置與高度參考線，**不是F2.3正式人物或F2.4動畫完成**；39／66不變，新高度呈現待使用者。下方「未接bio／只有查詢」為前批快照。
+
+- `player_bio_v1`獨立schema／服務：用MLBAM ID對官方People API按需合併查詢（每批最多50人、單次有限timeout、沒有自動全聯盟回填）。儲存`height_raw`、`height_inches`、`height_m`、`weight_lb`／`weight_kg`、長期`bats`／`throws`、source URL、retrieved_at、last_attempt_at、fresh/stale/unavailable。時間語意固定current listed bio，不冒充歷史年度或當場實測；不動官方active-roster契約。快取於`data/player_bios_v1/{MLBAM_ID}.json`，正常7天有效，缺人／失敗15分鐘後才重試；舊值明示stale、無值unavailable，快取讀寫錯誤不阻擋球路。
+- Game／Pitcher Personal共用replay現在帶`pitcher_bio`／`batter_bio`，同時補帶既有nullable`arm_angle`。已接受的Statcast球路／PR／影片公式不變；bio不覆寫每球`stand`／`p_throws`。共用Chart顯示兩人的列冊身高，3D cyan參考線使用打者height_m；缺值沿1.65m通用參考並明示，**不是球員眼高、ready姿勢或正式模型**。
+- 實際新服務查詢Snell／Judge／Moreno三人成功，分別1.9304／2.0066／1.7526m並寫快取。只代表這三人來源可用，非全聯盟覆蓋或視覺接受。局部bio／replay測試12項PASS（含換算／原值、批次快取、缺人、stale／離線、壞快取、快取無法寫、共用入口接線與球路不變）；3D純數值檢查含列冊身高／通用fallback高度，direct vue-tsc PASS。沒有瀏覽器／DOM畫面／截圖／新server／build／完整audit。
+
+### F2後續的外觀與球速交付分工（本輪規劃，未製作資產）
+
+| 項目 | 原有程度 | 已補明確交付與gate |
+| --- | --- | --- |
+| 球速呈現 | 逐球選單及readout已顯示release_speed mph；球路有來源flight time與progress | F2.4：以來源時間推進，1×為重建飛行時間，0.25×／0.5×等為播放倍率，不更改標示的實際release_speed；mph／km/h僅換算。若加沿途即時速度須標明為既有重建模型計算值，不能叫新增實測球速。球速標籤／釋放事件／暫停拖軸保持一致；不新增依動畫碰撞改判結果。F2.6由使用者驗讀值／倍率／切球／兩入口一致 |
+| 身高與人物比例 | 本批列冊身高接線；無正式人體 | F2.3：骨架以metre／足底anchor校準，身高用bio比例並標出current listed來源；臂展、肢段比例、肩肘腕與蹲姿未知仍generic。不能把整個人任意放縮後修改球路來湊手位；F2.4手對source release獨立校準 |
+| 主客隊球衣 | F2.3原只概括材質；D4 User已有favorite-team像素隊色，並不是歷史3D球員制服 | F2.3：共用rig上的獨立球衣／帽／褲材質與可替換貼圖、home／away版型、背號、可編輯來源及版本。F2.6：依該game_pk當場home_team／away_team、攻守與球員身份對應，包含轉隊／雙重賽，**不能用帳號favorite team或球員現在球隊取代歷史球隊**；具體球衣edition未有來源時明示通用主客隊色款，不聲稱當日alternate／City Connect款。資料／美術不足有neutral fallback；不改已接受2D User衣服 |
+| 臉部建模 | F2.3原通用rig含模型但未明列臉；D4只有V2樣本，F4仍負責2D roster NPC | F2.3先交正常人體比例的可轉視角通用頭部／臉部、膚色／髮型／鬍鬚／帽盔與頸部骨架、UV／材質及可編輯mesh。接著分批做少量可辨識的投打球員外觀變體，綁MLBAM ID及官方大頭照等有記錄的參考來源；記錄授權／provenance／LOD／下載及紋理預算，由使用者驗正面、側面、捕手及投手視角。單張大頭照不等於精準3D掃描；照片不能當固定billboard人物。無專屬外觀時明示generic，不自動把全聯盟／所有NPC建模納入本批；F4的像素NPC與G的個人mechanics擴充仍各自列帳 |
+
+人工僅需檢查這批新增：Game或Personal In game換球時兩人姓名／列冊身高相符；換高矮打者cyan高度線隨之更新；原球路／熱圖／影片仍可用。資料缺值時應顯示unavailable／generic，不要求使用者重驗已接受F2.2整套場地。球衣、臉部與完整投打動作尚待其後專門交付，不在這批驗收。
+
+## 2026-11-06 F2.2 人工接受；F2.3／F2.4 前資料盤點
+
+使用者明確回報「這部分驗證都通過」，包含投手丘遠端紅土半徑由10m改為10/3m後的場地／相機交付；**F2.2 Done，39／66**。這是使用者人工接受，不是代理執行畫面測試；E6／F2.6 數值及裝置 gate 仍未完成。下方 F2.2 待驗段落保留為交付時快照，不再重問。
+
+本輪只做 F2.3／F2.4 前的本機資料初查，沒有模型、動畫、API 改動、網路補抓或瀏覽器操作。可重現程式 `backend/scripts/audit_pitch_motion_sources.py`，完整分年度分母見 `data/sample/petehub_pitch_motion_data_audit_v1.json`。2026 現行庫716,544筆，皆 game_type=R，868位投手／662位打者；base／enriched列數相同，game_pk＋at_bat_number＋pitch_number未見重複。這是本機快照，不能因此宣稱聯盟所有賽事已補齊。有限值不等於生物力學正確。
+
+| 資料 | 2026 本機結果 | 對後續的限制 |
+| --- | --- | --- |
+| arm_angle | 711,723／716,544（99.33%）；868位投手皆至少一筆 | 缺4,821筆；Movement已使用，但目前 In game replay scalar_columns未帶出。需另補契約／nullable欄位，不能有庫就當已接模型；單一角度不能還原肩肘腕或整段投球 |
+| release XYZ＋速度向量／加速度 | 713,878／716,544（99.63%） | 缺2,666筆；可重建球路，不提供人體關節或投手踏步，既有 trajectory_status／closure gate 照用，不用欄位齊全率取代它 |
+| extension | 713,203／716,544（99.53%） | 缺3,341筆；不能拿出手高度當身高 |
+| 投球手別／當球打擊側 | 716,544／716,544（100%） | 每球L/R齊全；stand不是球員長期R/L/S生涯屬性，左右開弓仍要bio契約 |
+| sz_top／sz_bot | 713,853筆為有限值且top>bot>0（99.62%） | 這是好球帶，不是身高／眼高／肩寬；缺2,691筆沿既有明示fallback |
+| bat_speed／swing_length／attack_angle／attack_direction | 各331,191筆；指定揮棒事件中331,190／340,624（97.23%） | 揮棒分母明列含短打；未揮棒不應當缺失。是單次scalar，不是逐幀球棒路徑；另1筆在所列事件分母外，後續adapter需處理來源事件一致性 |
+| swing_path_tilt／intercept XY | 331,186／330,741筆 | intercept是相對位置scalar，不是完整站姿、腳位或bat-tip/handle序列；不能假稱精確接觸／動作時序 |
+| miss_distance | 75,554筆；揮棒事件分母22.18% | 不能假設每次揮棒都有；另有整季／球種／手別摘要快取，摘要不是逐球量測 |
+| 身高／體重、眼高、臂展／肢段比例 | 六年度DuckDB所有表未有height／weight欄；兩隊已快取roster的72筆及11場boxscore的284位person未保存身高／體重 | 需要有來源、單位及retrieved_at的player bio快取；目前不能做真球員比例。不得用release_z或sz_top推算個人身高 |
+| 逐幀人體骨架／球棒tip-handle／真實contact時間 | 本輪表結構／指定快取未找到 | F2.3可做明示generic rig；F2.4只能generic動作與來源球路同步，真實個人mechanics／bat path保持unknown或unavailable，來源adapter仍屬F2.5 |
+
+歷年差異：2021／2022雖有bat_tracking欄位，bat_speed／swing_length／attack等有效值為0；2023 bat_speed有144,298筆，2024有316,681筆，2025有329,251筆，不能以2026覆蓋率套全年代。現有2026 Timing摘要All/L/R各5,623／4,745／5,304列，代表657／647／653位打者，不是逐幀動作資料。官方roster本機只快取ATH／AZ兩隊，且是舊retrieved_at快照，不是30隊當下fresh覆蓋；不推測active roster。
+
+建模前建議先完成兩項資料接線小批：① player bio（身高／體重／長期投打手別，來源與時效及缺值狀態）；② replay帶入nullable arm_angle及motion availability，保留原球路與缺資料狀態。通用rig不必等真實mocap，但不應把它標成真球員動作。本輪只盤點並記錄這些前置，**F2.3／F2.4仍Planned，F2.5亦未因初查自動完成**。
+
+### 同日補查：身高來源已找到；手臂示意仍是可選方案
+
+使用者要求試查pybaseball，取不到時可考慮只呈現出手點／手臂／arm angle。本機已安裝pybaseball **2.2.7**；唯讀檢查`pybaseball/lahman.py`確認`people()`／`master()`可讀Lahman People表，但其設定的`https://github.com/chadwickbureau/baseballdatabank/archive/master.zip`於本次小請求回傳**404**，未下載整包／升級套件。`playerid_lookup`為ID對照，不能把它當身高來源。這只是本機版本路徑的可用性結果，不宣稱所有版本／Lahman來源都無身高。
+
+另以MLB官方 [`/api/v1/people`](https://statsapi.mlb.com/api/v1/people?personIds=605483,672515,592450,660271&fields=people,id,fullName,height,weight,batSide,code,pitchHand)做5人小樣本，**HTTP200，5／5都有height、weight、batSide、pitchHand**：Blake Snell、Nick Senzel、Gabriel Moreno、Aaron Judge、Shohei Ohtani。原始列冊值與查詢URL／取得時間保存在 `data/sample/petehub_pitch_motion_bio_source_probe_v1.json`。因此身高應列「已有可行外部來源、尚未接入本機bio契約」，不再列「來源拿不到」。此5人不是全聯盟覆蓋率；資料為查詢當下的列冊bio，不是2021–2026逐年身材實測，體重也不是當場量測。後續可依MLBAM ID按需求批量取回，轉換英呎英吋至公尺、磅至公斤時保留原值、來源與retrieved_at；不為此改active-roster contract或歷史Statcast。
+
+「出手點＋手臂方向＋arm angle」可作較小範圍的分析呈現，但目前只是候選，未取代F2.3／F2.4：
+
+- 出手球點／球路沿該球release XYZ，水平基準線與角度弧依nullable arm_angle；角度缺失時只保留已知出手點，不補造角度。
+- [Savant定義](https://baseballsavant.mlb.com/csv-docs)是水平線與投球肩部到球位置連線的夾角；它不是肘彎曲角、上臂單一關節角或球飛行方向。只有release XYZ＋此角度，無法唯一求出肩／肘／腕與整段投球動作，身高也不能補足這些自由度。
+- 手臂若呈現，必須標明為通用方向示意；沒有量測肩點／臂長／前後朝向時，不能把推定肩點或兩段肢體說成逐球實測。選用正面投影或假設的參考平面須明示；相機轉動不改來源角度，左右投不改球座標，完整人體／打者動畫另分批。
+
+本次僅做來源小查詢與規劃記錄；沒有加入bio服務、回填全隊、改replay API、建模／動畫／UI，也沒有任何畫面測試。39／66與F2.3–F2.7狀態維持不變。
+
+## 2026-11-06 F1 結案；F2.1 契約完成、F2.2 幾何交付待驗
+
+使用者明確表示主隊小修可接受，框起來的姓名改白色後就驗收完成，並授權開始 F2 及子項。`BatterInGameHeatmap.vue` 的姓名連結及 visited 文字已設白色，保留連結／焦點；依此條件接受 **F1 Done**，不重問前批。F2 依既定短批順序開工，本批 **F2.1 Done（契約／source scope）**、**F2.2 In progress（新場地／鏡頭待使用者）**，38／66。F2.3 的模型外觀與 ready gate 需先有本批場地尺度接受，F2.4–F2.7 未因授權或局部接線自動完成。
+
+### F2.1 已凍結的最小契約
+
+- **保存與替換：** 基準 commit `b7d720c`；最新 F1 主隊／姓名白字差異保存在 `output/ballpark/f2-preflight-v1/f1-preserved-ui.patch`，只記錄、未自動回退或另行 commit/push。保留逐球 identity、選場／手別、影片／Personal 連結、16 項熱圖／PR、exact-count API／卡片、DOM UI 與鍵盤 R。只替換母站共用分析 renderer；2D 園區、已接受素材／碰撞與 V2/V3 角色不變。
+- **座標：** `historical_replay_scene_v1`；source 為未改寫的 Statcast feet：X 側向、Y 本壘往投手丘、Z 向上。Three metre/Y-up 映射 `(X,Z,-Y)*0.3048`，不因投／打側鏡射球路。rubber Y=60.5ft、進壘平面 Y=17/12ft、好球帶寬17吋，高度用選中球 sz_bot/top；缺高度沿舊 fallback，不冒充個人量測。球從 source path 第0點 release_pos_x/y/z 開始，不吸附丘中心。人物眼高／站姿／軀幹缺資料；本批只有足底環與明示的 generic 高度線，不是正式角色模型。
+- **時鐘：** 使用現有 trajectory progress／time_seconds，按 source progress 插值；pause／seek／speed／replay 沿共用 UI。端點保持原值，不動 backend 常加速度重建或 closure。pre/post pitch／rig／contact 事件留 F2.4，無 measured bat-tip／handle sequence 不補造 swing path，留 F2.5。
+- **技術選擇：** 局部 Three.js **0.187.0（MIT）**，`@types/three` 同版，lockfile 精確鎖定；不另引 Babylon／Havok，不開第二套 Ballpark engine。Chart → async client component → onMounted dynamic scene import；app shell／非分析 Classic 不加入靜態 renderer import。只有開啟此三維分析才建立 WebGL2，失敗提供無照片／人物貼圖的 2D schematic，資料與影片仍可用。
+- **來源／工具：** 本批所有場地為 repo-native 確定性 primitive 幾何，沒有下載或生成模型／照片、沒有新授權不明素材；既有資產掃描未取得可直接使用的 GLB／glTF／FBX／Blender rig，Blender CLI 本機未偵測到。F2.3 需另交可編輯來源、骨架、授權／provenance、LOD／體積，不把 primitive guide 當正式人物。
+- **生命週期與預算：** on-demand render、pixel ratio cap1.5、無 idle loop／damping；progress 不重建路徑 geometry，hidden 不繪製，卸載取消 RAF／observer／controls／listeners，dispose geometry/material/texture/renderer/context 並移除 owned canvas，晚到 import 不建立 scene。新局部 renderer transfer 目標≤500KiB gzip、桌面 active-frame p95目標≤20ms，Classic initial-budget 沿既有300kB；皆為目標，**尚未量測**。正式 chunk／WebGL／input／GPU／實機及失敗情境留 F2.6，不從 source assertions 推定通過。
+
+選擇依據：[Three.js OrbitControls](https://threejs.org/docs/pages/OrbitControls.html) 提供真正相機 orbit／dolly；[WebGLRenderer](https://threejs.org/docs/pages/WebGLRenderer.html) 要求 WebGL2。套件安裝完成；既有 rollup-plugin-visualizer 對 Node版本的 npm warning 未造成這次安裝／編譯失敗，本輪未擅自升級環境。
+
+### F2.2 已交付、尚待使用者的範圍
+
+母站 Game 與 Personal 同一 `PitchReplayChart` 預設接新三維分析；捕手／投手／側面 preset、拖曳／方向鍵 orbit、滾輪／± dolly、Home／Reset view，關閉 pan 並限制距離／地面穿越角度。地面／本壘板／兩打擊框／投手丘／踏板／17吋好球帶／原熱圖與球路同世界；金色為該球真實出手點及落地參考線。比較球路可點選，原下拉、影片與資料卡保留。沒有正式投手／打者，cyan guide 只是定位；這批驗幾何，不要求接受 placeholder 美術。舊照片／PNG 人物與 `translate(-30 80)` 已從現行 renderer 撤接，原素材檔保留歷史；fallback 也不再載入這兩張圖。
+
+來源檢查 `node scripts/check-pitch-replay-3d.mjs` PASS：單位／軸、出手原值／踏板差異、17吋區／4×6ft框、time插值／端點、左右打不改軌跡、progress更新 geometry identity、dispose 及 lazy source boundary。一次 direct vue-tsc PASS。無瀏覽器／DOM畫面／WebGL實機／截圖／新server，沒跑 build／舊完整 audit；不能據此宣稱透視、GPU清理或手感通過。詳細契約與 hashes 在 `petehub_pitch_replay_3d_f2_1_2_v1.json`。
+
+使用者人工驗收：
+
+1. `/pitcher-personal?tab=in-game` 的 Catcher：姓名是白色；預設出現三維場地，沒有舊球場照片／固定人物貼圖。
+2. 拖曳／方向鍵改變視角，滾輪／± 改相機距離；場地有透視差，並非整張圖平移；三個 preset／Home／Reset view 可回復。
+3. 播放／慢放／時間軸0%：金色出手點在投手丘前上方的該球實際出手位置，球從此點開始；進壘對好球帶，左右投／左右打不反轉球路。
+4. 本壘板／兩打擊框在地面，球場、好球帶／熱圖與球路隨相機維持關係；只驗場地尺度，正式可動人物等 F2.3。
+5. 在 Game 與 Personal 各換球／開影片，兩卡仍更新；切2D schematic／Use3D或離頁再回沒有明顯重複畫面，R返回仍可用。正式裝置／效能認證另記未測，不捏造 pass。
 
 ## 2026-11-06 F1 接續交付（人工驗收待回報）
+
+最新回報：使用者表示其餘項目沒有問題，F1 原交付接受，僅補第2項主隊預設選場。已改為有效指定 game_pk 優先，其次目前日期／scope 的 favorite team（主客隊皆可），最後才第一場；主隊當日沒比賽不跳別日。頁面內主隊資料變更時，有對應比賽便改選該場；顯式 Viewing team 篩選仍保留。不動影片／日期／PR。擴充既有純來源檢查確認主隊優先、主隊變更、當日缺主隊與指定場優先，PASS；未跑瀏覽器／build／完整 typecheck。F1 只剩此小修待使用者確認，尚不標 done，其餘四項不重問。
 
 使用者要求先 git push、收好可保留 UI，再開始 F1。前段 checkpoint **d25f602** 已推送 origin/main，包含當時142個相關檔；被否決的母站貼圖只是可回溯候選，不因此變成核准。F1 已交付 source implementation，維持 **in_progress、36／66**，等使用者檢查；F2.1–F2.7 仍全部 Planned，不安裝引擎／產模型／改原圖。
 
@@ -45,7 +319,7 @@ F2.1–F2.7 狀態一律 Planned。原 G1–G6 已涵蓋動作來源／rig／投
 
 舊 JSON gate／hash 是當時的 snapshot，未覆蓋後續畫面修改；最新人工結論與 tracker 優先，不覆寫歷史為通過。
 
-### F2 分批交付與人工 exit gates
+### F2 分批交付與人工 exit gates（2026-11-06 歷史規劃，已由最上方靜態版本取代）
 
 | Slice | 交付範圍（全部 Planned） | 前置與驗收重點 |
 |---|---|---|
@@ -282,8 +556,8 @@ Petehub Ballpark 是現有分析網站上方的可選遊戲化入口，而不是
 
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
-| F1 · Main field, Game and Leaderboard | In progress | GAME／三個室內物件與 Leaderboard canonical context／query／狀態已接；保留 UI 與 R 返回 | source/data contracts＋vue-tsc PASS；最新五項使用者驗收待回報，36／66，不能把 source PASS 當 visual PASS |
-| F2 · Pitching and Batting facilities | Planned | 七個子項 F2.1–F2.7：母站共用三維歷史 In game、rig／clock／揮棒資料介面與 gate，以及原兩牛棚／投打設施 parity | 詳見最上方 2026-11-06 分項；不改 2D 園區／原始軌跡，不把 generic 動作當真實量測；parent 需完成其實際範圍，不因規劃先 done |
+| F1 · Main field, Game and Leaderboard | Done | GAME／三個室內物件與 Leaderboard canonical context／query／狀態、主隊預設選場及白色姓名連結 | 使用者明確接受主隊小修，指定姓名改白字後即結案；已完成該條件，不重問 F1 |
+| F2 · Pitching and Batting facilities | In progress | F2.1–F2.3 Done；F2.4 靜態角度／出手點，後續 F2.6 共用整合、F2.7 設施 parity | F2.5 揮棒資料與 G 動作已暫緩，不阻擋靜態主線；新功能仍待用戶驗收，E6／F2.6 發布關卡不跳過 |
 | F3 · Training & Lab | Planned | 集中 Stuff+、Location+、Stamina、Performance State、比較與計算器 | 研究與 production 標示清楚；不複製公式 |
 | F4 · Clubhouse active-roster experience | Planned | 主隊休息室、8–10 名場景 NPC、完整 PLAYER LIST、球員互動與個人數據；吸菸附屬區預留偶爾刷新球員抽菸與聊天 | official active roster／as-of 顯示；選單永遠可直接選人；附屬區刷新頻率、虛構情境動畫／聊天及通道不阻擋待實作 |
 | F5 · Team Office | Planned | 主隊預設；Coach Office 放輪值／牛棚／打線，GM Office 放交易／薪資／合約 | 球隊切換、資料 freshness、權限與 Classic Team page 一致 |
@@ -291,16 +565,16 @@ Petehub Ballpark 是現有分析網站上方的可選遊戲化入口，而不是
 
 ### Section G · Baseball Motion Lab（Post-MVP）
 
-2026-11-06 責任調整：下表保留 Planned，專指 F2 之後的球員專屬資料／動作、擴充 Lab 與 simulation event bridge；通用歷史場景 renderer、基本 rig、投打 clock 與首批相機 gate 改由 F2.1–F2.6 唯一實作。G1 延伸 player bio／stance coverage，G2 只在 F2 有實測限制時比較進階 engine，G3 擴充專屬 clips／retarget，G4/G5 擴充專屬動作與未來 H 的事件適配，G6 認證擴充 Motion Lab；不重做已交付通用能力，不自動授權 synthetic simulation。
+2026-11-07 最新靜態主線重排：G1–G6 全部 Deferred，歷史素材／證據留存，不再是 F2／F3 的必要前置。靜態 renderer／人物／出手角度由 F2 負責；G 的影片捕捉、個人動作與進階 engine／Lab 必須另獲新授權，不能沿用先前開工指示自動恢復。
 
 | Slice | 狀態 | 交付內容 | Exit gate |
 |---|---|---|---|
-| G1 · Motion data and bio feasibility | Planned | 稽核身高／體型／投打側／stance／motion asset 與可追溯 bio cache | 缺值用明示 generic fallback；不得由 release point 推測身高 |
-| G2 · Engine decision spike | Planned | 比較 Phaser skeletal、Babylon 與不升級 | 量測畫質／bundle／FPS／memory／開發成本／mobile 後才選 engine |
-| G3 · Rigged asset and animation pipeline | Planned | 核准 2D skeleton 或 Blender/glTF、rig、clips、IK、provenance | reusable clips、license、size 與左右側規則通過 |
-| G4 · Pitcher motion and release event | Planned | state machine 與明確 release event 接 replay／simulation path | 人體動畫不得改 trajectory；左右投／arm slot／pause/replay 對帳 |
-| G5 · Batter swing and contact event | Planned | stance／load／swing／check／miss／contact 與 timing feedback | 左右打、早晚／高低、take／check cases 通過 |
-| G6 · Motion Lab release gate | Planned | camera、HUD、audio、reduced-motion、device 與資源稽核 | 未達 gate 維持 Lab，不取代 SVG Replay |
+| G1 · Motion data and bio feasibility | Deferred | 保留 bio／來源／標點既有成果，不繼續影片捕捉 | 需新授權恢復，不影響既有身高／手別資料使用 |
+| G2 · Engine decision spike | Deferred | 暫停進階動作引擎比較 | 靜態版本沿用現有 renderer，不另換引擎 |
+| G3 · Rigged asset and animation pipeline | Deferred | 投手重構因步幅／root 未達要求而停止；保留來源，不重開套模 | 需新指示才能恢復投手辨識／訓練／retarget |
+| G4 · Pitcher motion and release event | Deferred | 停止投手模仿，F2.4 保留來源 release／arm angle／extension | 不把 extension 當步幅，不聲稱個人 mechanics 完成 |
+| G5 · Batter swing and contact event | Deferred | 投打動作／Perdomo 捕捉與套模暫停，僅保留資料 | 新授權才恢復，不作為目前 F2 結案前置 |
+| G6 · Motion Lab release gate | Deferred | 動作 Lab 發布關卡延後 | 靜態版自己的 E6／F2.6 gate 仍須完成 |
 
 ### Section H · Deterministic Simulation Game（Post-MVP）
 

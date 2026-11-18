@@ -11,6 +11,7 @@
         :panel="panel"
         :heatmap-blend="heatmapBlend"
         :side-mode="sideMode"
+        @select-point="emit('select-point', $event)"
       />
     </div>
   </section>
@@ -25,6 +26,7 @@ const props = defineProps<{
   heatmapBlend: number
   sideMode: 'pitch' | 'info'
 }>()
+const emit = defineEmits<{ 'select-point': [point: Record<string, unknown>] }>()
 
 const totalPitches = computed(() => props.panels.reduce((sum, panel) => sum + (panel.pitches ?? panel.rows.length), 0))
 </script>

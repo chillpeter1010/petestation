@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-06",
+  "updated_at": "2026-11-14",
   "instructions": "This is the authoritative project and slice tracker. Update project status, slice status, verification, next_step and updated_at whenever scoped work materially changes. Then run backend/scripts/sync_project_tracker.py to regenerate docs/PROJECT_TRACKER.md and the marked current-progress block in docs/NEXT_CHAT_HANDOFF.md. Keep one canonical human-readable Markdown document per small project; represent slices as sections inside it and keep exact generated evidence in machine-readable artifacts.",
   "status_legend": {
     "idea": "Captured but not scoped",
@@ -57,6 +57,390 @@
         {"id": "11", "label": "Slice 11 · Historical backfill and release gate", "status": "planned", "deliverable": "Full historical Plus v2 backfill, atomic snapshots, downstream Stamina/leaderboard rebuild and formal promotion decision", "verification": "Pending: 2027 or later prospective evidence, 100% eligible-row verification, representative-player review and model-versioned contract"}
       ]
     },
+    {
+  "id": "pitcher-decision-support",
+  "title": "換投決策與預警研究 / Pitcher Decision Lab",
+  "area": "Pitcher Lab",
+  "status": "in_progress",
+  "updated_at": "2026-11-14",
+  "document": "docs/PITCHER_DECISION_SUPPORT.md",
+  "route": "/lab/decision-support",
+  "summary": "Slices 0–10 研究資料層與歷史特徵已完成：保留暖機、建立獨立研究 Plus、先發／牛棚 prefix 三訊號與 WE／RE／PA-LI；正式模型保留，個別排名與預警晉升關閉。",
+  "next_step": "新增 Slice 6–10 結果區待使用者人工驗收；下一階段為 Slice 11 決策樣本庫與探索分析，尚未開始，須使用者指示。",
+  "phases": [
+    {
+      "id": "data",
+      "title": "01 資料前處理與補齊",
+      "description": "先確認缺什麼、來源能否回溯，再建立完整事件與可用名單。"
+    },
+    {
+      "id": "features",
+      "title": "02 歷史指標與當下狀態",
+      "description": "所有能力、負荷與局面指標都只使用決策前已知的資料。"
+    },
+    {
+      "id": "models",
+      "title": "03 預期價值與選項比較",
+      "description": "從打席結果分布推導 xWPA、xRE24，先研究續投與換投。"
+    },
+    {
+      "id": "validation",
+      "title": "04 穩健性與歷史部署",
+      "description": "檢查選擇偏差、樣本支持、校準與不確定性，再凍結測試。"
+    },
+    {
+      "id": "product",
+      "title": "05 儀表板與預警整合",
+      "description": "先呈現狀態，再依有證據支持的替代選項提供決策提示。"
+    }
+  ],
+  "experiment": [
+    {
+      "years": "2021–2023",
+      "role": "訓練",
+      "detail": "擴張時間窗產生樣本外特徵；最早資料不足時保留暖機期。"
+    },
+    {
+      "years": "2024",
+      "role": "Validation",
+      "detail": "選模型、校準、燈號與拒絕判斷門檻，完成後凍結。"
+    },
+    {
+      "years": "2025",
+      "role": "Test",
+      "detail": "本研究凍結後的一次測試；既有模型用過此年，須先重建上游。"
+    },
+    {
+      "years": "2026",
+      "role": "歷史部署模擬",
+      "detail": "已被研究過的資料，只能稱回溯影子評估。"
+    },
+    {
+      "years": "2027+",
+      "role": "前瞻影子驗證",
+      "detail": "凍結後的新資料；通過預先設定的證據門檻才考慮產品晉升。"
+    }
+  ],
+  "guardrails": [
+    "初版限定例行賽、合法打席間的投手續投／換投；打席中換投與特殊角色分層處理。",
+    "已觀測的換投與續投都要建樣本；官方換人事件、可用牛棚與零球事件仍待補齊。",
+    "全場 Stamina、季末能力與接手後才知道的球質不能用於當下決策；缺值不補成 100。",
+    "現行正式 Plus 模型訓練至 2025，現有成績僅供覆蓋盤點；嚴格測試須另建時間一致版本。",
+    "xWPA 以己方勝率差計，xRE24 先限定當前半局且守方越高越好；比較選項使用相同評估終點。",
+    "負 WPA、高 LI 或單項分數下降不直接等於應換投；三項狀態不強制合成一個體力分數。",
+    "資料不足或替代選項缺乏歷史支持時拒絕推薦；既有 Stamina／Performance State 正式版本與晉升門檻保留。"
+  ],
+  "slices": [
+    {
+      "id": "P0",
+      "phase": "data",
+      "label": "P0 · 研究規劃與 Lab 入口",
+      "status": "done",
+      "depends_on": [],
+      "deliverable": "建立單一規劃文件、追蹤紀錄及投手 Lab 研究頁，呈現五階段、依賴、覆蓋與驗證條件。",
+      "verification": "2026-11-12 使用者明確回覆『通過 開始slice1』，規劃頁人工驗收完成。先前一次 vue-tsc 與計畫／文件一致性來源檢查通過。",
+      "acceptance": "頁面能區分盤點完成、規劃待驗與未開始研究，不呈現虛構預測或可啟動訓練的按鈕。"
+    },
+    {
+      "id": "0",
+      "phase": "data",
+      "label": "Slice 0 · 六年資料覆蓋盤點",
+      "status": "done",
+      "depends_on": [],
+      "deliverable": "取出本機例行賽逐打席觀測、換投序列、WPA／RE 來源完整率、LI 參考支持及 Plus／三項狀態覆蓋。",
+      "verification": "2026-11-12：4,284,184 球、1,099,489 個觀測 PA、96,248 次觀測投手更換；六年鍵唯一、球數與登板更換數核對通過。",
+      "acceptance": "保留 357 次打席中換投、598 個無終結事件序列及稀疏 LI 標記；不聲稱完整官方決策集。",
+      "evidence": "data/research/decision_support_audit_20261112/coverage_report.json"
+    },
+    {
+      "id": "1",
+      "phase": "data",
+      "label": "Slice 1 · 賽程、來源版本與缺漏清單",
+      "status": "done",
+      "depends_on": [
+        "0"
+      ],
+      "deliverable": "核對 2021–2026 官方賽程、比賽完成狀態、日期與事件範圍；輸出逐年缺場、缺日、缺事件與來源版本清單。",
+      "verification": "2026-11-12：保存 6 份公開賽程 URL／UTC／SHA 快照；14,577 場完成賽程、唯讀 DB 與既有 feed 核對，缺場／缺日皆 0，排除 3 場取消。定位 2 場合計 249 個實投鍵差異、3 場再見 balk 比分語意與 14,017 個編號不匹配；3 項局部測試及六年資料一致性檢查通過。2026-11-14 使用者授權繼續後續 Slices；未將授權推定為所有新畫面驗收通過。",
+      "acceptance": "分清真實零事件、未完成比賽與尚未取得資料；先估補抓量與來源合法可用性。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice1_audit_v1.json"
+    },
+    {
+      "id": "2",
+      "phase": "data",
+      "label": "Slice 2 · 原始事件與追蹤資料補齊",
+      "status": "done",
+      "depends_on": [
+        "1"
+      ],
+      "deliverable": "按缺漏清單逐年分批補比賽事件、投球與換人紀錄；保存原始快照、來源與可續跑清單。",
+      "verification": "2026-11-14：僅針對兩場比賽補抓公開 Statcast CSV；2024 game 746731 由 319 增為 320 筆，2026 game 823244 由 10 增為 258 筆。兩場 DB、年度 CSV 與來源 metadata 已同步，原始檔與 SHA 備份保留；CSV 往返讀取一致，其他比賽資料指紋不變。正式 Plus／Stamina 產物未重訓或覆寫。",
+      "acceptance": "精確鍵去重、筆數核對與可重跑；不可取得的追蹤欄位保留缺值，不插補成實測資料。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice2_v1.json"
+    },
+    {
+      "id": "3",
+      "phase": "data",
+      "label": "Slice 3 · 打席與換人事件正規化",
+      "status": "done",
+      "depends_on": [
+        "2"
+      ],
+      "deliverable": "統一投球、打席、登板與決策事件鍵；區分局間、打席間、打席中、零球事件、續投與特殊換人原因。",
+      "verification": "2026-11-14：建立 14,577 場、4,866,152 個官方事件、4,270,416 顆實投、1,099,754 個 play 與 125,429 個登板段；登板段包含零球與重新上丘，不等於正式出賽數 G。六年面對打者數 BF 與既有官方帳本一致，事件／決策鍵無重複，WPA／RE 結果只在 play 層保存一次；七局、跨局與來源時間異常均保留標記。",
+      "acceptance": "WPA／RE24 每事件只計一次；處理跨局、繼承跑者、再見與未完成 PA，並建立年度合法換投規則。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice3_v1.json"
+    },
+    {
+      "id": "4",
+      "phase": "data",
+      "label": "Slice 4 · 負荷與角色歷史",
+      "status": "done",
+      "depends_on": [
+        "3"
+      ],
+      "deliverable": "依球員 ID 跨隊、跨角色累積近 1／3／7／14 日用球、連續登板、休息間隔、跨局及先發轉後援歷史。",
+      "verification": "2026-11-14：建立 125,412 個投球 session；近 1／3／7／14 日用球只計決策前已觀測實投，同日多場依 UTC 事件時間排序。200 個抽樣時點的四種滾動窗與獨立逐筆計算一致；1,066,310 列現任投手候選負荷與精確 SQL 視窗比較差異皆為 0。三場來源時間異常、2021 年初歷史不足與角色未知皆另有旗標。",
+      "acceptance": "當日多場依事件時間區分；不使用稍後登板、未來角色或受傷資訊；曾先發不自動增加體力。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice4_v1.json"
+    },
+    {
+      "id": "5",
+      "phase": "data",
+      "label": "Slice 5 · 當時可用牛棚與候選集合",
+      "status": "done",
+      "depends_on": [
+        "3",
+        "4"
+      ],
+      "deliverable": "重建當日有效名單、已使用球員、合法可用人選與名單信心，記錄熱身及身體狀態未知。",
+      "verification": "2026-11-14：使用完整官方比賽日球員名單建立名義牛棚候選，未以稍後實際登板者倒推選項。72 組指定日期 active-roster 覆核中，66 組一致、6 組衝突；其他日期仍保留未逐日驗證標記。候選附嚴格過去負荷與角色歷史，熱身／身體狀態維持 null，所有個別排名允許值皆為 false；未宣稱名義候選等於實際可用牛棚。使用者已授權接續 Slice 6–10。",
+      "acceptance": "不得用稍後真的登板者倒推可用牛棚；名單不足時只做狀態觀測，不排名個別替代投手。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice5_v1.json"
+    },
+    {
+      "id": "6",
+      "phase": "features",
+      "label": "Slice 6 · 時間切分與上游模型契約",
+      "status": "done",
+      "depends_on": [
+        "3",
+        "4"
+      ],
+      "deliverable": "凍結外層年份、暖機期、擴張窗、特徵可知時間與模型版本；重建 prior-only 主要速球及球員基準。",
+      "verification": "2026-11-14：訓練前凍結四個擴張／固定參考期；主要速球只取此前已結束登板，模型標籤只用 cutoff 前已結束比賽。訓練、參考與決策時點檢查無違規；正式模型 metadata SHA 不變。修正代跑誤改打者的 parser 並保存逐欄清單；27 顆來源打者身分歧異另列。前置特徵與結果標籤分檔，資料不足保留暖機或缺值。",
+      "acceptance": "所有訓練、標準化、補值與基準都遵守 cutoff；時間截斷檢查不得讀取未來事件。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice6_v1.json"
+    },
+    {
+      "id": "7",
+      "phase": "features",
+      "label": "Slice 7 · 歷史 Stuff+／Location+ 補算",
+      "status": "done",
+      "depends_on": [
+        "2",
+        "6"
+      ],
+      "deliverable": "使用時間一致的獨立版本按年補算兩項指標；產生樣本外特徵、涵蓋率、模型指紋與失敗原因。",
+      "verification": "2026-11-14：六年研究 Plus 已補算；2021 上半年暖機，2024–2026 使用截至 2023 年底的凍結模型，未使用 2025／2026 結果調參。研究 Location 預測位置／情境價值，研究 Stuff 預測扣除位置／情境後的物理殘差，與正式方法分開。保存逐球可用性、模型與指紋；2024 物理殘差增量很小，未晉升正式模型。",
+      "acceptance": "正式快取不覆寫；2025 測試特徵不來自使用過 2025 結果的模型；2021 早期不足時明示暖機。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice7_v1.json"
+    },
+    {
+      "id": "8",
+      "phase": "features",
+      "label": "Slice 8 · 先發單場 prefix 三項狀態",
+      "status": "done",
+      "depends_on": [
+        "4",
+        "7"
+      ],
+      "deliverable": "重建截至每個合法決策點的 Quality、Physical、Command，保留區間、可靠度與已觀測窗口。",
+      "verification": "2026-11-14：先發前 20 球建立同球種基準、至少另觀測 15 球；只用當下已結束的投球，並嚴格早於決策點接入。Quality／Physical／Command 分開，保留支持比例、近似 80% 抽樣區間及收縮權重；中斷重新暖機。2024 已觀測 prefix 路徑比較優於純用球數／近期負荷基準，但下一段預測與換投效益未驗證，不提供合成電量。",
+      "acceptance": "不得以全場結算回填前段；前 20 球不足與晚段缺支持要保留 unavailable，三項尺度不任意拉伸。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice8_v1.json"
+    },
+    {
+      "id": "9",
+      "phase": "features",
+      "label": "Slice 9 · 牛棚短登板狀態",
+      "status": "done",
+      "depends_on": [
+        "4",
+        "7"
+      ],
+      "deliverable": "建立歷史同球種基準、當日前幾球更新與角色部分池化；納入近期用球及長中繼／先發轉任背景。",
+      "verification": "2026-11-14：牛棚前 5 球建立同球種基準、至少再觀測 5 球，向歷史角色預期收縮；納入嚴格過去用球、休息、連續日、同日登板、角色／長局數背景及最近打席邊界 PA-LI。2024 已與純用球數及近七日用球＋休息基準比較。候選另附決策前已結束登板的觀測狀態，不讀本場前五球；短登板與歷史不足保留缺值，個別排名關閉。",
+      "acceptance": "與簡單近期負荷基準比較；候選後援使用登板前能力，不使用本場接手後的實測球質。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice9_v1.json"
+    },
+    {
+      "id": "10",
+      "phase": "features",
+      "label": "Slice 10 · WE／RE／LI 時間一致參考",
+      "status": "done",
+      "depends_on": [
+        "3",
+        "6"
+      ],
+      "deliverable": "建立固定歷史 WE、24 壘包出局 RE 與有收縮的 LI，保存參考期、稀疏支持與預測校準。",
+      "verification": "2026-11-14：建立歷史中性 WE、24 壘包出局／延長賽收縮 RE，以及過去完成打者轉移的研究 PA-LI。各參考期以已結束比賽訓練，固定內層時間切分校準；七局、再見、終局及延長賽跑者規則有檢查。每個官方決策皆有列，暖機／不可靠來源不填分，缺 LI 不補 1；2024 WE Brier 0.157961、log loss 0.472171。前置與實現結果分檔，尚未訓練 xWPA／xRE24 行動模型。",
+      "acceptance": "不以同年全季結果建立當年的決策特徵；核對方向與終局邊界，不把缺 LI 補成有證據的 1。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice10_v1.json"
+    },
+    {
+      "id": "11",
+      "phase": "models",
+      "label": "Slice 11 · 決策樣本庫與探索分析",
+      "status": "planned",
+      "depends_on": [
+        "5",
+        "8",
+        "9",
+        "10"
+      ],
+      "deliverable": "整合合法續投與換投機會、前置特徵、候選及固定範圍結果；分析用球、球質變化、LI 與教練選擇。",
+      "verification": "Pending",
+      "acceptance": "公布每年每角色的共同分母與排除原因；分開結果相關性與決策效果，不只保留換投樣本。"
+    },
+    {
+      "id": "12",
+      "phase": "models",
+      "label": "Slice 12 · 打席結果與局面轉移基準",
+      "status": "planned",
+      "depends_on": [
+        "11"
+      ],
+      "deliverable": "建立局面-only、用球數及球員對位基準，預測打席結果與壘包／出局／比分轉移分布。",
+      "verification": "Pending",
+      "acceptance": "機率總和與轉移合法性通過；在 2024 比較 Brier、log loss、校準及 WPA／RE 誤差。"
+    },
+    {
+      "id": "13",
+      "phase": "models",
+      "label": "Slice 13 · 狀態指標增益與消融",
+      "status": "planned",
+      "depends_on": [
+        "12"
+      ],
+      "deliverable": "逐層加入 Stuff、Location、Quality、Physical、Command、近期負荷與角色特徵。",
+      "verification": "Pending",
+      "acceptance": "以相同樣本、相同未來時窗比較；只保留穩定樣本外增益，不用訓練相關性選指標。"
+    },
+    {
+      "id": "14",
+      "phase": "models",
+      "label": "Slice 14 · xWPA／xRE24 與人選價值",
+      "status": "planned",
+      "depends_on": [
+        "13"
+      ],
+      "deliverable": "先比較續投與角色條件替代池，再在支持足夠時評估個別後援；輸出相同終點的預期價值、差值與區間。",
+      "verification": "Pending",
+      "acceptance": "下一 PA 用於解釋、固定半局作主要研究；遵守最低打者與後續安排，長期資源成本另定義，不任意加總 LI／WPA／RE。"
+    },
+    {
+      "id": "15",
+      "phase": "validation",
+      "label": "Slice 15 · 選擇偏差與樣本重疊",
+      "status": "planned",
+      "depends_on": [
+        "11",
+        "14"
+      ],
+      "deliverable": "時間交叉擬合歷史調度傾向，檢查換投與續投、各候選的支持、極端權重及有效樣本數。",
+      "verification": "Pending",
+      "acceptance": "無重疊人群拒絕推薦；披露權重截斷敏感度與教練未公開資訊，不把觀測效果直接稱因果。"
+    },
+    {
+      "id": "16",
+      "phase": "validation",
+      "label": "Slice 16 · 策略評估與 robustness",
+      "status": "planned",
+      "depends_on": [
+        "15"
+      ],
+      "deliverable": "比較 direct／SNIPS／doubly robust；進行比賽區塊 bootstrap、角色與年代分群、隱藏混雜及評估範圍敏感度分析。",
+      "verification": "Pending",
+      "acceptance": "多步策略採序列方法；預先登記門檻、實用收益、區間與最低支持，不以單一指標顯著就晉升。"
+    },
+    {
+      "id": "17",
+      "phase": "validation",
+      "label": "Slice 17 · 凍結與 2025 最終測試",
+      "status": "planned",
+      "depends_on": [
+        "16"
+      ],
+      "deliverable": "鎖定模型、校準、門檻、候選及評估範圍，記錄指紋後執行一次 2025 評估。",
+      "verification": "Pending",
+      "acceptance": "測試結果不回流調參；新版本另立實驗，清楚披露 2025 在既有其他研究中已被查看。"
+    },
+    {
+      "id": "18",
+      "phase": "validation",
+      "label": "Slice 18 · 2026 歷史部署與影子紀錄",
+      "status": "planned",
+      "depends_on": [
+        "17"
+      ],
+      "deliverable": "依時間順序模擬 2026 決策、保存當時預測與事後結果，統計校準、支持率及提醒負擔。",
+      "verification": "Pending",
+      "acceptance": "明示 retrospective replay；部署重訓若使用至 2025 須另存版本，不把 2026 稱前瞻未見資料。"
+    },
+    {
+      "id": "19",
+      "phase": "product",
+      "label": "Slice 19 · Personal 儀表板與 In game 同步",
+      "status": "planned",
+      "depends_on": [
+        "8",
+        "9",
+        "18"
+      ],
+      "deliverable": "點選單場展開三項狀態、負荷餘裕電池與時間軸；共用同場同投手同投球鍵同步 In game。",
+      "verification": "Pending",
+      "acceptance": "電池不是生理剩餘百分比；篩選不重置累積負荷，前後球時間語意一致；畫面與操作由使用者驗收。"
+    },
+    {
+      "id": "20",
+      "phase": "product",
+      "label": "Slice 20 · 狀態與決策雙層燈號",
+      "status": "planned",
+      "depends_on": [
+        "19",
+        "16"
+      ],
+      "deliverable": "建立灰／綠／黃／紅提醒、觸發原因、區間、解除與冷卻機制，分開狀態下降與換投優勢。",
+      "verification": "Pending",
+      "acceptance": "紅燈需合法替代方案且保守收益超過凍結門檻；高 LI 或一次負 WPA 不單獨觸發換投建議；人工驗收。"
+    },
+    {
+      "id": "21",
+      "phase": "product",
+      "label": "Slice 21 · 前瞻監測與產品晉升門檻",
+      "status": "planned",
+      "depends_on": [
+        "20"
+      ],
+      "deliverable": "用凍結後 2027+ 新資料作 append-only 影子監測，檢查漂移、收益、區間、誤報與可用覆蓋。",
+      "verification": "Pending",
+      "acceptance": "在有足夠有效樣本與可重現實用收益前維持研究模式；不取代既有模型或自動宣稱最佳策略。"
+    },
+    {
+      "id": "22",
+      "phase": "product",
+      "label": "Slice 22 · 代打、跑壘與防守擴充",
+      "status": "deferred",
+      "depends_on": [
+        "21"
+      ],
+      "deliverable": "沿用狀態／行動／價值契約，各自補事件、合法選項、能力與歸屬模型。",
+      "verification": "Deferred",
+      "acceptance": "投手研究完成且有新授權後再細分；不把現有投手更換盤點冒充其他決策的資料覆蓋。"
+    }
+  ]
+},
     {
       "id": "leverage-lab",
       "title": "RE24 & Leverage Lab",
@@ -262,9 +646,9 @@
       "title": "Game Center Analysis Modules",
       "area": "Game Center",
       "status": "in_progress",
-      "updated_at": "2026-11-06",
-      "summary": "Six of 17 slices complete. Earlier 3H shared In game/PR/Outside remains accepted/done. Latest name links, folded notes and exact-count cards are implemented but newest UI acceptance is unconfirmed. Flat-photo pan, foreground translation and PNG batter rejected by user; replacement roadmap owned once by Ballpark F2.1-F2.7. Other Game Center slices remain independent.",
-      "next_step": "User checks F1 mother-site Game identity/tab/refresh and preserved names/Personal links, folded notes and exact-count cards; Ballpark F1 owns this new acceptance, original 3H remains done. Rejected photo/PNG rendering is reserved for planned F2 replacement, not more pixel nudging. Location/Sequence/Tags/Movement and video full-season coverage remain independently unfinished; no engine work or data backfill started.",
+      "updated_at": "2026-11-09",
+      "summary": "Six of 18 slices complete; preserve accepted 3H data/video/season PR and user-accepted batter-switch acceleration. New 3I prior-date per-pitch contextual heatmap and empirical Pitch scout delivered pending manual acceptance. Shared Game/Personal static renderer, no actor motion or pose reconstruction. Other analysis gates remain independent.",
+      "next_step": "User validates 3I count/previous-pitch/hand context updates, season-PR toggle, empirical Scout target/probabilities, low-history fallback and pause/rapid selection. Keep 3I in_progress; no prediction-validation, visual/device PASS or resumed actor motion is implied. Existing full-season Sequence branch remains descriptive.",
       "slices": [
         {"id": "0", "label": "Slice 0 · Game-scoped contract and reuse audit", "status": "planned", "deliverable": "Consume the pre-Slice coverage audit, freeze game_pk, player, role, time boundary, source version, lazy-load behavior and shared filter schema, and inventory reusable APIs/components", "verification": "Pending: refreshed Stamina fingerprints and validation drift review, doubleheader isolation, game-row reconciliation, field-source matrix, empty/error states and representative fixtures"},
         {"id": "1", "label": "Slice 1 · Pitcher Location", "status": "in_progress", "deliverable": "Add a top-level game-scoped Location tab with a dropdown limited to pitchers in the selected game, reusing StrikeZoneScatter, pitch tooltip and Savant video identity", "verification": "API/service/payload tests pass; cold Tatsuya Imai game-view benchmark improved from about 8.0s to 0.26s by removing external catcher lookup and unused Location tables, with client prefetch/cache added; pending authenticated tab, dropdown, filter/video interaction and desktop/narrow visual audit"},
@@ -277,6 +661,7 @@
         {"id": "3F", "label": "Slice 3F · Pitch Replay SVG MVP", "status": "done", "deliverable": "Add a top-level Replay tab with the shared in-game pitcher selector and one perspective SVG scene that switches between Pitcher/Catcher views, overlays same-PA or same-game pitches and supports drag/keyboard camera orbit", "verification": "Reusable PitchReplayChart preserves single-pitch or PA playback, play/pause/replay/scrub, three speeds, pitch selection, local filters, video action and reduced-motion behavior. Replay screen X uses raw Statcast X in Catcher view and its negation in Pitcher view, an exact per-pitch 1.66-foot-wide sz_bot/sz_top zone sits inside a 1.35x visibility guide, and camera elevation reaches about -6 degrees with a -5-degree Low angle preset. Authenticated Chrome verifies view/comparison toggles, pointer drag and low-angle projection, with no document horizontal overflow or severe console errors."},
         {"id": "3G", "label": "Slice 3G · Pitch Replay validation and release gate", "status": "done", "deliverable": "Reconcile trajectory endpoint and SVG playback against observed release, flight time, plate location and event order, then decide production release and whether a later WebGL upgrade is justified", "verification": "Released the interactive SVG perspective MVP after representative fastball, breaking-ball, left/right, Tyler Rogers sidearm, 32.3 mph slow-pitch, missing and limited cases passed. Game 824948 has 328/328 supported valid pitches; observed service cases are about 0.17–0.22 seconds. On 2026-09-27 HOU–ATH, authenticated Chrome verifies one scene, Pitcher/Catcher projection changes, drag camera changes, 4 same-PA versus 40 same-game comparison paths, zero narrow-layout horizontal overflow and zero severe console errors. WebGL remains deferred until body models, free camera translation, depth occlusion or materially larger scenes require it."},
         {"id":"3H","label":"Slice 3H · Shared pitch panel and Personal In game","status":"done","deliverable":"Shared historical pitch panel for Game Replay and Personal In game with outing/default-latest selection and per-pitch details/video; add authenticated seasonal selected-batter catcher-view heatmap: PA>30 gate, auto/manual pitcher hand, 16 metric options including AVG, recorded-weight wOBA and tracked-BBE HardHit%, nine normalized zone cells plus eight outside groups, denominator/coverage and accessible table, preserving trajectory identity.","verification":"2026-11-05 user explicitly reported all passed after latest shared In game heatmap/leaguePR/Outside delivery and requested returning to Ballpark E3 planning. 3H done as aggregate user acceptance; do not invent browser/device/performance coverage. Delivered shared Game/Personal outing and per-pitch/video panel,16 metrics with PA>30 and hand context,2026 offline same-cell league mean/midrankPR,metric direction and vivid contours, bounded fadingOutsidehalo andcompoundpaths. Earlier16 targeted backend tests,sourcePRmath/directvue-tsc and data/source checks remain historical evidence; no checks repeated for acceptance metadata. Source evidence petehub_batter_zone_pr_source_gate_v1.json and prior versioned snapshots; old pending text superseded. Other GameCenter gates and BallparkE3/F/G are not implicitly completed. New followup delivered: resolved pitcher/batter Personal links, collapsed heatmap/scene guides, regular-season exact-count same-side cards with explicit denominators, generic stadium v2 and latest reference-pose batter v4. Older side-facing v2 and unused rear-facing v3 art rejected by user. Catcher all scene layers now share pan/zoom; pitcher keeps 3D orbit. Historical trajectory source unchanged; 12 focused backend tests passed. New UI/art/camera remains user acceptance pending; earlier 3H done preserved. Evidence petehub_in_game_catcher_redesign_v1.json. Superseding 2026-11-06 user feedback: flat-photo pan/zoom, screen-space foreground translation, fixed PNG batter and latest position/chalk-box draft are not accepted. Replace under planned F2.1-F2.7; preserve accepted original 3H data/video/PR done. Latest name/notes/count-card UI lacks separate final acceptance. Do not regenerate PNG poses or continue pixel nudges. No 3D implementation started."},
+        {"id":"3I","label":"Slice 3I · Prior-date contextual heatmap and Pitch scout","status":"in_progress","deliverable":"Shared Game/Personal per-pitch count/hand/stance/previous-pitch heatmap using prior-date observations, explicit sample backoff and absolute-rate palette alongside preserved season PR. Toggle empirical Swing/Take, swing-family distribution and concentration target ring; no current-pitch outcome/location inputs or animation reconstruction.","verification":"2026-11-09 delivered pending user. Backend 5 focused tests; request no-current-outcome/predecessor/cutoff contract, Vue late/cache/retry, PR/rate contour separation and renderer-free target/source geometry checks pass. One vue-tsc plus focused SFC compile, no browser/DOM/visual test. Source calls about 414/196/0.3ms, not UI latency. User had accepted preceding batter-switch acceleration only. Early/late and over/under contact unavailable; no predictive claim. User manual acceptance required before done."},
         {"id": "4", "label": "Slice 4 · Catcher Calling Context", "status": "planned", "deliverable": "Show observed game pairing, catcher changes, count/pitch mix and sequence context with supported links or season strategy-bridge diagnostics", "verification": "Pending: fielder_2 pairing reconciliation, pitcher-catcher-game counts, no caller attribution, no leaderboard and no best-pitch claim"},
         {"id": "5", "label": "Slice 5 · Stamina integration gate", "status": "planned", "deliverable": "Separate SP/RP role-specific Stamina trait and expected path from starter-only game Quality, Physical and Command signals", "verification": "Pending: 2026 role coverage rebuild, exact game joins, reliability/CI/minimum-pitch rules and explicit RP not-evaluated state"},
         {"id": "6", "label": "Slice 6 · Batter feature coverage Lab", "status": "planned", "deliverable": "Audit batter-game swing tracking and batted-ball fields, denominators, season coverage and missingness before any Game Center button", "verification": "Pending: 2023–2026 coverage, 2026 pitch-level coverage, handedness/substitute splits, small-sample cases and source reconciliation"},
@@ -290,9 +675,9 @@
       "title": "Petehub Ballpark Game System",
       "area": "Product architecture and game UX",
       "status": "in_progress",
-      "updated_at": "2026-11-06",
-      "summary": "Thirty-six of 66 slices complete. User requested push, preservation of reusable UI and F1 start. Checkpoint d25f602 pushed to origin/main. F1 implemented pending user: canonical Game/Leaderboard context and URL persistence, identity/race/fallback handling, snapshot/cutoff labels and preserved shared In game UI/guarded keyboard R. New F1 source contracts and direct vue-tsc pass are not visual acceptance. E6 numeric gate remains pending; all seven F2 children still planned.",
-      "next_step": "User performs the five F1 checks documented atop PETEHUB_BALLPARK_GAME_SYSTEM.md: GAME/objects/direct entry, game/pitcher/tab/refresh identity, scoreboard leaderboard year/team/view/cutoff, preserved name/notes/count-card/video UI, and guarded R return without banner. F1 stays in_progress until report. Do not reopen accepted D/E1-E5 or original 3H. Rejected photo/PNG rendering awaits separately authorized F2 replacement; do not install engines/start F2 or NPCs. E6 measurements remain pending.",
+      "updated_at": "2026-11-07",
+      "summary": "40/66 complete. Static F2.4/F2.6/F2.7 implementations delivered pending user acceptance: per-pitch arm-angle/release diagram, shared Game/Personal static renderer/fallback and official bullpen pitcher/outing picker. F2.1-F2.3 remain accepted. F2.5 skipped/deferred and G1-G6 deferred; no dynamic reconstruction. E6/F2.6 device/performance gate remains open.",
+      "next_step": "User acceptance only for latest F2 revision: pitcher/large diagram/Selected Pitch table removed; aligned heatmap/View/Compare controls and outer-right matchup sidebar; automatic Conditioned branch based on exact count/L-R batter/previous pitch, preserving PA descendants; native video-only popup in Game and Personal; original heatmap/R return. F2.4/F2.6/F2.7 still in_progress, F2.5/G motion deferred. Do not start F3 before this handoff/acceptance; E6/F2.6 performance/device release evidence remains outstanding.",
       "slices": [
         {"id": "A1", "label": "Section A · Slice A1 · Programme charter and roadmap", "status": "done", "deliverable": "Freeze the canonical Ballpark main document, roadmap, technical layers, MVP, non-goals and Classic UI principle", "verification": "docs/PETEHUB_BALLPARK_GAME_SYSTEM.md established Sections A-I and Classic compatibility; D2 was subsequently split into six smaller visual/asset gates, yielding 51 current slices without reopening Game Center slices"},
         {"id": "A2", "label": "Section A · Slice A2 · Official skill bootstrap", "status": "done", "deliverable": "Install official Playwright, Screenshot, Figma, Jupyter and security threat-model skills needed by later Sections", "verification": "Installed playwright, playwright-interactive, screenshot, figma, figma-create-design-system-rules, figma-generate-design, figma-implement-design, jupyter-notebook and security-threat-model from openai/skills curated"},
@@ -331,25 +716,25 @@
         {"id":"E4","label":"Section E · Slice E4 · Nuxt portal and overlay bridge","status":"done","deliverable":"Bridge object intents to existing Vue panels/canonical routes with URL/focus/scroll/auth/back/pause semantics; carry origin scene/object and safe return context so closing a panel returns to its facility rather than relying on arbitrary browser history","verification":"Implemented Nuxt object/year/player/game/date/mode queries, in-place paused overlay, focus trap/restore, scroll lock cleanup, Close/Escape/Back/forward/direct links. Account-scoped validated Classic return token + minimal app return link, no engine in global shell. C/R exits retained, no Classic R hijack. Source return/query contracts and direct vue-tsc PASS; user lifecycle/route/auth acceptance pending. E5 exact position persistence not implemented. Superseding acceptance: user explicitly clarified E3-E4 ALL passed and instructed E5-E6. Full delivered E3/E3.1-E3.3/E4 accepted; prior pending/partial interpretation superseded. No device-specific performance results inferred. Real team-player NPC art/random spawning stays planned F4."},
         {"id":"E5","label":"Section E · Slice E5 · World/session state","status":"done","deliverable":"Version last valid scene/position/facing and return context, with account isolation, recovery/migration and safe-spawn fallback across facility/Classic transitions","verification":"Delivered browser-local v1 saves per signed-in account: last room/team, nine-room pose/facing/object context, throttled writes and exact leave/pagehide/hidden/Classic checkpoints. Explicit one-use portal arrival wins; subsequent refresh restores pose. Current collision validates saves; invalid schema/account/coordinates/package changes recover safely. Storage denied/quota stays in memory with notice; no server/cross-device sync or avatar change. Seven focused source contracts and direct vue-tsc PASS; user refresh/relogin/account isolation/portal/Classic acceptance pending. Superseding user acceptance: all operations reported fine; delivered E5 operation scope accepted as aggregate, slice done. No per-device/numeric certification invented. New single-link/text UI followups await user separately."},
         {"id":"E6","label":"Section E · Slice E6 · Runtime release gate","status":"in_progress","deliverable":"Audit desktop/narrow/keyboard/reduced-motion/low-end/idle behavior","verification":"Earlier delivered operations accepted by user. Numeric/device release remains in_progress: production loading/input/frame, retained-heap/GPU and available-device measurements absent. Recorder/source/typecheck are not certification. All-object direct entry and prior keyboard R accepted; latest floating-banner removal lacks separate explicit final acceptance. Preserve historical evidence snapshots. Recommend user baseline before changes; full device certification is not a prerequisite to separately authorized isolated development, but release needs E6 and new-renderer F2.6 evidence."},
-        {"id": "F1", "label": "Section F · Slice F1 · Main field, Game and Leaderboard", "status": "in_progress", "deliverable": "Preserve approved Campus GAME to Game facility and three direct canonical Game objects, plus outfield scoreboard/DOM Leaderboard. Carry/synchronize Game year/date/game_pk/pitcher_id/tab and ranking year/team/view/role; explicit snapshot/cutoff/empty/error/fallback states, request isolation and guarded origin return. Reuse existing mother pages and formulas; no new renderer or art.", "verification": "2026-11-06 user authorized checkpoint push, retained-UI closeout and F1. d25f602 pushed. Source implementation delivered: exact game/pitcher/tab and historical date restoration, race-safe game detail, unavailable fallback, Leaderboard query context, no fabricated Basic cutoff or PR-population change. Selected pitch details use real-name fields; original links/folded notes/exact-count cards and invisible keyboard R retained. New pure Node/Vue source/data contract script and one direct vue-tsc PASS. No browser/DOM/image/HTTP/login fixture/server or numeric performance acceptance. Five user checks pending in main document; evidence petehub_ballpark_f1_source_gate_v1.json. F1 not done; E6 pending; F2/G/F4 not started."},
-        {"id": "F2", "label": "Section F · Slice F2 · Pitching and Batting facilities", "status": "planned", "deliverable": "Parent F2.1-F2.7: scoped shared mother-site historical 3D field/camera, generic rigged pitcher/batter, deterministic clock, measured-swing source adapter, integration/release plus original pitching/batting facility parity and both official-roster bullpen actors. Preserve approved 2D Ballpark/V2/V3 avatars/F4 scope.", "verification": "All seven children planned on 2026-11-06; user requested roadmap/state review, not implementation. Parent requires its real scope, not just the 3D panel. Rejected flat-photo pan/PNG actor/foreground offset is not visual pass. Preserve Statcast/pitch/video/rate contracts; follow child manual and quantitative gates; no all-team modeling or synthetic simulation authorization."},
-        {"id": "F2.1", "label": "Section F · Slice F2.1 · Preservation and 3D replay contract", "status": "planned", "deliverable": "Freeze preserved shared In game data/UI and replacement inventory, source coverage, coordinate/unit/time/camera/fallback contract, asset/tool/license feasibility and local-renderer decision. Three.js is a preferred candidate, not an installed or approved production dependency. Record a recoverable Git checkpoint before code replacement.", "verification": "Planning only on 2026-11-06. Pending immutable Statcast/pitch/video identity reconciliation, explicit generic-versus-measured coverage, local loading/resource budget and user-approved first implementation batch. Do not repeat accepted 3H data/PR or D/E acceptance; no image generation, engine installation or implementation authorized by this plan."},
-        {"id": "F2.2", "label": "Section F · Slice F2.2 · Unified 3D field, camera and release geometry", "status": "planned", "deliverable": "One world-space plate, chalk boxes, mound/rubber, strike zone and unchanged historical pitch path; catcher/pitcher/side camera presets, true orbit/dolly and clipping/reset limits. Release marker uses each pitch release_pos_x/y/z; no fixed-photo pan or screen-space foreground offset.", "verification": "Depends on F2.1. User verifies perspective/parallax, view rotation, plate/box geometry and release over mound toward measured plate location. Any actor marker is an explicit temporary geometry aid, not accepted character art. Numeric coordinate invariance is source-only, not visual acceptance."},
-        {"id": "F2.3", "label": "Section F · Slice F2.3 · Editable generic pitcher/batter rig assets", "status": "planned", "deliverable": "Normal-proportion animated 3D pitcher/batter, editable source plus GLB/glTF, skeleton/handedness/bat-grip/foot anchors, materials, asset versions, provenance/license, LOD and resource budgets. Present rigged model and ready/idle pose before authoring remaining clips. Preserve approved Ballpark V2/V3 pixel assets.", "verification": "Depends on F2.1/F2.2 scale. User accepts model appearance from multiple camera angles, left/right grip, grounded feet and initial idle. No stretched PNG, undocumented model license or claim of full-team/player-specific biomechanics; no asset production yet."},
-        {"id": "F2.4", "label": "Section F · Slice F2.4 · Deterministic pitch/bat animation timeline", "status": "planned", "deliverable": "Shared pre-pitch/release/plate-or-contact/post-pitch clock; ready/load/stride/swing/follow-through/recover/take and generic pitching. Sample clips deterministically for pause/seek/speed/replay; align generic pitcher hand to actual release without changing source ball path. Explicit unknown contact/swing timing fallback.", "verification": "Depends on F2.2/F2.3. User verifies left/right pitchers/batters, take/whiff and timeline synchronization; source tests reconcile per-pitch path and repeatable seek. No false contact, invented measured swing timing or synthetic result in historical replay."},
-        {"id": "F2.5", "label": "Section F · Slice F2.5 · Measured swing-source audit and overlay adapter", "status": "planned", "deliverable": "Audit per-frame bat-tip/handle versus per-swing scalar versus season-average/generic coverage; define same-pitch time/coordinates/source/coverage adapter and unavailable states. Draw measured bat paths only when a valid source exists; scalar bat speed/length/attack angle cannot uniquely reconstruct a measured swing.", "verification": "Depends on F2.1 and F2.4 time contract. Initial deliverable may be a completed source audit, adapter and truthful unavailable behavior; that does not claim real bat-path coverage. Later data integration is conditional on verified source. Generic/average/measured remain visibly separate; no forced full-season collection."},
-        {"id": "F2.6", "label": "Section F · Slice F2.6 · Shared integration and renderer release gate", "status": "planned", "deliverable": "One lazy 3D replay component for mother-site Game and Pitcher Personal, reached by canonical Ballpark links. Preserve DOM heatmap/cards/video/auth/router, selection/context and keyboard R; implement low-performance/no-WebGL/error fallback, resource cleanup and explicit rollout/rollback.", "verification": "Depends on F2.2-F2.4 and F2.5 data-state contract, not nonexistent measured swing coverage. User verifies both mother-site entries, selection/video/return, reduced motion and available devices. Measure new renderer loading/frame/input/resources separately from existing E6; missing evidence cannot become production-ready. Core integration can ship with explicit unavailable bat-path only after its required gates."},
-        {"id": "F2.7", "label": "Section F · Slice F2.7 · Facility parity and bullpen roster actors", "status": "planned", "deliverable": "Preserve original F2 facility work: personal/comparison/released-Lab parity and both In game lanes' official-team eligible pitcher appearances with generic pitching, manual pitcher/outing priority and net depth. Reuse shared panel and E3/E4 bridge; no global Ballpark 3D conversion.", "verification": "Pending identity/freshness, manual-selection isolation, actor lifecycle/net occlusion, accessible equivalent links and user facility acceptance. Full player-specific art, cross-Campus patrol and dialogue remain F4. Completing the 3D panel alone does not complete facility parity or parent F2."},
+        {"id": "F1", "label": "Section F · Slice F1 · Main field, Game and Leaderboard", "status": "done", "deliverable": "Preserve approved Campus GAME to Game facility and three direct canonical Game objects, plus outfield scoreboard/DOM Leaderboard. Carry/synchronize Game year/date/game_pk/pitcher_id/tab and ranking year/team/view/role; explicit snapshot/cutoff/empty/error/fallback states, request isolation and guarded origin return. Reuse existing mother pages and formulas; no new renderer or art.", "verification": "2026-11-06 user authorized checkpoint push, retained-UI closeout and F1. d25f602 pushed. Source implementation delivered: exact game/pitcher/tab and historical date restoration, race-safe game detail, unavailable fallback, Leaderboard query context, no fabricated Basic cutoff or PR-population change. Selected pitch details use real-name fields; original links/folded notes/exact-count cards and invisible keyboard R retained. New pure Node/Vue source/data contract script and one direct vue-tsc PASS. No browser/DOM/image/HTTP/login fixture/server or numeric performance acceptance. Five user checks pending in main document; evidence petehub_ballpark_f1_source_gate_v1.json. F1 not done; E6 pending; F2/G/F4 not started. Superseding user report: other F1 items have no problems; only default favorite-team game selection requested. Implemented explicit-game priority, favorite home/away selection within current date/scope, fallback without changing dates/team filters, and on-page favorite change. Extended existing source tests pass for default/change/no-game/explicit-game cases; no browser, build or repeated full typecheck. Only this followup remains user-pending; do not repeat accepted checks or invent device certification. Final superseding user acceptance: favorite-team fix accepted; user specified white name link as final condition and F1 complete after edit, then authorized F2. BatterInGameHeatmap header link/visited now white with focus outline. F1 done by conditional user acceptance; no assistant visual test or repeated F1 checklist."},
+        {"id": "F2", "label": "Section F · Slice F2 · Pitching and Batting facilities", "status": "in_progress", "deliverable": "Current static scope: F2.1-F2.3 accepted; F2.4 static arm-angle plus source release XYZ/height/extension, F2.6 shared static renderer/integration gate, F2.7 pitching/batting functionality and manual bullpen pitcher/outing selection. Historical ball-only playback remains. F2.5 measured swing and Section G motion work deferred, not blockers.", "verification": "40/66 unchanged. F2.4/F2.6/F2.7 static implementations delivered 2026-11-07 pending user acceptance; F2.5 explicitly skipped/deferred, G1-G6 deferred. Current required children six, three accepted. No animation/capture/retargeting resumed. Renderer/device/performance release evidence and E6 remain open."},
+        {"id": "F2.1", "label": "Section F · Slice F2.1 · Preservation and 3D replay contract", "status": "done", "deliverable": "Freeze preserved shared In game data/UI and replacement inventory, source coverage, coordinate/unit/time/camera/fallback contract, asset/tool/license feasibility and local-renderer decision. Three.js is a preferred candidate, not an installed or approved production dependency. Record a recoverable Git checkpoint before code replacement.", "verification": "Contract/source scope completed after explicit F2 start. Base pushed b7d720c plus output/ballpark/f2-preflight-v1/f1-preserved-ui.patch preserves latest F1 source delta. Freeze historical_replay_scene_v1, ft-to-metre (X,Z,-Y) mapping, 60.5ft rubber, 17/12ft plate plane, source release/time, generic guide and unavailable measured bat-path boundaries. Locally lazy Three.js/@types 0.187.0 MIT pinned; no global/Ballpark engine replacement, no existing rig/Blender CLI found in inspected sources. On-demand lifecycle, fallback and explicit unmeasured budgets recorded. Numeric/source tests and one direct vue-tsc PASS, not browser/GPU/device acceptance. Evidence petehub_pitch_replay_3d_f2_1_2_v1.json."},
+        {"id": "F2.2", "label": "Section F · Slice F2.2 · Unified 3D field, camera and release geometry", "status": "done", "deliverable": "One world-space plate, chalk boxes, mound/rubber, strike zone and unchanged historical pitch path; catcher/pitcher/side camera presets, true orbit/dolly and clipping/reset limits. Release marker uses each pitch release_pos_x/y/z; no fixed-photo pan or screen-space foreground offset.", "verification": "User explicitly reported this delivery passed on 2026-11-06, including far dirt patch radius reduced from 10m to 10/3m. Geometry/camera/source-release, plate/boxes/zone/heatmap/playback and preserved UI scope accepted by user; F2.2 done. Earlier numeric/source checks and vue-tsc remain source-only evidence. Agent performed no browser/visual/input verification. No formal rig claimed, E6/F2.6 device/performance certification remains open. Model/animation work paused for requested preliminary data inventory."},
+        {"id": "F2.3", "label": "Section F · Slice F2.3 · Editable generic pitcher/batter rig assets", "status": "done", "deliverable": "Normal-proportion generic animated pitcher/batter; editable source plus GLB/glTF, skeleton/handedness/bat/foot anchors, current listed bio height proportions with explicit generic limb fallback. Separate home/away jersey/cap/pants/number material variants; rotatable generic head/face, skin/hair/facial-hair variants, followed by staged MLBAM-linked player likeness references. Version/provenance/license/LOD/resource budgets. First user appearance/ready/idle gate; no full-team production or replacement of approved 2D avatars.", "verification": "Latest user rejected jersey appearance and bare feet painted as shoes. Strengthened loose mother-surface jersey silhouette without changing shared seam POSITION/JOINTS/WEIGHTS; added team collar/cuffs/placket piping and adjusted badge/buttons. Removed original bare-foot faces; each foot now has separate closed cleat upper, outsole, four lace cords and eight physical studs, skinned to its foot joint in editable glTF/GLB. 4,107,456 bytes, 13,864 triangles, 65 joints, 10 clips. Preserved corrected primary-palm bat ownership, secondary-hand IK and capped wrist adjustment. Targeted garment material/footwear structure and attachment/handed grip/pose checks plus one direct vue-tsc pass; no browser, screenshots, image comparison or visual pass. User checks jersey and cleat appearance and ready/idle seams in Game/Personal. F2.3 in progress; F2.4 not begun; generic likeness gaps remain. Follow-up user reported cuff protrusion: removed rigid forearm cuff rings, cuff now uses existing sleeve faces with identical blended skin weights/accessors; rebuilt GLB and ran only targeted actor source check. Latest cuff visual acceptance still pending. On 2026-11-06 user explicitly reported this part accepted after the cuff correction and expanded up/down camera orbit. Generic appearance/ready-idle gate accepted by the user; no agent visual test. F2.3 done; full pitching/swing clock remains F2.4, not delivered by this acceptance. Personal likeness and exact historical kit editions remain out of this accepted generic milestone."},
+        {"id": "F2.4", "label": "Section F / Slice F2.4 / Static source release analysis", "status": "in_progress", "deliverable": "Preserve source release XYZ/height/extension and arm-angle numeric readouts with immutable ball paths. User removed the 3D pitcher and large schematic diagram; static batter only. No body reconstruction, pose capture or animation.", "verification": "Latest user rejected the pitcher illustration/large arm-angle card and requested removal; both removed. Source gold release point and numeric data remain. F2.4 remains in_progress pending acceptance of current source-only presentation, not prior discarded poses. No animation or new model work."},
+        {"id": "F2.5", "label": "Section F · Slice F2.5 · Measured swing-source audit and overlay adapter", "status": "deferred", "deliverable": "Audit per-frame bat-tip/handle versus per-swing scalar versus season-average/generic coverage; define same-pitch time/coordinates/source/coverage adapter and unavailable states. Draw measured bat paths only when a valid source exists; scalar bat speed/length/attack angle cannot uniquely reconstruct a measured swing.", "verification": "User explicitly skipped F2.5 on 2026-11-07 and prohibited further dynamic reconstruction. Deferred, not done, and not a prerequisite for static F2.6/F2 closeout. Keep archived unavailable/source distinctions; no measured path, pose capture, ML or retargeting resumed."},
+        {"id": "F2.6", "label": "Section F / Slice F2.6 / Shared static integration and renderer release gate", "status": "in_progress", "deliverable": "One lazy shared static In game renderer/arm-angle view for mother-site Game/Personal and Ballpark canonical entry/R return. Preserve source ball playback, DOM heatmap/cards/video/keyboard, fallback/unmount/resource gates, listed bio height and historical home-away uniforms. No actor animation, measured swing or full-team face requirement.", "verification": "Latest revised delivery pending user: removed pitcher/large diagram/Selected Pitch bottom table; compact aligned controls; matchup cards moved to outermost right ReplayPanel sidebar (six pitch types + expand). Bottom Sequence uses existing Conditioned branch with anchors matching season pitcher/current exact count/L-R batter/previous same-PA pitch and retains downstream descendants. Shared Game/Personal native PitchVideoPlayer uses existing direct-media resolver instead of full Savant iframe. 3 backend branch/adjacency tests, frontend previous-pitch/video-state checks and one vue-tsc PASS, not visual/playback/device acceptance. All motion disabled; E6/F2.6 performance/device release gate remains open. User then reported empty video body and absent Sequence. Game/Personal now explicitly import PitchVideoPlayer; ReplayPanel explicitly imports/uses InGameSequence instead of auto/Lazy names. Three SFC compiler binding checks and vue-tsc PASS. Runtime cause and actual video/branch rendering remain unconfirmed pending user; no browser verification."},
+        {"id": "F2.7", "label": "Section F / Slice F2.7 / Pitching and batting facility functionality parity", "status": "in_progress", "deliverable": "Complete personal/comparison/released-Lab facility parity, both bullpen lanes manual pitcher/outing choices and official roster freshness, direct equivalents and R return. Static representative figures are sufficient; no pitching animation or new full-team likeness requirement. Reuse shared F2.6 panel and E3/E4 bridge; future real-player NPC spawn/dialogue belongs to F4.", "verification": "Static functionality delivered pending user. Existing batting/pitching personal/comparison/released-Lab canonical links preserved. Both bullpen entries open mother-site Personal In game with west/east lane context and official active-roster picker (Pitcher only, freshness/retrieved/source_as_of), year/team, manual historical pitcher priority and outing selection. First official entry only when unspecified; no fabricated roster/random NPC. Valid game preserved, unavailable requested game explicitly falls back latest; URL lane/origin and guarded R retained. Focused numerical/in-memory tests for identity/manual/late/error/unavailable states and vue-tsc PASS. Net/depth/entry/R/UI acceptance remains user-only. Real player spawns/dialogue F4; no animation."},
         {"id": "F3", "label": "Section F · Slice F3 · Training & Lab", "status": "planned", "deliverable": "Expose released Plus, Stamina, Performance State, comparison and calculator tools", "verification": "Pending research/production labeling and no duplicated formulas"},
         {"id":"F4","label":"Section F / Slice F4 / Team-player NPCs across Campus and rooms","status":"planned","deliverable":"User clarified NPCs mean real players of the viewing/favorite team, randomly appearing across Campus and applicable rooms, not generic guides. Define official active-roster identity pool, independent approved V2 player art, spawn points, dialogue and player-data access. Retain initial 8-10 Clubhouse representatives and complete PLAYER LIST, without limiting NPC appearances to Clubhouse. Courtyard may host occasional fictional smoking/chat activities. Cadence/density/deduplication/patrol/activity rules require explicit specification; keep exits clear and preserve roster freshness. Only V2 Gabriel Moreno sample exists; full team art and random spawning are not implemented. This slice remains planned, not started.","verification":"Pending user approval of roster-driven player identities/art, Campus and room spawn locations/cadence, dialogues, safe paths and direct PLAYER LIST/data equivalents; real-player modeling and random activity are not certified by generic E3 guides."},
         {"id": "F5", "label": "Section F · Slice F5 · Team Office", "status": "planned", "deliverable": "Build Coach rotation/bullpen/lineup and GM transactions/payroll/contracts rooms", "verification": "Pending team switching, freshness, permissions and Team page parity"},
         {"id": "F6", "label": "Section F · Slice F6 · Video/Game Room and parity gate", "status": "planned", "deliverable": "Expose recommended videos, reserve mini-game space and audit every core facility route", "verification": "Pending unavailable fallback, direct links, Classic reachability and authenticated browser audit"},
-        {"id": "G1", "label": "Section G · Slice G1 · Motion data and bio feasibility", "status": "planned", "deliverable": "Extend player-specific bio/stance/motion coverage beyond F2 generic historical replay; preserve explicit generic fallbacks.", "verification": "Pending provenance, coverage and no height inference from release point 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
-        {"id": "G2", "label": "Section G · Slice G2 · Engine decision spike", "status": "planned", "deliverable": "Compare advanced engine extensions only after measured F2 limitations justify them; reuse base renderer decision otherwise.", "verification": "Pending quality/bundle/FPS/memory/cost/mobile measurements 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
-        {"id": "G3", "label": "Section G · Slice G3 · Rigged asset and animation pipeline", "status": "planned", "deliverable": "Extend F2 rig/pipeline with player-specific clips, retargeting and broader coverage; do not rebuild base assets.", "verification": "Pending reusable clips, license, size and handedness rules 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
-        {"id": "G4", "label": "Section G · Slice G4 · Pitcher motion and release event", "status": "planned", "deliverable": "Extend F2 generic release clock to player-specific pitching and separately authorized H event adapters; keep historical and synthetic modes distinct.", "verification": "Pending handedness/arm-slot/pause/replay and trajectory invariance 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
-        {"id": "G5", "label": "Section G · Slice G5 · Batter swing and contact event", "status": "planned", "deliverable": "Extend F2 batter/clock/data adapter with player-specific/check/timing Motion Lab cases and separately authorized H adapters.", "verification": "Pending handedness and timing/location/take/check cases 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
-        {"id": "G6", "label": "Section G · Slice G6 · Motion Lab release gate", "status": "planned", "deliverable": "Certify expanded Post-MVP Motion Lab/audio/HUD/devices and any synthetic integration; reuse base F2.6 evidence and test added risks.", "verification": "Pending release/no-release decision; SVG Replay remains fallback 2026-11-06 planning: generic historical renderer/rig/clock has a single owner F2.1-F2.6; G remains planned for advanced extensions, not duplicated work or automatic simulation approval."},
+        {"id": "G1", "label": "Section G · Slice G1 · Motion data and bio feasibility", "status": "deferred", "deliverable": "Audit video-to-pitch identity, fetchable full-motion clips, FPS/slow-motion/camera/occlusion, bio and per-frame pose coverage for player-specific reconstruction. Prototype contrasting high-slot and sidearm pitchers, including user examples Yesavage/Thompson when suitable source is available; no full-season crawl.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
+        {"id": "G2", "label": "Section G · Slice G2 · Engine decision spike", "status": "deferred", "deliverable": "Compare advanced engine extensions only after measured F2 limitations justify them; reuse base renderer decision otherwise.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
+        {"id": "G3", "label": "Section G · Slice G3 · Rigged asset and animation pipeline", "status": "deferred", "deliverable": "Reuse F2 rig and add offline video pose estimation, temporal filtering, camera/field calibration and retargeted individual clips. Store model/source/license, per-joint confidence, measured versus estimated coordinates and reusable cached animation assets.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
+        {"id": "G4", "label": "Section G · Slice G4 · Pitcher motion and release event", "status": "deferred", "deliverable": "Extend F2 with player/year-specific pitch-motion templates learned from suitable video and constrained by per-pitch release XYZ/arm angle/extension. Align feet, body and release clock, quantify fit/confidence and retain generic fallback; historical motion reconstruction separate from synthetic H simulation.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
+        {"id": "G5", "label": "Section G · Slice G5 · Batter swing and contact event", "status": "deferred", "deliverable": "User explicitly paused all actor-motion design 2026-11-07. Static ready batter and pitcher only. Preserve historical ball paths/heatmap and archived source/B assets; disable research entry points, automatic reference loading and retargeting.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
+        {"id": "G6", "label": "Section G · Slice G6 · Motion Lab release gate", "status": "deferred", "deliverable": "Certify expanded Post-MVP Motion Lab/audio/HUD/devices and any synthetic integration; reuse base F2.6 evidence and test added risks.", "verification": "2026-11-07 static-scope replan: Section G motion/pose capture/advanced-engine/Lab work deferred, with prior sources and scoped acceptances preserved as historical evidence. No new ML, video pose, retarget or animation work; no implicit completion. Not a prerequisite for current F2 static analysis or F3 facilities. New explicit instruction required to resume."},
         {"id": "H1", "label": "Section H · Slice H1 · Simulation domain contract", "status": "planned", "deliverable": "Version and separate synthetic seed/clock/state/events from historical replay", "verification": "Pending deterministic replay and vocabulary/data isolation"},
         {"id": "H2", "label": "Section H · Slice H2 · Roster, ratings and role state", "status": "planned", "deliverable": "Version point-in-time ratings, roles, stamina and substitutions", "verification": "Pending sources, season boundaries and unavailable states"},
         {"id": "H3", "label": "Section H · Slice H3 · Pitch choice, location and outcome", "status": "planned", "deliverable": "Integrate only research components that pass release gates", "verification": "Pending probability/calibration/impossible/cold-start/leakage tests"},
