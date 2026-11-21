@@ -1,0 +1,12 @@
+{
+  "version": "decision_exploratory_v1",
+  "passed": true,
+  "prior_artifacts_unchanged": 1699,
+  "new_artifacts_verified": 182,
+  "candidate_rows": 13758,
+  "scenario_rows": 6068,
+  "source_only": true,
+  "visual_acceptance": "pending_user",
+  "formal_efficacy_passed": false,
+  "test2025_outcomes_examined": false
+}

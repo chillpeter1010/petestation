@@ -1,0 +1,307 @@
+{
+  "version": "decision_role_observation_v2",
+  "protocol_sha256": "df433ce70c7a7c990b593c7e7fddb1f3c9f8f5051531d7eeb311cc66ed9317c2",
+  "years": [
+    {
+      "year": 2021,
+      "option_rows": 1716128,
+      "unique_profiles": 47156,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1085631,
+          "last_stuff": 530461,
+          "three_appearance_stuff": 531179,
+          "three_day_stuff": 387303,
+          "five_day_stuff": 475534,
+          "last_quality": 119732
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 498575,
+          "last_stuff": 249837,
+          "three_appearance_stuff": 250373,
+          "three_day_stuff": 131334,
+          "five_day_stuff": 215339,
+          "last_quality": 72240
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 39515,
+          "last_stuff": 18098,
+          "three_appearance_stuff": 18134,
+          "three_day_stuff": 9206,
+          "five_day_stuff": 14432,
+          "last_quality": 3933
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 92407,
+          "last_stuff": 41533,
+          "three_appearance_stuff": 41659,
+          "three_day_stuff": 25,
+          "five_day_stuff": 9928,
+          "last_quality": 10301
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    },
+    {
+      "year": 2022,
+      "option_rows": 1774983,
+      "unique_profiles": 45823,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1107781,
+          "last_stuff": 1071674,
+          "three_appearance_stuff": 1072122,
+          "three_day_stuff": 770148,
+          "five_day_stuff": 965330,
+          "last_quality": 659962
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 529881,
+          "last_stuff": 520658,
+          "three_appearance_stuff": 520947,
+          "three_day_stuff": 279498,
+          "five_day_stuff": 465759,
+          "last_quality": 410106
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 40968,
+          "last_stuff": 38130,
+          "three_appearance_stuff": 38163,
+          "three_day_stuff": 17477,
+          "five_day_stuff": 29203,
+          "last_quality": 22675
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96353,
+          "last_stuff": 90253,
+          "three_appearance_stuff": 90360,
+          "three_day_stuff": 14,
+          "five_day_stuff": 23825,
+          "last_quality": 70735
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    },
+    {
+      "year": 2023,
+      "option_rows": 1726750,
+      "unique_profiles": 44440,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1065503,
+          "last_stuff": 1028109,
+          "three_appearance_stuff": 1028763,
+          "three_day_stuff": 743959,
+          "five_day_stuff": 936123,
+          "last_quality": 604116
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 521678,
+          "last_stuff": 511152,
+          "three_appearance_stuff": 511394,
+          "three_day_stuff": 268758,
+          "five_day_stuff": 453925,
+          "last_quality": 396359
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 43704,
+          "last_stuff": 40437,
+          "three_appearance_stuff": 40470,
+          "three_day_stuff": 17921,
+          "five_day_stuff": 30484,
+          "last_quality": 22637
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 95865,
+          "last_stuff": 89581,
+          "three_appearance_stuff": 89636,
+          "three_day_stuff": 73,
+          "five_day_stuff": 21022,
+          "last_quality": 69965
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    },
+    {
+      "year": 2024,
+      "option_rows": 1728765,
+      "unique_profiles": 44970,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1054536,
+          "last_stuff": 1022989,
+          "three_appearance_stuff": 1023360,
+          "three_day_stuff": 740775,
+          "five_day_stuff": 929646,
+          "last_quality": 573740
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 536149,
+          "last_stuff": 526670,
+          "three_appearance_stuff": 526959,
+          "three_day_stuff": 276512,
+          "five_day_stuff": 467561,
+          "last_quality": 415036
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 41450,
+          "last_stuff": 38461,
+          "three_appearance_stuff": 38479,
+          "three_day_stuff": 17919,
+          "five_day_stuff": 30186,
+          "last_quality": 20659
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96630,
+          "last_stuff": 90550,
+          "three_appearance_stuff": 90611,
+          "three_day_stuff": 46,
+          "five_day_stuff": 20469,
+          "last_quality": 71899
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    },
+    {
+      "year": 2025,
+      "option_rows": 1731915,
+      "unique_profiles": 45269,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1050218,
+          "last_stuff": 1039370,
+          "three_appearance_stuff": 1039535,
+          "three_day_stuff": 739369,
+          "five_day_stuff": 926138,
+          "last_quality": 554715
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 543323,
+          "last_stuff": 542326,
+          "three_appearance_stuff": 542411,
+          "three_day_stuff": 278534,
+          "five_day_stuff": 471979,
+          "last_quality": 420103
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 42070,
+          "last_stuff": 40396,
+          "three_appearance_stuff": 40412,
+          "three_day_stuff": 18406,
+          "five_day_stuff": 30462,
+          "last_quality": 20595
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96304,
+          "last_stuff": 94298,
+          "three_appearance_stuff": 94308,
+          "three_day_stuff": 3,
+          "five_day_stuff": 19216,
+          "last_quality": 73612
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    },
+    {
+      "year": 2026,
+      "option_rows": 1736929,
+      "unique_profiles": 45247,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1052359,
+          "last_stuff": 1041673,
+          "three_appearance_stuff": 1042631,
+          "three_day_stuff": 741256,
+          "five_day_stuff": 926937,
+          "last_quality": 523896
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 545374,
+          "last_stuff": 544842,
+          "three_appearance_stuff": 545009,
+          "three_day_stuff": 280367,
+          "five_day_stuff": 474973,
+          "last_quality": 394812
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 45417,
+          "last_stuff": 43815,
+          "three_appearance_stuff": 43886,
+          "three_day_stuff": 18725,
+          "five_day_stuff": 31291,
+          "last_quality": 20894
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 93779,
+          "last_stuff": 92421,
+          "three_appearance_stuff": 92528,
+          "three_day_stuff": 27,
+          "five_day_stuff": 18759,
+          "last_quality": 68119
+        }
+      ],
+      "time_violations": 0,
+      "scope": "same observed role; raw measures may cross versions, Plus/state comparisons require requested model version; latest history is closed strictly before decision",
+      "intervals": "Descriptive normal central80 interval of appearance means, only n>=2; serial/model uncertainty not included. No recent appearance is not a normal-state observation."
+    }
+  ],
+  "scope": "Closed same-role history with model-compatible Plus/state; raw timestamps and denominators retained; unknown readiness"
+}

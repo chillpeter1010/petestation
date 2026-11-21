@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-14",
+  "updated_at": "2026-11-19",
   "instructions": "This is the authoritative project and slice tracker. Update project status, slice status, verification, next_step and updated_at whenever scoped work materially changes. Then run backend/scripts/sync_project_tracker.py to regenerate docs/PROJECT_TRACKER.md and the marked current-progress block in docs/NEXT_CHAT_HANDOFF.md. Keep one canonical human-readable Markdown document per small project; represent slices as sections inside it and keep exact generated evidence in machine-readable artifacts.",
   "status_legend": {
     "idea": "Captured but not scoped",
@@ -62,11 +62,11 @@
   "title": "換投決策與預警研究 / Pitcher Decision Lab",
   "area": "Pitcher Lab",
   "status": "in_progress",
-  "updated_at": "2026-11-14",
+  "updated_at": "2026-11-21",
   "document": "docs/PITCHER_DECISION_SUPPORT.md",
   "route": "/lab/decision-support",
-  "summary": "Slices 0–10 研究資料層與歷史特徵已完成：保留暖機、建立獨立研究 Plus、先發／牛棚 prefix 三訊號與 WE／RE／PA-LI；正式模型保留，個別排名與預警晉升關閉。",
-  "next_step": "新增 Slice 6–10 結果區待使用者人工驗收；下一階段為 Slice 11 決策樣本庫與探索分析，尚未開始，須使用者指示。",
+  "summary": "16.1–16.3探索回測交付51/58；整合提醒、共同截點人選與下一PA／固定半局情境另版完成。正式策略效益未通過、2025封存。",
+  "next_step": "使用者驗收Lab#exploratory-replay單場提醒與實際換投時間軸；依支持與敏感度結果決定正式效益修訂。原15.4資格保留，16主項進行中，17–21未啟動。",
   "phases": [
     {
       "id": "data",
@@ -292,7 +292,7 @@
       "id": "11",
       "phase": "models",
       "label": "Slice 11 · 決策樣本庫與探索分析",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
         "5",
         "8",
@@ -300,69 +300,528 @@
         "10"
       ],
       "deliverable": "整合合法續投與換投機會、前置特徵、候選及固定範圍結果；分析用球、球質變化、LI 與教練選擇。",
-      "verification": "Pending",
-      "acceptance": "公布每年每角色的共同分母與排除原因；分開結果相關性與決策效果，不只保留換投樣本。"
+      "verification": "2026-11-18：1,099,754 個原始邊界納入 824,462 個（741,172 續投、83,290 換投）；823,879 個有可用半局 WPA。六年主鍵、候選對帳與時間檢查零違規；結果標籤按時間與來源缺漏保留空值，24 組角色／年度／行動摘要及排除原因留存。Lab 新區待人工；資料完成與頁面驗收分開。",
+      "acceptance": "公布每年每角色的共同分母與排除原因；分開結果相關性與決策效果，不只保留換投樣本。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice11_v1.json"
+    },
+    {
+      "id": "12.1",
+      "phase": "models",
+      "label": "Slice 12.1 · 決策起點與轉移標籤清洗",
+      "status": "done",
+      "depends_on": [
+        "11"
+      ],
+      "deliverable": "核對 1,371 筆 play 起點／決策局面差異及 1,527 筆零球故意四壞，建立從決策時點起算的打席轉移與固定半局標籤；確認自動跑者、決策前跑壘事件、再見、局末、七局與打席中換投的分流規則。保存原始標籤、版本與逐列修正／排除理由。",
+      "verification": "2026-11-18：824,462 個事件起點對帳，1,371 筆差異分為 789 自動跑者放置與 582 其他決策前事件，起點核對失敗 0。重新計算從決策點起算的研究標籤，823,999 筆轉移可靠，2,066 筆故意四壞分流後一般打席有效 821,933。半局／時間與來源不可靠者保留原始列及旗標。局部起點與故意四壞回歸檢查通過。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_1_v1.json",
+      "acceptance": "分開列出可確認修正、合法特殊事件、未確認來源與缺值，各類加總回 Slice 11 分母；打席／半局起點一致，標籤可用時間晚於決策；故意四壞有獨立處理規格，轉移後比分／出局／壘包合法。未取得可靠來源的個案保留標記並退出相應基準。"
+    },
+    {
+      "id": "12.2",
+      "phase": "models",
+      "label": "Slice 12.2 · 特徵 coverage 與條件式補齊清單",
+      "status": "done",
+      "depends_on": [
+        "12.1"
+      ],
+      "deliverable": "建立逐欄字典及 year×SP/RP×續投/換投 coverage，另以決策×候選為分母稽核候選；分類未計算、對位失敗、原始追蹤缺漏、早期歷史不足、當場球數不足、超出模型支持與真實零值。對可重算欄位安排本機重算；對需外部來源者先保存來源可行性、下載範圍、成本及補後預期覆蓋。",
+      "verification": "2026-11-18：逐年×角色×行動的逐欄非空／有效支持／真零與候選獨立分母、型別／單位／缺值規則已保存。已核對 14,577 個既有官方快照 SHA；2020 唯一完成例行賽 898 場，單場 Statcast 小樣本 174 列，來源 URL／UTC／SHA 保存。更早整季補抓與重建成本、可改善項目及無法消除的當場支持限制列入條件式清單。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_2_v1.json",
+      "acceptance": "每欄列出原始可用、可靠支持、暖機／回退及最終模型可用分母。2021 年初歷史與 14 日左截斷保留標記；如需要擴大 2021 早期 coverage，先評估 2020 或更早資料可否形成完整訓練參考及跨年負荷，不能僅補前幾天即宣稱全部可算。後續各 adapter 均重報實際 coverage；補抓來源須有明確實作範圍。"
+    },
+    {
+      "id": "12.3",
+      "phase": "models",
+      "label": "Slice 12.3 · 決策前投打能力與手別摘要",
+      "status": "done",
+      "depends_on": [
+        "12.2"
+      ],
+      "deliverable": "用 MLBAM ID 和嚴格早於決策且已完成的打席建立投手／打者歷史 K、BB、HBP、HR、安打及出局結果分布、樣本數與觀測期間，接入投球手別、實際打擊側與左右拆分。統一現任與候選投手的能力欄位，記錄來源、截止時間、身分對位及冷啟動狀態。",
+      "verification": "2026-11-18：1,091,590 個可靠已完成打席建立投手角色／打者與左右拆分累積歷史；824,462 個決策各有投手及打者資料列，手別及預期站側覆蓋 100%。2022–2026 能力比率含凍結參考回退皆有值；2021 冷啟動保留缺值。保存自身樣本與回退狀態，原始排除逐列對帳；嚴格時間檢查零違規，同時刻／未來資料及左右開弓局部檢查通過。列冊手別可能事後修訂、左右開弓反側假設已揭露。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_3_v1.json",
+      "acceptance": "缺打擊側或手別保留 unknown；避免把當球事後結果、未來打席或完整球季率帶入。角色／手別／聯盟先驗與收縮參數只用訓練期估計，分開公布球員自身支持與先驗回退 coverage。中途換投的責任與打席歸屬沿官方帳本，歧義有排除理由；加入未來資料不得改變已凍結的過去特徵。"
+    },
+    {
+      "id": "12.4",
+      "phase": "models",
+      "label": "Slice 12.4 · 研究 Plus 與三項狀態特徵接線",
+      "status": "done",
+      "depends_on": [
+        "12.2",
+        "12.3"
+      ],
+      "deliverable": "將決策前已完成投球的研究 Stuff／Location 摘要、樣本數、來源 cutoff 與模型版本接成可用特徵。補齊 Quality／Physical／Command adapter 的區間、收縮權重、觀測時間、球數範圍和缺值原因；準備 Slice 13 的單項與組合消融欄位。",
+      "verification": "2026-11-18：六季同登板決策前 Stuff／Location 累積均值與有效 n、模型／cutoff，三項原始區間及收縮權重已接入。2024 Stuff／Location 摘要皆有 138,041／138,080 筆；三項狀態原始覆蓋與缺值保留。時間／區間／主鍵檢查通過，局部檢查確認同時刻與稍後投球不進摘要；未訓練增益或行動模型。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_4_v1.json",
+      "acceptance": "全場正式成績缺檔與研究 prefix 缺值分開列帳。先發 35 球／後援 10 球、100／60 球上限及重新暖機規則明示；保留原始缺值與獨立支持旗標。逐球摘要嚴格早於決策，缺測球不補 100；同季模型版本與時間對位檢查通過。Slice 12 的核心基準可獨立計算，三項增益在 Slice 13 驗證。"
+    },
+    {
+      "id": "12.5",
+      "phase": "models",
+      "label": "Slice 12.5 · 候選投手歷史與可用性契約",
+      "status": "done",
+      "depends_on": [
+        "12.3",
+        "12.4"
+      ],
+      "deliverable": "統一現任與名義候選的球員能力、角色、前次用球、休息、近 1／3／7／14 日負荷及已結束登板的最後三項狀態。保存名單信心、候選理由、歷史可用時間與缺值；產出角色替代池所需的可用特徵集合及後續個別人選的限制。",
+      "verification": "2026-11-18：六季 824,462 決策與 9,591,008 候選列完成 option_features／observed_features 接線，換投結果對位實際接任者特徵。各年度時間違規、重複鍵與捏造可用性皆 0；逐欄及至少一位／全部候選 coverage 已保存。2024 幾乎全部決策有至少一位具三項狀態，全部候選均有者僅 3.16%；能力含自身／訓練參考回退，不等於個人歷史充分。熱身、醫療、精確異動未知，個別排名關閉。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_5_v1.json",
+      "acceptance": "逐候選與逐決策均對帳，報告每欄 coverage 以及至少一位／全部候選有支持的比例；歷史狀態須已結束且可用時間早於決策。熱身、醫療、當日精確異動無可靠來源時維持未知；新增外部來源先完成來源稽核。個別牛棚排名 gate 保持關閉，Slice 14 先評估角色替代池。"
+    },
+    {
+      "id": "12.6",
+      "phase": "models",
+      "label": "Slice 12.6 · 時間切分、缺值與正則化協定",
+      "status": "done",
+      "depends_on": [
+        "12.1",
+        "12.2",
+        "12.3",
+        "12.4",
+        "12.5"
+      ],
+      "deliverable": "在訓練前凍結特徵白名單、目標範圍、類別編碼、未知類別、缺值旗標、必要補值、標準化及 L2／分層收縮候選。按 2021–2023 訓練、2024 驗證、2025 最終測試與 2026 回溯分配用途；建立相同分母的模型比較與按比賽／投手群聚的評估方案。",
+      "verification": "2026-11-18：decision_baseline_v1.2 凍結白名單、輸入／實作 SHA、2021–2023 訓練／2024 選設定／2025 最終測試／2026 評分。中位數＋缺值指示、StandardScaler、未知類別 one-hot 均只 fit 訓練；L2 alpha 0.0001／0.001、能力收縮 0／20 依 2024 選擇，按比賽等總權重與群聚評估。nullable boolean 編碼及再見非 HR 得分限制修正，兩次中止協定與部分產物另存並列 SHA；未變更特徵、時間切分及選模規則。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_6_v1.json",
+      "acceptance": "標準化、補值、歷史先驗與模型參數只在各訓練窗 fit；2024 選設定後凍結，2025／2026 結果不能回流選模。缺值處理前後 coverage 與樣本流向可追溯，極端值先查來源，不以全季分位數裁切。觀測行動是監督標籤／選項描述，實際接任者 ID 僅供對位選項特徵；未來實測球質與結果欄位禁止進入預測特徵。"
+    },
+    {
+      "id": "12.7",
+      "phase": "models",
+      "label": "Slice 12.7 · 三層基準與 2024 轉移驗證",
+      "status": "done",
+      "depends_on": [
+        "12.6"
+      ],
+      "deliverable": "建立局面、局面＋用球／負荷、再加投打能力的三層基準，預測打席結果與得分／出局／壘包轉移；沿同一可靠局面參考換算預期價值並列 2024 驗證。保存每列支援／回退、預測、模型與校準版本，以及原始／有效樣本流向。",
+      "verification": "2026-11-18：407,505 訓練／137,699 驗證一般打席，跑者守恆額外排除 0。局面／加負荷／加能力 PA log loss 1.520314／1.519161／1.500242，Brier 0.709403／0.708929／0.701695；保留能力層 alpha=0.001、收縮=20，無迭代上限警告。能力層 joint log loss 1.776664，下一 PA WPA RMSE 5.2783pp、RE24 RMSE 0.502300；價值誤差改善小。逐類校準、稀有轉移支持及 100 次比賽群聚區間完整保存；2024 不是獨立測試，2025／2026 僅保存預測。新摘要畫面待使用者驗收。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice12_7_v1.json",
+      "acceptance": "所有結果機率和為 1，轉移符合出局、壘包、得分與終局規則；相同分母比較 Brier、log loss、校準及 WPA／RE 誤差，稀有事件揭露支持。未通過或增益不明者保留簡單基準。三項狀態的下一段預測增益及個別換投效益分別留 Slice 13、14–16 驗證。"
     },
     {
       "id": "12",
       "phase": "models",
       "label": "Slice 12 · 打席結果與局面轉移基準",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
-        "11"
+        "12.7"
       ],
-      "deliverable": "建立局面-only、用球數及球員對位基準，預測打席結果與壘包／出局／比分轉移分布。",
-      "verification": "Pending",
-      "acceptance": "機率總和與轉移合法性通過；在 2024 比較 Brier、log loss、校準及 WPA／RE 誤差。"
+      "deliverable": "整合 12.1–12.7 的資料與三層基準，發布逐欄 coverage、特徵契約、時間協定、驗證結果及限制，完成父項結案。",
+      "verification": "2026-11-18：12.1–12.7 資料、候選契約、凍結協定與三層基準整合，逐欄 coverage、樣本流向、2024 機率／合法轉移／價值誤差及限制已發布；正式模型保留，僅研究交付。可作 Slice 13 對照；未開始狀態增益、半局行動價值或個別候選排名。Lab 新摘要僅 source 檢查，視覺驗收交由使用者。",
+      "evidence": "data/research/decision_baseline_v1/manifest.json",
+      "acceptance": "12.1–12.7 完成且版本與分母一致；原始與最終有效樣本數可追溯，2024 驗證與失敗項目完整揭露，再交付 Slice 13 使用。"
     },
     {
       "id": "13",
       "phase": "models",
       "label": "Slice 13 · 狀態指標增益與消融",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
         "12"
       ],
       "deliverable": "逐層加入 Stuff、Location、Quality、Physical、Command、近期負荷與角色特徵。",
-      "verification": "Pending",
+      "verification": "2026-11-18：decision_ablation_v1，實際續投prefix／接任者已結束歷史正確對位，時間違規0。完整支持訓練176,027／2024驗證77,794：支持基準LL1.502931、Plus1.502216、三狀態1.502980；Quality／Physical／Command單獨及合併未通過增益門檻，Plus保留研究候選。十個相同分母消融與全分母407,505／137,699對照、分群、100次比賽群聚區間均保存；全分母All對自身支持基準改善，但對Slice12原始基準Brier未改善。未晉升正式模型，2025／2026僅存機率未開結果。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_v1.json",
       "acceptance": "以相同樣本、相同未來時窗比較；只保留穩定樣本外增益，不用訓練相關性選指標。"
+    },
+    {
+      "id": "13.1",
+      "phase": "models",
+      "label": "Slice 13.1 · 負荷口徑修正與角色資料契約",
+      "status": "done",
+      "depends_on": [
+        "12.5",
+        "12.6",
+        "13"
+      ],
+      "deliverable": "另開修訂版統一現任／候選的決策前連投日、同日登板、休息及近24／72／120／168／336小時負荷（新增5日窗）。前次登板開始前的streak保留為獨立歷史欄；本場已投與此前跨場累積負荷分開。明定紐約決策日／session起始日、跨夜、同日雙重賽、復賽及左截斷語意，修訂所有受影響adapter與基準。",
+      "verification": "2026-11-18：修訂版嚴格取完成時間<t，整合10,415,470個選項連結及24／72／120／168／336小時窗口。核心連投按實際／假定進場前紐約登板日重建；決策日曝光、零球進場、同日其他登板、季內序號、進場休息／live idle、本場與其他場負荷分開。2024現任RP有7,334／31,638列與原欄位不同，另20列與舊實投session日參考不同，已逐列重建核對。原基準白名單固定重訓，2024 n=137,699；新5日欄位未提前選模。2筆原始結束時鐘異常保留旗標／支持缺值。",
+      "acceptance": "用已觀測事件重建，現任與候選在相同時點可互相比較；逐列audit與逐年／SP/RP／行動coverage。2024既有現任RP有7,332／31,638列streak差異必須對帳。不得覆寫原v1協定或模型，不以缺歷史當0負荷。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_1_v2.json"
+    },
+    {
+      "id": "13.2",
+      "phase": "models",
+      "label": "Slice 13.2 · 當場投手狀態與壓制力觀測",
+      "status": "done",
+      "depends_on": [
+        "13.1"
+      ],
+      "deliverable": "分開SP／RP建立當下Stuff／Location水準與相對個人、同球種早段基準的變化／斜率，分開Quality／Physical／Command與已完成投球／打席的近期壓制表現。評估K／BB、揮空／CSW、接觸／界外／場內球及被擊球品質可補算的來源與分母；只接有可靠來源者。分開本場整隊對手已實現結果與特定打者的已見次數／實際看過球數；搭配本場球數及已知下一打者。後援一旦已有本場投球，同樣保留當場觀測，不能以近期負荷取代。Location是位置價值代理，沒有目標位置時不宣稱直接量測控球精準度。",
+      "verification": "2026-11-18：六季current_features／pa_features完成，原決策現任與首顆實投前實際單一actor分開。保存prefix及最近十球Stuff／Location、物理量、CSW／揮空／接觸／界外／場內／有效擊球品質、已完成PA之K／BB、同球種固定配比變化／斜率與進場前個人參考；附有效n及時間。三項狀態暖機、35／10及100／60範圍、>8h重啟、缺值均保留；嚴格時序檢查通過，不視為生理疲勞或換投建議。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_2_v2.json",
+      "acceptance": "原始水準、相對下降、實現結果與下一段預測分開；保留樣本n、收縮、版本與暖機／範圍缺值。不得用全場均值、事後換投或未來打序當決策特徵。沿嚴格過去Plus重算，Performance State既有回溯模型只能參考方法，不直接搬入會穿越訓練cutoff的歷史分數。"
+    },
+    {
+      "id": "13.3",
+      "phase": "models",
+      "label": "Slice 13.3 · 牛棚近期狀態、連投與季內登板軌跡",
+      "status": "done",
+      "depends_on": [
+        "13.1"
+      ],
+      "deliverable": "明確建立每位名義牛棚候選的近期狀態觀測：分開近3／5日與最近1／3／5次已結束登板的Stuff／Location、球速／位移／出手特徵、三項狀態及K／BB、揮空與接觸品質的支持指標。保存當前水準、個人同球種基準差、近期趨勢、樣本n、觀測時間、資料年齡與區間；視窗設定及必要收縮限訓練資料決定。另接當季已知總登板／後援序號、季累積用球、連投日、昨日／72／120小時用球及休息。投前用歷史觀測與負荷估帶區間的起始狀態；登板後依13.2本場觀測更新。",
+      "verification": "2026-11-18：六季近期同角色閉合登板history及去重profile／option links完成，分別保留last1／3／5與近72／120小時已可用摘要、均值／有效登板n／描述性80%範圍、近期斜率、觀測時間與年齡；原始有效球數在history。Plus／三項狀態要求模型版本相容，raw可觀測量另列；無近期出賽不補正常，沒有熱身／健康／準備度推論。視窗固定為候選摘要，尚未做13.6預測增益選擇。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_3_v2.json",
+      "acceptance": "季內序號每季重置、轉隊仍依球員ID累積；雙重賽／復賽依實際時間，不能把session當新登板或把跨年prior_observed_relief當當季序號。所有近期觀測須嚴格早於決策且版本相容；近5日未出賽不等於狀態正常或缺值補100，舊觀測需顯示年齡及支持限制。控制個人基準、球種配比、角色、本場球數與季內日期，處理短登板與倖存／調度選擇；近期狀態不是已熱身或健康證明，下降不等於疲勞因果。"
+    },
+    {
+      "id": "13.4",
+      "phase": "models",
+      "label": "Slice 13.4 · 輪次／打者數壓制力曲線與個人下滑風險",
+      "status": "done",
+      "depends_on": [
+        "13.2",
+        "13.3"
+      ],
+      "deliverable": "先建立全體SP／RP的過程及壓制表現隨面對打者序號、本場球數、打線輪次與對特定打者交手次數的條件曲線，再有足夠支持時估個人曲線並向角色參考收縮。分別展示Stuff／Location、K／BB、揮空／接觸品質及局面調整結果，檢查是否存在持續且有實務幅度的下降區間，附n與區間，不強制每人都有下降點。輪次與特定打者熟悉度分開定義，納入當天狀態、近期負荷、對手能力與配球變化，進一步預估下一固定球數／打席區間下滑風險。",
+      "verification": "2026-11-18：以2021–2023建條件參考、2024驗證，全體SP／RP×7指標×4曝光軸共56面板；區分BF、球數、打序slot交手、特定打者交手，控制對手／球路／局面等，200次比賽×投手重抽樣及面板內同時區間。依預定支持、實務幅度、連續兩區與同區段重現門檻，0面板重現，沒有已驗證通用／個人切點。歷史個人曲線向角色收縮並留出驗證；下一十球相對前十球下降5研究Plus點的條件模型按時間前推／訓練內校準，可觀測者較球數基準改善，但有設限、回歸均值與選擇限制。2025／2026僅機率。修復序列化guard及名冊篩選的初輪實驗／協定均保留，未改門檻。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_4_v2.json",
+      "acceptance": "明列累積BF、已知打線輪次、對當前打者交手次數及實際投球曝光的不同語意；無法重建打線輪次時僅標BF代理，不冒充精確輪次，代打／零球IBB需另處理。控制球數、打者強弱、手別、球種及個人差異，不能把第3輪差異直接稱熟悉度或疲勞因果。按比賽／投手聚集、揭露多個切點搜尋並採訓練內預定或留出驗證，報效果大小、支持n與區間；沒有穩定下降就報未發現。換投終點不是下滑真值，未觀測續投與選擇偏差明列，不用全季／本場事後最差段落決定當時特徵。"
+    },
+    {
+      "id": "13.5",
+      "phase": "models",
+      "label": "Slice 13.5 · 打者出棒／掌握度、熟悉度與球路相性",
+      "status": "done",
+      "depends_on": [
+        "13.2",
+        "13.3",
+        "13.4"
+      ],
+      "deliverable": "對下一打者建立決策前已完成打席的球種攻擊輪廓，分開收到球種占比、各球種出棒率、出棒球種占比、揮空／接觸、界外／場內球及有效擊球品質。分開本場對該投手、同場其他投手、歷史對戰／類型與全隊近期打席；研究先前打席、重複面對與實際看過球數增加時掌握度的條件變化，再與現任／候選球路、狀態及下滑風險共同估計PA結果／轉移。",
+      "verification": "2026-11-18：六季824,462個實際actor請求完成；同場打者last1／2／3、同投手／其他投手／全隊last3與歷史BvP／粗球路類型分開。收到球種占比、球種出棒率、出棒中球種占比、接觸／揮空／界外／場內／有效EV保留各自分母。球路類型取此前觀測角色last3閉合登板，BvP20→類型50→過去打者能力回退，family依有效分母收縮到嚴格過去手別／球類參考；無同季整季tag。排除110個多打者／身分衝突歷史PA，原試驗完整保留；描述曲線另以乾淨PA交集凍結獨立修訂。12個描述面板2024有支持且區間排除0的區段0個，不稱心理鎖定或熟悉度因果；未讀2025／2026結果指標。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_5_v2.json",
+      "acceptance": "只用嚴格早於決策的球／打席；不讀本次或下一打席的出棒／結果。出棒傾向不是心理鎖定證明，控制收到球種、球數、位置與球質。各出棒／接觸／擊球品質使用各自有效分母，無資料不填0；熟悉度關聯不稱因果。BvP及類型採分層收縮／回退，禁止同季整季標籤回填；配球預測成功不代表傷害已驗證。"
+    },
+    {
+      "id": "13.6",
+      "phase": "models",
+      "label": "Slice 13.6 · SP／RP下一段增益與特徵消融",
+      "status": "done",
+      "depends_on": [
+        "13.2",
+        "13.3",
+        "13.4",
+        "13.5"
+      ],
+      "deliverable": "在修訂後共同分母上分開SP／RP，比較局面＋投打能力、負荷、Plus、當場／牛棚近期狀態、輪次／BF下滑風險、打者出棒／掌握輪廓及熟悉度／類型相性。分別移除72／120小時用球、近期狀態、連投日、季內登板序號、輪次／BF、前序打席攻擊輪廓、BvP及類型支持，檢查必要交互作用。下一PA為共同目標，描述曲線仍須另驗樣本外增益。",
+      "verification": "2026-11-18：相同2024 n=137,699，實際actor SP／RP分開、各25設定；共同缺值支持／年齡／scope控制、訓練內補值標準化及固定L2。逐組／leave-one-out／純72與120小時、連投、季內序號比較；派生risk／交互項隨來源移除，type移除時BvP改回打者先驗。200次比賽×投手配對重抽樣，角色內多設定同時97.5%帶、兩角色校正，另報校準、current／incoming分群與完整訊號支持敏感度。診斷選擇SP=baseline、RP=baseline，無增益保留基準；原決策時點前推risk，無接任者吃到被換下者狀態，2025／2026僅凍結機率。 角色分層採現任本次角色或接任RP，前次SP不當作本次SP；跨角色歷史狀態／Plus不當RP進場先驗。前兩輪未完成訓練與原協定／源碼保留，修正角色及來源後重跑，選模門檻不變。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice13_6_v2.json",
+      "acceptance": "每項比較同訓練／驗證分母、按比賽與投手聚集處理、報校準與區間，控制小樣本與多重嘗試。被換下後的續投結果不可觀測，不能用接任者結果填成續投標籤；後續球不足或強制退出有獨立旗標。補值／尺度／正則化限訓練窗，2025／2026結果不回流選特徵，沒有增益則保留簡單基準。"
+    },
+    {
+      "id": "13.6.1",
+      "phase": "models",
+      "label": "Slice 13.6.1 · 學習誤差、年度與來源穩定性診斷",
+      "status": "done",
+      "depends_on": [
+        "13.6"
+      ],
+      "deliverable": "保留舊凍結版，分角色檢查訓練／時間留出誤差、逐類校準、年度缺值／資料年齡與Plus／狀態分布；釐清本場與閉合歷史的scope及n單位。",
+      "verification": "2026-11-19：舊baseline／plus／states／all均補實際訓練與2024誤差、逐類校準；2021–2024依角色、現任／閉合歷史及量測模型版本輸出缺值、年齡、n與分位數。候補的歷史Plus不混作本場狀態，current有效球數與歷史有效登板數不作同單位收縮；不只由泛化落差宣稱過擬合或疲勞不存在。",
+      "acceptance": "只作診斷，不由2024結果反覆調參；分開資料漂移、模型容量與泛化落差，不能僅由驗證變差認定過擬合或疲勞不存在。",
+      "evidence": "data/sample/petehub_pitcher_decision_model_patch_v3.json"
+    },
+    {
+      "id": "13.6.2",
+      "phase": "models",
+      "label": "Slice 13.6.2 · 獨立特徵增益、正則化與機率校準",
+      "status": "done",
+      "depends_on": [
+        "13.6.1"
+      ],
+      "deliverable": "基準直接加入本場觀測、近期歷史／負荷、打者前序／相性三群獨立對照；於2021–2023時間前推內限制L2搜尋與溫度校準，再凍結候選。",
+      "verification": "2026-11-19：線性基準直接加current／recent／batter三群獨立對照，L2 alpha=.001/.01/.1；raw與訓練內溫度校準共同比較。以2021→2022、2021–22→2023時間前推，整場固定SHA樣本fit約30,000、cal至多約10,000，驗證用各年全分母。fit／cal嚴格時間切分且跨界比賽排除，補值／尺度／編碼只fit前段；先選候選再看2024，2025封存。",
+      "acceptance": "同分母／支持控制，補值尺度編碼及校準只fit相應訓練窗。特徵窗與候選範圍事先限定；2024僅已使用診斷，2025不回流。",
+      "evidence": "data/sample/petehub_pitcher_decision_model_patch_v3.json"
+    },
+    {
+      "id": "13.6.3",
+      "phase": "models",
+      "label": "Slice 13.6.3 · 受限非線性對照與解釋穩定性",
+      "status": "done",
+      "depends_on": [
+        "13.6.2"
+      ],
+      "deliverable": "加入一種淺層HistGradientBoosting，基準與精簡完整特徵均作對照；時間前推挑選、全量確認及角色／群聚區間／校準／固定模型群組置換診斷（模型依賴，非因果）。",
+      "verification": "2026-11-19：唯一非線性家族為淺層HGB，7／15葉、60迭代，base／rich比較；連同線性共16 learner設定×raw／溫度×兩個時間窗／角色。每角色凍結6族候選，再移除pilot上限以2021–23前段fit、末段cal、2024完整同分母確認。200次比賽×投手配對、角色內同時97.5%帶及兩角色校正；Brier、ECE、分群傷害、內層年度穩定及收斂共同判定，新增特徵另需勝過同演算法調整基準。固定模型作月別／scope／過去角色內整群置換，保留共同支持控制，僅解釋依賴、非因果。結果SP=frozen_v2_baseline、RP=tree_rich_7，2024已使用診斷，非獨立測試。",
+      "acceptance": "新增特徵效果與更換演算法效果分開；重要性／移除結果不稱因果。沒有增益保留基準，不以無限搜尋作為進14.2條件。",
+      "evidence": "data/sample/petehub_pitcher_decision_model_patch_v3.json"
     },
     {
       "id": "14",
       "phase": "models",
       "label": "Slice 14 · xWPA／xRE24 與人選價值",
-      "status": "planned",
+      "status": "done",
       "depends_on": [
         "13"
       ],
       "deliverable": "先比較續投與角色條件替代池，再在支持足夠時評估個別後援；輸出相同終點的預期價值、差值與區間。",
-      "verification": "Pending",
+      "verification": "2026-11-18：decision_action_values_v1，2024分層＋兩場固定hash範例499邊界，484個有歷史角色池支持、439個全部路徑無截尾／球數外推。續投或均勻RP替代池均投至半局結束，第一打者當時已知，後續以2023年底聯盟池配對抽樣，未讀真實後續打序。每方案256路徑＋8個比賽群聚分類器，提供MC95與條件式中央80%模型範圍；55替代池較高／12續投較高／417不明或支持不足，均非推薦。兩場WE曲線、官方換投事件與決策前研究點已接Lab；參考另一專案Momentum源碼並保存SHA，未沿用CPBL勝率表。實際熱身／醫療、完整模型不確定性與長期成本未知，個別排名／推薦關閉，視覺待使用者驗收；未開始15–20。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice14_v1.json",
       "acceptance": "下一 PA 用於解釋、固定半局作主要研究；遵守最低打者與後續安排，長期資源成本另定義，不任意加總 LI／WPA／RE。"
+    },
+    {
+      "id": "14.1",
+      "phase": "models",
+      "label": "Slice 14.1 · 修訂模型與固定半局比較重跑",
+      "status": "done",
+      "depends_on": [
+        "13.6",
+        "14"
+      ],
+      "deliverable": "以修正負荷與有支持的狀態／下滑風險／相性特徵另凍結模型版本，重跑原484個比較並另報支持範圍。先在角色池，支持足夠時再以手別／球路類型條件池比較；個別人選仍須通過另列的可用性與樣本門檻。以局數、比分、壘包、出局及已知下一打者建立完整結果機率，再用同終點與後續策略計算守方xWPA／xRE24及差值，不對八項因素手工加分。評估以當時已公布打線及已發生換人重建後續打序，未確認時明示聯盟池回退，不讀賽後打線或未來代打。分開官方名單／法定合法／熱身／醫療／人工確認可用性；另列預計用球與後續牛棚資源限制，長期成本未建模前不任意與WPA／RE相加。對照原55／12／417研究方向、差值與區間如何變動。",
+      "verification": "2026-11-18：原484個研究比較完整保留，修正負荷重跑；角色池方向50／11／423，手別及有過去類型支持的至少兩人條件池另報。第一PA接13.6通過設定或13.1修訂基準，後續一律明示基準，未外推未知球質／狀態。共同256路徑、8次共同比賽群聚分類器重訓、MC95／中央80模型範圍與設限／外推／稀有轉移分列；與原55／12／417方向及xWPA／xRE24差值區間逐點對照。存檔打序無獨立公開時點證明，484均明示原2023年底聯盟池回退；已知首打者保留。名義合法／game名單與active／熱身／醫療／人工確認分開，另列預計用球／BF及剩餘名義RP，無長期資源成本加分；14.2、15未開始，推薦／排名關閉。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice14_1_v2.json",
+      "acceptance": "舊模型／資料／結論保留且明列差異。不得把觀測中的先發prefix或後援前次狀態當成候選準備度；未來狀態無可驗證演化規則時保留基準或另列敏感度範圍。外推、稀有轉移及模擬／模型不確定性分開，個別推薦gate仍關閉。"
+    },
+    {
+      "id": "14.1.1",
+      "phase": "models",
+      "label": "Slice 14.1.1 · 凍結模型與484點決策敏感度覆核",
+      "status": "done",
+      "depends_on": [
+        "13.6.3",
+        "14.1"
+      ],
+      "deliverable": "有通過預定診斷門檻的候選才另版重跑原484點固定半局比較；否則核對原14.1仍有效並保留50／11／423。依相同終點、路徑與可用性限制評估方向穩定性。",
+      "verification": "2026-11-19：通過候選已另版重跑原484點；僅第一PA更動，研究方向與區間逐點留版；原484點、1,072條件池比較及原輸入留版，角色池方向43／11／430。只有通過預先門檻才更動第一PA，後續回修訂global baseline；未觀測狀態演化、後續打線時點、active／熱身／醫療可用性及長期成本限制保留。研究方向不等於正式建議，14.2去重／事件對應及15尚未開始。",
+      "acceptance": "只更動有支持的第一PA預測，不虛造後續狀態演化／當時打線；未通過可用性及策略驗證前推薦／排名關閉。完成此補充後才進14.2，不能自動開始14.2或15。",
+      "evidence": "data/sample/petehub_pitcher_decision_model_patch_v3.json"
+    },
+    {
+      "id": "14.2",
+      "phase": "validation",
+      "label": "Slice 14.2 · 研究預警去重與實際換投對應",
+      "status": "done",
+      "depends_on": ["14.1", "14.1.1"],
+      "deliverable": "事先定義研究預警收益／支持門檻、持續條件、冷卻與同登板去重；分別報同一決策邊界及預先定義提前窗口的官方換投對應。每次實際事件與提醒採明確一對一匹配，保存未配對、重複與支持不足原因及原始分母。",
+      "verification": "2026-11-19使用者授權：固定MD5前32場2024比賽補齊原始邊界時序，先凍結0.5pp收益、連續2點、2PA冷卻／同登板最多1則及同邊界／提前2PA且600秒的一對一對應；沿13.6.3／14.1.1模型，不重訓或調2025。 完成：2376原始邊界、1737可計算、1674模擬支持、133單點合格、11獨立研究預警；官方事件208，同邊界0、提前窗口0，未配對預警11／事件208。支持／門檻／持續／冷卻／去重、事件時鐘／身分／範圍及未配對原因逐列保存，原始非打者／未完成邊界仍中斷持續，但不增加已完成PA計數。對應率不是正確率；點區間不是序列錯警控制，active／熱身／醫療未知、操作推薦0。",
+      "acceptance": "研究點數、獨立預警數、實際事件數與對應數分開；對應率不是正確率，教練行動不是合理性的標籤。沒有重疊或可用性不足時拒絕推薦；合理性／策略效益仍須15–18，正式釋出門檻留20，不以事後最接近換投來挑窗口。",
+      "evidence": "data/sample/petehub_pitcher_decision_slice14_2_v1.json"
+    },
+    {
+      "id": "14.2.1",
+      "phase": "validation",
+      "label": "Slice 14.2.1 · 多原因燈與景氣式綜合燈契約／介面",
+      "status": "done",
+      "depends_on": [
+        "14.2"
+      ],
+      "deliverable": "A球質、B位置／控球代理、C對手掌握、D負荷四群各計一票；五級綜合狀態與資料不足灰燈，分開替代收益、名義合法、實際可用性及原因持續條件。真實11例與互動規則示範分開。",
+      "verification": "2026-11-19：完成景氣式0–8研究展示、四群原因燈、分開的收益／合法／可用／持續條件；讀原11則實際研究例，7則未達35球觀測支持，全部原因燈尚未校準而維持灰。互動示範明確標記且永不開啟正式推薦。純規則／資料／型別檢查完成，畫面仍待使用者驗收；未重訓、未改原11／0結果、未開始14.2.2或15。",
+      "acceptance": "單群不重複計票，灰燈不補0或正常；總燈不單獨觸發換投。規則、資料與型別檢查完成；畫面人工驗收另外保留pending，不宣稱模型或換投有效。",
+      "evidence": "data/sample/petehub_pitcher_decision_signal_lights_v1.json"
+    },
+    {
+      "id": "14.2.2",
+      "phase": "validation",
+      "label": "Slice 14.2.2 · 個人正常進程、局間恢復與狀態去雜訊",
+      "status": "done",
+      "depends_on": [
+        "14.2.1",
+        "13.4"
+      ],
+      "deliverable": "以嚴格過去個人／同球種參考，建模累積球數、單局負荷、局間時間及角色的正常進程，分開水準／預期下降／異常殘差；研究觀測成熟、單一受限平滑、解除及跨局更新，保留累積負荷。",
+      "verification": "2026-11-19：四季244,179個非重疊完整10球塊，個人同球種及同量測版本參考固定於進場前、至少20球；控制累積／單局用球、局間時間、球類配比與過去打者能力。四個時間窗、兩角色、Stuff／球速／Location／接觸共32個固定Ridge正常進程模型，內部校準不優於個人參考者保留原參考；EWMA=.3與不平滑對照，下一完整球塊未觀測保留設限。2024已用診斷，模型與來源協定留版；首次序列化guard失敗未訓練，原協定／源碼另存。 2024六組平滑對不平滑及常數比較均未通過完整增益門檻，僅保留描述性去雜訊版本，不宣稱疲勞預測有效。",
+      "acceptance": "不預設每場必下降，不將35球支持門檻當疲勞切點；未知／超範圍灰燈。基準／尺度／視窗只fit訓練時間窗，不能借未來局間恢復；下一段未觀測保留設限，正常下降仍進表現預測。",
+      "evidence": "data/sample/petehub_pitcher_decision_signal_calibration_v1.json"
+    },
+    {
+      "id": "14.2.3",
+      "phase": "validation",
+      "label": "Slice 14.2.3 · 分燈校準、資訊重複與SP／RP增益驗證",
+      "status": "done",
+      "depends_on": [
+        "14.2.2",
+        "13.6.3"
+      ],
+      "deliverable": "校準A–D灰／綠／黃／紅，分SP／RP檢查原始支持、群間相關、缺值與額外增益；曝光／gmLI作情境，球速與Stuff不重複計票。綜合0–8及兩紅規則與有限替代設定作訓練內對照；需要影響xWPA的訊號另做角色模型增益。",
+      "verification": "2026-11-19：精確actor及決策時鐘對位545,204個有機PA，incoming不繼承outgoing A/B/C；D以進場前同角色近期登板中位數及完整負荷參考。共同支持／資料年齡控制下比較control、A、B、C、D、all，2022／23前推排序、2024 SP92,013／RP45,686確認；兩角色新增方案均未通過增益門檻，保留原SP global及RP rich tree+temperature，xWPA沿用原版。",
+      "acceptance": "等權分數與兩紅只是展示候選，不是已驗證權重。2021–2023時間前推選設定、2024已用診斷、2025封存；控制相同分母與校準／群聚區間，不能只用教練對應率選燈或用前端門檻冒充模型納入疲勞。",
+      "evidence": "data/sample/petehub_pitcher_decision_signal_calibration_v1.json"
+    },
+    {
+      "id": "14.2.4",
+      "phase": "validation",
+      "label": "Slice 14.2.4 · 多燈事件、恢復重啟與固定時序覆核",
+      "status": "done",
+      "depends_on": [
+        "14.2.3",
+        "14.2"
+      ],
+      "deliverable": "依新凍結分燈模型研究狀態事件，分開戰術池比較與狀態驅動候選；校準持續／解除／新事件重新觸發及冷卻，處理同登板首次過早吞掉後續訊號。按完整時序報分燈／組合支持、提醒負擔、恢復與預測表現、官方對應與拒絕原因。",
+      "verification": "2026-11-19：兩個新的非重疊球塊確認／解除，灰暫停不當恢復，D累積負荷保留，可解除後重啟。2022／23兩紅與三紅均未取得角色預測支持。原32場2376邊界／1737可算／842四群支持，1次SP描述性狀態事件、0觀測解除／新增研究候選／對應／正式推薦；原11／0留版，沒有為提高配對率改窗口。",
+      "acceptance": "保留原14.2的11預警／0配對與原窗口，不為提高配對率覆寫。重疊球窗不是獨立證據，監控需評估序列提醒負擔。可用性未知仍阻擋正式推薦；通過此研究覆核後再進15重疊／選擇偏差，合理性及效益仍留15–18。",
+      "evidence": "data/sample/petehub_pitcher_decision_signal_calibration_v1.json"
     },
     {
       "id": "15",
       "phase": "validation",
       "label": "Slice 15 · 選擇偏差與樣本重疊",
-      "status": "planned",
+      "status": "done",
+      "depends_on": ["11", "14", "14.2", "14.2.4"],
+      "deliverable": "時間交叉擬合歷史調度與續投／未來量測觀測傾向，檢查各候選及分燈組合的重疊、極端權重與有效樣本；承接14.2.4未通過增益／組合支持的結果，先處理續投選擇、稀疏群聚區間及提醒母體，不能將兩紅或零新候選視作模型成效通過。",
+      "verification": "2026-11-19：四季546,930個邊界、54,669次換投，恢復38次原池外換投；2022／23／24前推SP/RP共24個調度／觀測／RP池歸屬／人選模型。2024 SP重疊14,691/96,630，換投ESS1943、最大SMD0.209；RP重疊31,196/41,457，換投ESS4062、最大SMD0.296；兩角色均未過0.1平衡。後援未來量測缺失87%；固定32場604/1737可算點過初步重疊。SP觀測加權兩紅差區間跨0，RP無足夠兩紅；沒有晉升策略或推薦。原二階段人選分數另留版，顯式加入池外機率修訂，不重寫原燈號或xWPA。",
+      "acceptance": "無重疊人群拒絕推薦；披露權重截斷敏感度與教練未公開資訊，不把觀測效果直接稱因果。",
+      "evidence": "data/sample/petehub_pitcher_decision_overlap_v1.json"
+    },
+    {
+      "id": "15.1",
+      "phase": "validation",
+      "label": "Slice 15.1 · 共同觀測時點、局間／局中與缺失原因稽核",
+      "status": "done",
       "depends_on": [
-        "11",
-        "14"
+        "15"
       ],
-      "deliverable": "時間交叉擬合歷史調度傾向，檢查換投與續投、各候選的支持、極端權重及有效樣本數。",
-      "verification": "Pending",
-      "acceptance": "無重疊人群拒絕推薦；披露權重截斷敏感度與教練未公開資訊，不把觀測效果直接稱因果。"
+      "deliverable": "建立早於官方行動的共同觀測截點，能力／球數／負荷／原因訊號按截點重取；分局間／局中、保留舊點與新點對帳及時間不足排除，分類後續量測缺失原因。",
+      "verification": "2026-11-19：共同截點為前一完整play結束+1ms，546,930點重取球數／能力／負荷／原因與先前名義RP快照，排除50個不能確認早於行動的點，留546,880。2024後援局間原時間間隔中位續投133秒／換投92秒，局中28／61秒；不能把時間切片差異直接叫疲勞。原RP缺16,630例分當下換投4,641、未來投球機會不足10,553、量測／參考不足1,267等，未觀測標籤仍空值。",
+      "acceptance": "不能只改decision_at而沿用較晚特徵；無法確認截點早於換投或資訊當時可知者拒絕比較。未觀測不補正常；不把資料切片差異直接稱生理疲勞。",
+      "evidence": "data/sample/petehub_pitcher_decision_overlap_revision_v1.json"
+    },
+    {
+      "id": "15.2",
+      "phase": "validation",
+      "label": "Slice 15.2 · 特徵表示、平衡模型與權重對照",
+      "status": "done",
+      "depends_on": [
+        "15.1"
+      ],
+      "deliverable": "在共同時點上比較固定HGB、樣條logit、核心特徵消融及矩條件平衡logit；預先分開IPW與overlap目標母體，依2022／23前推的平衡／校準／ESS選設定，2024只診斷。",
+      "verification": "2026-11-19：4固定對照×SP/RP×局間/局中×3前推年度共48模型，先2022/23凍結研究排序，再2024診斷。兩角色HGB對照最穩定但內層全門檻未過；2024 overlap最大SMD：SP局間.195／局中.148，RP.255／.108，均未過.1；固定矩條件logit部分不收斂，不改次數調到過。IPW與overlap母體分開，不改原xWPA／燈號、不產生新推薦。",
+      "acceptance": "保留能力、局面及缺值支持檢查，不靠刪失衡欄位過關；同演算法／特徵與加權目標分開。訓練內平衡不保證未來平衡，不以2024反覆挑設定；不改xWPA或推薦。",
+      "evidence": "data/sample/petehub_pitcher_decision_overlap_revision_v1.json"
+    },
+    {
+      "id": "15.3",
+      "phase": "validation",
+      "label": "Slice 15.3 · RP觀測目標與受限比較母體",
+      "status": "done",
+      "depends_on": [
+        "15.2"
+      ],
+      "deliverable": "分開短登板／換下／量測不足，預先研究RP下一打席與完整十球任務、可比較母體及觀測機制敏感度；保留被換下者未知後續。",
+      "verification": "2026-11-21：RP共同時點、進場前歷史使用型態、下一PA／完整十球目標、受限母體與觀測機制敏感度研究完成；詳見新證據，15.4未開始。",
+      "acceptance": "任務及目標母體改動另立協定；不得用未來登板長度挑容易觀測者或將沒有後續當無惡化，不能把不同目標Brier直接比較。",
+      "evidence": "data/sample/petehub_pitcher_decision_rp_targets_v1.json"
+    },
+    {
+      "id": "15.4",
+      "phase": "validation",
+      "label": "Slice 15.4 · 凍結修訂、前推覆核與16進入條件",
+      "status": "done",
+      "depends_on": [
+        "15.3"
+      ],
+      "deliverable": "鎖定比較母體、特徵／時點、權重及支持門檻，完整前推覆核平衡、校準、ESS與拒絕原因，明定16可評估策略與終點。",
+      "verification": "2026-11-21：凍結共同截點、SP／RP固定母體／模型／權重／門檻；2022–24前推平衡、校準、ESS、拒絕原因與缺失／群聚不確定性覆核完成。研究工作44/51；未通過比較及實作條件，不進16、不啟用推薦，2025封存。",
+      "acceptance": "未過支持不晉升；2025封存、2024已用診斷需揭露，不以研究工作完成等同策略有效。正式換投／人選排名維持關閉。",
+      "evidence": "data/sample/petehub_pitcher_decision_entry_review_v1.json"
+    },
+    {
+      "id": "15.5.1",
+      "phase": "validation",
+      "label": "Slice 15.5.1 · 共同截點、PE／預定打線與coverage",
+      "status": "done",
+      "depends_on": [
+        "15.4"
+      ],
+      "deliverable": "盤點並重建截點前完整PA、PE材料、FF基準及由已完成棒次推估的後續打線；區分觀測、預測身分與未知，保留2021–24覆蓋與時鐘對帳。",
+      "verification": "2026-11-21：2021–24共同截點特徵與PA／FF材料、已完成棒次打線預測及coverage完成；預測身分不等同實際下一打者。",
+      "acceptance": "不使用本場最終平均、最終登板長度或事後下一打者；零球及IBB仍占棒次。D是負荷，相性另列；原研究留版、2025封存。",
+      "evidence": "data/sample/petehub_pitcher_decision_pe_revision_v1.json"
+    },
+    {
+      "id": "15.5.2",
+      "phase": "validation",
+      "label": "Slice 15.5.2 · 近期PE與個人化偏離",
+      "status": "done",
+      "depends_on": [
+        "15.5.1"
+      ],
+      "deliverable": "建立PA版PE代理的最近1／2／3PA、趨勢及缺失支持，加入進場前個人PE／FF基準與收縮的預定打者歷史，凍結有限特徵群。",
+      "verification": "2026-11-21：近期PE代理／缺失支持、進場前個人參考及收縮打者先驗完成，特徵及模型協定已凍結。",
+      "acceptance": "PE代理非原論文精確重現或生理疲勞；缺失不補正常，個人基準早於進場、所有打者先驗早於截點。",
+      "evidence": "data/sample/petehub_pitcher_decision_pe_revision_v1.json"
+    },
+    {
+      "id": "15.5.3",
+      "phase": "validation",
+      "label": "Slice 15.5.3 · 固定特徵與有限模型對照",
+      "status": "done",
+      "depends_on": [
+        "15.5.2"
+      ],
+      "deliverable": "九類PA結果主要任務、下一PA失分輔助任務；HGB特徵消融及同完整特徵的正則化線性／Random Forest比較，整場前推及校準、2022/23凍結排序後才看2024。",
+      "verification": "2026-11-21：30個九類PA模型及12個PA失分模型、共42個固定擬合；2022/23先凍結排序再檢查2024，未替換原模型。",
+      "acceptance": "同一任務／樣本／訓練分段公平比較；不得跨標籤Brier評輸贏或依2024調參。被換下者原投手後續仍未知。",
+      "evidence": "data/sample/petehub_pitcher_decision_pe_revision_v1.json"
+    },
+    {
+      "id": "15.5.4",
+      "phase": "validation",
+      "label": "Slice 15.5.4 · 前推增益、提醒負擔與進入條件",
+      "status": "done",
+      "depends_on": [
+        "15.5.3"
+      ],
+      "deliverable": "比賽×投手群聚增益區間、校準、角色／早局提醒負擔、未知後續與提前配對；預測支持和原SMD／策略資格分開回報。",
+      "verification": "2026-11-21：前推增益與群聚區間、角色別提醒負擔／早局／未知及同邊界／提前配對完成；原SMD與16資格保留，不估策略收益。",
+      "acceptance": "警示與實際換投吻合非正確或因果收益；未知不可算誤報，預測提升不等於SMD改善；不進16、不啟用推薦或開封2025。",
+      "evidence": "data/sample/petehub_pitcher_decision_pe_revision_v1.json"
     },
     {
       "id": "16",
       "phase": "validation",
-      "label": "Slice 16 · 策略評估與 robustness",
-      "status": "planned",
+      "label": "Slice 16 · 探索性回放、情境模擬與正式效益覆核",
+      "status": "in_progress",
+      "depends_on": ["15", "15.4", "15.5.4"],
+      "deliverable": "16.1–16.3先完成整合影子回放、下一PA與固定半局模型情境。原direct／SNIPS／DR正式效益評估仍須共同人選／可用性支持、平衡與後續策略對齊，另行授權後續修訂。",
+      "verification": "2026-11-21：使用者授權探索修訂16.1–16.3，另版產物完成；原15.4正式SMD／人選／可用性／後續策略資格未通過，不能將探索模擬視為策略有效。",
+      "acceptance": "探索完成與正式效益通過分開。保留原15.4契約與門檻；不以模型情境平均、配對率或MC區間啟用推薦或開封2025。"
+    },
+    {
+      "id": "16.1",
+      "phase": "validation",
+      "label": "Slice 16.1 · 整場影子回放與實際換投對應",
+      "status": "done",
       "depends_on": [
-        "15"
+        "15.5.4"
       ],
-      "deliverable": "比較 direct／SNIPS／doubly robust；進行比賽區塊 bootstrap、角色與年代分群、隱藏混雜及評估範圍敏感度分析。",
-      "verification": "Pending",
-      "acceptance": "多步策略採序列方法；預先登記門檻、實用收益、區間與最低支持，不以單一指標顯著就晉升。"
+      "deliverable": "合併SP／RP共同截點，套用跨角色同隊冷卻；2022–24全母體提醒負擔與未知、固定32場實際WE／WPA時間軸及官方換投標記。",
+      "verification": "2026-11-21：研究工作交付，結果與限制見探索回測證據；畫面待使用者驗收。",
+      "acceptance": "沿實際歷史，非反事實整場路徑；實際換投配對不是正確率，多燈／替代收益正式門檻保留。",
+      "evidence": "data/sample/petehub_pitcher_decision_exploratory_v1.json"
+    },
+    {
+      "id": "16.2",
+      "phase": "validation",
+      "label": "Slice 16.2 · 共同截點人選與下一PA情境",
+      "status": "done",
+      "depends_on": [
+        "16.1"
+      ],
+      "deliverable": "以實際續投／接任者重建同截點自身歷史，2022/23前推固定比較模型，再作2024固定32場全部邊界候選池下一完整PA估值與coverage。",
+      "verification": "2026-11-21：研究工作交付，結果與限制見探索回測證據；畫面待使用者驗收。",
+      "acceptance": "候補不借現任當場狀態；相同起點／一般PA終點，時點與機率和核對；不將模型值稱因果效益。",
+      "evidence": "data/sample/petehub_pitcher_decision_exploratory_v1.json"
+    },
+    {
+      "id": "16.3",
+      "phase": "validation",
+      "label": "Slice 16.3 · 固定半局模擬與可靠性評估",
+      "status": "done",
+      "depends_on": [
+        "16.2"
+      ],
+      "deliverable": "兩方案各由選定投手留至半局結束，配對路徑、支持／截尾／外推、休息與72小時負荷／基準模型敏感度及群聚描述區間。",
+      "verification": "2026-11-21：研究工作交付，結果與限制見探索回測證據；畫面待使用者驗收。",
+      "acceptance": "只含明定的模型情境，無IBB／獨立跑者事件／長期成本；MC區間非模型或因果區間，SNIPS／DR不具資格時明列未估計。",
+      "evidence": "data/sample/petehub_pitcher_decision_exploratory_v1.json"
     },
     {
       "id": "17",
@@ -407,11 +866,8 @@
       "phase": "product",
       "label": "Slice 20 · 狀態與決策雙層燈號",
       "status": "planned",
-      "depends_on": [
-        "19",
-        "16"
-      ],
-      "deliverable": "建立灰／綠／黃／紅提醒、觸發原因、區間、解除與冷卻機制，分開狀態下降與換投優勢。",
+      "depends_on": ["19", "16", "14.2.4"],
+      "deliverable": "接已驗證的14.2.4分燈／綜合狀態契約至正式狀態與決策雙層燈號，保留來源版本、灰燈、解除與冷卻；整合個人頁及In game，不另造一套總分。",
       "verification": "Pending",
       "acceptance": "紅燈需合法替代方案且保守收益超過凍結門檻；高 LI 或一次負 WPA 不單獨觸發換投建議；人工驗收。"
     },
@@ -446,15 +902,17 @@
       "title": "RE24 & Leverage Lab",
       "area": "Pitcher Lab",
       "status": "done",
-      "updated_at": "2026-09-20",
-      "summary": "Calculator, local reliever leaderboard, reference comparison and corrected plate-appearance WPA are complete.",
-      "next_step": "Automate or explicitly version the collected reliever reference cutoff.",
+      "updated_at": "2026-11-18",
+      "summary": "Calculator, reliever leaderboard and reference diagnostics are complete. The user accepted the WPA leaderboards; team entry gmLI distribution and WPA heatmap are delivered.",
+      "next_step": "User verifies the new team gmLI distribution and WPA heatmap. Collected reference cutoff automation remains planned.",
       "slices": [
         {"id": "0", "label": "Slice 0 · State model", "status": "done", "deliverable": "RE24 and empirical LI states", "verification": "Backend tests passed"},
         {"id": "1", "label": "Slice 1 · Calculator", "status": "done", "deliverable": "Entry and exit scenario calculator", "verification": "Known scenario smoke tests passed"},
         {"id": "2", "label": "Slice 2 · Leaderboard", "status": "done", "deliverable": "Local and collected views", "verification": "2025 regression diagnostics recorded"},
         {"id": "3", "label": "Slice 3 · Global WPA audit", "status": "done", "deliverable": "Shared plate-appearance WPA", "verification": "Downstream tests passed"},
-        {"id": "4", "label": "Slice 4 · Reference automation", "status": "planned", "deliverable": "Versioned reference cutoff and refresh path", "verification": "Pending"}
+        {"id": "4", "label": "Slice 4 · Reference automation", "status": "planned", "deliverable": "Versioned reference cutoff and refresh path", "verification": "Pending"},
+        {"id": "5", "label": "Slice 5 · Substitution outcomes", "status": "done", "deliverable": "Player entry gmLI WPA buckets and team pitching-change / pinch-hit totals, averages and scored counts.", "verification": "2025 and 2026 API schemas and 30 teams per view checked; entry buckets and missing representations reconciled. The user explicitly accepted the WPA leaderboards."},
+        {"id": "6", "label": "Slice 6 · Team entry gmLI visualization", "status": "in_progress", "deliverable": "Show team entry gmLI distribution and matching total WPA heatmap below the team leaderboard.", "verification": "Uses the selected season’s existing local pitching rows and grouped counts; new chart awaits user acceptance."}
       ]
     },
     {

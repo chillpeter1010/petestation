@@ -1,0 +1,975 @@
+{
+  "version": "decision_signal_calibration_v1",
+  "stop": "14.2.4",
+  "updatedAt": "2026-11-19",
+  "blocks": 244179,
+  "actorRows": 545204,
+  "normal2024": [
+    {
+      "year": 2024,
+      "role": "SP",
+      "group": "A",
+      "n": 16902,
+      "censored_or_insufficient": 21437,
+      "smooth_brier": 0.16682820587428684,
+      "raw_brier": 0.16860123755255232,
+      "constant_brier": 0.20689126325349622,
+      "vs_raw": {
+        "mean": -0.0017730316782654527,
+        "paired_two_way95": [
+          -0.005663951744011355,
+          0.0018034652717041964
+        ],
+        "role_family97_5": [
+          -0.006553409314723557,
+          0.003007345958192651
+        ],
+        "replicates": 200,
+        "games": 2283,
+        "pitchers": 262
+      },
+      "vs_constant": {
+        "mean": -0.04006305737920443,
+        "paired_two_way95": [
+          -0.046127340016051864,
+          -0.03333999922203598
+        ],
+        "role_family97_5": [
+          -0.049043083230122755,
+          -0.031083031528286103
+        ],
+        "replicates": 200,
+        "games": 2283,
+        "pitchers": 262
+      },
+      "predictive_gate": false
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "group": "B",
+      "n": 16902,
+      "censored_or_insufficient": 21437,
+      "smooth_brier": 0.05975067955675823,
+      "raw_brier": 0.05972923053959954,
+      "constant_brier": 0.0597669639198389,
+      "vs_raw": {
+        "mean": 2.1449017158695272e-05,
+        "paired_two_way95": [
+          -0.00011298078304200302,
+          0.00014898108398088848
+        ],
+        "role_family97_5": [
+          -0.0001714322192172407,
+          0.00021433025353463124
+        ],
+        "replicates": 200,
+        "games": 2283,
+        "pitchers": 262
+      },
+      "vs_constant": {
+        "mean": -1.6284363080663925e-05,
+        "paired_two_way95": [
+          -0.00017277279803135865,
+          0.00011027049887971544
+        ],
+        "role_family97_5": [
+          -0.00022074260105158143,
+          0.00018817387489025356
+        ],
+        "replicates": 200,
+        "games": 2283,
+        "pitchers": 262
+      },
+      "predictive_gate": false
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "group": "C",
+      "n": 13306,
+      "censored_or_insufficient": 25033,
+      "smooth_brier": 0.19622056434892488,
+      "raw_brier": 0.1963346798395634,
+      "constant_brier": 0.1962910039045721,
+      "vs_raw": {
+        "mean": -0.00011411549063856886,
+        "paired_two_way95": [
+          -0.0006244608105495877,
+          0.0004198188327435229
+        ],
+        "role_family97_5": [
+          -0.000782700565794729,
+          0.0005544695845175913
+        ],
+        "replicates": 200,
+        "games": 2389,
+        "pitchers": 304
+      },
+      "vs_constant": {
+        "mean": -7.043955564723686e-05,
+        "paired_two_way95": [
+          -0.0006621645273031305,
+          0.000438997025118596
+        ],
+        "role_family97_5": [
+          -0.0007580568908934389,
+          0.0006171777795989652
+        ],
+        "replicates": 200,
+        "games": 2389,
+        "pitchers": 304
+      },
+      "predictive_gate": false
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "group": "A",
+      "n": 5921,
+      "censored_or_insufficient": 16193,
+      "smooth_brier": 0.1578035130145362,
+      "raw_brier": 0.15645960191884348,
+      "constant_brier": 0.19876660887798547,
+      "vs_raw": {
+        "mean": 0.0013439110956927549,
+        "paired_two_way95": [
+          -0.0012828305813759114,
+          0.0043476403797660015
+        ],
+        "role_family97_5": [
+          -0.002353738505597552,
+          0.005041560696983061
+        ],
+        "replicates": 200,
+        "games": 1982,
+        "pitchers": 451
+      },
+      "vs_constant": {
+        "mean": -0.04096309586345104,
+        "paired_two_way95": [
+          -0.04879719475124184,
+          -0.033708906423166936
+        ],
+        "role_family97_5": [
+          -0.05054338789259376,
+          -0.03138280383430832
+        ],
+        "replicates": 200,
+        "games": 1982,
+        "pitchers": 451
+      },
+      "predictive_gate": false
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "group": "B",
+      "n": 5919,
+      "censored_or_insufficient": 16195,
+      "smooth_brier": 0.0719571945307206,
+      "raw_brier": 0.07198469446387115,
+      "constant_brier": 0.0718187257673242,
+      "vs_raw": {
+        "mean": -2.7499933150553866e-05,
+        "paired_two_way95": [
+          -0.00032103620021337905,
+          0.0002458637980124102
+        ],
+        "role_family97_5": [
+          -0.0003801598410732421,
+          0.0003251599747721344
+        ],
+        "replicates": 200,
+        "games": 1982,
+        "pitchers": 451
+      },
+      "vs_constant": {
+        "mean": 0.0001384687633963785,
+        "paired_two_way95": [
+          -0.00019206746442752154,
+          0.00047002675173063094
+        ],
+        "role_family97_5": [
+          -0.0002663870202375225,
+          0.0005433245470302796
+        ],
+        "replicates": 200,
+        "games": 1982,
+        "pitchers": 451
+      },
+      "predictive_gate": false
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "group": "C",
+      "n": 4881,
+      "censored_or_insufficient": 17233,
+      "smooth_brier": 0.19638018635200372,
+      "raw_brier": 0.19664023622543061,
+      "constant_brier": 0.19641837733522485,
+      "vs_raw": {
+        "mean": -0.0002600498734268926,
+        "paired_two_way95": [
+          -0.001486134536211273,
+          0.0011136397256527736
+        ],
+        "role_family97_5": [
+          -0.0017611339616733098,
+          0.0012410342148195244
+        ],
+        "replicates": 200,
+        "games": 1907,
+        "pitchers": 562
+      },
+      "vs_constant": {
+        "mean": -3.819098322118214e-05,
+        "paired_two_way95": [
+          -0.001108639393412953,
+          0.0011889545410805032
+        ],
+        "role_family97_5": [
+          -0.0014068071321385255,
+          0.001330425165696161
+        ],
+        "replicates": 200,
+        "games": 1907,
+        "pitchers": 562
+      },
+      "predictive_gate": false
+    }
+  ],
+  "outcomeModels": [
+    {
+      "role": "SP",
+      "n": 92013,
+      "selected": "retain_previous",
+      "referenceLL": 1.4965050527074955,
+      "variants": [
+        {
+          "variant": "control",
+          "LL": 1.5006400982868187,
+          "Brier": 0.7001793886269263,
+          "vsControl": {
+            "mean": 0.0,
+            "paired_two_way95": [
+              0.0,
+              0.0
+            ],
+            "role_family97_5": [
+              0.0,
+              0.0
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.00413504557932311,
+            "paired_two_way95": [
+              0.0017416450036958867,
+              0.008487488177354115
+            ],
+            "role_family97_5": [
+              -0.0007577141118509942,
+              0.009027805270497215
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        },
+        {
+          "variant": "A",
+          "LL": 1.4998057748888778,
+          "Brier": 0.7001485989576404,
+          "vsControl": {
+            "mean": -0.0008343233979405889,
+            "paired_two_way95": [
+              -0.0030803268969830187,
+              0.00024946093589335876
+            ],
+            "role_family97_5": [
+              -0.0031690270103992123,
+              0.0015003802145180344
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.003300722181382593,
+            "paired_two_way95": [
+              0.0017003185457629862,
+              0.005727642311267589
+            ],
+            "role_family97_5": [
+              0.00022752685463835274,
+              0.006373917508126833
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        },
+        {
+          "variant": "B",
+          "LL": 1.4997979735286566,
+          "Brier": 0.7001814846682269,
+          "vsControl": {
+            "mean": -0.0008421247581621708,
+            "paired_two_way95": [
+              -0.0025381416586549386,
+              5.829508259846819e-06
+            ],
+            "role_family97_5": [
+              -0.0026733755679152855,
+              0.0009891260515909437
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.0032929208211609526,
+            "paired_two_way95": [
+              0.0015290493964914178,
+              0.005865820564968741
+            ],
+            "role_family97_5": [
+              -7.059711310191275e-05,
+              0.006656438755423818
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        },
+        {
+          "variant": "C",
+          "LL": 1.49956100661767,
+          "Brier": 0.7000041179191965,
+          "vsControl": {
+            "mean": -0.001079091669148486,
+            "paired_two_way95": [
+              -0.0032318200640203258,
+              -5.2995745669734065e-05
+            ],
+            "role_family97_5": [
+              -0.003237603911395656,
+              0.0010794205730986837
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.0030559539101746675,
+            "paired_two_way95": [
+              0.001306091505822064,
+              0.0054897749349427935
+            ],
+            "role_family97_5": [
+              -0.0001492125853020834,
+              0.006261120405651419
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        },
+        {
+          "variant": "D",
+          "LL": 1.5011598091015321,
+          "Brier": 0.7001566081338899,
+          "vsControl": {
+            "mean": 0.0005197108147136658,
+            "paired_two_way95": [
+              -9.460402929908546e-05,
+              0.001755570632388817
+            ],
+            "role_family97_5": [
+              -0.0008684772693516967,
+              0.0019078988987790285
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.004654756394036835,
+            "paired_two_way95": [
+              0.001723025767352957,
+              0.010816033784611085
+            ],
+            "role_family97_5": [
+              -0.001509104997312387,
+              0.010818617785386057
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        },
+        {
+          "variant": "all",
+          "LL": 1.500399195334776,
+          "Brier": 0.7003839518740446,
+          "vsControl": {
+            "mean": -0.00024090295204257973,
+            "paired_two_way95": [
+              -0.002125790392126746,
+              0.000864027676953785
+            ],
+            "role_family97_5": [
+              -0.002241745948264378,
+              0.0017599400441792186
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "vsRetained": {
+            "mean": 0.0038941426272805276,
+            "paired_two_way95": [
+              0.0021703084422071872,
+              0.006327174933559392
+            ],
+            "role_family97_5": [
+              0.0006635821113654661,
+              0.007124703143195589
+            ],
+            "replicates": 200,
+            "games": 2427,
+            "pitchers": 366
+          },
+          "passed": false
+        }
+      ]
+    },
+    {
+      "role": "RP",
+      "n": 45686,
+      "selected": "retain_previous",
+      "referenceLL": 1.5069358864575548,
+      "variants": [
+        {
+          "variant": "control",
+          "LL": 1.5068592121463502,
+          "Brier": 0.7056278671137123,
+          "vsControl": {
+            "mean": 0.0,
+            "paired_two_way95": [
+              0.0,
+              0.0
+            ],
+            "role_family97_5": [
+              0.0,
+              0.0
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": -7.667431120458313e-05,
+            "paired_two_way95": [
+              -0.0002634652418780506,
+              0.00015021752876895114
+            ],
+            "role_family97_5": [
+              -0.0003701671355139478,
+              0.0002168185131047815
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        },
+        {
+          "variant": "A",
+          "LL": 1.5070423403488653,
+          "Brier": 0.7057062759798443,
+          "vsControl": {
+            "mean": 0.0001831282025151526,
+            "paired_two_way95": [
+              -6.001356838459269e-05,
+              0.0004615534692404717
+            ],
+            "role_family97_5": [
+              -0.00022367847704398677,
+              0.0005899348820742919
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": 0.00010645389131056777,
+            "paired_two_way95": [
+              -0.00016663057449216082,
+              0.00039311835221908005
+            ],
+            "role_family97_5": [
+              -0.0003300872442809154,
+              0.0005429950269020509
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        },
+        {
+          "variant": "B",
+          "LL": 1.5071909802893844,
+          "Brier": 0.7057101049298093,
+          "vsControl": {
+            "mean": 0.0003317681430338765,
+            "paired_two_way95": [
+              1.3819700896598255e-05,
+              0.0007103862415569758
+            ],
+            "role_family97_5": [
+              -0.00022994192535774746,
+              0.0008934782114255004
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": 0.0002550938318292935,
+            "paired_two_way95": [
+              -6.597018202522045e-05,
+              0.0005995011794828706
+            ],
+            "role_family97_5": [
+              -0.00028784188089414875,
+              0.0007980295445527358
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        },
+        {
+          "variant": "C",
+          "LL": 1.506999645805044,
+          "Brier": 0.7056822170626664,
+          "vsControl": {
+            "mean": 0.00014043365869395317,
+            "paired_two_way95": [
+              -0.00012870070688015937,
+              0.00037001592379391096
+            ],
+            "role_family97_5": [
+              -0.000256883558401278,
+              0.0005377508757891843
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": 6.37593474893689e-05,
+            "paired_two_way95": [
+              -0.00020384231894568668,
+              0.0003262496482913192
+            ],
+            "role_family97_5": [
+              -0.00033407907563373683,
+              0.00046159777061247466
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        },
+        {
+          "variant": "D",
+          "LL": 1.5070662250252274,
+          "Brier": 0.7057222347786768,
+          "vsControl": {
+            "mean": 0.00020701287887694286,
+            "paired_two_way95": [
+              -9.798782710829605e-05,
+              0.0005467788164866153
+            ],
+            "role_family97_5": [
+              -0.0002645781182413121,
+              0.0006786038759951979
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": 0.00013033856767235793,
+            "paired_two_way95": [
+              -0.00019989096944317145,
+              0.0004959810864550168
+            ],
+            "role_family97_5": [
+              -0.0003599381813054536,
+              0.0006206153166501694
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        },
+        {
+          "variant": "all",
+          "LL": 1.5069684401897905,
+          "Brier": 0.7056862576168774,
+          "vsControl": {
+            "mean": 0.00010922804343997338,
+            "paired_two_way95": [
+              -0.0002332051644034542,
+              0.0004439159683088712
+            ],
+            "role_family97_5": [
+              -0.00039685309061790507,
+              0.0006153091774978518
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "vsRetained": {
+            "mean": 3.2553732235391026e-05,
+            "paired_two_way95": [
+              -0.0002473037751957948,
+              0.0003414494710934756
+            ],
+            "role_family97_5": [
+              -0.00042811335600322965,
+              0.0004932208204740117
+            ],
+            "replicates": 200,
+            "games": 2426,
+            "pitchers": 665
+          },
+          "passed": false
+        }
+      ]
+    }
+  ],
+  "replay": {
+    "version": "multi_signal_episode_v1",
+    "selection": {
+      "selected": {
+        "SP": {
+          "minimum_red": 2,
+          "training_predictive_support": false
+        },
+        "RP": {
+          "minimum_red": 2,
+          "training_predictive_support": false
+        }
+      },
+      "contrasts": [
+        {
+          "role": "SP",
+          "minimum_red": 2,
+          "n": 22474,
+          "flagged": 86,
+          "appearances": 75,
+          "risk": 0.46511627906976744,
+          "reference_risk": 0.31921331316187596,
+          "difference": 0.14590296590789148,
+          "interval": [
+            -0.08487370042068582,
+            0.37667963223646883
+          ],
+          "annual": [
+            {
+              "n": 11262,
+              "flagged": 48,
+              "appearances": 39,
+              "risk": 0.4375,
+              "reference_risk": 0.2878707156810513,
+              "difference": 0.14962928431894867,
+              "interval": [
+                -0.1544963934033392,
+                0.45375496204123655
+              ]
+            },
+            {
+              "n": 11212,
+              "flagged": 38,
+              "appearances": 36,
+              "risk": 0.5,
+              "reference_risk": 0.3506956831965751,
+              "difference": 0.14930431680342487,
+              "interval": [
+                -0.17983767494683583,
+                0.4784463085536857
+              ]
+            }
+          ],
+          "gate": false
+        },
+        {
+          "role": "SP",
+          "minimum_red": 3,
+          "n": 22474,
+          "flagged": 3,
+          "appearances": 3,
+          "risk": 1.0,
+          "reference_risk": 0.31921331316187596,
+          "difference": 0.680786686838124,
+          "interval": [
+            0.6578256672924243,
+            0.7037477063838238
+          ],
+          "annual": [
+            {
+              "n": 11262,
+              "flagged": 3,
+              "appearances": 3,
+              "risk": 1.0,
+              "reference_risk": 0.2878707156810513,
+              "difference": 0.7121292843189486,
+              "interval": [
+                0.6856488152681377,
+                0.7386097533697598
+              ]
+            },
+            {
+              "n": 11212,
+              "flagged": 0,
+              "appearances": 0,
+              "risk": null,
+              "reference_risk": null,
+              "difference": null,
+              "interval": null
+            }
+          ],
+          "gate": false
+        },
+        {
+          "role": "RP",
+          "minimum_red": 2,
+          "n": 3540,
+          "flagged": 11,
+          "appearances": 11,
+          "risk": 0.36363636363636365,
+          "reference_risk": 0.3307909604519774,
+          "difference": 0.032845403184386224,
+          "interval": [
+            -0.48724858257322723,
+            0.5529393889419997
+          ],
+          "annual": [
+            {
+              "n": 1654,
+              "flagged": 5,
+              "appearances": 5,
+              "risk": 0.4,
+              "reference_risk": 0.3041112454655381,
+              "difference": 0.09588875453446194,
+              "interval": [
+                -0.757959053904357,
+                0.949736562973281
+              ]
+            },
+            {
+              "n": 1886,
+              "flagged": 6,
+              "appearances": 6,
+              "risk": 0.3333333333333333,
+              "reference_risk": 0.35418875927889715,
+              "difference": -0.020855425945563832,
+              "interval": [
+                -0.7830208203231066,
+                0.7413099684319788
+              ]
+            }
+          ],
+          "gate": false
+        },
+        {
+          "role": "RP",
+          "minimum_red": 3,
+          "n": 3540,
+          "flagged": 0,
+          "appearances": 0,
+          "risk": null,
+          "reference_risk": null,
+          "difference": null,
+          "interval": null,
+          "annual": [
+            {
+              "n": 1654,
+              "flagged": 0,
+              "appearances": 0,
+              "risk": null,
+              "reference_risk": null,
+              "difference": null,
+              "interval": null
+            },
+            {
+              "n": 1886,
+              "flagged": 0,
+              "appearances": 0,
+              "risk": null,
+              "reference_risk": null,
+              "difference": null,
+              "interval": null
+            }
+          ],
+          "gate": false
+        }
+      ],
+      "2024_used_for_selection": false,
+      "matching_used_for_selection": false
+    },
+    "combination_validation2024": [
+      {
+        "role": "SP",
+        "n": 11249,
+        "flagged": 37,
+        "appearances": 32,
+        "risk": 0.5945945945945946,
+        "reference_risk": 0.3298070939639079,
+        "difference": 0.26478750063068673,
+        "interval": [
+          -0.1176680537654437,
+          0.6472430550268171
+        ],
+        "diagnostic_gate": false
+      },
+      {
+        "role": "RP",
+        "n": 1691,
+        "flagged": 1,
+        "appearances": 1,
+        "risk": 0.0,
+        "reference_risk": 0.3228858663512714,
+        "difference": -0.3228858663512714,
+        "interval": [
+          -0.3703998168142877,
+          -0.27537191588825516
+        ],
+        "diagnostic_gate": false
+      }
+    ],
+    "flow": {
+      "raw_boundaries": 2376,
+      "modeled": 1737,
+      "full_four": 842,
+      "state_episodes": 1,
+      "observed_recovery": 0,
+      "nominal_research_alerts": 0,
+      "same_boundary": 0,
+      "advance_window": 0,
+      "unmatched_alerts": 0,
+      "official_events": 208,
+      "operational_recommendations": 0
+    },
+    "roles": [
+      {
+        "role": "RP",
+        "modeled": 495,
+        "full_four": 251,
+        "states": {
+          "A": {
+            "0": 332,
+            "-1": 145,
+            "1": 11,
+            "2": 7
+          },
+          "B": {
+            "0": 333,
+            "-1": 145,
+            "1": 15,
+            "2": 2
+          },
+          "C": {
+            "0": 272,
+            "-1": 195,
+            "1": 22,
+            "2": 6
+          },
+          "D": {
+            "0": 415,
+            "1": 60,
+            "2": 20
+          }
+        },
+        "state_episodes": 0,
+        "research_alerts": 0
+      },
+      {
+        "role": "SP",
+        "modeled": 1242,
+        "full_four": 591,
+        "states": {
+          "A": {
+            "0": 658,
+            "-1": 529,
+            "1": 45,
+            "2": 10
+          },
+          "B": {
+            "0": 621,
+            "-1": 529,
+            "1": 64,
+            "2": 28
+          },
+          "C": {
+            "0": 609,
+            "-1": 574,
+            "1": 46,
+            "2": 13
+          },
+          "D": {
+            "0": 1106,
+            "1": 60,
+            "-1": 59,
+            "2": 17
+          }
+        },
+        "state_episodes": 1,
+        "research_alerts": 0
+      }
+    ],
+    "point_reasons": {
+      "unknown_evidence_pauses_not_recovery": 1534,
+      "no_state_combination": 833,
+      "combination_predictive_support_not_established": 5,
+      "awaiting_fresh_block_persistence": 4
+    },
+    "episode_end_reasons": {
+      "last_observed_boundary_censored": 1
+    },
+    "retained_old_result": {
+      "alerts": 11,
+      "matched": 0
+    },
+    "first_PA_models": {
+      "SP": "retain_previous",
+      "RP": "retain_previous"
+    },
+    "value_version": "retained14.2",
+    "interpretation": "threshold-calibrated tail states and future-measurement support are research proxies, not physiological fatigue/causal strategy correctness; gray pauses do not count as recovery",
+    "recommendation_allowed": false,
+    "test2025_outcomes_examined": false,
+    "stop": "14.2.4"
+  },
+  "recommendationAllowed": false,
+  "test2025OutcomesExamined": false,
+  "visualAcceptance": "pending user"
+}

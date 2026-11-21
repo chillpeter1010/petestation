@@ -1,5 +1,373 @@
 # Petehub 新對話交接
 
+2026-11-21 競賽PDF參考評估時的欄位勘誤：目前四群為A球質、B位置／控球代理、C對手接觸、D負荷／恢復壓力；下一打者與相性是另外的資訊，不能混稱「下一打者D」。15.4凍結source／protocol中該文字對應有誤，原產物保留，不靜默改hash。共同截點已有load_relative與個人負荷參考，仍未完成四群顏色／持續性／價值及人選／半局終點的整合覆核；下一打者另外需要時點安全的預定打線重建。9個SMD拒絕來自固定特徵的數值計算，未因這項文字勘誤變更；不能把D負荷資料全說成缺失。本輪只讀取使用者競賽PDF及參考文獻、評估可能修訂，不新增Slice、不重訓、不進16或開封2025。
+
+2026-11-21 11:12 開發服務恢復：使用者回報 `/lab/decision-support` 顯示 `IPC connection closed`，現有 `frontend/.logs/nuxt-recovery-20261115.out.log` 亦有相同錯誤。原3000服務PID33704（11/15啟動）及已確認所屬Nuxt／esbuild子程序停止，原位重啟同專案同3000服務PID45524；另一專案3001未動。新日誌 `frontend/.logs/nuxt-recovery-20261121-111159.out.log`／`.err.log`。HTTP未登入請求正常導向 `/login?redirect=/lab/decision-support`，最終200且未見IPC錯誤；這不是已登入研究頁或畫面驗收。未操作browser、未建立替代帳號／UI server，未改研究或頁面源碼；請使用者原瀏覽器重新整理確認。
+
+## 2026-11-21：16.1–16.3探索回測完成（最新）
+
+使用者明確授權探索性16.1–16.3。新增三子項，進度 **51/58**，16主項仍in_progress（原正式direct／SNIPS／DR效益未完成），17–21未開始、2025封存，未commit／push。此前把正式效益資格與探索回測綁在一起過嚴，本輪另立協定放行探索，不改原15.4契約／失敗門檻、原模型或正式多燈；推薦／人選排名仍false，畫面驗收由使用者。
+
+16.1：沿15.5兩角色下一PA失分模型，整合全部共同截點並採SP-to-RP同隊2PA冷卻，同半局／登板兩相鄰PA、一登板一次。2022–24全母體回放，沒有早局刪除或依實際換投／標籤挑點。2024共138074點／2427場，2748提醒、1172前三局、2506可觀測／242未知，觀測失分987／2506；同邊界208、提前1–2PA且600秒內288。這是既有合法cohort對應，非全部官方事件召回或正確率；未知不算誤報，尚未套正式四燈／替代收益門檻。合併後數量恰與分角色相同，不宣稱新冷卻降低提醒。歷史不因提醒而改寫，不是反事實整場路徑。
+
+16.2：2021–24共同截點重建actual actor（續投與實際RP接任）觀測標籤，不編碼事後身分。候補池連嚴格先前名義快照，去除已進場及現任；自身ASOF角色九類能力／手別、72／120小時用球、距上球時間、最近三次同Plus量測版本已閉合登板的相對Stuff／Location／球速與資料年齡。候補當場PE／狀態保持NaN，不借現任；熱身／健康未知。首三棒僅由過去已完成棒次預測，不使用actual next batter。observed標籤需單一actor、organic PA起點不早於anchor、終點不晚於game-close且初始局面一致；官方第三出局殘壘轉半局終止post_base=0後才檢查守恆。2024可觀測137539例，其中自身歷史支持131742例。
+
+六個新橋接擬合（base/rich×三前推年），整場80/20 fit/cal、跨界場排除、fit自然cap60000、HGB7葉60/L2=10、cal溫度；前推2022/23平均LL base=1.513550662、rich=1.513541286，依凍結最低平均LL排序選rich，微小差距不稱顯著增益。2024重用診斷；LL與AUC是含actual entries的新cohort，不與15.5原投手續投作純模型比較。
+
+固定MD5前32場全部1791邊界，1517可估／274拒絕；39提醒中37可估、11有半局模擬支持。完整名義支持池：下一PA支持697／半局支持628；半局方向{'uncertain_or_unsupported': 1417, 'pool_higher': 63, 'continue_higher': 37}。個別點不代表獨立決策、不能相加成季效益。
+
+16.3：uniform own-history-supported nominal RP、至少2人；256共同路徑、MAX32PA、兩臂皆選定投手留半局。第一PA用選定橋接，後續base且清空live PE／狀態，球數取訓練role×outcome分布；下PA休息回訓練局中現任中位數，不把入場前休息延續。前三棒後回先前UTC日聯盟先驗，WE／RE及轉移只前年度訓練。未模擬IBB／獨立跑者事件、後續教練行為或牛棚長期成本，非原15.4共同後續行為策略估計。unsupported最大類別質量>.01、任何路徑外推或截尾則未知；MC95只含模擬誤差、不含模型／因果不確定。群聚案例平均僅描述；休息>=24h、72h<=40球與未選用模型的共同支持敏感度另列。
+
+`decision_exploratory_v1/`含全部逐點回放、own-actor標籤／32場options、六模型／split／排序、56批場景與排除、匯總、32場官方WE/WPA曲線及實際換投／影子提醒。共同anchor重新計WE與過去預定打者；實際事件圖層是事後描述。原1699檔hash留版。attempt0保存初稿型別／慢回放；attempt1保存未正規化第三出局殘壘的錯誤篩樣本、試算模型／場景及協定，不參與最終結果。正式SMD未重估；SNIPS／DR缺共同人選／可用性機率及後續策略支持，明列未估計，不能稱效益通過。
+
+摘要`petehub_pitcher_decision_exploratory_v1.json`，audit另存；Lab `/lab/decision-support#exploratory-replay`。重現：先核對舊hash及protocol，build_decision_exploratory.py freeze→replay2022/23/24→prepare2021–24→train2022/23→select（必須先於2024新模型；既有版本不可原位重選）→train2024→scenarios --batch0..55；export_decision_exploratory.py build→traces→update→docs→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_exploratory.py。全部source-only，沒有browser／截圖／DOM或替代UI server。
+
+## 2026-11-21：15.5.1–15.5.4預測修訂研究完成（歷史版本）
+
+使用者授權完成15.5.1–15.5.4。新增四子項，進度 **48/55**（此前44/51），16增加15.5.4依賴且仍planned；16–21未開始、2025封存，不commit/push、不改原PA／xWPA／燈號或啟用推薦。原1556份產物（含15.4）留版。D負荷／恢復字典勘誤已明定，下一打者是另一資訊群，不修改舊凍結source/hash。
+
+15.5.1/2：四年546880個共同截點，建立PA版PE代理（固定事件權重＋最後一球前球數＋已知EV）、最近1/2/3完整PA、3PA變化、部分累積與coverage、揮空／每PA強擊球及prefix好球份額。非原論文精確重現、不稱疲勞。接觸缺EV與IBB等留未知、打斷近期窗；無接觸不是缺EV。FF僅四縫線，最後已完成PA FF均值對截點前prefix及進場前最近50有FF PA參考；個人PE同樣進場前最近50、至少10才有均值，沒有全場未來平均或最終登板長度選取。
+
+下三棒由先前已完成官方PA依9棒次循環的最近已出現球員推估，包括零球／IBB，不使用事後首發表或實際下一PA打者。未知首輪／代打保留不確定，身分吻合度只事後盤點，不篩樣本。歷史打者九結果ASOF、收縮20到前一UTC日已完成PA聯盟先驗，無日參考僅Laplace1未資訊先驗。身分／能力／聯盟時鐘、PE prefix／entry參考各保留。標籤只在原投手續投、下一完整organic PA同一physical actor且開始不早於anchor、結束不晚於gameclose時有值；換下者未知，不借接任結果。輔助失分是PA期間比分增量，不是anchor-to-half WPA。
+
+15.5.3：SP/RP各三年前推，主要九類PA每折HGBbase/PE/full及linear_full/RF_full五模型；輔助run每折HGBbase/full兩模型，共30+12=42。整場80/20分fit/cal，跨界場排除；取已觀測標籤，自然抽樣fit最多60000、所有設定同一fit，補值／尺度只fit；late-cal溫度[.5,3]。HGB7葉60、線性L2alpha.001/100iter、RF100棵depth8/minleaf100/maxfeatures.7固定，無超參數搜尋。2022/23依失敗fold數再平均LL排序，選設定但不保證支持；selection/guard早於2024新輸出，2024已被過去研究看過，只診斷，不稱新獨立測試。
+
+15.5.4：主要SP全部、RP局中short_profile（entry歷史）固定；九類LL、nonout Brier／AUC／校準及game×pitcher300次配對區間。輔助run風險在全部角色risk set回放，cal全部邊界風險90百分位取門檻（非依未來觀測／實際換投）；同半局登板連續兩PA、一登板一次、角色流內同隊2PA冷卻，沒有SP-to-RP全域整合。早局保留，未知警示後續另列，不算誤報；實際事件只既有合法母體，同邊界與提前1–2PA/600秒分開，非策略效益。RP另在同paired monitoring案例對照原15.3二元預測，訓練樣本／任務不同，不能當純演算法對照。舊十球任務不改、不參與排序。
+
+研究排序：SP=hgb_full, development_support=True; RP=hgb_full, development_support=True。完整數值在摘要primary2024與folds，不挑2024其他較好模型回頭改選。沒有重訓行動傾向或重算權重，原15.4三年9項SMD拒絕保留，沒有因預測增益自動進16；共同截點四群／價值回放、人選聯合支持／實際可用性及同半局終點／共同後續策略仍需另行修訂。
+
+新來源資料`decision_pe_features_v1/`、協定／42模型／split／逐點機率／排序／guard／風險回放`decision_pe_models_v1/`；摘要`petehub_pitcher_decision_pe_revision_v1.json`，audit另存。Lab#pe-revision，畫面使用者驗收。重跑先核對原hash，build_decision_pe_features.py cache各年→references→prepare各年；build_decision_pe_models.py freeze→train/evaluate2022/23各role→select→guard→train/evaluate2024→finish；export_decision_pe_revision.py build/finish→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_pe_revision.py。不能靜默改已凍結source／資料／排序。
+
+2024結果：SP有92010個已觀測原投手PA，九類LL HGBbase1.512046→full1.504205，Δ=-.007842、game×pitcher探索性95%[-.009245,-.006551]，非出局AUC .52550→.53126；RP主要局中短型有10534個已觀測PA，LL1.527521→1.514653，Δ=-.012867、[-.017891,-.007990]，AUC .51905→.53162。完整HGB在兩角色2022/23開發及2024診斷均過新增PA預測條件；這些年度已被研究使用，不是全新確認。只加PE：SPΔLL-.000187、[-.000695,.000324]，RP+.000197、[-.001520,.001810]，皆跨0，未支持穩定獨立增益。完整RF有部分增益但不優於完整HGB，不能只因競賽用RF就換模型。完整群同時加個人參考／打線，尚不能歸因單一欄。
+
+輔助PA期間失分：SP完整AUC .79052對基準.78616、Brier .068542對.068575，Δ區間[-.000082,.000015]；RP主要完整AUC .78919對.78681、Brier .105564對.105699，[-.000355,.000106]。Brier增益皆跨0，不能稱失分提醒已證實更有效，更不能比較此AUC與非出局.53為同目標改善。RP同6653個舊配對監測案例：原15.3非出局AUC .51671／Brier .215476，完整九類導出AUC .53918／Brier .214858，Brier差區間[-.001551,.000297]跨0；訓練任務／母體不同，僅補充對照。
+
+2024角色全部母體完整HGB研究風險提醒：SP1939（後續可觀測1837／未知102、觀測PPV36.85%、前三局1152、同邊界85／提前1–2PA且600s內131）；RP809（669／140、PPV46.34%、前三局20、同邊界123／提前157）。這是PA期間失分研究提醒，並未套正式多燈／替代價值／實際可用性全門檻，不能稱新增1939／809次可用換投建議。提醒分母是角色全部母體，RP主要預測表是局中短型，不能混用。早期風險亦不等於疲勞；未知不算誤報，時間配對不證明合理或因果效益。
+
+source-only完成：94項Decision Python測試、一次direct vue-tsc、frontend／backend及修改docs UTF-8、嚴格JSON通過。`petehub_pitcher_decision_pe_revision_audit_v1.json`核對1556份舊產物及98份新產物（15資料／83模型研究檔，非獨立樣本）、四年所有時鐘／actor／標籤／coverage及抽樣直接PE／個人／棒次重建、42個相同樣本fit與直接機率、每fold選中模型區間重算、所有run門檻由過去cal重算、2024前selection／guard、48/55與16未開始。原SMD／多燈／策略及畫面未宣稱通過；畫面待使用者。
+
+## 2026-11-21：15.4凍結前推與16資格覆核完成（歷史版本）
+
+使用者授權下一步15.4，本輪完成 **44/51**，16–21仍planned。15.4研究交付完成但16進入資格=False；沒有執行16、訓練新模型、產生新策略收益／推薦、開封2025、commit/push或瀏覽器／畫面驗收。原1546份產物（含15.3留版）按manifest核對保留。
+
+15.4協定`decision_entry_review_v1/protocol.json`在這輪重算前凍結source／既有manifest／特徵／母體／模型／門檻／權重及16策略終點。SP沿15.2 hgb_full、兩phase分開；RP沿15.3 history_enriched、主要within_inning short_profile，其餘固定subset敏感度。沒有改選或重新擬合，2024早已診斷、15.3亦曾修正標籤，本輪不是獨立確認。2022/23/24共72個平衡結果（非模型數）、9個主要phase/year門檻，通過0/9。全部逐點覆核414,962，初步支持318,669，通過所有研究／實作資格0；不能把初步支持當有效建議數。
+
+門檻沿既有SMD≤.1、兩臂ESS≥500、ECE≤.03、無fit警告，兩個開發年度與2024均過才取得比較資格。主要overlap及次要IPW分列不同estimand。新ledger只用當時已知母體、過去cell與有效機率作initial_support；年度／開發資格及review_rejection是回溯研究稽核，非當時可知訊號。實際換投／未來Y／觀測狀態不入資格判斷；不把被換下標籤補正常。
+
+六個RP主要條件結果（兩目標×三年）增加300次game×pitcher pigeonhole配對Brier差95%區間；只針對固定模型、有觀測結果與各自過去常數，不含重訓不確定性、不解決選擇偏差，屬探索性邊際區間，不作多重比較保證。逐年覆蓋、缺失原因、g≥.1加權／最壞界限及odds情境重算保留。
+
+16五道資格：前推比較、多燈預測支持、共同時點四群／價值／持續性回放、人選聯合支持與實際可用性、同半局終點及共同後續策略；目前均未取得通過。共同比較時點沒有可借用的未來打者D，原較晚時點xWPA／候選行為不能直接代入。這些是實作／識別缺口，不是調高門檻到沒建議，也不能用換分類器直接補齊。
+
+16候選策略契約：同一合法index boundary比較續投與既有兩紅含A/B、成熟度、fresh-block持續性及14.2價值／合法／可用性等全門檻觸發換投；接任從當時合法、有自身歷史／聯合機率支持且確認可用的名義RP等機率抽樣，沒有支持或關鍵未知則abstain，不作最佳人選排名。兩臂後續用相同版本調度策略。主要終點守方WE(同當前／即將開始半局自然終點)-WE(anchor)，次要RE(anchor)-失分-RE(同終點)，納入所有中間play／IBB／跑壘與吸收終局；原nonout／十球偏離不替代策略收益。這是待實作的feasibility契約，沒有計算值。16才可在資格過後做direct／SNIPS／DR、相同joint支持及群聚區間／敏感度。
+
+下一步先另立修訂協定處理拒絕清單，不自動跳16或以15.4done當授權。新產物`data/research/decision_entry_review_v1/`、摘要`data/sample/petehub_pitcher_decision_entry_review_v1.json`、audit另存；Lab#entry-review及規劃總覽同步。重跑先核對協定與原hash：build_decision_entry_review.py freeze→review --year2022/23/24→finish；export_decision_entry_review.py build/finish→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_entry_review.py。原產物及source不得靜默改。
+
+主要結果：三年9個門檻全僅因balance_smd拒絕，ESS／ECE／fit warning均未觸發。2024 SP局間SMD.195083、局中.147563，RP局中短型.133375。2024條件Brier差（模型−自身常數）next_pa=-.000131、game×pitcher探索性95%[-.000564,.000298]；future_ten=-.018860、[-.045809,.005029]。2022/23兩任務區間亦皆跨0，不能確認穩定增益，更不能稱策略有效。2024已被看過，不是新獨立測試。
+
+source-only完成：86項Decision Python測試、direct vue-tsc（新表達式語法修正後通過）、frontend／backend及修改docs UTF-8、嚴格JSON檢查通過。`petehub_pitcher_decision_entry_review_audit_v1.json`核對1546份既有產物與10份新產物、72平衡列及6個群聚區間重算、36個既有模型任務的抽樣直接機率、所有414962邊界／互斥拒絕分母、initial_support不借用行動或未來標籤、44/51及16–21維持planned；0新模型、0策略估值。資料稽核通過不代表SMD／策略／畫面通過，畫面仍待使用者。
+
+## 2026-11-21：15.3 RP目標與受限母體研究完成（歷史版本）
+
+使用者本輪只要求完成15.3，現 **43/51**；15.4／16–21維持planned。2025封存，沒有新推薦、改燈號、重跑xWPA、commit/push或瀏覽器／畫面驗收。15.1–15.2及更早協定／資料／模型／源碼留版。
+
+進場前最近10次已結束RP登板，至少5次，歷史BF中位≤4且球數中位≤20為short_profile，其餘extended_profile，不足history_unknown。全體、已知歷史、短型、延長型、短型相對BF及球數≤1.5共5固定母體；主要局中short_profile在擬合前指定，不按2024或本場最終登板長度挑選。所有特徵沿15.1共同截點；不借用截點後打者或較晚狀態。
+
+原投手next_pa目標：下一個完整自然PA的非出局（K／other_out為0，其他來源自然類別為1），同一實體投手且開始不早於anchor，並非xWPA或純安打率。future_ten：第一個完整位於anchor後的固定十球塊，預期編號ceil(當前session已投球數/10)，不跳過未量測的塊找較晚完整者；Stuff殘差≤-5或速度≤-.5或Location≤-5。缺任一量測則未知，不是已確認生理疲勞。換下者兩任務均未知，不能接接任者成績。監測為同已知球塊首個邊界，無完整塊時每登板首個起始機會；另報全部邊界與唯一未來球塊，不能把重複預測當獨立證據。
+
+2024 RP全部共同截點邊界41,447、配對監測24,385。主要局中短型監測：next_pa 6653/7589 (87.67%); future_ten 639/7589 (8.42%)。兩種標籤含義不同，只與各自過去常數基準比較，不能跨標籤Brier判斷改善。
+
+固定HGB自然抽樣及late-time Platt，兩phase×3前推年×(action、2觀測、2條件結果)共30任務產物，其中HGB27、預先稀少任務常數退路3。每個任務按整場時間80/20 fit/cal，嚴格早於次年驗證。conditional outcome只用R=1；observation用全部監測。protocol與confirmation_guard均在2024前留版，沒有超參數或母體挑選；2024已被前輪診斷使用，不稱全新獨立測試。
+
+revision2修正紀錄：首次將來源raw事件錯當分組名稱，已知nextPA標籤全為1；source／protocol／資料／30任務產物／2024診斷完整封存attempt0_label_mapping。新增原始事件映射測試、按既有preparation事件與出局數規則修正後全重跑，未改母體、特徵、模型或門檻。修正版guard早於修正版2024，但2024已被診斷，不能稱獨立確認。
+
+2024主要母體條件結果：next_pa Brier常數.215607→模型.215476，AUC.516710、ECE.013839，區分力弱；future_ten .228187→.209327，AUC.673089、ECE.037353，只限639個已觀測結果，沒有群聚區間支持晉升。2022主要PA模型Brier反而略差、2023略好，不能宣稱穩定提升。十球觀測權重g≥.1只留444例，ESS356.7；6950未知使最壞全母體界限2.93%–94.51%，odds假設情境26.18%／38.01%／51.62%。PA未知936，最壞界限27.54%–39.87%。固定母體所有2024新模型overlap皆未過完整門檻，不以較接近.1者回頭改主要母體。主要新舊SMD .133375／.131053，未顯示改善；主要失衡仍投手K能力、左右投及狀態量測缺失。
+
+主要2024局中短型歷史、overlap，新增歷史模型最大絕對SMD=0.133375，換投ESS=1407.5、續投ESS=5622.3、ECE=0.013688，完整診斷門檻未通過。新舊15.2行動模型在同一subset、同一豐富基準含新增歷史欄位對照；完整矩陣有2022/23/24、5母體、2phase、2模型、2權重，不依2024改選或宣稱因果策略有效。
+
+缺失敏感度包含g≥.1的逆觀測加權（caps無／10／20／50）、最壞情況界限、未知者預測odds×.5／1／2總體情境。所有原未知Y仍NaN，情境數值不回填、不進訓練，不能用觀測模型宣稱已解決非隨機缺失或換下後反事實。資料／模型證據`data/research/decision_rp_targets_v1/`，摘要`data/sample/petehub_pitcher_decision_rp_targets_v1.json`，source audit另存。Lab新增#rp-target-research，手動畫面驗收由使用者進行。
+
+下一步15.4需據固定母體、平衡／校準／ESS與拒絕原因作凍結覆核，明定16策略與終點；工作完成不等於獲准啟用推薦。沒有支持時維持研究／未知。重跑先核對舊manifest與新protocol：build_decision_rp_targets.py prepare --year2021..24→freeze→train2022/23各phase→export_decision_rp_targets.py guard→train2024→evaluate→export build/finish→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_rp_targets.py。不可靜默覆寫已凍結研究產物。
+
+本輪source-only驗證：81項Decision Python測試、一次direct vue-tsc、frontend／backend UTF-8與修改docs UTF-8、嚴格JSON檢查通過。`petehub_pitcher_decision_rp_targets_audit_v1.json`核對1365份既有產物未變、新181份產物（含失敗留版，非獨立樣本）、四年共同RP分母、進場前歷史抽查、來源PA事件獨立重建、後續球塊時鐘／換下缺值、30任務split與直接機率、固定主要母體平衡及缺失情境重算、43/51與15.4／16–21未開始。source checks不代表平衡、策略或畫面通過；畫面驗收待使用者。
+
+## 2026-11-19：15.1–15.2共同時點與平衡修訂完成（歷史版本）
+
+使用者要求改規劃並開始15.1–15.2。新增15.1–15.4四子項，進度由40/47改為 **42/51**；15.1／15.2完成研究工作，平衡門檻仍未過。15.3 RP觀測任務／母體、15.4凍結前推覆核planned，16增加15.4依賴；不自動開始15.3、16或開封2025、不commit/push、不開browser/server。原研究產物與源碼全部留版。
+
+15.1：共同截點＝前一個全場已完成play結束+1ms，必須嚴格早於原官方行動時間、現任已進場及局面可重建。546930點中排除50個時點不能嚴格確認的點，留546880（2021 131918、2022 137323、2023 139565、2024 138074）。這仍繼承原回溯合法／身分／完整play母體，不是部署覆蓋或真實教練思考時點。
+
+所有球數、BF、72/120h其他場用球、角色能力、當前原因區段均ASOF重取；個人負荷中位數固定進場前，避免把現任整段當過去。累積pitcher／game clocks相減處理同場與跨場負荷。局間以已知比分及規定壘包重建，局中沿前play出局／壘包；未來打者身分／能力及舊時點WE/LI不沿用。牛棚採截點前最近名義RP快照，扣除截點前已登板者並保留年齡／未知，非完整active／熱身／醫療資訊。不能只改decision_at沿用舊欄位。
+
+2024 RP共同截點到舊時點的中位間隔，局間續投132.6秒／換投91.9秒；局中續投27.9秒／換投61.5秒。差異方向依情境變動，需把局間／局中分開；不能將其直接稱成疲勞或斷言造成多少舊偏差。保留原官方時間與所有排除對帳。
+
+原15 RP監測19115例，缺16630：當下換投4641、後續投球機會不足10553、量測／參考不足1267、原支持範圍外142、區段／session缺口27。有量測2485。分類以舊15目標為準，只作事後稽核，不入模型；不足機會包含稍後換下／原固定區段要10–19球等，不等同資料缺檔或生理疲勞。SP缺16828另列1812／6244／2883／5730／159；有量測21259。沒有開始15.3的新RP目標／觀測模型。
+
+15.2：4個固定設定（共同時點HGB、核心樣條logit、完整樣條logit、固定矩條件平衡logit）×兩離場角色×局間/局中×三前推年度，共48模型。學習分段80/20整場時間、所有label早於次年首anchor；僅HGB做late-time Platt，線性模型保留原機率。所有候選以同一豐富數值／缺失／類別基準檢查平衡；核心消融不能刪檢查欄位過關。主目標overlap weights、次目標IPW(.05/.95)，兩母體分開，不以結果挑目標。
+
+只用2022/23前推排序，SP/RP都選hgb_full作最穩定研究對照，但各4個phase/year門檻全未過，沒有取得晉升資格。selection與confirmation_guard在任何2024結果前凍結；2024已用診斷，不稱獨立新測試。2024主要overlap最大SMD：SP局間.195、局中.148；RP局間.255、局中.108，仍均高於.1。新舊時點、分組、欄位與目標不同，不能宣稱比舊15改善多少%。2024部分logit表面較好也不回頭改選。
+
+固定矩條件模型最小化IPW平衡矩加L2、限制150迭代／係數範圍；不是官方CBPS實作、沒有精確平衡保證。共4模型有收斂警告，保留失敗，不加迭代調到2024過。原研究矩陣48模型的重複兩scheme共96結果，不是96個獨立模型。原xWPA／PA模型、名義人選、兩紅、11／0及新0多燈研究候選全部未變；推薦／排名關閉。
+
+留版：15.2首次兩個2022 HGB模型擬合後，IPW診斷遇pandas唯讀mask錯誤；原source/protocol/2模型/機率/split留attempt0_readonly_mask。revision2只複製mask再篩選，模型與門檻／母體／排序不變；沒有2024結果時即修正留版。15.1的源碼／資料協定凍結在15.2模型之前，所有核心源碼不可靜默改。
+
+產物 `data/research/decision_common_clock_v1/`（逐點時點／重取特徵／缺失原因／時鐘快取）及 `decision_balance_revision_v1/`（協定、splits、48模型／機率、排序、guard、結果、manifest）；小型證據 `data/sample/petehub_pitcher_decision_overlap_revision_v1.json`。新Lab#overlap-revision，舊15收進歷史組並保留#overlap-research，規劃表依數字顯示15.1–15.4及依賴。畫面使用者驗收。
+
+接下來依15.3檢查RP目標及受限母體；15.4再凍結完整前推、明定16策略與終點，未達支持不晉升。本輪只完成15.1–15.2，不進後續。方法局限包括未來打者於新截點未知、牛棚快照不完整、歷史選擇、未記錄意圖／健康與觀測缺失，平衡過關也不能直接稱策略有效。
+
+重跑分段：build_decision_common_clock.py cache→prepare/missing_audit --year2021..24→freeze；build_decision_balance_revision.py freeze→train --year2022/23 --role SP/RP→select→confirmation_guard→train --year2024→finish。export_decision_overlap_revision.py build／finish→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_overlap_revision.py。原協定／來源先核對再重跑，新方法另立版本。
+
+本輪source-only完成：75項Decision Python測試、一次direct vue-tsc、frontend／backend及修改docs UTF-8檢查通過；audit核對1205份原產物、160份新產物（24共同時點／136平衡研究，含留版不是獨立樣本），以及ASOF actor／個人參考／牛棚快照時鐘、未觀測標籤維持、每模型直接機率重算、2024之前凍結排序、同分母平衡重算及42/51與未開始15.3–15.4／16。證據 `data/sample/petehub_pitcher_decision_overlap_revision_audit_v1.json`。2024新HGB主要失衡：SP局間跨場72h負荷、局中K能力；RP局間本場球數／牛棚負荷、局中球數／BF。沒有模型／策略晉升或畫面通過宣稱。
+
+## 2026-11-19：Slice15選擇偏差／重疊研究完成（最新）
+
+使用者授權「開始slice15並回報成果」。工作完成 **40/47**，研究結果的平衡門檻未過；不自動進16、不開封2025、不commit/push、不開browser/server或驗收畫面。原969份研究檔、14.2.2–4的112份及凍結源碼／v1與v2燈號均保留；原11預警／0配對及新0有效多燈研究候選不變。
+
+分開四項：P(換投|X)、P(之後有全未來有效量測|X)、P(進入名義RP池|換投,X)、P(該RP|換投且池內,X)。前兩者以固定HGB7/60＋時間內Platt，池內人選以固定L2條件softmax＋時間內temperature。所有輸入只用離場者／候選本人的決策前資訊，incoming ID只作標籤；遊戲closed時鐘作保守label available，2021→22、21–22→23、21–23→24，fit/cal整場時間分開，沒有2025結果。
+
+母體546,930個2021–24回溯合法／身分／已完成play邊界，54,669次換投；恢復原38個實際接任者不在名義池的案例，不再以此結果排除調度傾向。仍繼承回溯身分、法定合法、已完成play、強制換投排除，非部署母體。2021後續量測只有晚季已具凍結正常進程分數，不能直接以全年比率比較。
+
+2024：SP 96,630邊界、4,515換投，主要e∈[.05,.95]且過去分格各行動>=10後14,691（15.2%），換投ESS1943、續投ESS8769、最大絕對SMD0.209；RP 41,457邊界、9,819換投，保留31,196（75.2%），ESS4062／15948、SMD0.296。預先平衡門檻0.1兩角色皆未過，AUC雖SP.948／RP.883不能當正確率或可用因果權重。偏差主項SP為D缺失與投手K/BB能力，RP為出局、資料年齡及壘包。
+
+監測以每完整10球block第一個合法邊界去重，目標anchor>=decision且最多來源後2個編號。SP38,087機會缺16,828（44.2%），RP19,115缺16,630（87.0%）；R=0只代表沒有有效後續量測，future_bad仍NaN。全四群、g>=.1母體SP15016中11244有量測，觀測權重ESS6983／平衡SMD.100附近；RP5271中1424有量測，ESS1002／SMD.147。這仍依賴無法驗證的觀測機制假設。主要R>=.1使1/g<=10，所以10/20/50 cap相同屬預定範圍的必然，不能稱截斷敏感度已證明穩健；調度與候選的cap敏感度另列。
+
+SP兩紅觀測加權未來偏離率63.6%對參考34.5%，差29.1pp，200次比賽×投手重抽樣區間[-4.94,50.69]pp跨0；不是因果效果，也沒晉升。RP在g>=.1及有完整未來量測之後兩紅0例，不強算區間。樣本支持旗標只代表足夠例數算區間，不等於預測支持。固定32場2376原始、1791有調度分數、633過初步重疊；1737可算值中604過初步重疊，但整體平衡仍不通過，不能叫604個有效策略建議。
+
+方法留版：初次fit因nullable Int64在transformer即被拒、沒有成功模型或預測，原source/protocol/split留attempt0_nullable_dtype；revision2只修float/NaN輸入後才擬合。原18模型及結果先封core_manifest（96檔）。診斷後發現兩階段人選分數不能當無條件機率，另凍結pool_mass_v2並加6個RP池歸屬模型，顯式保留池外機率；不改原18模型／原結果，不稱新的獨立2024確認。最終人選機率是P(change)*P(in RP pool|change)*P(actor|change,in pool)，池外＋續投＋池內合為1；展示候選門檻只是初篩，整體平衡及active／熱身／醫療／人工未知仍阻擋可操作建議。
+
+完整逐點、候選、monitoring、time splits、24模型、機率、權重／平衡在 `data/research/decision_overlap_v1/` 及 `decision_overlap_pool_revision_v2/`；小型證據 `data/sample/petehub_pitcher_decision_overlap_v1.json`。核心方法及補正協定各有SHA，凍結後不得靜默改。Lab `#overlap-research` 新增主要重疊、觀測缺失、個別人選與cap／區間結果；只做source檢查，畫面待使用者。
+
+建議下一步先做15後續平衡修訂（另立協定，不按2024結果反覆調到過）：比較受限平衡模型／預先縮小母體，分開RP短登板結構性不可觀測與量測缺失。過關後才明定16可評估策略、終點與群體；目前多燈策略0有效候選，不能直接作有效策略估值。17–21仍planned。
+
+重跑：build_decision_overlap.py prepare --year2021..24→freeze→fit --year2022..24 --role SP/RP→evaluate；核心源碼目前已凍結，只能相同協定重跑；core_manifest固定原產物。build_decision_overlap_pool.py freeze→run為顯式池外質量補正。export_decision_overlap.py build→finish→export_pitcher_decision_plan.py→sync_project_tracker.py→manifest→audit_decision_overlap.py。
+
+本輪source-only完成：69項Decision Python測試、一次direct vue-tsc、frontend／backend及修改docs UTF-8檢查通過。audit核對1081份既有凍結檔、原96份core留版及最終124份新產物（含留版重複計數，非獨立樣本），驗證時間分段、來源／個人參考嚴格早於決策、未觀測目標NaN、候選自己的過去選用次數、池內＋池外＋續投機率和1、固定32場原值不變與40/47／16–21仍planned。證據 `data/sample/petehub_pitcher_decision_overlap_audit_v1.json`。最終人選初篩SP1620／4515、RP6382／9819，未截斷人選聯合權重ESS718／2132；這不是合理率或策略效益通過。畫面仍pending user。
+
+## 2026-11-19：Decision Support頁面依Slice整理（最新閱讀方式）
+
+使用者要求整理上方Slice並說明後續與驗證階段。本輪僅調整 `frontend/pages/lab/decision-support.vue` 閱讀結構：完整47項清單移到上方並用數字順序排序（P0、0、1…12、12.1…，子項接主項）；歷史成果按0–10資料、11–12.7樣本基準、13–14.1.1模型與價值、14.2原預警四組收合，最新14.2.1–4多燈維持可見，另加閱讀捷徑與15–21驗證里程碑表。原panel anchor保留，直連會展開對應歷史組；任務依賴／47項身分及39項完成狀態未改。
+
+入口 `/lab/decision-support`，最新 `#signal-lights`、後續 `#next-validation`、完整清單 `#slice-list`、歷程 `#research-history`。現在可驗收展示與事件；15檢查選擇偏差／重疊／有效樣本；16開始初步離線策略效益評估；17凍結2025年度保留測試（非完全未接觸年度，其他研究暴露需揭露）；18為2026回溯部署與提醒負擔；19–20整合Personal／In game／雙層燈；21用凍結後2027+新資料作真正前瞻影子監測。任一步無支持均不晉升，現有零新候選不能當策略效益已通過。未開始15、不開封2025、不重訓、不改任何凍結研究產物；畫面／互動由使用者本人驗收。
+
+僅做一次Vue source parse／script／template編譯與保留／新增anchor唯一性檢查，通過；沒有browser／DOM／server或畫面驗收，也未重跑模型、完整audit或全站build。
+
+## 2026-11-19：14.2.2–14.2.4多燈正常進程／增益／事件回放完成（最新）
+
+進度 **39/47**，本輪止於14.2.4。15–20仍planned，2025結果封存，不自動進15或commit／push。畫面由使用者驗收。保留原969份凍結研究產物及14.2的11預警／0配對，v1燈號資料未覆寫，原三份顯示源碼另存previous_display_contract。
+
+14.2.2：2021–2024共244,179個完整且不重疊10球塊。進場前同人／角色／球種／量測版本至少20球個人參考；固定Ridge100控制累積／單局用球、局間時間、配球與過去打者能力，內部校準不優者回個人參考。4時間窗×2角色×4目標32個正常進程模型；EWMA=.3與不平滑、常數基準比較。2024六個角色×原因組合均未通過同時改善的群聚區間門檻，不能宣稱去雜訊已提高預測。SP滿35球、RP滿10球只是研究觀測成熟，SP>100／RP>60或量測不足灰；正常模型只限制預先指定支持範圍，尚非全面OOD檢定或生理疲勞真值。
+
+14.2.3：四季545,204個有機PA，當前原因只接精確outgoing，incoming不借其A/B/C；D以進場前最近10次已閉合同角色登板中位數（至少5次）及14日完整負荷。control／A／B／C／D／all共同缺值與資料年齡控制，先2022/23前推排序，再2024固定分母確認（SP92,013、RP45,686）。兩角色所有新增方案均未通過對control及實際保留模型的增益門檻；保留SP原global及RP原rich tree+temperature，不覆寫值模擬、不另生成新的第一PA敏感度產物。正常進程與殘差均入候選特徵，但未因此取得決策模型替換資格。
+
+14.2.4：兩個新的相鄰10球區段且同session確認，重複PA讀同block不算持續；灰暫停不當恢復。兩個新區段A/B綠、C非紅可解除，D累積負荷可仍高；恢復後同登板可重新形成事件，結束未恢復則設限。兩紅／三紅組合只以2022/23決策後「全未來」區段選支持（該區段anchor>=decision，下一塊已開始則找再下一塊）；不依官方配對挑設定。兩角色兩紅組合均不通過，三紅SP只有3例、RP0，不擴大解釋；2024診斷不能改選。
+
+固定32場2,376原始邊界、1,737可算、842四群皆支持（SP591/1242、RP251/495）；1次SP描述性狀態事件，0次實際觀測解除、0新增研究候選、0官方對應、208官方換投、操作推薦0。這不能叫「降低錯警已驗證」，也不是沒有疲勞；組合尚缺預測支持，灰與未來續投缺失均保留。恢復／重啟僅規則測試通過，此32場沒有實際解除例。
+
+Lab `/lab/decision-support#signal-lights` 顯示校準尾端色、增益與回放摘要、原11例＋固定MD5前24例＋明示1個狀態事件導航例；這36例不是估計分母。0–8總分仍為展示，新增validation gate（實際fail），可用性unknown。C實際只驗證條件接觸率代理，未完成鎖定球種／擊球品質／熟悉度因果辨識；B位置也不是主觀控球意圖。
+
+完整產物 `data/research/decision_signal_calibration_v1/`：normal／feature／model／episode四份凍結協定、fit/cal ledgers、模型、逐區段分數、actor特徵、角色消融與機率、episode選擇及32場逐點／事件／候選／對應表；manifest與audit另列SHA及時鐘檢查。首次協定序列化guard在訓練前失敗，原稿留attempt0_protocol_serialization，revision2修正tuple/list一致性後才開始擬合。2024已使用診斷，2025不開封；小樣本區間及續投選擇偏差尚需15研究，15是研究下一步，不是上線批准。
+
+重跑分段：build_decision_signal_calibration.py prepare→freeze→fit_normal --fold→score_year --year；build_decision_signal_models.py prepare→freeze→fit_load→finalize_features→freeze_models→screen→confirm（按角色）；build_decision_signal_replay.py freeze→select→normal_diagnostics→replay。最後export_decision_signal_calibration.py build→finish，export_pitcher_decision_plan.py、sync_project_tracker.py、manifest與audit。模型／核心腳本凍結後不得靜默修改；新方法另留協定版本。畫面仍pending user。
+
+本輪source-only完成：62項Decision Python測試、12項燈號契約測試、一次direct vue-tsc、frontend／backend及修改docs UTF-8檢查通過；audit核對969份舊檔與112份新研究檔SHA、4份凍結協定、三份v1顯示源碼封存、角色同分母／機率和、fit/cal與actor／全未來目標時鐘、2376點值沿用、39/47權威與15–20未開始。證據 `data/sample/petehub_pitcher_decision_signal_calibration_audit_v1.json`。這不代表模型增益、疲勞識別或畫面通過。
+
+## 2026-11-19：多原因燈與景氣式綜合狀態14.2.1完成（歷史）
+
+使用者要求把多個原因燈組成景氣式總燈並調整後續流程。本輪完成14.2.1契約／介面，新增4個前置子項，進度 **36/47**（新增4項、完成其中1項）。14.2.2／14.2.3／14.2.4及15仍planned，不自動訓練／校準或進15；2025測試封存。未commit／push、未開瀏覽器／server／截圖，畫面由使用者本人驗收。保留全部既有dirty worktree及969份先前凍結檔案。
+
+新入口 `/lab/decision-support#signal-lights`：A球質、B位置／控球代理、C對手掌握、D負荷／恢復每群一票；綠0／黃1／紅2，0–8研究展示分數，0綠、1–2黃綠、3–4黃、5–6橙、7–8紅。任一灰不補0、不重算分母，總分null／總燈灰，仍列已知異常群。未校準真實訊號一律灰，不能因raw Stuff或用球數直接亮紅。
+
+換投評估是獨立條件：展示暫定四群皆可判讀、至少兩紅且包含A或B、原因持續成立，並且替代收益／名義合法／實際可用性通過；高總分不能略過。gmLI／相性作脈絡不計票，收益的兩點連續不冒充原因的兩段持續。綜合狀態紅不直接換投，綠不保證健康。這些分數／門檻尚未校準，demo或未來研究候選也永不將recommendationAllowed改true。
+
+資料由原14.2的11則預警快照轉接，其中7則16–33球未達現行35球支持；35是觀測支持不是疲勞切點。真實11例的A–D全部尚未校準為灰，保留原始數值與缺值／資料年齡scope，不偽造新燈色或新配對。可另外切到「互動規則示範」，手動調四燈／四個條件或選預設情境，始終標明示範、不代表真實比賽。原32場11預警／0配對完全留版。
+
+後續順序：14.2.2用訓練內個人同球種／累積與單局球數／局間時間建立正常進程、異常殘差、觀測成熟與受限平滑；正常下降仍進表現預測、累積負荷不跨局歸零，不能用未來恢復。14.2.3分SP／RP校準分燈、群間相關與增益、有限組合設定；需影響xWPA者另做角色增益，不用前端門檻假裝SP已納入疲勞。14.2.4研究解除／新事件重啟及冷卻，完整序列評估提醒負擔與恢復／預測／對應，原14.2不覆寫。15加入14.2.4依賴，20正式雙層燈號消費已驗證契約，不重造另一套分數；合理性／策略價值與封存測試仍留15–18。
+
+新增 `frontend/components/charts/DecisionSignalLights.vue`、純規則 `frontend/utils/decisionSignalLights.ts`、契約測試 `frontend/scripts/test-decision-signal-lights.cjs`、資料／流程publisher `backend/scripts/export_decision_signal_lights.py`。小型來源快照 `data/sample/petehub_pitcher_decision_signal_lights_v1.json`，版本資料及來源SHA在 `data/research/decision_signal_lights_v1/`；不新增API、不重訓、不重新計算研究預警。source-only檢查不等於畫面驗收。
+
+本輪source-only完成：10項新分燈契約測試、vue-tsc與frontend／backend／修改docs的UTF-8檢查通過；小型資料稽核核對4份既有輸入SHA、3份顯示來源SHA及builder SHA，原11例／44個未校準原因群皆灰，舊11／0不變，36/47快照與15／20依賴一致。未重跑模型／模擬或完整舊969份audit，畫面／互動／響應式仍待使用者本人驗收。
+
+## 2026-11-19：Slice14.2完整時序預警與官方換投對應完成（歷史）
+
+使用者授權「開始14.2並解釋成果」，現已完成，Decision Support **35/43**。本輪止於14.2，15–20仍planned，2025最終測試未開啟；未commit／push、未開瀏覽器／server或執行畫面驗收。既有dirty worktree、935份舊凍結產物及原484點留版。
+
+固定2024 prepared母體按MD5(game_pk)前32場，不按實際換投／收益／配對挑場，不做全季或獨立測試宣稱。沿本輪SP基準、RP tree_rich_7＋溫度；僅第一PA有狀態特徵，後續global matchup／2023年底聯盟打者池。256共同路徑、8次舊共同比賽refit，不新增訓練。每場SHA(seed:game)亂數相同於兩方案及9模型；role池均勻抽人，無最佳手別／類型或個別排名。
+
+事先凍結門檻：中央ΔxWPA>=0.005（0.5pp）、MC95與模型中央80下界>0、9模型皆無截尾／球數或首PA範圍外推、最差模型平均缺轉移質量<=1%；RE24另報不選門檻。相同登板／同守備半局相鄰2個原始邊界合格才發；任何資料缺口／拒絕點中斷。每登板最多1則、同隊發出後2個已完成守備PA冷卻。非打者／未完成play保留原始缺口，但不增加PA窗口。配對只用同game／team／outgoing appearance，先同邊界，否則提前1–2個已完成守備PA且<=600秒，依預警時序取最早合格事件，一對一，無事後最近配對。
+
+結果：2376原始邊界、1791既有cohort邊界、1737有支持選項可算、1674無截尾／外推支持、133單點門檻合格、11獨立研究預警。官方換投208，有模型同邊界186／固定窗口內機會190；預警同邊界對應0、提前對應0、未配對預警11，未配對事件208。各角色／各場／原始點與事件原因、未配對保留，不能以配對率當正確率或教練行動當合理真值。固定小樣本，可能低提醒或零配對也不改閾值；序列多次查看並未有整體錯警率保證。active／熱身／醫療／人工可用性未知，操作推薦0、個別排名false。
+
+凍結結果的規則診斷rule_review另存，不新增配對：官方有可算同邊界186個，其中13個單點合格、0個達持續條件。原固定配對窗口內，有單點合格的事件16個、有持續合格點的事件1個；若已同登板發過預警，仍依原規則拒絕重發。早期1–3局預警7則，與同一離場事件的中位提前14.0個已完成守備PA。短半局替代池優勢不等於先發疲勞或最佳換投切點；不以放寬窗口增加配對率。這組補充不改原11／0結果，建議下一步檢查Slice15早換選擇的重疊／支持，規則敏感度另立新版本，不覆寫本輪凍結結果。
+
+新資料 `data/research/decision_alerts_v1/`，核心 `build_decision_alert_research.py`、純規則 `decision_alert_rules.py`、發布 `export_decision_alert_research.py`、稽核 `audit_decision_alert_research.py`。protocol／manifest、所有原始點point_ledger、alerts、matches及event_ledger均存檔；小型證據slice14_2_v1.json／alert_research_v1.json，source-only audit另存sample。前端 `/lab/decision-support#alert-research` 顯示完整分母、規則、角色／場次／每則提醒與原因；畫面由使用者本人驗收。下一步需使用者指示Slice15重疊／選擇偏差，後續16策略評估及17凍結測試，不能自動開始。
+
+本輪source-only檢查完成：52項Decision測試通過，vue-tsc通過，frontend／backend及修改docs的UTF-8檢查通過；935份舊凍結檔案與34份新產物SHA均通過，共969份。另核對原始時序／已完成PA計數、官方事件完整分母、同登板去重／冷卻、嚴格時鐘及一對一配對、機率和、35/43權威快照與所有預警的兩個有限區間端點。型別檢查曾發現JSON一般陣列與tuple宣告不符，已對齊一般陣列並保留缺值顯示後通過；沒有更動凍結預警或配對結果。所有畫面／操作仍待使用者本人驗收。
+
+## 2026-11-19：模型診斷補丁完成，停在14.1.1（歷史）
+
+使用者授權執行13.6.1–13.6.3及14.1.1，現已完成，Decision Support **34/43**。14.2及15仍planned，本輪不自動接續；2025最終測試封存，2024已使用診斷，不能稱獨立確認。沒有commit／push、開瀏覽器／server或代替畫面驗收。既有dirty worktree與全部舊版本保留。
+
+13.6.1：補舊baseline／plus／states／all的訓練與2024逐類校準，2021–2024角色／scope／量測版本分布與缺值。舊完整群在訓練資料也較基準差，不能只歸因過擬合。current有效球數與closed-history有效登板數不混作同單位；候補歷史不當本場觀測。
+
+13.6.2–3：2021→2022及2021–22→2023選設定，整場固定SHA pilot fit約30,000、cal至多約10,000，全年全分母驗證。base獨立加current／recent／batter，alpha=.001/.01/.1；唯一非線性家族淺層HGB base／rich、7／15葉、60迭代。各16 learner設定×raw／溫度模式×兩窗／角色，先凍結六族，再解除pilot上限用2021–23時間分離fit／cal、2024完整同分母確認。補值／尺度／編碼只fit學習段；跨界比賽排除。兩角色及多候選同時區間、Brier／ECE／分群傷害／年度穩定／收斂共同判定；新增特徵另需勝過同演算法調整基準。
+
+結果：SP保留原基準；tree rich雖比原基準平均分數好，新增特徵相對tree base的同時區間仍跨0。RP選tree_rich_7（temperature），2024 LL 1.511457→1.506936、Brier 0.707436→0.705636，通過預先研究門檻。固定模型按同月／scope／過去角色的整群置換另存，是模型依賴而非疲勞／熟悉度因果；不得將整群增益說成每一項都有獨立貢獻。
+
+14.1.1：通過候選已另版重跑原484點；僅第一PA更動，研究方向與區間逐點留版。原484研究點方向替代池較高／續投較高／不明或不足=43／11／430；相對v2方向變動51點、正反直接翻轉0點。另有1,072條件池比較。僅RP第一PA改用通過候選，SP第一及全部後續PA維持13.1修訂global matchup；沒有把未知狀態固定投到局末。256共同路徑、8次同一全域game計數重抽樣，新角色固定中央前處理／先驗、時序分離的校準再估溫度；中央快取與重複列直接推論差0。原可用性、後續打線時點、截尾／外推與長期成本限制不變，推薦／個別排名關閉。這些是研究比較點，不是獨立預警或正確率；14.2才做去重／事件對應。
+
+新資料 `data/research/decision_model_diagnostics_v3/`、`data/research/decision_action_sensitivity_v3/`，小型證據 `data/sample/petehub_pitcher_decision_model_patch_v3.json`，source-only驗證結果 `data/sample/petehub_pitcher_decision_model_patch_audit_v3.json`。新scripts：build_decision_model_patch.py、run_decision_model_patch_impact.py、export_decision_model_patch.py、audit_decision_model_patch.py。原2025／2026預測仍是v2，不冒充新模型已上線。Lab `/lab/decision-support#model-patch` 新增候選／訓練誤差／置換／coverage摘要；下方原版本保留歷史。畫面與操作由使用者本人驗收。
+
+本輪source-only檢查完成：45項Decision測試通過、vue-tsc通過、frontend／backend及修改docs的UTF-8檢查通過；792份舊凍結檔案及143份新檔案SHA均通過，共935份。時間切分、候選順序、機率和、同分母keys、候補本場遮罩、共同比賽refit與34/43權威快照已核對。中央首PA快取與重複列直接推論差0；此項不等於畫面驗收。
+
+## 2026-11-18：13.5、13.6及14.1完成，停在14.1（歷史）
+
+使用者授權跑完13.5／13.6／14.1。本輪完成打者前序出棒／掌握與相性資料、SP／RP同分母消融及原484點固定半局重跑。Decision Support **30/39**，權威PROJECT_TRACKER.json；14.2去重／官方換投對應與15均未開始。保留原dirty worktree、全部舊v1及13.1–13.4凍結輸出，未push／commit、未開瀏覽器或server。新摘要／表格與操作待使用者本人驗收，不能記成視覺通過。
+
+13.5 `data/research/decision_batter_matchup_v1/`、`build_decision_batter_matchups.py`：六季824,462個實際actor請求，只用決策前已完成PA；同場打者last1／2／3、同投手／其他投手／全隊last3與歷史BvP／粗類型／球系分開，收到占比、球種出棒率、出棒組成與接觸／揮空／界外／場內／有效EV各有分母／n／時間。零球IBB占PA窗不製造球數。類型只用此前觀測角色last3閉合登板、>=50球、手別×主導family×速球速度band；BvP20→type50→過去打者能力，family回嚴格過去手別／球系參考；沒有同季整季tag或心理鎖定證明。
+
+來源稽核找到110個多打者或官方／實投身分衝突完成PA（六年21／18／18／13／16／24），已從歷史排除，逐年identity_exclusions保留；這些本來就不在有機下一PA模型分母內。原未篩資料、協定、源碼、初步描述與樣本完整保存在attempt1_pa_identity_unfiltered。描述分析另以 `audit_decision_familiarity.py` 凍結 `familiarity_identity_clean_v2`：13.4原curve cohort與乾淨PA交集，排除2021及2024各1個無有效描述目標列；預測特徵不變。12個接觸／揮空／EV×交手／實投曝光×角色條件面板，2024有支持且同時區間排除0的區段0個；不等於不存在熟悉度效應。原描述保留，最新小型證據 `slice13_5_v2.json`。
+
+13.6 `decision_role_ablation_v2`、`build_decision_role_ablation.py`：修訂 `forecast_role=現任本次角色／接任RP`；原option_role仍保留過去角色。2024有285個接任者過去為SP，不能分到本次SP或把SP三狀態／Plus先驗冒充RP進場狀態。初輪過去角色分組及第二輪未清身分來源的部分模型／輸入／源碼／協定分別保存在attempt1_previous_role_grouping、attempt2_pa_identity_unfiltered；沒有因看分數改門檻。各25個預定設定共用missing-aware分母，控制支持n／年齡／scope；逐組加入與移除派生項、純72／120小時負荷／連投／季內序號對照，訓練內補值標準化與固定L2=.001／能力收縮20。原決策risk用前推模型在同cutoff重算，候選entry risk缺值。
+
+訓練SP271,558／RP135,947；2024 SP92,013／RP45,686，共137,699。200次比賽×投手配對Poisson bootstrap、角色內全部設定同時97.5%帶及兩角色校正、Brier／>=500PA分群／收斂門檻。兩角色均選baseline：SP LL1.497407、Brier0.699711；RP LL1.511457、Brier0.707436。All各為1.521122／0.705733與1.579233／0.726754，未通過增益。完整訊號敏感度SP117,223／53,114、RP55,434／23,163，也未通過。SP Plus的Brier微降但LL未改善，不能晉級。本次固定模型／切分沒有證實新特徵改善下一PA，不表示這些資訊永遠無用或疲勞不存在；這是九類PA目標，不能和13.4二元下降Brier直接比。2025／2026只有選定模型機率、未讀結果指標。
+
+14.1 `decision_action_values_v2`、`build_decision_action_revision.py`：原484點完整保留；5,811原選項經RP支持篩選留下3,880列。因兩角色新設定未通過，第一及後續PA均用13.1修訂global matchup，沒有把未知狀態凍結到半局末。原2023年底聯盟打者／用球與合法轉移／WE／RE參考保留；修訂訓練球數上限已核對仍SP126／RP109。首打者當時已知，存檔事後打序無獨立公開時點證明，484全部明示後續聯盟池回退，不讀實際未來打序／代打。game名單、active時點、名義合法、熱身／醫療／人工確認分開；長期牛棚預算未知不加扣WPA。預計新增用球／BF與剩餘名義RP另列。
+
+每方案256共同亂數路徑、8次共同比賽分類器重抽樣，均無收斂警告；另有1,072個條件池比較（左投309、右投480、粗類型283），共1,556列／模型。粗類型此輪只作分組，未通過的相性分數沒有進價值模型；條件池不是最佳池或個人排名。中央模型完整欄位模擬與 `run_decision_action_projected.py` 的必要欄位記憶體投影逐值完全相同，證明在runtime_projection.json及保留中央檔；未變模型、凍結輸入、亂數或科學設定，投影僅限兩角色baseline，完整原模擬入口仍可重現。
+
+角色池437／484未觸發截尾／外推旗標（原439）。ΔxWPA研究方向由原55／12／417改成 **50替代池較高／11續投較高／423不明或支持不足**。原正向33保留、22轉不明；原負向6保留、6轉不明；原不明17轉正向、5轉負向、395保留；無正負直接互反，合計50點分類改變。這些不是合理建議數／正確率／獨立預警。新減舊WPA差均值+0.000137746勝率單位（+0.013775百分點），RE差均值+0.000815147分，只是固定分層樣本，不是聯盟／因果效益。每PA平均排除的轉移機率質量均值0.00006425、最大0.00790286，另列且非整半局失敗率。
+
+小型證據位於data/sample：`petehub_pitcher_decision_slice13_5_v2.json`、`petehub_pitcher_decision_slice13_6_v2.json`、`petehub_pitcher_decision_slice14_1_v2.json` 及 `petehub_pitcher_decision_matchup_revision_v2.json`。新三套manifest分別93／206／29份SHA；舊201＋13.1–13.4的263份保持。`export_decision_matchup_revision.py`只手術更新本專案權威三項狀態／摘要／下一步；`export_pitcher_decision_plan.py`同步主文件／Lab快照，`sync_project_tracker.py`同步TrackerMD及交接標記區。
+
+本輪source驗證完成：44項pytest、單次vue-tsc、UTF-8與git diff --check通過；`audit_decision_matchup_revision.py --stage full`對帳792份產物SHA、現行及中止協定／源碼／輸入、兩份正式Plus metadata、六季主鍵／嚴格過去時鐘／比例與回退／角色範圍、同分母137,699驗證鍵與機率和、2025／2026僅預測結構、1,556模擬列／484原點／未知可用性及30/39快照。中央模型完整欄位與投影檔逐值相同，證據在`petehub_pitcher_decision_matchup_full_audit_v2.json`及runtime_projection。這些不等於畫面或操作驗收。
+
+重跑：`build_decision_batter_matchups.py sources → histories → features → freeze → associations`；`audit_decision_familiarity.py` → 前者finalize；`build_decision_role_ablation.py features → freeze → train → score → finalize`（可分train --role SP／RP後combine）；`build_decision_action_revision.py prepare → freeze → bootstrap → simulate → finalize`。必要欄位投影可在完成原中央模型0後執行 `run_decision_action_projected.py`，會強制完整中央結果逐值相同再往下；協定或輸入不同會拒絕。來源／全量檢查由 `audit_decision_matchup_revision.py --stage sources|full`。
+
+人工入口 `http://127.0.0.1:3000/lab/decision-support#matchup-revision`：查看30/39、打者覆蓋與25設定／純負荷對照、原484點新舊方向／條件池、固定前12個decision ID的WPA／RE差、兩類區間、用球及轉移支持。表格閱讀、details展開、窄畫面水平捲動都待使用者驗收；下方原v1單場時間軸保留。尚未做14.2去重／官方換投對應或15，所有推薦／個別排名關閉。
+
+## 2026-11-18：13.1–13.4完成，停在13.4（最新）
+
+使用者授權完成13.1–13.4。本輪完成負荷修訂、SP／RP當場觀測、同角色近期狀態、全體／個人條件曲線與下一十球相對Plus下降模型。Decision Support **27/39**，權威為PROJECT_TRACKER.json；原13／14 v1為歷史，不覆寫。未開始13.5、13.6、14.1、14.2或15，未push、未開瀏覽器／server。新頁面與圖表操作均待使用者本人驗收。
+
+版本 `data/research/decision_role_observation_v2/`：10,415,470現任／候選選項列、272,905去重近期profile，來源4,270,416顆實投及125,429次登板。負荷嚴格以已完成時間<t取24／72／120／168／336小時；2筆結束時鐘異常另標並使相關完整窗口缺值。零球進場計登板不計球，復賽session不重複加季內登板。核心連投改為實際／假定進場前的紐約登板日；決策日投球／登板streak、同日其他登板、本場與跨場負荷、進場休息與live idle分開。2024實際續投RP與舊基準不同7,334／31,638列；另20列與舊實投session日欄不同，已用登板日期／實投日期逐列獨立重建核對。舊覆核7,332是舊session口徑，勿混稱同一標準。
+
+13.2以原決策前現任與實際PA單一actor首球前兩種anchor分開，保存prefix／最近十球、同球種變化、進場前個人參考、CSW／揮空／接觸／界外／擊球品質、過去已完成PA結果與三項狀態的n／時間／支持。三項狀態沿原暖機、球數上限、>8h重啟及模型版本限制；2021不完整為訓練暖機與來源支持，沒有整季回填未來模型。13.3只取已閉合同角色歷史，last1／3／5及近72／120小時已可用摘要，原始有效球數保留history，描述性80%範圍n>=2；無出賽不補正常、歷史不是今日準備度。Plus／狀態不跨版本混算。
+
+固定舊白名單基準在相同2024 n=137,699重訓：workload LL1.519098／Brier0.708905；matchup LL1.500161／Brier0.701660。五日窗與新狀態未提前作13.6選模，舊v1半局55池較高／12續投較高沒有重跑，也不能拿新風險分數重解讀成建議。
+
+13.4名冊投手cohort為2021=179,881、2022=180,054、2023=182,045、2024=180,906。先全體SP／RP×7指標×BF／球數／當前打序slot交手／特定打者交手4軸，共56面板；條件控制對手、個人、球路、局面等，200次比賽×投手Poisson bootstrap，面板內同時95%帶。預定200PA／50登板／30投手、實務幅度、相鄰兩區及同一訓練選定區段在2024重現門檻，**0面板通過**；不能給通用球數／輪次或已驗證個人切點，亦不表示不存在下滑。個人曲線只用歷史並收縮，未證實優於角色曲線。官方存檔slot僅定位當前已觀測打者，不用來讀未來打線；反應期球種配比只進描述曲線，不進預測。
+
+下一十球風險為前十球均值對比未來十球下降>=5研究Plus點、各窗>=8有效測量，SP／RP時間前推L2及訓練內校準。2024可觀測SP51,925、RP13,840；Stuff Brier SP0.077829→0.069210、RP0.086338→0.078712，Location SP0.089144→0.077895、RP0.104461→0.089281；AUC約0.75–0.78。只是可觀測續投條件下的相對下降，包括回歸均值／抽樣噪音；未來不足設限，不填負類；不代表低於個人基準、疲勞或換投優勢。負荷獨立增益待13.6。2025／2026只凍結評分，不讀結果指標。
+
+可重跑入口：`build_decision_role_observations.py sources → lineups → references → workload → pa → prefix → recent_history → recent`；`build_decision_role_models.py adapter → cohort → freeze → baselines → curves → risks → risk_score`；`export_decision_role_revision.py`發布證據、圖及Tracker完成狀態；最後`export_pitcher_decision_plan.py`、`sync_project_tracker.py`。freeze拒絕不同實作／輸入。revision3保存原tuple/list guard中止協定，`attempt2_roster_filter_missing/`保存初輪漏篩1,302個非名冊投手PA的協定／源碼／模型，修正後全部重跑且不改門檻。263份新遞迴hash及原201份產物／正式metadata guard需對帳。規劃區一度經Windows stdin導致中文成問號，已從UTF-8來源快照恢復；後續中文修改用UTF-8檔案，不能只靠「合法UTF-8」檢查問號遺失。
+
+本輪source驗證完成：38項pytest、單次vue-tsc、UTF-8及git diff --check通過。`audit_decision_role_revision.py`核對舊201／新263份artifact SHA、兩份正式Plus metadata、凍結協定、六季主鍵／嚴格過去時鐘／缺值支持、四季名冊投手cohort、同分母基準機率、2025／2026僅評分結構、SVG來源與發布檔SHA及27/39權威快照一致；結果在`data/sample/petehub_pitcher_decision_slice13_validation_v2.json`。這些檢查不等於畫面驗收。
+
+人工入口 `http://127.0.0.1:3000/lab/decision-support#role-revision`：確認27/39、六年SP／RP有效數、兩張條件曲線與空心支持不足點、四項風險分母及設限限制；窄畫面表格／圖的閱讀與舊時間軸皆由使用者驗收。未來接續先等使用者指示13.5打者前序出棒／掌握與相性，再做13.6及14.1／14.2；不要自行開始。
+
+## 2026-11-18：補入牛棚近期狀態、打者出棒掌握及輪次下降規劃（最新）
+
+使用者要求牛棚加近期狀態；對打者希望看本場先前打席出棒球種／掌握度，熟悉度增加是否伴隨掌握提升；並先分析投手整體約在第幾輪／第幾名打者壓制力開始顯著下降。此次只重新安排既有planned子項，未重訓、未執行新研究，維持23/39及原13–14凍結輸出。權威內容在PROJECT_TRACKER.json，主文件及Lab規劃快照同步產生。
+
+13.2擴為SP／RP當場觀測，明列全隊對手表現與當前打者接觸歷史的不同scope。13.3明列名義牛棚的近3／5日與最近1／3／5次已結束登板之球質／位置／物理測量／三項狀態及有來源支持的壓制指標；各自保存n、個人同球種基準差、趨勢、區間、觀測時間與資料年齡。視窗只是訓練內待選候選，不能看測試挑窗；近5日沒有出賽不等於狀態正常，歷史狀態不是熱身／健康證明，本場資料仍用13.2更新。
+
+13.4順序改成先全體SP／RP隨BF序號、球數、打線輪次、對同一打者第幾次交手之條件壓制曲線，再樣本足夠時估個人曲線。BF代理不能冒充精確輪次；代打與零球IBB的打席交手／實際看過球數分開。控制球數、打者能力、手別、球路與投手差異；長局數保留者的調度／倖存選擇及未觀測續投明列。下降切點需報效果幅度、n、群聚區間、多點搜尋與留出驗證，允許未發現穩定下降，不把歷史換投球數當下滑真值。
+
+13.5擴為打者先前已完成1／2／3個打席或訓練內預定滾動窗的出棒／掌握輪廓，再連類型相性。分開收到球種占比、對該類收到球的出棒率、全部出棒中該球種占比；接觸／揮空分母為出棒，擊球品質用有效場內擊球，保留界外。分開本場對該投手、本場其他投手、歷史H2H／類型及全隊近期打席，不能把不同打者混成一人的熟悉度。控制球數／位置／球質／球種曝光，不能由出棒就認定心理鎖定；熟悉度與掌握變化先作條件關聯及預測假說，不稱因果。任何本次／未來打席資料禁止進特徵。
+
+13.5新增依賴13.4；13.6在相同分母新增近期牛棚狀態、BF／輪次、打者前序出棒／掌握與熟悉度交互作用的消融，描述曲線仍須驗是否改善下一段預測。14.1／14.2沿原依賴接續，未開始15；2025測試仍保留。沒有新增畫面或啟動瀏覽器／server，本次僅規劃。
+
+## 2026-11-18：使用者八點換投拆解納入規劃（最新）
+
+使用者將SP決策拆成當天球質／位置、對手本場表現／熟悉度、個人歷史下滑球數、下一打者在下滑後的傷害風險、替代投手壓制力、可換牛棚、打者對該類型相性及本隊是否有對應弱點類型，最後換算xWPA／xRE24；RP希望改看歷史對戰、近3／5日用球與連投。本輪對照資料與調整planned工作，沒有修模型／重訓。
+
+規劃改為13.1–13.6、14.1–14.2，共8個planned子項，原23項完成不變、23/39。13.1新增120小時窗；13.2保留本場已觀測狀態、對手已實現結果與同打者已見次數分開；13.3補RP投前歷史先驗與季內軌跡。新增13.4個人歷史條件下滑風險曲線、13.5投打類型相性，原13.4消融順延13.6；14.1依賴13.6，新增有支持的手別／類型替代池、當時已知打序與資源限制；15仍待14.2。
+
+關鍵限制：Location是位置價值代理，無目標位置不能直接當控球精準量測。歷史換投球數不是下滑真值，未觀測續投與倖存／調度選擇須列帳。直接BvP與類型相性常有小樣本，按原始n、收縮與回退處理；八點重疊，不能手工加權或假設獨立相乘。狀態風險與打者條件共同形成完整PA結果／合法轉移分布，再用相同終點WE／RE比較行動。傷害不能只看安打／硬擊，BB與出局等也須保留。
+
+RP不能用近期負荷取代當天已投資料；投前用歷史／負荷估起始狀態，登板後依本場資料更新。直接對戰與本場熟悉度兩角色都可存在。候選前次狀態不是今日準備度，名單／法定合法／熱身／醫療／人工確認可用性分開；短期半局比較尚未含完整長期牛棚成本，不隨意加扣分。
+
+另一專案player-archetypes-pitch-strategy已有球路形態、打者特徵、前季tags與嚴格過去H2H／pair maps，但Slice5主要驗證配球預測，不能當相性或打擊傷害驗證；整季tag也不能同季回填。僅借方法與時間相容的原始／過去特徵，必要時重建。14.1若重建後續打序，只能用當時已公布打線及已發生替換，無法確認則明示聯盟池回退，不讀賽後打線或未來代打。
+
+## 2026-11-18：13–14修訂與SP／RP分層規劃（最新）
+
+使用者詢問是否需重排13／14，以及SP當場狀態／壓制力、RP連投或當季第幾次登板的Stuff／Location下降能否作換投依據。完成唯讀覆核及規劃，沒有重訓或開始新Slice。保留13／14原始v1歷史完成紀錄，權威Tracker新增6個planned修訂項：13.1負荷契約修正、13.2先發當場狀態與壓制、13.3後援連投／季內登板軌跡、13.4角色分層增益、14.1半局比較重跑、14.2研究預警去重／實際事件對應；進度23/37（原23項完成未變），15新增依賴14.2，不能跳過修訂直接進15。細節依PROJECT_TRACKER.json產生主文件。
+
+2024可靠一般打席、實際續投：SP92,013列，Stuff／Location各91,992，Quality53,212／Physical53,132／Command53,194，五項齊全53,114；RP31,379列，Stuff／Location各31,364，五項齊全15,766。這是organic cohort，與連投問題audit的全部觀測續投RP31,638分母不同。三項狀態目前未證明下一PA整體增益；個別SP分群也不能憑小幅平均差認定顯著。原Plus有小幅增益，不等於其下降已能判定該換投。
+
+新的季內欄位核對：原 `prior_observed_relief` 是跨年累積的已觀測closed history，2024最大296，且沒進核心白名單；不能當本季第幾次登板。13.3需每季重置、同球員轉隊合併、分開總登板與RP登板、復賽session不重複算。要控制個人基準、同球種配比、同模型版本、角色、本場球數與季內日期；不把季內序號直接當疲勞。
+
+Performance State另案已有SP/RP過程／結果下滑與恢復研究可借方法，但v2歷史Plus含現行回溯模型，部分fit到2025；不可直接搬到2021–2024決策特徵，必須沿本案時間協定重算或確認cutoff。現有模型及輸出均未改，2025最終測試繼續保留。觀測下滑、下一段預測、換投優勢需分開驗證；被換下後的續投結果不可用接任者結果代替。
+
+## 2026-11-18：換投對應數與後援負荷口徑覆核（最新限制）
+
+使用者詢問累積建議／實際對應／合理性，以及後援連續出賽與近三日球數。唯讀覆核保存於 `data/sample/petehub_pitcher_decision_workload_review_v1.json`：正式建議0。484個角色池比較中，pool_higher55（實際同邊界換投24、續投31），continue_higher12（換投5、續投7），不明／支持不足417（換投163、續投254）。55點分布45場／48個登板，尚無冷卻去重或提前窗口匹配；對應數不是正確率或合理性驗證，尚未通過15–18／20。
+
+**新發現需要修訂：** 近1／3／7／14日球數、休息、前次球數及連投欄位已在Slice12–14核心模型，但 `build_decision_baselines.py` 現任option的 `consecutive_days` 接的是 `prepared_features.prior_session_consecutive_days`（前次已結束登板開始前的連投紀錄），並非本次登板前的 `workload.current_session_consecutive_days`。候選則按決策日重建streak，兩者語意不一致。2024實際續投RP31,638列皆有本次登板streak與近72小時用球；7,332列streak不同。全部實際續投123,753列中有8,419列不同。
+
+原時間／hash／機率等source檢查通過不代表驗過此語意。既有凍結版本與201份artifact均未改，原55／12方向只是待修訂研究結果，不能解讀成已驗證疲勞或推薦。下一步先統一現任／候選的決策時點連投定義、保留前次登板streak獨立欄、分清滾動72小時（含本場已投）與先前出賽負荷，再另開版本作RP專屬加入／移除消融及重跑受影響比較；不要覆寫原凍結模型、不要先開2025測試。本輪僅覆核／記錄，未重訓或開始15。
+
+## 2026-11-18：Slices 13–14 完成（最新）
+
+使用者授權完成13–14，並唯讀參考 `C:/intern/data_fixed/wpa_fixed__peter_0821` 的單場WPA呈現；未授權開始15–20。Decision Support 23/31；既有dirty worktree保留，本輪未push、未開瀏覽器或server。新Lab消融／時間軸畫面與操作待使用者本人驗收，不能記成通過。
+
+Slice13 `decision_ablation_v1`：`build_decision_ablation.py features → freeze → train → score → finalize`。接任者只用此前已結束登板的三項狀態與同fold Plus，續投才用當次prefix；嚴格來源時間違規0。共同支持訓練176,027／2024驗證77,794，支持基準LL1.502931、Plus1.502216、三訊號1.502980。Quality／Physical／Command單獨或三項合併未通過增益，Plus保留研究候選；十個消融、角色／行動分群、按比賽群聚100次區間及missing-aware全分母對照完整保存。全分母All對自身支持基準改善，但對原Slice12基準Brier未改善；不晉升正式模型，也不把All改善歸給三訊號。2025／2026僅凍結機率，未開結果指標。
+
+Slice14 `decision_action_values_v1`：`build_decision_action_values.py prepare → freeze → bootstrap → simulate`，接 `export_decision_action_research.py traces → finalize`。2024分層樣本＋兩場按hash固定選取，499邊界、484個有歷史RP池、439個全部模擬無截尾／球數外推。比較現任投至半局結束 vs 名義RP池均勻選一人投至半局結束；之後不再換人，遵守最低打者／局末例外。第一打者已知，後續使用2023年底聯盟打者池的同身分配對抽樣，不讀實際後續打序／投球；用球從訓練期角色×結果類別分布累加。使用Slice12完整覆蓋基準，不推演未觀測三項狀態。
+
+每方案256路徑、8個比賽群聚重抽樣分類器：MC95為模擬誤差，中央80%模型範圍固定前處理、轉移與WE／RE；不涵蓋完整模型或隱藏混雜。研究方向55替代池較高、12續投較高、417不明或支持不足；全部recommendation_allowed=false、individual_ranking_allowed=false。這是固定半局、聯盟打序中性情境，不是實際可調度牛棚、因果效果或聯盟平均；熱身／醫療、長期資源成本及真實未來打序未知。
+
+離線根目錄 `data/research/decision_ablation_v1/`（35份hash）、`data/research/decision_action_values_v1/`（27份hash），小型證據 `petehub_pitcher_decision_slice13_v1.json`／`slice14_v1.json`。兩場範例：744839 MIA@WSH（136個前後點／6次官方換投）、745964 MIA@MIL（154點／5次換投）。官方快照與另一專案的參考源碼SHA保存，未修改另一專案、未沿用CPBL勝率表。時間軸為實際局面對應的凍結WE直線與50%中線，上軌實際換投、下軌決策前研究比較；事後WPA／描述標明事後資料。
+
+In game尚未接線，後續以year/game_pk、pitcher_id、decision_id與官方PA/event_id定位；pitch_uid需要既有官方／Statcast驗證映射，eventIndex不能直接當pitch_number。正式同步留19，推薦／燈號要等15–18與20。下一步先等使用者人工驗收與決定是否開始15，不能自動續做。
+
+本輪source驗證：相關pytest共29項通過；vue-tsc與UTF-8通過。準備100＋原基準39＋新消融35＋半局27＝201份artifact SHA均對帳，兩份正式Plus metadata guard未變；兩套新協定的實作／輸入一致。完整支持十模型／missing-aware兩模型主鍵及分母一致，機率和為1；2025／2026僅查預測結構。兩場曲線WE在0–1、前後錨點與事件順序唯一且遞增；未進行畫面、hover、點選或鍵盤驗收。
+
+人工入口 `http://127.0.0.1:3000/lab/decision-support`：確認23/31與消融未通過項目；切換兩場時間軸；查看官方換投／研究點的不同標記；hover／點選／方向鍵與前後打席標籤；窄畫面水平捲動。這些皆尚未人工驗收。
+
+## 2026-11-18：12.5–12.7 與父項 12 完成（歷史紀錄）
+
+Decision Support 21/31。使用者授權續做 12.5–12.7，視覺部分保留本人確認；未授權繼續 Slice 13／14。新研究版 `decision_baseline_v1.2` 根目錄 `data/research/decision_baseline_v1/`，腳本 `backend/scripts/build_decision_baselines.py` 依 candidates → freeze → train → score → finalize 執行。既有 dirty worktree 保留，本輪未 push。
+
+12.5：824,462 決策、9,591,008 筆名義候選，現任／候選共用 option schema；observed_features 依實際接任者對位，不能把換投後結果配給被換下投手。能力歷史、負荷、過去角色及最後已結束登板狀態均嚴格早於決策；逐欄與 any/all 候選 coverage 可追溯。2024 幾乎每個決策至少一人有三項狀態，全部候選均有僅 3.16%。能力非空含訓練參考回退；熱身／醫療／精確當日異動未知，個別排名維持關閉。
+
+12.6：局面、再加負荷、再加投打九類歷史率／手別／n 三層白名單；Plus 與三項狀態留 Slice 13。補值＋missing indicator、標準化與 one-hot 只 fit 2021–2023。2024 選 L2／收縮，2025 測試保留至 Slice 17，2026 回溯；後兩年只存預測，不檢視結果。協定保存輸入／實作 SHA，參數／分母凍結。兩次未完成實驗保存在 attempt1_nullable_category_failure、attempt2_terminal_constraint_revision；v1.2 修正 nullable boolean 編碼及再見非 HR 得分上限，原協定 SHA 明列，未變更切分／特徵／選模規則。
+
+12.7：407,505 訓練、137,699 驗證一般打席；額外跑者守恆排除 0。局面／加負荷／加能力的 2024 PA log loss=1.520314／1.519161／1.500242，Brier=0.709403／0.708929／0.701695。保留能力層 alpha=0.001、收縮20，無迭代上限警告；相對局面 log loss 差=-0.020072，比賽群聚100次區間[-0.021011,-0.018995]。2024 同時選設定，區間不是獨立測試證據。完整逐類校準箱與稀有事件支持另存。
+
+能力層聯合轉移 log loss=1.776664，下一 PA WPA RMSE=5.2783pp、RE24 RMSE=0.502300；對局面基準的價值誤差改善很小，不能宣稱換投效益。此為下一打席模型；固定半局策略及替代池價值仍在 Slice 14，因果與個別建議 gate 未開。正式 Stuff／Location metadata guards 保持原 SHA。
+
+小型證據 `data/sample/petehub_pitcher_decision_slice12_5_v1.json` 至 `slice12_7_v1.json`，離線 manifest 與協定可對帳；主文件與前端 build-time 快照由 export_pitcher_decision_plan.py 產生，Tracker 由 sync_project_tracker.py 同步。Source-only 檢查與 UI 驗收分開；新增 `/lab/decision-support`「候選歷史與下一打席基準」摘要、coverage／樣本流向及群聚診斷，未開瀏覽器或 server。
+
+本輪 source 檢查：新基準7 tests、準備／時間管線／Tracker14 tests通過；vue-tsc通過。準備100份＋新基準39份 artifact SHA、凍結實作／輸入、正式模型2份 metadata SHA一致。2024／2025／2026三層所有預測鍵唯一、九類機率和誤差<1e-9，WPA／RE均有值；後兩年僅查預測結構與涵蓋，沒有開結果指標。另以1000筆真實context檢查batch定價，以及再見／第三出局／守方符號的局部測試；這些均不是畫面驗收。
+
+人工入口 `http://127.0.0.1:3000/lab/decision-support`：確認21/31及下一步文字、三層驗證表、展開候選coverage／樣本流向、展開凍結設定／群聚區間、窄畫面表格捲動。畫面一律待使用者驗收，不能記錄自動通過；先等使用者決定是否開 Slice 13。
+
+## 2026-11-18：12.1–12.4 完成（歷史紀錄）
+
+Decision Support 17/31，父項 12 尚未結案，下一個工作 12.5。新離線版本 `data/research/decision_preparation_v1/`，腳本 `backend/scripts/build_decision_preparation.py` 依 source → probe → labels → history → ability → signals → coverage → finalize 執行。六季既有官方快照 14,577 場核 SHA；全部輸入資料及正式模型保留。
+
+12.1 核對 1,371 筆差異（789 自動跑者、582 其他決策前事件），2,066 筆故意四壞另標（含 1,527 零球），一般打席可靠轉移 821,933。標籤從決策起點重算，原標籤與不可靠終點旗標保留。12.2 保存逐欄 coverage／字典與補齊清單，2020 來源 probe 僅六年以前賽程及一場 CSV 小樣本，未進行整季回填。
+
+12.3 從 1,091,590 個可靠打席建立投打能力歷史與 frozen reference 回退；同時刻／未來標籤排除，另保存排除原因。手別取官方快照 game-listed 欄位，來源可能事後修訂；左右開弓預期反側屬明示假設。12.4 接上同登板嚴格更早的研究 Plus 均值／n、三項原有區間／收縮權重及缺值原因。三項缺值與 2021 暖機仍保留；補值／標準化／正則化選擇在 12.6，尚未開始 12.5–12.7 或 13–14。
+
+## 2026-11-18：Slice 12 補齊與建模準備分項（只規劃）
+
+使用者要求將仍需建立／補齊的欄位排入正式 Slice。新增 12.1 決策起點與標籤清洗、12.2 coverage 與條件式補齊、12.3 投打能力／手別、12.4 研究 Plus／三項狀態 adapter、12.5 候選歷史／可用性、12.6 前處理與時間協定、12.7 三層基準及 2024 驗證。父項 12 在子項完成後結案，13／14 沿原依賴接續。進度 13/31，新增七項皆 planned；完成工作數未變。下一個工作 12.1，尚未開始實作。
+
+12.2 先評估可補算、可補來源及結構性缺值。更早年度資料、未知熱身／醫療與歷史不全均各自列帳；條件式來源工作須有可行性、範圍與預期 coverage。三項狀態的基準增益留 13 檢驗。主文件與 Lab 規劃快照從權威 Tracker 產生。
+
+## 2026-11-18：WPA 榜驗收、gmLI 圖與 Slice 12 開工評估
+
+使用者明確回報 WPA 排行榜驗證通過。球隊榜下方已加三區間進場占比及總 WPA 熱圖，採當季換投資料，依 >2 區間占比排序，顯示各組次數與有效 gmLI 分母。新圖待人工驗收。
+
+使用者要求先評估再決定是否進 Slice 12–14。本機唯讀盤查 824,462 筆納入列，1,527 筆零球均為故意四壞，1,371 筆 play 起點／決策局面異同須在 Slice 12 的轉移標籤分流核對。基準可開工，無須先補舊正式成績檔。三項研究訊號缺值、罕見轉移及時間切分規格見 Decision Support 主文件的開工評估；Slice 12–14 仍 planned。
+
+## 2026-11-18：Pitcher Decision Slice 11 與 RE24 Lab 球隊調度榜
+
+Slice 11 離線決策樣本完成，Decision Lab 13/24；六季納入 824,462 個打席邊界（741,172 續投、83,290 換投）。特徵、名義候選、實際結果和排除清單分檔，時間／主鍵對帳通過。新頁面區塊在 `/lab/decision-support` 待使用者驗收；下一批 Slice 12。重跑 `backend/scripts/build_pitcher_decision_sample.py`，不要重新訓練已凍結的 Slice 6–10。
+
+`/lab/leverage` 球員表以接手 gmLI 三區間 WPA 取代四個 LI 欄，增加換投／代打球隊榜及各分母。換投是接任段，代打是同一打席，2025／2026 皆有 30 隊。新增表待人工驗收。圖法供使用者選擇，尚未併入頁面。
+
 ## 2026-11-15：Swing Timing 字級、展開寬度與水平拖曳條
 
 使用者回報排行榜／展開明細太小、右側裁切且沒有可見水平拉條。查得 `docs/RESEARCH_DISPLAY_CONTRACT.md:12` 已規定桌面正文 14px／表頭 12px、最低 12px，以及寬表水平捲動；本頁原 9–10px 表頭／明細不符。僅修改 `frontend/pages/batters/lab/swing-timing.vue`：主表數字／姓名 16px、表頭 12px、展開明細 14px／次要字 12px，增加欄寬及表格最小寬 2056px；標題操作列可換行。表格上方新增具 aria-label 的 range 拉條與原生 scrollLeft 雙向同步，底部原生 scrollbar 加粗上色。ResizeObserver 只供產品執行時量測容器寬度，限制展開面板為可視容器寬並 sticky left，避免跟著整張寬表撐大；三維卡片／matrix／gear 明細依容器與換行呈現。未改資料或模型，未做瀏覽器／DOM 視覺檢查或啟動 server；只一次 Vue template／TS syntax／scoped CSS compile 與 diff 檢查。人工入口 `/batters/lab/swing-timing`，待使用者核對字級、展開右側、頂部拖曳與底部水平捲動、窄窗換行。未宣稱畫面通過。
@@ -304,14 +672,14 @@ Extension答覆：有逐球release_extension與release XYZ，球路起點未改�
 2026-11-02 最新補充（優先於後方歷史摘要）：使用者已明確回報 D4 與全部 followup「都通過，進入 D5」。**D4 Done，22／51**；favorite-team 隊色、R／L／S、移除樣本按鈕、圍網與 70vw 頁寬不再待驗。現行 v3 **133 collision／82 foreground／16 portals**。D5 已授權並補齊角色／來源／組合／紋理 source-only gate，零 findings、十項 focused tests PASS，證據在 `data/sample/petehub_ballpark_d5_source_gate_v1.json`。PNG 12.44 MiB，單房＋User RGBA8 估算 18.70 MiB，不是實測 GPU／heap。D5 只剩載入／depth／邊緣、窄版／實機、reduced-motion、缺圖 fallback 的使用者結果；不可重問 D4 功能或同張素材。`production_ready=false`，D5 保持 in_progress，無代理瀏覽器／截圖／操作驗收。FPS／LCP／cleanup 的 E6 尚未開始，不自動進入 Section E。
 
 <!-- PROJECT_PROGRESS:START -->
-Tracker updated: 2026-11-14
+Tracker updated: 2026-11-19
 
 | Project | Status | Slices | Current direction |
 | --- | --- | ---: | --- |
 | Batter Comparison & Research | done | 10/10 | Only reopen when a verified exact timing, stance, roster or injury source becomes available. |
 | Pitch Quality Leaderboards | in_progress | 12/13 | Keep Stuff+ v2/v5 research-only; allow Location+ v2 to enter shadow monitoring, then proceed to Slice 11 historical backfill/release gate only after prospective checks. |
-| 換投決策與預警研究 / Pitcher Decision Lab | in_progress | 12/24 | 新增 Slice 6–10 結果區待使用者人工驗收；下一階段為 Slice 11 決策樣本庫與探索分析，尚未開始，須使用者指示。 |
-| RE24 & Leverage Lab | done | 4/5 | Automate or explicitly version the collected reliever reference cutoff. |
+| 換投決策與預警研究 / Pitcher Decision Lab | in_progress | 51/58 | 使用者驗收Lab#exploratory-replay單場提醒與實際換投時間軸；依支持與敏感度結果決定正式效益修訂。原15.4資格保留，16主項進行中，17–21未啟動。 |
+| RE24 & Leverage Lab | done | 5/7 | User verifies the new team gmLI distribution and WPA heatmap. Collected reference cutoff automation remains planned. |
 | Daily Data Reliability | done | 7/7 | Observe the next 03:00 scheduled run in the selected mode. During the off-season, pause daily game refresh while leaving transactions enabled; use explicit --step or --retry-failed for manual recovery. |
 | Project & Slice Tracker | done | 4/4 | For future material work, update the project document and tracker JSON, run the sync script, then keep only recent cross-project changes or live blockers in the concise handoff. |
 | Stamina+ Research & Lab | done | 24/24 | Treat Slice 0–19 as complete. Reopen only for a genuinely untouched season validation, or begin the separate Player Health & Availability research with its event-source audit. |

@@ -1,0 +1,16 @@
+{
+  "version": "decision_signal_lights_display_audit_v1",
+  "existing_input_hashes_checked": 4,
+  "display_source_hashes_checked": 3,
+  "real_cases": 11,
+  "uncalibrated_gray_groups": 44,
+  "new_alerts_computed": false,
+  "old_result": {
+    "alerts": 11,
+    "matches": 0
+  },
+  "progress": "36/47",
+  "stop": "14.2.1",
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user"
+}

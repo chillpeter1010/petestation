@@ -1,0 +1,16 @@
+{
+  "version": "decision_entry_review_source_audit_v1",
+  "previous_artifacts": 1546,
+  "new_artifacts": 10,
+  "reviewed_rows": 414962,
+  "primary_folds": 9,
+  "primary_passed": 0,
+  "new_models": 0,
+  "progress": "44/51",
+  "stop": "15.4",
+  "slice16_entry_allowed": false,
+  "recommendation_allowed": false,
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user",
+  "checks": "source/clock/probability/gates/paired uncertainty/denominators only; retrospective qualification is not live eligibility or strategy efficacy"
+}

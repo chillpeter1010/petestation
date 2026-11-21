@@ -1,0 +1,4113 @@
+{
+  "version": "decision_ablation_v1",
+  "protocol_sha256": "3ca128e6f4161adfac3bce7712dec356468e4ae45142e6cf47ecd0e03b5f30ef",
+  "coverage": [
+    {
+      "year": 2021,
+      "n": 131365,
+      "complete": 13898
+    },
+    {
+      "year": 2022,
+      "n": 136945,
+      "complete": 81136
+    },
+    {
+      "year": 2023,
+      "n": 139195,
+      "complete": 80993
+    },
+    {
+      "year": 2024,
+      "n": 137699,
+      "complete": 77794
+    }
+  ],
+  "cohorts": {
+    "complete": {
+      "training_n": 176027,
+      "validation_n": 77794,
+      "results": {
+        "baseline": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5029313790737728,
+            "brier": 0.7019259107479483,
+            "accuracy": 0.46261922513304365,
+            "ece": 0.023455540509248318,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5530,
+                "mean_confidence": 0.38027913317975165,
+                "accuracy": 0.3669077757685353
+              },
+              {
+                "lower": 0.4,
+                "n": 38712,
+                "mean_confidence": 0.4576959286382703,
+                "accuracy": 0.43495556933250673
+              },
+              {
+                "lower": 0.5,
+                "n": 32977,
+                "mean_confidence": 0.5345495740261849,
+                "accuracy": 0.5093550050034873
+              },
+              {
+                "lower": 0.6,
+                "n": 521,
+                "mean_confidence": 0.6156866969497715,
+                "accuracy": 0.5623800383877159
+              },
+              {
+                "lower": 0.7,
+                "n": 24,
+                "mean_confidence": 0.7461704082067193,
+                "accuracy": 0.625
+              },
+              {
+                "lower": 0.8,
+                "n": 21,
+                "mean_confidence": 0.8392509792450132,
+                "accuracy": 0.6190476190476191
+              },
+              {
+                "lower": 0.9,
+                "n": 9,
+                "mean_confidence": 0.9206100349203094,
+                "accuracy": 0.4444444444444444
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16668275891471596,
+                "ece": 0.008544987698418167,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 1932,
+                    "mean_probability": 0.08528146712474194,
+                    "event_rate": 0.09627329192546584
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34607,
+                    "mean_probability": 0.15810666887081304,
+                    "event_rate": 0.1683185482705811
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31766,
+                    "mean_probability": 0.2429490278246953,
+                    "event_rate": 0.2469306806019014
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8480,
+                    "mean_probability": 0.33539025777303205,
+                    "event_rate": 0.31898584905660377
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 953,
+                    "mean_probability": 0.42937268620296604,
+                    "event_rate": 0.40818467995802726
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 55,
+                    "mean_probability": 0.5221701130693038,
+                    "event_rate": 0.45454545454545453
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6079629016916266,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07035144800212528,
+                "ece": 0.005183011641667491,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68250,
+                    "mean_probability": 0.0648473641936524,
+                    "event_rate": 0.0703003663003663
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9475,
+                    "mean_probability": 0.11990333753777345,
+                    "event_rate": 0.12295514511873351
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 69,
+                    "mean_probability": 0.21918749331971782,
+                    "event_rate": 0.18840579710144928
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010323305810424866,
+                "ece": 0.0011358083487422825,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77778,
+                    "mean_probability": 0.00935516201395013,
+                    "event_rate": 0.010465684383758904
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 16,
+                    "mean_probability": 0.12405411269188929,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.03029855717875562,
+                "ece": 0.0024014615992842127,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77785,
+                    "mean_probability": 0.028967071149199042,
+                    "event_rate": 0.03136851578067751
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9,
+                    "mean_probability": 0.10856300053738181,
+                    "event_rate": 0.1111111111111111
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12339877951839986,
+                "ece": 0.005860474397962463,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4067,
+                    "mean_probability": 0.09056020305468439,
+                    "event_rate": 0.10179493484140645
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73102,
+                    "mean_probability": 0.1410473816471363,
+                    "event_rate": 0.14656233755574402
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 625,
+                    "mean_probability": 0.2094979451080787,
+                    "event_rate": 0.2208
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.04201801298542543,
+                "ece": 0.0020852525229915347,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.04187700677721157,
+                    "event_rate": 0.0439622593002031
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940185997964354,
+                "ece": 0.0005055941352902415,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.003453580094084774,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24627673466940267,
+                "ece": 0.022811000634899863,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 237,
+                    "mean_probability": 0.2787370766755365,
+                    "event_rate": 0.31645569620253167
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6292,
+                    "mean_probability": 0.3705237487019411,
+                    "event_rate": 0.3645899554990464
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37769,
+                    "mean_probability": 0.4583965590935337,
+                    "event_rate": 0.43556885276284785
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 32922,
+                    "mean_probability": 0.5345702553442283,
+                    "event_rate": 0.5094465706822185
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 520,
+                    "mean_probability": 0.6157015504021909,
+                    "event_rate": 0.5634615384615385
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 24,
+                    "mean_probability": 0.7461704082067193,
+                    "event_rate": 0.625
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 21,
+                    "mean_probability": 0.8392509792450132,
+                    "event_rate": 0.6190476190476191
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 9,
+                    "mean_probability": 0.9206100349203094,
+                    "event_rate": 0.4444444444444444
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008636127670734304,
+                "ece": 0.0011769453189896762,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.007538379770348834,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": 0.0,
+            "game_cluster_95pct": [
+              0.0,
+              0.0
+            ],
+            "replicates": 100
+          },
+          "brier_delta": 0.0,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": 0.0
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "plus": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.502215526122487,
+            "brier": 0.7016614639814727,
+            "accuracy": 0.46279918759801525,
+            "ece": 0.02369598053473959,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5536,
+                "mean_confidence": 0.38037290985010835,
+                "accuracy": 0.36596820809248554
+              },
+              {
+                "lower": 0.4,
+                "n": 38610,
+                "mean_confidence": 0.4577546569842138,
+                "accuracy": 0.43434343434343436
+              },
+              {
+                "lower": 0.5,
+                "n": 32991,
+                "mean_confidence": 0.535033413376734,
+                "accuracy": 0.5102300627443849
+              },
+              {
+                "lower": 0.6,
+                "n": 609,
+                "mean_confidence": 0.6162657480551702,
+                "accuracy": 0.5681444991789819
+              },
+              {
+                "lower": 0.7,
+                "n": 12,
+                "mean_confidence": 0.7319627374150054,
+                "accuracy": 0.5833333333333334
+              },
+              {
+                "lower": 0.8,
+                "n": 26,
+                "mean_confidence": 0.8472006731212777,
+                "accuracy": 0.6538461538461539
+              },
+              {
+                "lower": 0.9,
+                "n": 10,
+                "mean_confidence": 0.934942300127409,
+                "accuracy": 0.4
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16648849308900932,
+                "ece": 0.00852977667270224,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2072,
+                    "mean_probability": 0.08376773190519285,
+                    "event_rate": 0.0834942084942085
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34480,
+                    "mean_probability": 0.15809519381039647,
+                    "event_rate": 0.1693445475638051
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31585,
+                    "mean_probability": 0.2431716695784305,
+                    "event_rate": 0.24650941902801962
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8598,
+                    "mean_probability": 0.33547593161443756,
+                    "event_rate": 0.3189113747383112
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 994,
+                    "mean_probability": 0.42984703175597844,
+                    "event_rate": 0.4074446680080483
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 64,
+                    "mean_probability": 0.5218994400054217,
+                    "event_rate": 0.453125
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6065984391127975,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07032726096241367,
+                "ece": 0.005629300473085827,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68383,
+                    "mean_probability": 0.06443736121409276,
+                    "event_rate": 0.07006127253849641
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9341,
+                    "mean_probability": 0.12023585698054286,
+                    "event_rate": 0.12557542019055776
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 70,
+                    "mean_probability": 0.22098589945421,
+                    "event_rate": 0.17142857142857143
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010321252324876037,
+                "ece": 0.001095111893284131,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77780,
+                    "mean_probability": 0.009393404565391521,
+                    "event_rate": 0.010465415273849319
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 14,
+                    "mean_probability": 0.12943869444987105,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.03029310353755331,
+                "ece": 0.002272654281040673,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77783,
+                    "mean_probability": 0.029099308144161194,
+                    "event_rate": 0.03136932234549966
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 11,
+                    "mean_probability": 0.11185022877892076,
+                    "event_rate": 0.09090909090909091
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.1233996231832777,
+                "ece": 0.006150800726624376,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4017,
+                    "mean_probability": 0.09044211228852155,
+                    "event_rate": 0.09733632063729152
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73232,
+                    "mean_probability": 0.14078292151972177,
+                    "event_rate": 0.14679375136552328
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 545,
+                    "mean_probability": 0.20987841188573994,
+                    "event_rate": 0.22935779816513763
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.042017590912024984,
+                "ece": 0.0019423058773679021,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77791,
+                    "mean_probability": 0.042025838559905625,
+                    "event_rate": 0.04396395469912972
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 3,
+                    "mean_probability": 0.11058361252568456,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940320963693955,
+                "ece": 0.0005164271553709503,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034427470740040654,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24623658260866127,
+                "ece": 0.02307795864999483,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 246,
+                    "mean_probability": 0.2777282201574536,
+                    "event_rate": 0.3048780487804878
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6337,
+                    "mean_probability": 0.37026870377358356,
+                    "event_rate": 0.36231655357424647
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37628,
+                    "mean_probability": 0.4584753340473545,
+                    "event_rate": 0.4349952163282662
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 32927,
+                    "mean_probability": 0.5350589417970506,
+                    "event_rate": 0.510341057490813
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 608,
+                    "mean_probability": 0.6162816482343517,
+                    "event_rate": 0.569078947368421
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 12,
+                    "mean_probability": 0.7319627374150054,
+                    "event_rate": 0.5833333333333334
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 26,
+                    "mean_probability": 0.8472006731212777,
+                    "event_rate": 0.6538461538461539
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 10,
+                    "mean_probability": 0.934942300127409,
+                    "event_rate": 0.4
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008637236399962509,
+                "ece": 0.0012974268256892227,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.007417898263649287,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -0.0007158529512858726,
+            "game_cluster_95pct": [
+              -0.0009515665913049423,
+              -0.0004946639041119057
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.0002644467664756345,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": -0.00020659755874043515
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.001544775525933771
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.0016036432723858767
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": -0.0004826463775365068
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        },
+        "quality": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5028526760686614,
+            "brier": 0.7018767416206609,
+            "accuracy": 0.4626963519037458,
+            "ece": 0.023245083087058718,
+            "calibration_bins": [
+              {
+                "lower": 0.2,
+                "n": 2,
+                "mean_confidence": 0.2962266321317301,
+                "accuracy": 0.5
+              },
+              {
+                "lower": 0.3,
+                "n": 5661,
+                "mean_confidence": 0.38044158090504565,
+                "accuracy": 0.3670729553082494
+              },
+              {
+                "lower": 0.4,
+                "n": 38664,
+                "mean_confidence": 0.45766247958527295,
+                "accuracy": 0.4351851851851852
+              },
+              {
+                "lower": 0.5,
+                "n": 32895,
+                "mean_confidence": 0.5347588541394986,
+                "accuracy": 0.5093175254597964
+              },
+              {
+                "lower": 0.6,
+                "n": 520,
+                "mean_confidence": 0.6146648091315314,
+                "accuracy": 0.5884615384615385
+              },
+              {
+                "lower": 0.7,
+                "n": 22,
+                "mean_confidence": 0.748038894009634,
+                "accuracy": 0.5909090909090909
+              },
+              {
+                "lower": 0.8,
+                "n": 21,
+                "mean_confidence": 0.850132019727357,
+                "accuracy": 0.6190476190476191
+              },
+              {
+                "lower": 0.9,
+                "n": 9,
+                "mean_confidence": 0.9278567778625268,
+                "accuracy": 0.4444444444444444
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16665753946148096,
+                "ece": 0.008150816441058339,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 1963,
+                    "mean_probability": 0.08501354541553963,
+                    "event_rate": 0.09220580743759552
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34369,
+                    "mean_probability": 0.1580084357000155,
+                    "event_rate": 0.16878582443481044
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31660,
+                    "mean_probability": 0.2430285122821137,
+                    "event_rate": 0.24545167403663928
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8757,
+                    "mean_probability": 0.33556489224629077,
+                    "event_rate": 0.3182596779719082
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 988,
+                    "mean_probability": 0.430605049189332,
+                    "event_rate": 0.4139676113360324
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 57,
+                    "mean_probability": 0.5238820928442245,
+                    "event_rate": 0.43859649122807015
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07035073084703276,
+                "ece": 0.005451731306777012,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68372,
+                    "mean_probability": 0.06463300992208745,
+                    "event_rate": 0.0703796875914117
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9353,
+                    "mean_probability": 0.11994916425723093,
+                    "event_rate": 0.12306211910616914
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 69,
+                    "mean_probability": 0.218618448844272,
+                    "event_rate": 0.18840579710144928
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010322669852248613,
+                "ece": 0.0009765680767276636,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77779,
+                    "mean_probability": 0.009512748250765994,
+                    "event_rate": 0.010465549827074146
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 15,
+                    "mean_probability": 0.1242122104853409,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030294289357272835,
+                "ece": 0.0020891919482303027,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77783,
+                    "mean_probability": 0.02928261098144105,
+                    "event_rate": 0.03136932234549966
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 11,
+                    "mean_probability": 0.11053894455065733,
+                    "event_rate": 0.09090909090909091
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12340578757431535,
+                "ece": 0.006276607914145991,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4283,
+                    "mean_probability": 0.09025102646167843,
+                    "event_rate": 0.10179780527667523
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 72908,
+                    "mean_probability": 0.1407898405115408,
+                    "event_rate": 0.14674658473692873
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 603,
+                    "mean_probability": 0.20972922981117806,
+                    "event_rate": 0.21724709784411278
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.042018808326685295,
+                "ece": 0.0021579415590101264,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.041804317741192976,
+                    "event_rate": 0.0439622593002031
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940267039224622,
+                "ece": 0.0004941087674454805,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034650654619295352,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24625016648213324,
+                "ece": 0.022571421460412407,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.1991086275981773,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 241,
+                    "mean_probability": 0.27821635049348675,
+                    "event_rate": 0.3153526970954357
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6458,
+                    "mean_probability": 0.37032811409317207,
+                    "event_rate": 0.36481882935893467
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37684,
+                    "mean_probability": 0.458361001078989,
+                    "event_rate": 0.4357286912217387
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 32838,
+                    "mean_probability": 0.5347777339553774,
+                    "event_rate": 0.5094402825994275
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 520,
+                    "mean_probability": 0.6146648091315314,
+                    "event_rate": 0.5884615384615385
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 22,
+                    "mean_probability": 0.748038894009634,
+                    "event_rate": 0.5909090909090909
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 21,
+                    "mean_probability": 0.850132019727357,
+                    "event_rate": 0.6190476190476191
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 9,
+                    "mean_probability": 0.9278567778625268,
+                    "event_rate": 0.4444444444444444
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008636482680267382,
+                "ece": 0.0012949622798959738,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.007420362809442536,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -7.870300511155813e-05,
+            "game_cluster_95pct": [
+              -0.00022410982213605892,
+              3.374036134939789e-05
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -4.916912728736289e-05,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 5.33643138201045e-05
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.00038900556224150687
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.00028798323611140106
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": 8.984659536459603e-06
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "physical": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5030314883716027,
+            "brier": 0.7019595396540872,
+            "accuracy": 0.4625935162094763,
+            "ece": 0.023722609007228515,
+            "calibration_bins": [
+              {
+                "lower": 0.2,
+                "n": 1,
+                "mean_confidence": 0.2999543668696308,
+                "accuracy": 0.0
+              },
+              {
+                "lower": 0.3,
+                "n": 5508,
+                "mean_confidence": 0.38024664724125384,
+                "accuracy": 0.3661946259985476
+              },
+              {
+                "lower": 0.4,
+                "n": 38650,
+                "mean_confidence": 0.45776759694885494,
+                "accuracy": 0.4342302716688228
+              },
+              {
+                "lower": 0.5,
+                "n": 33025,
+                "mean_confidence": 0.5346428963596579,
+                "accuracy": 0.5099772899318697
+              },
+              {
+                "lower": 0.6,
+                "n": 552,
+                "mean_confidence": 0.6169092447521973,
+                "accuracy": 0.5634057971014492
+              },
+              {
+                "lower": 0.7,
+                "n": 21,
+                "mean_confidence": 0.7408437575051429,
+                "accuracy": 0.6190476190476191
+              },
+              {
+                "lower": 0.8,
+                "n": 24,
+                "mean_confidence": 0.8455293597592725,
+                "accuracy": 0.5833333333333334
+              },
+              {
+                "lower": 0.9,
+                "n": 13,
+                "mean_confidence": 0.9303505185114905,
+                "accuracy": 0.5384615384615384
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16669412242340675,
+                "ece": 0.008885001931118925,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2015,
+                    "mean_probability": 0.0850884483818068,
+                    "event_rate": 0.09627791563275434
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34790,
+                    "mean_probability": 0.1579568703683481,
+                    "event_rate": 0.168381718884737
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31548,
+                    "mean_probability": 0.24287125102354354,
+                    "event_rate": 0.24762267021681247
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8420,
+                    "mean_probability": 0.33522184564688245,
+                    "event_rate": 0.3194774346793349
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 963,
+                    "mean_probability": 0.42902661268902614,
+                    "event_rate": 0.4091381100726895
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 57,
+                    "mean_probability": 0.5218567435810838,
+                    "event_rate": 0.45614035087719296
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.608408373984344,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07034233382550606,
+                "ece": 0.005028191481604976,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68031,
+                    "mean_probability": 0.06484150146108811,
+                    "event_rate": 0.07008569622672017
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9686,
+                    "mean_probability": 0.12023138835187248,
+                    "event_rate": 0.12337394177162915
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 77,
+                    "mean_probability": 0.22021482591557678,
+                    "event_rate": 0.16883116883116883
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010322069870228854,
+                "ece": 0.0009300549451159571,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77779,
+                    "mean_probability": 0.00955922711154169,
+                    "event_rate": 0.010465549827074146
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 15,
+                    "mean_probability": 0.12398799393012658,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030298888009999064,
+                "ece": 0.002558987457633673,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77784,
+                    "mean_probability": 0.02881074097539504,
+                    "event_rate": 0.03136891905790394
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 10,
+                    "mean_probability": 0.10885463092816605,
+                    "event_rate": 0.1
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.1233953263449058,
+                "ece": 0.005883126310758943,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4130,
+                    "mean_probability": 0.09045528976298847,
+                    "event_rate": 0.1009685230024213
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73062,
+                    "mean_probability": 0.1410931469317912,
+                    "event_rate": 0.14664257753688648
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 602,
+                    "mean_probability": 0.20963492347034443,
+                    "event_rate": 0.22425249169435216
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.04201933551358806,
+                "ece": 0.0019084374955996087,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.04205382180460349,
+                    "event_rate": 0.0439622593002031
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940369377299045,
+                "ece": 0.0005589250463670097,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.003400249183008006,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24631076316617584,
+                "ece": 0.022971109849858028,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.19918151395126635,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 236,
+                    "mean_probability": 0.2786162707367868,
+                    "event_rate": 0.3050847457627119
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6286,
+                    "mean_probability": 0.3704206496065172,
+                    "event_rate": 0.3650970410435889
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37694,
+                    "mean_probability": 0.458492022117789,
+                    "event_rate": 0.4347906828672998
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 32968,
+                    "mean_probability": 0.5346650029693513,
+                    "event_rate": 0.5100703712691095
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 551,
+                    "mean_probability": 0.616924672829816,
+                    "event_rate": 0.5644283121597096
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 21,
+                    "mean_probability": 0.7408437575051429,
+                    "event_rate": 0.6190476190476191
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 24,
+                    "mean_probability": 0.8455293597592725,
+                    "event_rate": 0.5833333333333334
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 13,
+                    "mean_probability": 0.9303505185114905,
+                    "event_rate": 0.5384615384615384
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008636331122977745,
+                "ece": 0.00122211705897608,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.00749320803036243,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": 0.00010010929782988777,
+            "game_cluster_95pct": [
+              -1.3365532261404173e-06,
+              0.0001969388717125229
+            ],
+            "replicates": 100
+          },
+          "brier_delta": 3.362890613889391e-05,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.0008498316093885842
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.00031356278536028817
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": 0.000635783365927633
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": 0.00010820352117096133
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "command": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5031338751459835,
+            "brier": 0.7019733350431457,
+            "accuracy": 0.4627734786744479,
+            "ece": 0.024190429433455247,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5476,
+                "mean_confidence": 0.38031488143885134,
+                "accuracy": 0.36796932067202337
+              },
+              {
+                "lower": 0.4,
+                "n": 38265,
+                "mean_confidence": 0.4578024331501174,
+                "accuracy": 0.43488827910623284
+              },
+              {
+                "lower": 0.5,
+                "n": 33434,
+                "mean_confidence": 0.5350570478310546,
+                "accuracy": 0.5081952503439613
+              },
+              {
+                "lower": 0.6,
+                "n": 559,
+                "mean_confidence": 0.6156865652538714,
+                "accuracy": 0.5706618962432916
+              },
+              {
+                "lower": 0.7,
+                "n": 22,
+                "mean_confidence": 0.7406730044289218,
+                "accuracy": 0.6363636363636364
+              },
+              {
+                "lower": 0.8,
+                "n": 27,
+                "mean_confidence": 0.8401298931537879,
+                "accuracy": 0.5925925925925926
+              },
+              {
+                "lower": 0.9,
+                "n": 11,
+                "mean_confidence": 0.9283119749858691,
+                "accuracy": 0.45454545454545453
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16669419187535392,
+                "ece": 0.008729412024509534,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 1989,
+                    "mean_probability": 0.08502418379968898,
+                    "event_rate": 0.10005027652086476
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34658,
+                    "mean_probability": 0.15793149866089448,
+                    "event_rate": 0.1680131571354377
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31603,
+                    "mean_probability": 0.24297370925402442,
+                    "event_rate": 0.2472233648704237
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8505,
+                    "mean_probability": 0.33544142452402725,
+                    "event_rate": 0.3189888300999412
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 980,
+                    "mean_probability": 0.42926705139871685,
+                    "event_rate": 0.4091836734693878
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 58,
+                    "mean_probability": 0.5220162582000436,
+                    "event_rate": 0.43103448275862066
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6090258332934947,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07033876961115697,
+                "ece": 0.005686209353999576,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68421,
+                    "mean_probability": 0.06436576636080407,
+                    "event_rate": 0.07040236184797065
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9297,
+                    "mean_probability": 0.12008308392696948,
+                    "event_rate": 0.12305044638055286
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 76,
+                    "mean_probability": 0.22020397271913195,
+                    "event_rate": 0.19736842105263158
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.01032200706292218,
+                "ece": 0.0009696015973165598,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77779,
+                    "mean_probability": 0.009519867916336784,
+                    "event_rate": 0.010465549827074146
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 15,
+                    "mean_probability": 0.12499955509354178,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030298633452902884,
+                "ece": 0.0024879104240107244,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77784,
+                    "mean_probability": 0.028881801408457235,
+                    "event_rate": 0.03136891905790394
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 10,
+                    "mean_probability": 0.10865442809277674,
+                    "event_rate": 0.1
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12340965875905081,
+                "ece": 0.006002264059632132,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4116,
+                    "mean_probability": 0.09023777645187532,
+                    "event_rate": 0.10276967930029154
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73097,
+                    "mean_probability": 0.14098884135622605,
+                    "event_rate": 0.14661340410687168
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 581,
+                    "mean_probability": 0.20960386446299933,
+                    "event_rate": 0.21686746987951808
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.04201726265879696,
+                "ece": 0.0017994436948214412,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.04216281560538166,
+                    "event_rate": 0.0439622593002031
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940443404757798,
+                "ece": 0.0005937836428023557,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.00336539058657266,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24631401598516195,
+                "ece": 0.02367596834253333,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.19920924080032731,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 236,
+                    "mean_probability": 0.2785961493472066,
+                    "event_rate": 0.3177966101694915
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6270,
+                    "mean_probability": 0.37040684391189654,
+                    "event_rate": 0.3639553429027113
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37293,
+                    "mean_probability": 0.45854119938400384,
+                    "event_rate": 0.43547046362588154
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33376,
+                    "mean_probability": 0.5350797097976953,
+                    "event_rate": 0.5083293384467881
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 558,
+                    "mean_probability": 0.6156985020494994,
+                    "event_rate": 0.5716845878136201
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 22,
+                    "mean_probability": 0.7406730044289218,
+                    "event_rate": 0.6363636363636364
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 27,
+                    "mean_probability": 0.8401298931537879,
+                    "event_rate": 0.5925925925925926
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 11,
+                    "mean_probability": 0.9283119749858691,
+                    "event_rate": 0.45454545454545453
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008638352233042273,
+                "ece": 0.0015192988514135348,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.007196026237924975,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": 0.0002024960722107562,
+            "game_cluster_95pct": [
+              6.066976516957796e-05,
+              0.00032140631241114615
+            ],
+            "replicates": 100
+          },
+          "brier_delta": 4.742429519744018e-05,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.0014897012836217435
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -7.073598300774036e-05
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": 0.0008523219587444916
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": 0.0001007043345152968
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "three_signals": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5029803066238063,
+            "brier": 0.701930515179444,
+            "accuracy": 0.4625935162094763,
+            "ece": 0.024598707167828103,
+            "calibration_bins": [
+              {
+                "lower": 0.2,
+                "n": 2,
+                "mean_confidence": 0.2927038670122927,
+                "accuracy": 0.5
+              },
+              {
+                "lower": 0.3,
+                "n": 5611,
+                "mean_confidence": 0.3802214721739754,
+                "accuracy": 0.3639279985742292
+              },
+              {
+                "lower": 0.4,
+                "n": 37934,
+                "mean_confidence": 0.4576405960743001,
+                "accuracy": 0.4344914852111562
+              },
+              {
+                "lower": 0.5,
+                "n": 33583,
+                "mean_confidence": 0.5356191992971444,
+                "accuracy": 0.5083822171932227
+              },
+              {
+                "lower": 0.6,
+                "n": 618,
+                "mean_confidence": 0.6143443424132071,
+                "accuracy": 0.5857605177993528
+              },
+              {
+                "lower": 0.7,
+                "n": 12,
+                "mean_confidence": 0.7372891031409236,
+                "accuracy": 0.6666666666666666
+              },
+              {
+                "lower": 0.8,
+                "n": 24,
+                "mean_confidence": 0.8419917385621695,
+                "accuracy": 0.625
+              },
+              {
+                "lower": 0.9,
+                "n": 10,
+                "mean_confidence": 0.9236536726822246,
+                "accuracy": 0.4
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16666027706259515,
+                "ece": 0.008166195121013395,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 1982,
+                    "mean_probability": 0.08497461007766276,
+                    "event_rate": 0.09233097880928355
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34427,
+                    "mean_probability": 0.15795096673947195,
+                    "event_rate": 0.1688790774682662
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31610,
+                    "mean_probability": 0.24307465009339937,
+                    "event_rate": 0.24546029737424865
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8718,
+                    "mean_probability": 0.33567883104417107,
+                    "event_rate": 0.3188804771736637
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 994,
+                    "mean_probability": 0.430266081601838,
+                    "event_rate": 0.41448692152917505
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 62,
+                    "mean_probability": 0.5215265007799503,
+                    "event_rate": 0.41935483870967744
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.601104606531451,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07034171666317791,
+                "ece": 0.005883655571621544,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68411,
+                    "mean_probability": 0.06411780008381507,
+                    "event_rate": 0.07023724254871293
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9305,
+                    "mean_probability": 0.12027819577389133,
+                    "event_rate": 0.12423428264373992
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 78,
+                    "mean_probability": 0.22134018908535652,
+                    "event_rate": 0.19230769230769232
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.01032315280015805,
+                "ece": 0.0011547743437522896,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77780,
+                    "mean_probability": 0.009333750811533996,
+                    "event_rate": 0.010465415273849319
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 14,
+                    "mean_probability": 0.12954667278427404,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030293912676085683,
+                "ece": 0.0021204449311369522,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77783,
+                    "mean_probability": 0.029251413878314408,
+                    "event_rate": 0.03136932234549966
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 11,
+                    "mean_probability": 0.11096533361794748,
+                    "event_rate": 0.09090909090909091
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12340620053914207,
+                "ece": 0.006335400862277678,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4125,
+                    "mean_probability": 0.09044187072586107,
+                    "event_rate": 0.10327272727272727
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73127,
+                    "mean_probability": 0.14066505568629928,
+                    "event_rate": 0.1465122321440781
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 542,
+                    "mean_probability": 0.20970033469333116,
+                    "event_rate": 0.23247232472324722
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.042019804412737644,
+                "ece": 0.002434754951175358,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.041527504349027744,
+                    "event_rate": 0.0439622593002031
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.0039403205933597535,
+                "ece": 0.0005252748414691752,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034338993879058405,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24630755567131768,
+                "ece": 0.02378555228420367,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.195843384468769,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 253,
+                    "mean_probability": 0.27819720611331983,
+                    "event_rate": 0.31225296442687744
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6411,
+                    "mean_probability": 0.37004494760749973,
+                    "event_rate": 0.3634378412104196
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 36945,
+                    "mean_probability": 0.45837008286386205,
+                    "event_rate": 0.4350250372174855
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33521,
+                    "mean_probability": 0.535645264966667,
+                    "event_rate": 0.5085468810596343
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 617,
+                    "mean_probability": 0.6143658006561273,
+                    "event_rate": 0.586709886547812
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 12,
+                    "mean_probability": 0.7372891031409236,
+                    "event_rate": 0.6666666666666666
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 24,
+                    "mean_probability": 0.8419917385621695,
+                    "event_rate": 0.625
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 10,
+                    "mean_probability": 0.9236536726822246,
+                    "event_rate": 0.4
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008637574760870112,
+                "ece": 0.0014006220603562216,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0073147030289822884,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": 4.892755003340271e-05,
+            "game_cluster_95pct": [
+              -0.00017160818474191568,
+              0.00019686930571212547
+            ],
+            "replicates": 100
+          },
+          "brier_delta": 4.6044314957471855e-06,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.00025824603378238537
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.00027464430742887017
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.0006190998125664084
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": 0.00015545164579686965
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "all": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.502536828359428,
+            "brier": 0.7017771154678734,
+            "accuracy": 0.46276062421266423,
+            "ece": 0.02543060356248725,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5370,
+                "mean_confidence": 0.38037754228006593,
+                "accuracy": 0.36573556797020484
+              },
+              {
+                "lower": 0.4,
+                "n": 37718,
+                "mean_confidence": 0.4579602828787537,
+                "accuracy": 0.43366562384007634
+              },
+              {
+                "lower": 0.5,
+                "n": 33980,
+                "mean_confidence": 0.5356769662339895,
+                "accuracy": 0.5080341377280754
+              },
+              {
+                "lower": 0.6,
+                "n": 665,
+                "mean_confidence": 0.6162193058152005,
+                "accuracy": 0.5714285714285714
+              },
+              {
+                "lower": 0.7,
+                "n": 23,
+                "mean_confidence": 0.7347003865700255,
+                "accuracy": 0.6521739130434783
+              },
+              {
+                "lower": 0.8,
+                "n": 25,
+                "mean_confidence": 0.8492338015937381,
+                "accuracy": 0.6
+              },
+              {
+                "lower": 0.9,
+                "n": 13,
+                "mean_confidence": 0.935147457409395,
+                "accuracy": 0.46153846153846156
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16648219180853363,
+                "ece": 0.008497730750325038,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2104,
+                    "mean_probability": 0.08397409047237397,
+                    "event_rate": 0.08507604562737643
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34571,
+                    "mean_probability": 0.1580311436687582,
+                    "event_rate": 0.1698244193109832
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31490,
+                    "mean_probability": 0.24323866777152786,
+                    "event_rate": 0.24607812003810733
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8576,
+                    "mean_probability": 0.33559135508480664,
+                    "event_rate": 0.31961287313432835
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 988,
+                    "mean_probability": 0.42978542502029654,
+                    "event_rate": 0.4109311740890688
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 64,
+                    "mean_probability": 0.5214631792497586,
+                    "event_rate": 0.4375
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6011636433738764,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.0703336779693558,
+                "ece": 0.006096992923946773,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68416,
+                    "mean_probability": 0.06381591749946881,
+                    "event_rate": 0.0699543966323667
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9299,
+                    "mean_probability": 0.12057339718765019,
+                    "event_rate": 0.12625013442305624
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 79,
+                    "mean_probability": 0.2221683495839534,
+                    "event_rate": 0.20253164556962025
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010321659858731657,
+                "ece": 0.0011326836546848202,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77780,
+                    "mean_probability": 0.009356333230803721,
+                    "event_rate": 0.010465415273849319
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 14,
+                    "mean_probability": 0.1322564946045966,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.0302913676219384,
+                "ece": 0.002251817530879438,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77782,
+                    "mean_probability": 0.02911321931766614,
+                    "event_rate": 0.03135686919852922
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 12,
+                    "mean_probability": 0.1114735030047838,
+                    "event_rate": 0.16666666666666666
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12340676314545375,
+                "ece": 0.006261233564761122,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4401,
+                    "mean_probability": 0.08977205957864588,
+                    "event_rate": 0.10270393092478983
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 72772,
+                    "mean_probability": 0.14089816498540353,
+                    "event_rate": 0.14669103501346673
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 621,
+                    "mean_probability": 0.20996054676258896,
+                    "event_rate": 0.22383252818035426
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.042020222306654025,
+                "ece": 0.0026523844879647175,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77789,
+                    "mean_probability": 0.04132009490178889,
+                    "event_rate": 0.04396508503773027
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 5,
+                    "mean_probability": 0.11769223439659955,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940377524894205,
+                "ece": 0.000515929846604448,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034432443827705677,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24634259047744275,
+                "ece": 0.024769294914701687,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 243,
+                    "mean_probability": 0.27799607965102574,
+                    "event_rate": 0.3004115226337449
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6166,
+                    "mean_probability": 0.3701972114178512,
+                    "event_rate": 0.3629581576386636
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 36744,
+                    "mean_probability": 0.45869854549278904,
+                    "event_rate": 0.4342205530154583
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33916,
+                    "mean_probability": 0.5357037878629255,
+                    "event_rate": 0.5081672367024413
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 664,
+                    "mean_probability": 0.6162419800056242,
+                    "event_rate": 0.572289156626506
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 23,
+                    "mean_probability": 0.7347003865700255,
+                    "event_rate": 0.6521739130434783
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 25,
+                    "mean_probability": 0.8492338015937381,
+                    "event_rate": 0.6
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 13,
+                    "mean_probability": 0.935147457409395,
+                    "event_rate": 0.46153846153846156
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.0086382647548692,
+                "ece": 0.0014785432705696402,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.00723678181876887,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -0.0003945507143447906,
+            "game_cluster_95pct": [
+              -0.000697375613155615,
+              -0.0001458430144014563
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.00014879528007494258,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.00040596578572530014
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.001341158676494891
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.0006279128570641986
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": -0.0001941712290419421
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        },
+        "without_quality": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5022374747849552,
+            "brier": 0.7016680148107066,
+            "accuracy": 0.4626706429801784,
+            "ece": 0.02431202185612548,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5509,
+                "mean_confidence": 0.3802315995251655,
+                "accuracy": 0.36612815392993286
+              },
+              {
+                "lower": 0.4,
+                "n": 38248,
+                "mean_confidence": 0.4577883404484332,
+                "accuracy": 0.43421878268144737
+              },
+              {
+                "lower": 0.5,
+                "n": 33429,
+                "mean_confidence": 0.5352807693426822,
+                "accuracy": 0.5090191151395494
+              },
+              {
+                "lower": 0.6,
+                "n": 553,
+                "mean_confidence": 0.6157484584322748,
+                "accuracy": 0.5768535262206148
+              },
+              {
+                "lower": 0.7,
+                "n": 18,
+                "mean_confidence": 0.7391417237689022,
+                "accuracy": 0.6666666666666666
+              },
+              {
+                "lower": 0.8,
+                "n": 26,
+                "mean_confidence": 0.8514925576255806,
+                "accuracy": 0.6153846153846154
+              },
+              {
+                "lower": 0.9,
+                "n": 11,
+                "mean_confidence": 0.9356370567215362,
+                "accuracy": 0.45454545454545453
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16648692794486208,
+                "ece": 0.008867238305446496,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2086,
+                    "mean_probability": 0.08359448298584644,
+                    "event_rate": 0.08341323106423777
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34625,
+                    "mean_probability": 0.15797608219605883,
+                    "event_rate": 0.16964620938628158
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31472,
+                    "mean_probability": 0.2431818686929919,
+                    "event_rate": 0.24679079816980173
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8552,
+                    "mean_probability": 0.33552740079272947,
+                    "event_rate": 0.3185219831618335
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 993,
+                    "mean_probability": 0.4298347954532402,
+                    "event_rate": 0.4078549848942598
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 65,
+                    "mean_probability": 0.5218253574565488,
+                    "event_rate": 0.46153846153846156
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6065310706417937,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07032270959837049,
+                "ece": 0.005506322927411573,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68225,
+                    "mean_probability": 0.06433942728154203,
+                    "event_rate": 0.0698717478930011
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9490,
+                    "mean_probability": 0.12050908694354616,
+                    "event_rate": 0.12571127502634352
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 79,
+                    "mean_probability": 0.22212085053814906,
+                    "event_rate": 0.20253164556962025
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010321128062952482,
+                "ece": 0.001007459468892468,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77779,
+                    "mean_probability": 0.009483031922670299,
+                    "event_rate": 0.010465549827074146
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 15,
+                    "mean_probability": 0.1303361224262543,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030290852570921675,
+                "ece": 0.0020433055172674975,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77782,
+                    "mean_probability": 0.02933050361235018,
+                    "event_rate": 0.03136972564346507
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 12,
+                    "mean_probability": 0.11184511551078642,
+                    "event_rate": 0.08333333333333333
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12339948907859069,
+                "ece": 0.006269317668038589,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4232,
+                    "mean_probability": 0.09026092411597224,
+                    "event_rate": 0.09924385633270322
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 72959,
+                    "mean_probability": 0.14076110587206733,
+                    "event_rate": 0.14679477514768569
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 603,
+                    "mean_probability": 0.20980256576061518,
+                    "event_rate": 0.22553897180762852
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.042019236156830474,
+                "ece": 0.0022922847749719416,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77790,
+                    "mean_probability": 0.04167825052473721,
+                    "event_rate": 0.043964519861164675
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 4,
+                    "mean_probability": 0.11927752586872199,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940439573473505,
+                "ece": 0.000548019695308548,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034111545340664677,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24624933903806565,
+                "ece": 0.023557854581666378,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.1997651451813121,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 246,
+                    "mean_probability": 0.2780754281416763,
+                    "event_rate": 0.3048780487804878
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6313,
+                    "mean_probability": 0.37008491512577574,
+                    "event_rate": 0.3643275780136227
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37263,
+                    "mean_probability": 0.4585218725974964,
+                    "event_rate": 0.4348549499503529
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33364,
+                    "mean_probability": 0.5353069832790387,
+                    "event_rate": 0.5091116173120729
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 552,
+                    "mean_probability": 0.6157651565985618,
+                    "event_rate": 0.5778985507246377
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 18,
+                    "mean_probability": 0.7391417237689022,
+                    "event_rate": 0.6666666666666666
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 26,
+                    "mean_probability": 0.8514925576255806,
+                    "event_rate": 0.6153846153846154
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 11,
+                    "mean_probability": 0.9356370567215362,
+                    "event_rate": 0.45454545454545453
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008637892786639503,
+                "ece": 0.0013915425489724525,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0073237825403660575,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -0.0006939042888177825,
+            "game_cluster_95pct": [
+              -0.000987635848220362,
+              -0.000412387078094187
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.00025789593724168114,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": -0.00015411112684784943
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.0016238482853300753
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.001860642817968878
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": -0.00041974842026339034
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        },
+        "without_physical": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5023331436625647,
+            "brier": 0.7016774355526659,
+            "accuracy": 0.4626963519037458,
+            "ece": 0.024534653164774864,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5556,
+                "mean_confidence": 0.38034778765126,
+                "accuracy": 0.36555075593952485
+              },
+              {
+                "lower": 0.4,
+                "n": 38023,
+                "mean_confidence": 0.4576786976738565,
+                "accuracy": 0.4334218762328065
+              },
+              {
+                "lower": 0.5,
+                "n": 33544,
+                "mean_confidence": 0.5355318919371099,
+                "accuracy": 0.5097185785833532
+              },
+              {
+                "lower": 0.6,
+                "n": 617,
+                "mean_confidence": 0.615378903131704,
+                "accuracy": 0.5753646677471637
+              },
+              {
+                "lower": 0.7,
+                "n": 18,
+                "mean_confidence": 0.7328901368468278,
+                "accuracy": 0.5555555555555556
+              },
+              {
+                "lower": 0.8,
+                "n": 26,
+                "mean_confidence": 0.8476137109236463,
+                "accuracy": 0.6538461538461539
+              },
+              {
+                "lower": 0.9,
+                "n": 10,
+                "mean_confidence": 0.9318833139117118,
+                "accuracy": 0.4
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16648060740519913,
+                "ece": 0.008649339883167679,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2092,
+                    "mean_probability": 0.08373600792289794,
+                    "event_rate": 0.08365200764818356
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34386,
+                    "mean_probability": 0.1580434553765865,
+                    "event_rate": 0.16977839818530796
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31502,
+                    "mean_probability": 0.24326783817403674,
+                    "event_rate": 0.24588914989524474
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8730,
+                    "mean_probability": 0.3355363220239221,
+                    "event_rate": 0.3169530355097365
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 1018,
+                    "mean_probability": 0.43006492150136494,
+                    "event_rate": 0.412573673870334
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 65,
+                    "mean_probability": 0.5224038306990575,
+                    "event_rate": 0.4307692307692308
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6022826815856402,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07032714647049737,
+                "ece": 0.005912365431438479,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68423,
+                    "mean_probability": 0.06410559781244753,
+                    "event_rate": 0.07002031480642475
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9291,
+                    "mean_probability": 0.12048186677168003,
+                    "event_rate": 0.12603594876762458
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 80,
+                    "mean_probability": 0.22051124587625986,
+                    "event_rate": 0.175
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010320995992515484,
+                "ece": 0.0009885825404184112,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77780,
+                    "mean_probability": 0.0095001697329928,
+                    "event_rate": 0.010465415273849319
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 14,
+                    "mean_probability": 0.13064228439212888,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030291274666345385,
+                "ece": 0.002589541205511716,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77783,
+                    "mean_probability": 0.02877673400284441,
+                    "event_rate": 0.03135646606584987
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 11,
+                    "mean_probability": 0.10986641047045068,
+                    "event_rate": 0.18181818181818182
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12340371825142056,
+                "ece": 0.006078176800800474,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4125,
+                    "mean_probability": 0.0901398347517225,
+                    "event_rate": 0.1006060606060606
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 73078,
+                    "mean_probability": 0.14090708222434223,
+                    "event_rate": 0.1467199430745231
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 591,
+                    "mean_probability": 0.2100164819241801,
+                    "event_rate": 0.2182741116751269
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.04201899656849215,
+                "ece": 0.002348973101990771,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77790,
+                    "mean_probability": 0.04162134742654905,
+                    "event_rate": 0.043964519861164675
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 4,
+                    "mean_probability": 0.1151574518801344,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.003940380317993981,
+                "ece": 0.0005198888500936023,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0034392853792814134,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24625611234110126,
+                "ece": 0.023759846672076337,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 245,
+                    "mean_probability": 0.2770389865551494,
+                    "event_rate": 0.3020408163265306
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6383,
+                    "mean_probability": 0.370090376601174,
+                    "event_rate": 0.36393545354848816
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37017,
+                    "mean_probability": 0.4584218154655483,
+                    "event_rate": 0.4339627738606586
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33479,
+                    "mean_probability": 0.5355573802724984,
+                    "event_rate": 0.5098718599719227
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 616,
+                    "mean_probability": 0.6154001632316164,
+                    "event_rate": 0.5762987012987013
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 18,
+                    "mean_probability": 0.7328901368468278,
+                    "event_rate": 0.5555555555555556
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 26,
+                    "mean_probability": 0.8476137109236463,
+                    "event_rate": 0.6538461538461539
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 10,
+                    "mean_probability": 0.9318833139117118,
+                    "event_rate": 0.4
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.008638203539100654,
+                "ece": 0.0014696859253719155,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.0072456391639665945,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -0.0005982354112080483,
+            "game_cluster_95pct": [
+              -0.0008897070396917062,
+              -0.00033484499724321666
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.0002484751952823716,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": 0.00021569787509532633
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.0015085893832865918
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.001566501394198402
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": -0.0003719694249859219
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        },
+        "without_command": {
+          "metrics": {
+            "n": 77794,
+            "log_loss": 1.5022643183151765,
+            "brier": 0.7016951056679609,
+            "accuracy": 0.46285060544515,
+            "ece": 0.02446169926764541,
+            "calibration_bins": [
+              {
+                "lower": 0.3,
+                "n": 5520,
+                "mean_confidence": 0.38020448505060567,
+                "accuracy": 0.36884057971014494
+              },
+              {
+                "lower": 0.4,
+                "n": 38053,
+                "mean_confidence": 0.457744559484908,
+                "accuracy": 0.43308017764696605
+              },
+              {
+                "lower": 0.5,
+                "n": 33533,
+                "mean_confidence": 0.535566861736567,
+                "accuracy": 0.5096173918229804
+              },
+              {
+                "lower": 0.6,
+                "n": 642,
+                "mean_confidence": 0.6156970391305219,
+                "accuracy": 0.5841121495327103
+              },
+              {
+                "lower": 0.7,
+                "n": 14,
+                "mean_confidence": 0.7457406890417301,
+                "accuracy": 0.6428571428571429
+              },
+              {
+                "lower": 0.8,
+                "n": 22,
+                "mean_confidence": 0.8438115116771379,
+                "accuracy": 0.6363636363636364
+              },
+              {
+                "lower": 0.9,
+                "n": 10,
+                "mean_confidence": 0.9245656631083194,
+                "accuracy": 0.4
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 16974,
+                "brier": 0.16648380830988535,
+                "ece": 0.008786607416704437,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2142,
+                    "mean_probability": 0.08388901580024696,
+                    "event_rate": 0.08450046685340803
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 34510,
+                    "mean_probability": 0.15785891562957743,
+                    "event_rate": 0.16977687626774848
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 31402,
+                    "mean_probability": 0.24325186669138227,
+                    "event_rate": 0.2462582001146424
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 8651,
+                    "mean_probability": 0.3355939826578737,
+                    "event_rate": 0.3183447000346781
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 1021,
+                    "mean_probability": 0.4297336036150532,
+                    "event_rate": 0.40842311459353575
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 67,
+                    "mean_probability": 0.5217738989757001,
+                    "event_rate": 0.44776119402985076
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 1,
+                    "mean_probability": 0.6015009431300175,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 5976,
+                "brier": 0.07033091631015279,
+                "ece": 0.0059767880865563144,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 68482,
+                    "mean_probability": 0.06406841681735552,
+                    "event_rate": 0.07007680850442452
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 9235,
+                    "mean_probability": 0.1204703500650292,
+                    "event_rate": 0.1259339469409854
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 77,
+                    "mean_probability": 0.22123708756165122,
+                    "event_rate": 0.18181818181818182
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 814,
+                "brier": 0.010322150427638793,
+                "ece": 0.0011847927591648953,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77780,
+                    "mean_probability": 0.009304272802652303,
+                    "event_rate": 0.010465415273849319
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 14,
+                    "mean_probability": 0.132579035483569,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 2441,
+                "brier": 0.030289098014396047,
+                "ece": 0.0019970698202663845,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77781,
+                    "mean_probability": 0.029366885918596205,
+                    "event_rate": 0.03135727234157442
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 13,
+                    "mean_probability": 0.111861289835804,
+                    "event_rate": 0.15384615384615385
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 11266,
+                "brier": 0.12339986085657778,
+                "ece": 0.006072675628647908,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 4218,
+                    "mean_probability": 0.09032274756180862,
+                    "event_rate": 0.10218112849691798
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 72974,
+                    "mean_probability": 0.14095842278960705,
+                    "event_rate": 0.14665497300408364
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 602,
+                    "mean_probability": 0.20980228950244387,
+                    "event_rate": 0.22093023255813954
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 3420,
+                "brier": 0.04201863453527252,
+                "ece": 0.002510001639405492,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77791,
+                    "mean_probability": 0.04145810253361542,
+                    "event_rate": 0.04396395469912972
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 3,
+                    "mean_probability": 0.11010724279599272,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 308,
+                "brier": 0.0039404004823395304,
+                "ece": 0.0005591526270105167,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.003400021602364499,
+                    "event_rate": 0.003959174229375016
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 35917,
+                "brier": 0.24627312029004542,
+                "ece": 0.023855853772335005,
+                "bins": [
+                  {
+                    "lower": 0.1,
+                    "n": 1,
+                    "mean_probability": 0.19759951644445042,
+                    "event_rate": 0.0
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 253,
+                    "mean_probability": 0.27799572195154587,
+                    "event_rate": 0.30434782608695654
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 6343,
+                    "mean_probability": 0.3700451159553246,
+                    "event_rate": 0.3646539492353776
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 37044,
+                    "mean_probability": 0.4584993746599596,
+                    "event_rate": 0.4337004643127092
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 33466,
+                    "mean_probability": 0.5355944756881889,
+                    "event_rate": 0.5097412299049782
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 641,
+                    "mean_probability": 0.6157191859261545,
+                    "event_rate": 0.5850234009360374
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 14,
+                    "mean_probability": 0.7457406890417301,
+                    "event_rate": 0.6428571428571429
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 22,
+                    "mean_probability": 0.8438115116771379,
+                    "event_rate": 0.6363636363636364
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 10,
+                    "mean_probability": 0.9245656631083194,
+                    "event_rate": 0.4
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 678,
+                "brier": 0.0086371164416527,
+                "ece": 0.001270308511495069,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 77794,
+                    "mean_probability": 0.007445016577843441,
+                    "event_rate": 0.00871532508933851
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2426,
+            "mean_challenger_minus_baseline": -0.000667060758596266,
+            "game_cluster_95pct": [
+              -0.0009455689977486274,
+              -0.00039709547594797616
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.00023080507998740618,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 6153,
+              "log_loss_delta": -0.0005484323623968574
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 15766,
+              "log_loss_delta": -0.0015342983327966359
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 2761,
+              "log_loss_delta": -0.002310535611985008
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 53114,
+              "log_loss_delta": -0.00033794637927566534
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        }
+      }
+    },
+    "missing_aware": {
+      "training_n": 407505,
+      "validation_n": 137699,
+      "results": {
+        "baseline": {
+          "metrics": {
+            "n": 137699,
+            "log_loss": 1.5005911884315082,
+            "brier": 0.7019356383828526,
+            "accuracy": 0.46062062905322476,
+            "ece": 0.015715010447070688,
+            "calibration_bins": [
+              {
+                "lower": 0.2,
+                "n": 1,
+                "mean_confidence": 0.2950051252345734,
+                "accuracy": 0.0
+              },
+              {
+                "lower": 0.3,
+                "n": 11971,
+                "mean_confidence": 0.3802899743839417,
+                "accuracy": 0.37265057221618914
+              },
+              {
+                "lower": 0.4,
+                "n": 77267,
+                "mean_confidence": 0.4569025359737555,
+                "accuracy": 0.4392949124464519
+              },
+              {
+                "lower": 0.5,
+                "n": 48020,
+                "mean_confidence": 0.5298926821621452,
+                "accuracy": 0.5162640566430654
+              },
+              {
+                "lower": 0.6,
+                "n": 359,
+                "mean_confidence": 0.6318450255837396,
+                "accuracy": 0.5153203342618384
+              },
+              {
+                "lower": 0.7,
+                "n": 53,
+                "mean_confidence": 0.7249695171811754,
+                "accuracy": 0.6792452830188679
+              },
+              {
+                "lower": 0.8,
+                "n": 22,
+                "mean_confidence": 0.8404674329769963,
+                "accuracy": 0.36363636363636365
+              },
+              {
+                "lower": 0.9,
+                "n": 6,
+                "mean_confidence": 0.9190097407909718,
+                "accuracy": 0.5
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 30713,
+                "brier": 0.16929761407552207,
+                "ece": 0.008269962596016018,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2389,
+                    "mean_probability": 0.08754638730983193,
+                    "event_rate": 0.08078694014231896
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 58365,
+                    "mean_probability": 0.16010152674497463,
+                    "event_rate": 0.16981067420543133
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 60084,
+                    "mean_probability": 0.24320590758844213,
+                    "event_rate": 0.2497836362425937
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 15518,
+                    "mean_probability": 0.3340276193981444,
+                    "event_rate": 0.32613738883876786
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 1294,
+                    "mean_probability": 0.4271893287313131,
+                    "event_rate": 0.40030911901081917
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 49,
+                    "mean_probability": 0.520470021250991,
+                    "event_rate": 0.4489795918367347
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 10644,
+                "brier": 0.07075766474015725,
+                "ece": 0.003556738774657857,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 119969,
+                    "mean_probability": 0.06711389128563638,
+                    "event_rate": 0.07059323658611807
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 17657,
+                    "mean_probability": 0.11849979395799937,
+                    "event_rate": 0.12244435634592513
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 73,
+                    "mean_probability": 0.2150227136235512,
+                    "event_rate": 0.1780821917808219
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 1464,
+                "brier": 0.010485238104279716,
+                "ece": 0.0006389037521871277,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137696,
+                    "mean_probability": 0.009995629229368563,
+                    "event_rate": 0.010632117127585406
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 3,
+                    "mean_probability": 0.11152337984963849,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 4152,
+                "brier": 0.029143534653973263,
+                "ece": 0.0006578808791024564,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137688,
+                    "mean_probability": 0.02950565086568556,
+                    "event_rate": 0.03015513334495381
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 11,
+                    "mean_probability": 0.1057814150947601,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 19758,
+                "brier": 0.1224454910134751,
+                "ece": 0.00396097874946964,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 5313,
+                    "mean_probability": 0.09067493874358935,
+                    "event_rate": 0.10107284020327499
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 131786,
+                    "mean_probability": 0.14118236933414724,
+                    "event_rate": 0.14472705750231435
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 600,
+                    "mean_probability": 0.20826918760360064,
+                    "event_rate": 0.24666666666666667
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 5962,
+                "brier": 0.04140089285166375,
+                "ece": 5.524351080607448e-05,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137699,
+                    "mean_probability": 0.04335258045588193,
+                    "event_rate": 0.04329733694507586
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 532,
+                "brier": 0.0038459265333827307,
+                "ece": 9.023954838146631e-05,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137699,
+                    "mean_probability": 0.003773259823436775,
+                    "event_rate": 0.0038634993718182414
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 63261,
+                "brier": 0.24583191045347574,
+                "ece": 0.01560703568361642,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 323,
+                    "mean_probability": 0.28002083823629703,
+                    "event_rate": 0.3219814241486068
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 12984,
+                    "mean_probability": 0.3719487178413029,
+                    "event_rate": 0.36414048059149723
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 75981,
+                    "mean_probability": 0.45740295768609024,
+                    "event_rate": 0.4399520932864795
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 47971,
+                    "mean_probability": 0.5299023069434641,
+                    "event_rate": 0.5163327843905693
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 359,
+                    "mean_probability": 0.6318450255837396,
+                    "event_rate": 0.5153203342618384
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 53,
+                    "mean_probability": 0.7249695171811754,
+                    "event_rate": 0.6792452830188679
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 22,
+                    "mean_probability": 0.8404674329769963,
+                    "event_rate": 0.36363636363636365
+                  },
+                  {
+                    "lower": 0.9,
+                    "n": 6,
+                    "mean_probability": 0.9190097407909718,
+                    "event_rate": 0.5
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 1213,
+                "brier": 0.008727365956922924,
+                "ece": 0.0009206571112346101,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137699,
+                    "mean_probability": 0.007888411945185553,
+                    "event_rate": 0.008809069056420163
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2427,
+            "mean_challenger_minus_baseline": 0.0,
+            "game_cluster_95pct": [
+              0.0,
+              0.0
+            ],
+            "replicates": 100
+          },
+          "brier_delta": 0.0,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 9799,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 31379,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 4508,
+              "log_loss_delta": 0.0
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 92013,
+              "log_loss_delta": 0.0
+            }
+          ],
+          "increment_gate": false,
+          "convergence_warning": false
+        },
+        "all": {
+          "metrics": {
+            "n": 137699,
+            "log_loss": 1.500150373752362,
+            "brier": 0.7017338965494678,
+            "accuracy": 0.4607368245230539,
+            "ece": 0.018260654028730464,
+            "calibration_bins": [
+              {
+                "lower": 0.2,
+                "n": 1,
+                "mean_confidence": 0.2927637116420351,
+                "accuracy": 1.0
+              },
+              {
+                "lower": 0.3,
+                "n": 11435,
+                "mean_confidence": 0.3806240784596844,
+                "accuracy": 0.36982947092260604
+              },
+              {
+                "lower": 0.4,
+                "n": 74776,
+                "mean_confidence": 0.4570883704966677,
+                "accuracy": 0.43674440997111375
+              },
+              {
+                "lower": 0.5,
+                "n": 50998,
+                "mean_confidence": 0.5315414008529012,
+                "accuracy": 0.5152751088277971
+              },
+              {
+                "lower": 0.6,
+                "n": 410,
+                "mean_confidence": 0.6262646959696312,
+                "accuracy": 0.5707317073170731
+              },
+              {
+                "lower": 0.7,
+                "n": 64,
+                "mean_confidence": 0.7339960315504808,
+                "accuracy": 0.5625
+              },
+              {
+                "lower": 0.8,
+                "n": 15,
+                "mean_confidence": 0.8531734203632044,
+                "accuracy": 0.4666666666666667
+              }
+            ],
+            "classwise_calibration": [
+              {
+                "outcome": "k",
+                "events": 30713,
+                "brier": 0.16911362763709992,
+                "ece": 0.007831968635329513,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 2839,
+                    "mean_probability": 0.08507344416517573,
+                    "event_rate": 0.073617470940472
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 58297,
+                    "mean_probability": 0.15947863198262868,
+                    "event_rate": 0.17120949620049059
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 58719,
+                    "mean_probability": 0.24350061440539525,
+                    "event_rate": 0.2473986273608202
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 16215,
+                    "mean_probability": 0.33458050461603633,
+                    "event_rate": 0.3282146160962072
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 1564,
+                    "mean_probability": 0.42839737998539057,
+                    "event_rate": 0.4124040920716113
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 65,
+                    "mean_probability": 0.5220421914897281,
+                    "event_rate": 0.4461538461538462
+                  }
+                ]
+              },
+              {
+                "outcome": "bb",
+                "events": 10644,
+                "brier": 0.07074800109448157,
+                "ece": 0.004319714997607487,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 120368,
+                    "mean_probability": 0.06640651414263915,
+                    "event_rate": 0.07066662235810182
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 17247,
+                    "mean_probability": 0.11899345620261072,
+                    "event_rate": 0.12332579579057228
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 84,
+                    "mean_probability": 0.21809367741868121,
+                    "event_rate": 0.13095238095238096
+                  }
+                ]
+              },
+              {
+                "outcome": "hbp",
+                "events": 1464,
+                "brier": 0.010486715569774109,
+                "ece": 0.001016794144439919,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137696,
+                    "mean_probability": 0.00961768303809338,
+                    "event_rate": 0.010632117127585406
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 3,
+                    "mean_probability": 0.10934016951276981,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "hr",
+                "events": 4152,
+                "brier": 0.029139838254066665,
+                "ece": 0.000700812538392131,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137674,
+                    "mean_probability": 0.02944837088557725,
+                    "event_rate": 0.03014367273414007
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 25,
+                    "mean_probability": 0.11104796100079799,
+                    "event_rate": 0.08
+                  }
+                ]
+              },
+              {
+                "outcome": "single",
+                "events": 19758,
+                "brier": 0.12244286922258979,
+                "ece": 0.00472191744662772,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 6092,
+                    "mean_probability": 0.09055019033996965,
+                    "event_rate": 0.10292186474064347
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 130975,
+                    "mean_probability": 0.14067042271469088,
+                    "event_rate": 0.1449665966787555
+                  },
+                  {
+                    "lower": 0.2,
+                    "n": 632,
+                    "mean_probability": 0.20863340966626268,
+                    "event_rate": 0.22784810126582278
+                  }
+                ]
+              },
+              {
+                "outcome": "double",
+                "events": 5962,
+                "brier": 0.04140252877538742,
+                "ece": 0.000497347327204991,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137686,
+                    "mean_probability": 0.042814114923848165,
+                    "event_rate": 0.0433014249814796
+                  },
+                  {
+                    "lower": 0.1,
+                    "n": 13,
+                    "mean_probability": 0.10680438567374594,
+                    "event_rate": 0.0
+                  }
+                ]
+              },
+              {
+                "outcome": "triple",
+                "events": 532,
+                "brier": 0.0038460495274230057,
+                "ece": 5.342419258050216e-05,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137699,
+                    "mean_probability": 0.0038100751792377392,
+                    "event_rate": 0.0038634993718182414
+                  }
+                ]
+              },
+              {
+                "outcome": "other_out",
+                "events": 63261,
+                "brier": 0.245825289003757,
+                "ece": 0.018094901137381235,
+                "bins": [
+                  {
+                    "lower": 0.2,
+                    "n": 368,
+                    "mean_probability": 0.2794800735139771,
+                    "event_rate": 0.3233695652173913
+                  },
+                  {
+                    "lower": 0.3,
+                    "n": 12682,
+                    "mean_probability": 0.3715489515601177,
+                    "event_rate": 0.3626399621510803
+                  },
+                  {
+                    "lower": 0.4,
+                    "n": 73227,
+                    "mean_probability": 0.45769125000563093,
+                    "event_rate": 0.43722943722943725
+                  },
+                  {
+                    "lower": 0.5,
+                    "n": 50933,
+                    "mean_probability": 0.5315535236143448,
+                    "event_rate": 0.5153633204405788
+                  },
+                  {
+                    "lower": 0.6,
+                    "n": 410,
+                    "mean_probability": 0.6262646959696312,
+                    "event_rate": 0.5707317073170731
+                  },
+                  {
+                    "lower": 0.7,
+                    "n": 64,
+                    "mean_probability": 0.7339960315504808,
+                    "event_rate": 0.5625
+                  },
+                  {
+                    "lower": 0.8,
+                    "n": 15,
+                    "mean_probability": 0.8531734203632044,
+                    "event_rate": 0.4666666666666667
+                  }
+                ]
+              },
+              {
+                "outcome": "other_reach",
+                "events": 1213,
+                "brier": 0.008728977464888306,
+                "ece": 0.0012674462538013742,
+                "bins": [
+                  {
+                    "lower": 0.0,
+                    "n": 137699,
+                    "mean_probability": 0.007541622802618789,
+                    "event_rate": 0.008809069056420163
+                  }
+                ]
+              }
+            ]
+          },
+          "cluster_delta": {
+            "games": 2427,
+            "mean_challenger_minus_baseline": -0.00044081467914611693,
+            "game_cluster_95pct": [
+              -0.0006550745292623387,
+              -0.0002830141377580861
+            ],
+            "replicates": 100
+          },
+          "brier_delta": -0.00020174183338472762,
+          "subgroups": [
+            {
+              "role": "RP",
+              "is_current": false,
+              "n": 9799,
+              "log_loss_delta": -0.0008625673808846758
+            },
+            {
+              "role": "RP",
+              "is_current": true,
+              "n": 31379,
+              "log_loss_delta": -0.0007291803394312976
+            },
+            {
+              "role": "SP",
+              "is_current": false,
+              "n": 4508,
+              "log_loss_delta": -0.0006817442582913295
+            },
+            {
+              "role": "SP",
+              "is_current": true,
+              "n": 92013,
+              "log_loss_delta": -0.0002857551623255433
+            }
+          ],
+          "increment_gate": true,
+          "convergence_warning": false
+        }
+      }
+    }
+  },
+  "test_outcome_metrics_examined": false,
+  "formal_promotion": false,
+  "supported_subset_winner": "plus",
+  "general_use_increment_supported": true,
+  "action_model": "Slice12 matchup baseline; signal trajectories/entry readiness are not projected into hypothetical future pitches"
+}

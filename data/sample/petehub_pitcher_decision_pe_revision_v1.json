@@ -1,0 +1,5109 @@
+{
+  "version": "decision_pe_models_v1",
+  "coverage": [
+    {
+      "year": 2021,
+      "boundaries": 131918,
+      "coverage": [
+        {
+          "role": "SP",
+          "n": 92403,
+          "target_observed": 88556,
+          "missing_target": 3847,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 92403,
+            "pe_cumulative_coverage": 92403,
+            "pe_last1": 92191,
+            "pe_last2": 91992,
+            "pe_last3": 91808,
+            "pe_slope3": 91808,
+            "prefix_strike_share": 92354,
+            "last3_whiff_rate": 92310,
+            "last3_hard_rate": 91863,
+            "ff_delta_prefix": 58865,
+            "pe_entry_mean": 86467,
+            "pe_entry_n": 86663,
+            "pe3_personal_delta": 85916,
+            "ff_entry_mean": 79308,
+            "ff_entry_n": 83335,
+            "ff_delta_entry": 54371,
+            "forecast1_log_n": 92403,
+            "forecast1_nonout": 92403,
+            "forecast1_extra_base": 92403,
+            "forecast1_k": 92403,
+            "forecast1_bb": 92403,
+            "forecast2_log_n": 92403,
+            "forecast2_nonout": 92403,
+            "forecast2_extra_base": 92403,
+            "forecast2_k": 92403,
+            "forecast2_bb": 92403,
+            "forecast3_log_n": 92403,
+            "forecast3_nonout": 92403,
+            "forecast3_extra_base": 92403,
+            "forecast3_k": 92403,
+            "forecast3_bb": 92403
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 63678,
+            "slot_unobserved": 28724,
+            "forecast_without_own_history": 1
+          },
+          "forecast_agreement_n": 60004,
+          "forecast_agreement": 58838
+        },
+        {
+          "role": "RP",
+          "n": 39515,
+          "target_observed": 31365,
+          "missing_target": 8150,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 39501,
+            "pe_cumulative_coverage": 39501,
+            "pe_last1": 39329,
+            "pe_last2": 38008,
+            "pe_last3": 36827,
+            "pe_slope3": 36827,
+            "prefix_strike_share": 39348,
+            "last3_whiff_rate": 37214,
+            "last3_hard_rate": 37037,
+            "ff_delta_prefix": 24360,
+            "pe_entry_mean": 34094,
+            "pe_entry_n": 36418,
+            "pe3_personal_delta": 31641,
+            "ff_entry_mean": 28007,
+            "ff_entry_n": 34085,
+            "ff_delta_entry": 20211,
+            "forecast1_log_n": 39515,
+            "forecast1_nonout": 39515,
+            "forecast1_extra_base": 39515,
+            "forecast1_k": 39515,
+            "forecast1_bb": 39515,
+            "forecast2_log_n": 39515,
+            "forecast2_nonout": 39515,
+            "forecast2_extra_base": 39515,
+            "forecast2_k": 39515,
+            "forecast2_bb": 39515,
+            "forecast3_log_n": 39515,
+            "forecast3_nonout": 39515,
+            "forecast3_extra_base": 39515,
+            "forecast3_k": 39515,
+            "forecast3_bb": 39515
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 39363,
+            "slot_unobserved": 152
+          },
+          "forecast_agreement_n": 31220,
+          "forecast_agreement": 28859
+        }
+      ],
+      "dict_D": "load/recovery, not next batter; forecast identities are hypotheses from past slots, never certified next actors"
+    },
+    {
+      "year": 2022,
+      "boundaries": 137323,
+      "coverage": [
+        {
+          "role": "SP",
+          "n": 96351,
+          "target_observed": 91683,
+          "missing_target": 4668,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 96351,
+            "pe_cumulative_coverage": 96351,
+            "pe_last1": 96070,
+            "pe_last2": 95803,
+            "pe_last3": 95532,
+            "pe_slope3": 95532,
+            "prefix_strike_share": 96305,
+            "last3_whiff_rate": 95944,
+            "last3_hard_rate": 95222,
+            "ff_delta_prefix": 60022,
+            "pe_entry_mean": 94595,
+            "pe_entry_n": 94740,
+            "pe3_personal_delta": 93779,
+            "ff_entry_mean": 91985,
+            "ff_entry_n": 93871,
+            "ff_delta_entry": 58592,
+            "forecast1_log_n": 96351,
+            "forecast1_nonout": 96351,
+            "forecast1_extra_base": 96351,
+            "forecast1_k": 96351,
+            "forecast1_bb": 96351,
+            "forecast2_log_n": 96351,
+            "forecast2_nonout": 96351,
+            "forecast2_extra_base": 96351,
+            "forecast2_k": 96351,
+            "forecast2_bb": 96351,
+            "forecast3_log_n": 96351,
+            "forecast3_nonout": 96351,
+            "forecast3_extra_base": 96351,
+            "forecast3_k": 96351,
+            "forecast3_bb": 96351
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 67573,
+            "slot_unobserved": 28777,
+            "forecast_without_own_history": 1
+          },
+          "forecast_agreement_n": 63038,
+          "forecast_agreement": 62750
+        },
+        {
+          "role": "RP",
+          "n": 40972,
+          "target_observed": 30638,
+          "missing_target": 10334,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 40957,
+            "pe_cumulative_coverage": 40957,
+            "pe_last1": 40779,
+            "pe_last2": 39196,
+            "pe_last3": 37828,
+            "pe_slope3": 37828,
+            "prefix_strike_share": 40767,
+            "last3_whiff_rate": 38248,
+            "last3_hard_rate": 37964,
+            "ff_delta_prefix": 24040,
+            "pe_entry_mean": 38790,
+            "pe_entry_n": 39787,
+            "pe3_personal_delta": 35732,
+            "ff_entry_mean": 34467,
+            "ff_entry_n": 38326,
+            "ff_delta_entry": 22362,
+            "forecast1_log_n": 40972,
+            "forecast1_nonout": 40972,
+            "forecast1_extra_base": 40972,
+            "forecast1_k": 40972,
+            "forecast1_bb": 40972,
+            "forecast2_log_n": 40972,
+            "forecast2_nonout": 40972,
+            "forecast2_extra_base": 40972,
+            "forecast2_k": 40972,
+            "forecast2_bb": 40972,
+            "forecast3_log_n": 40972,
+            "forecast3_nonout": 40972,
+            "forecast3_extra_base": 40972,
+            "forecast3_k": 40972,
+            "forecast3_bb": 40972
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 40802,
+            "slot_unobserved": 170
+          },
+          "forecast_agreement_n": 30475,
+          "forecast_agreement": 29005
+        }
+      ],
+      "dict_D": "load/recovery, not next batter; forecast identities are hypotheses from past slots, never certified next actors"
+    },
+    {
+      "year": 2023,
+      "boundaries": 139565,
+      "coverage": [
+        {
+          "role": "SP",
+          "n": 95865,
+          "target_observed": 91313,
+          "missing_target": 4552,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 95865,
+            "pe_cumulative_coverage": 95865,
+            "pe_last1": 95694,
+            "pe_last2": 95519,
+            "pe_last3": 95351,
+            "pe_slope3": 95351,
+            "prefix_strike_share": 95842,
+            "last3_whiff_rate": 95653,
+            "last3_hard_rate": 95229,
+            "ff_delta_prefix": 59891,
+            "pe_entry_mean": 94160,
+            "pe_entry_n": 94295,
+            "pe3_personal_delta": 93651,
+            "ff_entry_mean": 91329,
+            "ff_entry_n": 93560,
+            "ff_delta_entry": 58550,
+            "forecast1_log_n": 95865,
+            "forecast1_nonout": 95865,
+            "forecast1_extra_base": 95865,
+            "forecast1_k": 95865,
+            "forecast1_bb": 95865,
+            "forecast2_log_n": 95865,
+            "forecast2_nonout": 95865,
+            "forecast2_extra_base": 95865,
+            "forecast2_k": 95865,
+            "forecast2_bb": 95865,
+            "forecast3_log_n": 95865,
+            "forecast3_nonout": 95865,
+            "forecast3_extra_base": 95865,
+            "forecast3_k": 95865,
+            "forecast3_bb": 95865
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 67293,
+            "slot_unobserved": 28572
+          },
+          "forecast_agreement_n": 62951,
+          "forecast_agreement": 62719
+        },
+        {
+          "role": "RP",
+          "n": 43700,
+          "target_observed": 33684,
+          "missing_target": 10016,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 43687,
+            "pe_cumulative_coverage": 43687,
+            "pe_last1": 43533,
+            "pe_last2": 41923,
+            "pe_last3": 40520,
+            "pe_slope3": 40520,
+            "prefix_strike_share": 43478,
+            "last3_whiff_rate": 40736,
+            "last3_hard_rate": 40546,
+            "ff_delta_prefix": 24558,
+            "pe_entry_mean": 41512,
+            "pe_entry_n": 42373,
+            "pe3_personal_delta": 38405,
+            "ff_entry_mean": 36301,
+            "ff_entry_n": 40530,
+            "ff_delta_entry": 22940,
+            "forecast1_log_n": 43700,
+            "forecast1_nonout": 43700,
+            "forecast1_extra_base": 43700,
+            "forecast1_k": 43700,
+            "forecast1_bb": 43700,
+            "forecast2_log_n": 43700,
+            "forecast2_nonout": 43700,
+            "forecast2_extra_base": 43700,
+            "forecast2_k": 43700,
+            "forecast2_bb": 43700,
+            "forecast3_log_n": 43700,
+            "forecast3_nonout": 43700,
+            "forecast3_extra_base": 43700,
+            "forecast3_k": 43700,
+            "forecast3_bb": 43700
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 43485,
+            "slot_unobserved": 215
+          },
+          "forecast_agreement_n": 33473,
+          "forecast_agreement": 31871
+        }
+      ],
+      "dict_D": "load/recovery, not next batter; forecast identities are hypotheses from past slots, never certified next actors"
+    },
+    {
+      "year": 2024,
+      "boundaries": 138074,
+      "coverage": [
+        {
+          "role": "SP",
+          "n": 96627,
+          "target_observed": 92010,
+          "missing_target": 4617,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 96627,
+            "pe_cumulative_coverage": 96627,
+            "pe_last1": 96439,
+            "pe_last2": 96258,
+            "pe_last3": 96081,
+            "pe_slope3": 96081,
+            "prefix_strike_share": 96602,
+            "last3_whiff_rate": 96224,
+            "last3_hard_rate": 95747,
+            "ff_delta_prefix": 59994,
+            "pe_entry_mean": 95059,
+            "pe_entry_n": 95146,
+            "pe3_personal_delta": 94516,
+            "ff_entry_mean": 92266,
+            "ff_entry_n": 93988,
+            "ff_delta_entry": 58735,
+            "forecast1_log_n": 96627,
+            "forecast1_nonout": 96627,
+            "forecast1_extra_base": 96627,
+            "forecast1_k": 96627,
+            "forecast1_bb": 96627,
+            "forecast2_log_n": 96627,
+            "forecast2_nonout": 96627,
+            "forecast2_extra_base": 96627,
+            "forecast2_k": 96627,
+            "forecast2_bb": 96627,
+            "forecast3_log_n": 96627,
+            "forecast3_nonout": 96627,
+            "forecast3_extra_base": 96627,
+            "forecast3_k": 96627,
+            "forecast3_bb": 96627
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 67911,
+            "slot_unobserved": 28716
+          },
+          "forecast_agreement_n": 63444,
+          "forecast_agreement": 63214
+        },
+        {
+          "role": "RP",
+          "n": 41447,
+          "target_observed": 31369,
+          "missing_target": 10078,
+          "feature_nonmissing": {
+            "pe_cumulative_observed": 41428,
+            "pe_cumulative_coverage": 41428,
+            "pe_last1": 41265,
+            "pe_last2": 39613,
+            "pe_last3": 38196,
+            "pe_slope3": 38196,
+            "prefix_strike_share": 41224,
+            "last3_whiff_rate": 38546,
+            "last3_hard_rate": 38339,
+            "ff_delta_prefix": 23394,
+            "pe_entry_mean": 40016,
+            "pe_entry_n": 40555,
+            "pe3_personal_delta": 36823,
+            "ff_entry_mean": 35806,
+            "ff_entry_n": 39415,
+            "ff_delta_entry": 22166,
+            "forecast1_log_n": 41447,
+            "forecast1_nonout": 41447,
+            "forecast1_extra_base": 41447,
+            "forecast1_k": 41447,
+            "forecast1_bb": 41447,
+            "forecast2_log_n": 41447,
+            "forecast2_nonout": 41447,
+            "forecast2_extra_base": 41447,
+            "forecast2_k": 41447,
+            "forecast2_bb": 41447,
+            "forecast3_log_n": 41447,
+            "forecast3_nonout": 41447,
+            "forecast3_extra_base": 41447,
+            "forecast3_k": 41447,
+            "forecast3_bb": 41447
+          },
+          "lineup_status": {
+            "previous_slot_actor_forecast": 41273,
+            "slot_unobserved": 174
+          },
+          "forecast_agreement_n": 31199,
+          "forecast_agreement": 29573
+        }
+      ],
+      "dict_D": "load/recovery, not next batter; forecast identities are hypotheses from past slots, never certified next actors"
+    }
+  ],
+  "folds": [
+    {
+      "year": 2022,
+      "role": "SP",
+      "primary_n": 96351,
+      "observed_n": 91683,
+      "pa": [
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 91683,
+            "log_loss": 1.5046844855191885,
+            "constant_log_loss": 1.5126088951521652,
+            "multiclass_brier": 0.7020513757972897,
+            "nonout": {
+              "n": 91683,
+              "events": 28973,
+              "prevalence": 0.31601278317681575,
+              "brier": 0.21546083578258757,
+              "constant_brier": 0.21615087356048954,
+              "log_loss": 0.6222383550629913,
+              "auc": 0.5367150885501848,
+              "ece": 0.0033655758291238694,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 17036,
+                  "predicted": 0.2844774180909026,
+                  "observed": 0.27359708851843156
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 74643,
+                  "predicted": 0.327339401497525,
+                  "observed": 0.325710381415538
+                },
+                {
+                  "lower": 0.4,
+                  "n": 4,
+                  "predicted": 0.40346204129769525,
+                  "observed": 0.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91683,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "delta_nonout_brier": {
+            "n": 91683,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 91683,
+            "log_loss": 1.5047214127103878,
+            "constant_log_loss": 1.5126088951521652,
+            "multiclass_brier": 0.7020525759300132,
+            "nonout": {
+              "n": 91683,
+              "events": 28973,
+              "prevalence": 0.31601278317681575,
+              "brier": 0.2154856857334622,
+              "constant_brier": 0.21615087356048954,
+              "log_loss": 0.6222964502892159,
+              "auc": 0.5357449189891537,
+              "ece": 0.00394809576352384,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 16538,
+                  "predicted": 0.2848957060187754,
+                  "observed": 0.27373322046196635
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 75141,
+                  "predicted": 0.32763718016933535,
+                  "observed": 0.32529511185637666
+                },
+                {
+                  "lower": 0.4,
+                  "n": 4,
+                  "predicted": 0.4043193388451534,
+                  "observed": 0.75
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91683,
+            "delta": 3.69271911991632e-05,
+            "interval": [
+              -0.0004604785624695049,
+              0.0005531823398176693
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "delta_nonout_brier": {
+            "n": 91683,
+            "delta": 2.4849950874659643e-05,
+            "interval": [
+              -6.710569920756385e-05,
+              0.00011894044134856286
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 91683,
+            "log_loss": 1.4964293514628502,
+            "constant_log_loss": 1.5126088951521652,
+            "multiclass_brier": 0.6984316617313474,
+            "nonout": {
+              "n": 91683,
+              "events": 28973,
+              "prevalence": 0.31601278317681575,
+              "brier": 0.2155369114189733,
+              "constant_brier": 0.21615087356048954,
+              "log_loss": 0.622400398129616,
+              "auc": 0.5343564284825133,
+              "ece": 0.008777084753588155,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 17586,
+                  "predicted": 0.28399304152530297,
+                  "observed": 0.2755032412146025
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 73571,
+                  "predicted": 0.33381309076935517,
+                  "observed": 0.3249649997961153
+                },
+                {
+                  "lower": 0.4,
+                  "n": 526,
+                  "predicted": 0.40980050911213806,
+                  "observed": 0.41825095057034223
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91683,
+            "delta": -0.008255134056338504,
+            "interval": [
+              -0.010045437231172707,
+              -0.006763938913261311
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "delta_nonout_brier": {
+            "n": 91683,
+            "delta": 7.607563638577863e-05,
+            "interval": [
+              -0.0001775422450139748,
+              0.00031398400410582533
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 91683,
+            "log_loss": 1.542174516770899,
+            "constant_log_loss": 1.5126088951521652,
+            "multiclass_brier": 0.7117360660037296,
+            "nonout": {
+              "n": 91683,
+              "events": 28973,
+              "prevalence": 0.31601278317681575,
+              "brier": 0.22439130320208325,
+              "constant_brier": 0.21615087356048954,
+              "log_loss": 0.6446423167577044,
+              "auc": 0.5116449204218161,
+              "ece": 0.07763740187072025,
+              "calibration": [
+                {
+                  "lower": 0.0,
+                  "n": 578,
+                  "predicted": 0.06797961563465962,
+                  "observed": 0.29930795847750863
+                },
+                {
+                  "lower": 0.1,
+                  "n": 1931,
+                  "predicted": 0.17132469443368106,
+                  "observed": 0.2703262558259969
+                },
+                {
+                  "lower": 0.2,
+                  "n": 40610,
+                  "predicted": 0.24805691287644838,
+                  "observed": 0.3174341295247476
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 28821,
+                  "predicted": 0.3675800608010796,
+                  "observed": 0.30370216161826447
+                },
+                {
+                  "lower": 0.4,
+                  "n": 18832,
+                  "predicted": 0.4263325003814526,
+                  "observed": 0.33761682242990654
+                },
+                {
+                  "lower": 0.5,
+                  "n": 74,
+                  "predicted": 0.5138195971732438,
+                  "observed": 0.33783783783783783
+                },
+                {
+                  "lower": 0.7000000000000001,
+                  "n": 80,
+                  "predicted": 0.7718196768517928,
+                  "observed": 0.3125
+                },
+                {
+                  "lower": 0.8,
+                  "n": 757,
+                  "predicted": 0.845778793320597,
+                  "observed": 0.2985468956406869
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91683,
+            "delta": 0.03749003125171008,
+            "interval": [
+              0.029412206984961595,
+              0.04670594937931275
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "delta_nonout_brier": {
+            "n": 91683,
+            "delta": 0.008930467419495675,
+            "interval": [
+              0.007353632022382739,
+              0.01083577796320939
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 91683,
+            "log_loss": 1.4983771664945849,
+            "constant_log_loss": 1.5126088951521652,
+            "multiclass_brier": 0.6988006653021422,
+            "nonout": {
+              "n": 91683,
+              "events": 28973,
+              "prevalence": 0.31601278317681575,
+              "brier": 0.21557172240012512,
+              "constant_brier": 0.21615087356048954,
+              "log_loss": 0.6224928695771813,
+              "auc": 0.5330971555495531,
+              "ece": 0.004945339511440495,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 17450,
+                  "predicted": 0.2886410601106796,
+                  "observed": 0.2785100286532951
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 74167,
+                  "predicted": 0.32848607282113074,
+                  "observed": 0.32480752895492604
+                },
+                {
+                  "lower": 0.4,
+                  "n": 66,
+                  "predicted": 0.4059166753217577,
+                  "observed": 0.3484848484848485
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91683,
+            "delta": -0.006307319024603695,
+            "interval": [
+              -0.007706198685083938,
+              -0.004606020520878222
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "delta_nonout_brier": {
+            "n": 91683,
+            "delta": 0.00011088661753756554,
+            "interval": [
+              -6.770399514758242e-05,
+              0.0003165400995406533
+            ],
+            "games": 2430,
+            "pitchers": 361
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        }
+      ],
+      "run": [
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 91683,
+            "events": 8003,
+            "prevalence": 0.08728990107217259,
+            "brier": 0.06696153593100779,
+            "constant_brier": 0.07968290870760349,
+            "log_loss": 0.2421882204563011,
+            "auc": 0.7872110727358692,
+            "ece": 0.010517276486490331,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 71420,
+                "predicted": 0.04488503423099796,
+                "observed": 0.038868664239708764
+              },
+              {
+                "lower": 0.1,
+                "n": 11644,
+                "predicted": 0.18099600496088492,
+                "observed": 0.16858467880453454
+              },
+              {
+                "lower": 0.2,
+                "n": 4171,
+                "predicted": 0.23777264170270412,
+                "observed": 0.22896187964516904
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 698,
+                "predicted": 0.33333203568383035,
+                "observed": 0.3753581661891118
+              },
+              {
+                "lower": 0.4,
+                "n": 3468,
+                "predicted": 0.4553299071161145,
+                "observed": 0.53719723183391
+              },
+              {
+                "lower": 0.5,
+                "n": 282,
+                "predicted": 0.5104644545656215,
+                "observed": 0.6524822695035462
+              }
+            ],
+            "average_precision": 0.3472226944457986
+          },
+          "delta_brier": {
+            "n": 91683,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2430,
+            "pitchers": 361
+          }
+        },
+        {
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 91683,
+            "events": 8003,
+            "prevalence": 0.08728990107217259,
+            "brier": 0.06693964457832796,
+            "constant_brier": 0.07968290870760349,
+            "log_loss": 0.24175096252983289,
+            "auc": 0.7934146311708157,
+            "ece": 0.011333607670318518,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 71420,
+                "predicted": 0.04463372816538976,
+                "observed": 0.038868664239708764
+              },
+              {
+                "lower": 0.1,
+                "n": 8622,
+                "predicted": 0.1802998338401085,
+                "observed": 0.1636511250289956
+              },
+              {
+                "lower": 0.2,
+                "n": 7172,
+                "predicted": 0.22683881175356235,
+                "observed": 0.20970440602342444
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 766,
+                "predicted": 0.33200659179471353,
+                "observed": 0.3668407310704961
+              },
+              {
+                "lower": 0.4,
+                "n": 3453,
+                "predicted": 0.4547945044765319,
+                "observed": 0.539820445988995
+              },
+              {
+                "lower": 0.5,
+                "n": 250,
+                "predicted": 0.5054094621122938,
+                "observed": 0.668
+              }
+            ],
+            "average_precision": 0.35238466068843705
+          },
+          "delta_brier": {
+            "n": 91683,
+            "delta": -2.1891352679824206e-05,
+            "interval": [
+              -8.631442230518004e-05,
+              4.7634235220561235e-05
+            ],
+            "games": 2430,
+            "pitchers": 361
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 96351,
+          "games": 2430,
+          "appearances": 4847,
+          "alerts": 1760,
+          "alerts_per100_appearances": 36.31112028058593,
+          "known_alerts": 1683,
+          "unknown_alerts": 77,
+          "true_observed": 650,
+          "precision_observed": 0.38621509209744503,
+          "events_observed": 8003,
+          "sensitivity_observed": 0.08121954267149818,
+          "early_alerts": 1180,
+          "same_boundary_change": 65,
+          "advance_change_2pa600s": 86,
+          "advance_seconds_median": 308.5700001716614,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_base",
+          "threshold": 0.20095661181591212,
+          "primary_alerts": 1760,
+          "primary_unknown_alerts": 77
+        },
+        {
+          "n": 96351,
+          "games": 2430,
+          "appearances": 4847,
+          "alerts": 1799,
+          "alerts_per100_appearances": 37.115741695894364,
+          "known_alerts": 1712,
+          "unknown_alerts": 87,
+          "true_observed": 673,
+          "precision_observed": 0.39310747663551404,
+          "events_observed": 8003,
+          "sensitivity_observed": 0.08409346495064352,
+          "early_alerts": 1117,
+          "same_boundary_change": 75,
+          "advance_change_2pa600s": 94,
+          "advance_seconds_median": 298.45650017261505,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2022,
+          "role": "SP",
+          "config": "hgb_full",
+          "threshold": 0.21270021349906934,
+          "primary_alerts": 1799,
+          "primary_unknown_alerts": 87
+        }
+      ],
+      "paired_binary_reference": []
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "primary_n": 12601,
+      "observed_n": 11035,
+      "pa": [
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 11035,
+            "log_loss": 1.5430686121392854,
+            "constant_log_loss": 1.5452667217886582,
+            "multiclass_brier": 0.7216145158176055,
+            "nonout": {
+              "n": 11035,
+              "events": 3586,
+              "prevalence": 0.3249660172179429,
+              "brier": 0.21909741309684855,
+              "constant_brier": 0.21936326581871055,
+              "log_loss": 0.6299480188409414,
+              "auc": 0.5218729038068646,
+              "ece": 0.007419540053139188,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 2380,
+                  "predicted": 0.2883189894342042,
+                  "observed": 0.3004201680672269
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8655,
+                  "predicted": 0.3255836141721783,
+                  "observed": 0.3317157712305026
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 11035,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "delta_nonout_brier": {
+            "n": 11035,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 11035,
+            "log_loss": 1.5421597529711797,
+            "constant_log_loss": 1.5452667217886582,
+            "multiclass_brier": 0.7211641959483112,
+            "nonout": {
+              "n": 11035,
+              "events": 3586,
+              "prevalence": 0.3249660172179429,
+              "brier": 0.21907947459694532,
+              "constant_brier": 0.21936326581871055,
+              "log_loss": 0.6299140901036426,
+              "auc": 0.5213189042245028,
+              "ece": 0.006663815899723048,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 2170,
+                  "predicted": 0.2889273561922842,
+                  "observed": 0.3009216589861751
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8864,
+                  "predicted": 0.325484196839576,
+                  "observed": 0.33077617328519854
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1,
+                  "predicted": 0.40050782329742013,
+                  "observed": 1.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 11035,
+            "delta": -0.000908859168106083,
+            "interval": [
+              -0.003310673879318661,
+              0.001090538014511375
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "delta_nonout_brier": {
+            "n": 11035,
+            "delta": -1.7938499903269255e-05,
+            "interval": [
+              -0.0003507938102959418,
+              0.0003491613978770874
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 11035,
+            "log_loss": 1.5327303079551522,
+            "constant_log_loss": 1.5452667217886582,
+            "multiclass_brier": 0.7174399947983556,
+            "nonout": {
+              "n": 11035,
+              "events": 3586,
+              "prevalence": 0.3249660172179429,
+              "brier": 0.2194115490593699,
+              "constant_brier": 0.21936326581871055,
+              "log_loss": 0.6306913049625711,
+              "auc": 0.5177885958408234,
+              "ece": 0.006472512856344391,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 2811,
+                  "predicted": 0.2865875518146781,
+                  "observed": 0.303806474564212
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8207,
+                  "predicted": 0.3292354098391686,
+                  "observed": 0.33178993542098206
+                },
+                {
+                  "lower": 0.4,
+                  "n": 17,
+                  "predicted": 0.4084237605366191,
+                  "observed": 0.5294117647058824
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 11035,
+            "delta": -0.010338304184133278,
+            "interval": [
+              -0.015698799040024733,
+              -0.005566188471440475
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "delta_nonout_brier": {
+            "n": 11035,
+            "delta": 0.00031413596252133905,
+            "interval": [
+              -0.0006043804137211762,
+              0.0010946140613672967
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 11035,
+            "log_loss": 1.572997620068129,
+            "constant_log_loss": 1.5452667217886582,
+            "multiclass_brier": 0.730032757378259,
+            "nonout": {
+              "n": 11035,
+              "events": 3586,
+              "prevalence": 0.3249660172179429,
+              "brier": 0.2263223283105904,
+              "constant_brier": 0.21936326581871055,
+              "log_loss": 0.64634074327042,
+              "auc": 0.5121384627214454,
+              "ece": 0.07776590492331288,
+              "calibration": [
+                {
+                  "lower": 0.0,
+                  "n": 1,
+                  "predicted": 0.07925904095979,
+                  "observed": 0.0
+                },
+                {
+                  "lower": 0.1,
+                  "n": 182,
+                  "predicted": 0.16665585220367302,
+                  "observed": 0.2802197802197802
+                },
+                {
+                  "lower": 0.2,
+                  "n": 5757,
+                  "predicted": 0.26168307891758097,
+                  "observed": 0.3248219558797985
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 1232,
+                  "predicted": 0.36238324845116304,
+                  "observed": 0.3189935064935065
+                },
+                {
+                  "lower": 0.4,
+                  "n": 3781,
+                  "predicted": 0.4324690750400481,
+                  "observed": 0.32689764612536365
+                },
+                {
+                  "lower": 0.5,
+                  "n": 10,
+                  "predicted": 0.5082019141444416,
+                  "observed": 0.6
+                },
+                {
+                  "lower": 0.6000000000000001,
+                  "n": 40,
+                  "predicted": 0.673371290889361,
+                  "observed": 0.425
+                },
+                {
+                  "lower": 0.7000000000000001,
+                  "n": 29,
+                  "predicted": 0.7208388723713004,
+                  "observed": 0.3793103448275862
+                },
+                {
+                  "lower": 0.8,
+                  "n": 3,
+                  "predicted": 0.8431525354091277,
+                  "observed": 0.6666666666666666
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 11035,
+            "delta": 0.029929007928843353,
+            "interval": [
+              0.015828432448345024,
+              0.0491833243751891
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "delta_nonout_brier": {
+            "n": 11035,
+            "delta": 0.007224915213741819,
+            "interval": [
+              0.00434487446168413,
+              0.009842728241505156
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 11035,
+            "log_loss": 1.5333540773384193,
+            "constant_log_loss": 1.5452667217886582,
+            "multiclass_brier": 0.7173267052572742,
+            "nonout": {
+              "n": 11035,
+              "events": 3586,
+              "prevalence": 0.3249660172179429,
+              "brier": 0.2190147846873599,
+              "constant_brier": 0.21936326581871055,
+              "log_loss": 0.6297619946521146,
+              "auc": 0.5271048558717591,
+              "ece": 0.005327835625005858,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 525,
+                  "predicted": 0.2945772525290443,
+                  "observed": 0.28
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 10502,
+                  "predicted": 0.3229003674907903,
+                  "observed": 0.3274614359169682
+                },
+                {
+                  "lower": 0.4,
+                  "n": 8,
+                  "predicted": 0.40490849155892294,
+                  "observed": 0.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 11035,
+            "delta": -0.009714534800866509,
+            "interval": [
+              -0.015057941726812988,
+              -0.003576228300132257
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "delta_nonout_brier": {
+            "n": 11035,
+            "delta": -8.262840948872602e-05,
+            "interval": [
+              -0.0007914334887839646,
+              0.000610037893837067
+            ],
+            "games": 2178,
+            "pitchers": 380
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        }
+      ],
+      "run": [
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 11035,
+            "events": 1697,
+            "prevalence": 0.15378341640235613,
+            "brier": 0.1105426593877226,
+            "constant_brier": 0.13127726197223585,
+            "log_loss": 0.35945315418014995,
+            "auc": 0.7801068002912427,
+            "ece": 0.016002062767832982,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5777,
+                "predicted": 0.04951481644565666,
+                "observed": 0.04777566210836074
+              },
+              {
+                "lower": 0.1,
+                "n": 3285,
+                "predicted": 0.16778508250556273,
+                "observed": 0.1939117199391172
+              },
+              {
+                "lower": 0.2,
+                "n": 739,
+                "predicted": 0.23487327350970963,
+                "observed": 0.2422192151556157
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 342,
+                "predicted": 0.3537166537401306,
+                "observed": 0.40058479532163743
+              },
+              {
+                "lower": 0.4,
+                "n": 808,
+                "predicted": 0.4529603006567426,
+                "observed": 0.5148514851485149
+              },
+              {
+                "lower": 0.5,
+                "n": 84,
+                "predicted": 0.5089996226107139,
+                "observed": 0.6190476190476191
+              }
+            ],
+            "average_precision": 0.39974147079662775
+          },
+          "delta_brier": {
+            "n": 11035,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2178,
+            "pitchers": 380
+          }
+        },
+        {
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 11035,
+            "events": 1697,
+            "prevalence": 0.15378341640235613,
+            "brier": 0.11041401618219063,
+            "constant_brier": 0.13127726197223585,
+            "log_loss": 0.3588779387626883,
+            "auc": 0.78300521639172,
+            "ece": 0.015605402478161947,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5777,
+                "predicted": 0.0487921674423771,
+                "observed": 0.04777566210836074
+              },
+              {
+                "lower": 0.1,
+                "n": 3241,
+                "predicted": 0.1687172772642719,
+                "observed": 0.19253316877506943
+              },
+              {
+                "lower": 0.2,
+                "n": 759,
+                "predicted": 0.23103278533331617,
+                "observed": 0.2450592885375494
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 388,
+                "predicted": 0.34508481249294937,
+                "observed": 0.39690721649484534
+              },
+              {
+                "lower": 0.4,
+                "n": 822,
+                "predicted": 0.4552901683507355,
+                "observed": 0.5182481751824818
+              },
+              {
+                "lower": 0.5,
+                "n": 48,
+                "predicted": 0.5074735344798813,
+                "observed": 0.6458333333333334
+              }
+            ],
+            "average_precision": 0.4026367793312333
+          },
+          "delta_brier": {
+            "n": 11035,
+            "delta": -0.00012864320553200099,
+            "interval": [
+              -0.0003917682423789959,
+              9.988522941256397e-05
+            ],
+            "games": 2178,
+            "pitchers": 380
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 40972,
+          "games": 2425,
+          "appearances": 13762,
+          "alerts": 794,
+          "alerts_per100_appearances": 5.769510245603836,
+          "known_alerts": 633,
+          "unknown_alerts": 161,
+          "true_observed": 277,
+          "precision_observed": 0.43759873617693523,
+          "events_observed": 3677,
+          "sensitivity_observed": 0.07533315202610824,
+          "early_alerts": 19,
+          "same_boundary_change": 145,
+          "advance_change_2pa600s": 115,
+          "advance_seconds_median": 275.0550000667572,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_base",
+          "threshold": 0.23507684327659265,
+          "primary_alerts": 382,
+          "primary_unknown_alerts": 93
+        },
+        {
+          "n": 40972,
+          "games": 2425,
+          "appearances": 13762,
+          "alerts": 803,
+          "alerts_per100_appearances": 5.834907716901613,
+          "known_alerts": 642,
+          "unknown_alerts": 161,
+          "true_observed": 282,
+          "precision_observed": 0.4392523364485981,
+          "events_observed": 3677,
+          "sensitivity_observed": 0.07669295621430514,
+          "early_alerts": 18,
+          "same_boundary_change": 143,
+          "advance_change_2pa600s": 113,
+          "advance_seconds_median": 275.0550000667572,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2022,
+          "role": "RP",
+          "config": "hgb_full",
+          "threshold": 0.2354641369810363,
+          "primary_alerts": 382,
+          "primary_unknown_alerts": 93
+        }
+      ],
+      "paired_binary_reference": [
+        {
+          "config": "frozen15_3_binary",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.2188924602262977,
+            "constant_brier": 0.21853377566267512,
+            "log_loss": 0.6296281117753547,
+            "auc": 0.474896904063787,
+            "ece": 0.018063381926901323,
+            "calibration": [
+              {
+                "lower": 0.30000000000000004,
+                "n": 7027,
+                "predicted": 0.34067616120682165,
+                "observed": 0.3226127792799203
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_base",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.21836338388902246,
+            "constant_brier": 0.21854136075620553,
+            "log_loss": 0.6284420498963941,
+            "auc": 0.5197794998016851,
+            "ece": 0.007085395120442304,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1713,
+                "predicted": 0.28806751135798536,
+                "observed": 0.30297723292469353
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5314,
+                "predicted": 0.32437924003244695,
+                "observed": 0.32894241625893866
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": -0.0005290763372752332,
+            "interval": [
+              -0.0018925888953624731,
+              0.0007374383533818543
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.21837329906169417,
+            "constant_brier": 0.21854136075620553,
+            "log_loss": 0.6284612010276657,
+            "auc": 0.5186365017996611,
+            "ece": 0.006303279093383041,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1589,
+                "predicted": 0.28838660155068485,
+                "observed": 0.302706104468219
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5437,
+                "predicted": 0.32445466987740695,
+                "observed": 0.3283060511311385
+              },
+              {
+                "lower": 0.4,
+                "n": 1,
+                "predicted": 0.40050782329742013,
+                "observed": 1.0
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": -0.0005191611646035599,
+            "interval": [
+              -0.0017364365768866399,
+              0.000789062538796041
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_full",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.21888029615868754,
+            "constant_brier": 0.21854136075620553,
+            "log_loss": 0.6296292323154881,
+            "auc": 0.5103836373543683,
+            "ece": 0.007406975787192968,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1837,
+                "predicted": 0.28660681120770526,
+                "observed": 0.30919978225367445
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5182,
+                "predicted": 0.32898333103774446,
+                "observed": 0.32709378618294094
+              },
+              {
+                "lower": 0.4,
+                "n": 8,
+                "predicted": 0.4057612990540371,
+                "observed": 0.5
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": -1.2164067610205055e-05,
+            "interval": [
+              -0.001293004899792749,
+              0.0013454223125751348
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "linear_full",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.22465412480123054,
+            "constant_brier": 0.21854136075620553,
+            "log_loss": 0.6428059779569989,
+            "auc": 0.5135647377610064,
+            "ece": 0.07277877966102887,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 1,
+                "predicted": 0.07925904095979,
+                "observed": 0.0
+              },
+              {
+                "lower": 0.1,
+                "n": 94,
+                "predicted": 0.17261617181284797,
+                "observed": 0.32978723404255317
+              },
+              {
+                "lower": 0.2,
+                "n": 3617,
+                "predicted": 0.26117960857598205,
+                "observed": 0.31711363008017696
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 828,
+                "predicted": 0.3669916399751977,
+                "observed": 0.3248792270531401
+              },
+              {
+                "lower": 0.4,
+                "n": 2456,
+                "predicted": 0.4309385141577751,
+                "observed": 0.3273615635179153
+              },
+              {
+                "lower": 0.5,
+                "n": 2,
+                "predicted": 0.5045926370222236,
+                "observed": 0.5
+              },
+              {
+                "lower": 0.6000000000000001,
+                "n": 17,
+                "predicted": 0.6682009406058589,
+                "observed": 0.5882352941176471
+              },
+              {
+                "lower": 0.7000000000000001,
+                "n": 12,
+                "predicted": 0.7189266726267759,
+                "observed": 0.4166666666666667
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": 0.005761664574932848,
+            "interval": [
+              0.0023339147318891286,
+              0.008959170805211266
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "rf_full",
+          "metrics": {
+            "n": 7027,
+            "events": 2267,
+            "prevalence": 0.3226127792799203,
+            "brier": 0.21829663901577587,
+            "constant_brier": 0.21854136075620553,
+            "log_loss": 0.6282860968762215,
+            "auc": 0.5195716398601787,
+            "ece": 0.0030848275259200194,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 361,
+                "predicted": 0.29430136447466965,
+                "observed": 0.28254847645429365
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6664,
+                "predicted": 0.3223873911909663,
+                "observed": 0.32487995198079234
+              },
+              {
+                "lower": 0.4,
+                "n": 2,
+                "predicted": 0.41193267294183994,
+                "observed": 0.0
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 7027,
+            "delta": -0.0005958212105218554,
+            "interval": [
+              -0.001448945047519155,
+              0.0004209079747977548
+            ],
+            "games": 2161,
+            "pitchers": 378
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "primary_n": 95865,
+      "observed_n": 91313,
+      "pa": [
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 91313,
+            "log_loss": 1.528887784007168,
+            "constant_log_loss": 1.534372878799344,
+            "multiclass_brier": 0.7110462398490592,
+            "nonout": {
+              "n": 91313,
+              "events": 29555,
+              "prevalence": 0.3236669477511417,
+              "brier": 0.21856382065469246,
+              "constant_brier": 0.21891809029009673,
+              "log_loss": 0.6288194788391137,
+              "auc": 0.5260184724930539,
+              "ece": 0.0069238315279470455,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 21949,
+                  "predicted": 0.2870682312327388,
+                  "observed": 0.2944553282609686
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 69348,
+                  "predicted": 0.32612871591362375,
+                  "observed": 0.33290073253734787
+                },
+                {
+                  "lower": 0.4,
+                  "n": 16,
+                  "predicted": 0.40441417604950197,
+                  "observed": 0.375
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91313,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "delta_nonout_brier": {
+            "n": 91313,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 91313,
+            "log_loss": 1.5288209063871554,
+            "constant_log_loss": 1.534372878799344,
+            "multiclass_brier": 0.7109820007596361,
+            "nonout": {
+              "n": 91313,
+              "events": 29555,
+              "prevalence": 0.3236669477511417,
+              "brier": 0.21850805720825,
+              "constant_brier": 0.21891809029009673,
+              "log_loss": 0.6286887361059621,
+              "auc": 0.5273877761336812,
+              "ece": 0.006967603277807456,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 21925,
+                  "predicted": 0.2873059521710464,
+                  "observed": 0.2901254275940707
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 69340,
+                  "predicted": 0.32593029540838203,
+                  "observed": 0.33419382751658494
+                },
+                {
+                  "lower": 0.4,
+                  "n": 48,
+                  "predicted": 0.40786576929510754,
+                  "observed": 0.4375
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91313,
+            "delta": -6.687762001187202e-05,
+            "interval": [
+              -0.0006205457492103846,
+              0.00047979948245645477
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "delta_nonout_brier": {
+            "n": 91313,
+            "delta": -5.576344644244176e-05,
+            "interval": [
+              -0.00015952885002247342,
+              5.6466577513365917e-05
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 91313,
+            "log_loss": 1.520094992603298,
+            "constant_log_loss": 1.534372878799344,
+            "multiclass_brier": 0.7074585605086624,
+            "nonout": {
+              "n": 91313,
+              "events": 29555,
+              "prevalence": 0.3236669477511417,
+              "brier": 0.21842085105551343,
+              "constant_brier": 0.21891809029009673,
+              "log_loss": 0.6284998720132629,
+              "auc": 0.5300274664231109,
+              "ece": 0.005591471652384684,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 25004,
+                  "predicted": 0.2839761610979125,
+                  "observed": 0.2956326987681971
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 66038,
+                  "predicted": 0.3306178847913606,
+                  "observed": 0.33374723643962567
+                },
+                {
+                  "lower": 0.4,
+                  "n": 271,
+                  "predicted": 0.4079045795635444,
+                  "observed": 0.45387453874538747
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91313,
+            "delta": -0.008792791403869508,
+            "interval": [
+              -0.010140328852384,
+              -0.007412867759208363
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "delta_nonout_brier": {
+            "n": 91313,
+            "delta": -0.0001429695991789936,
+            "interval": [
+              -0.00035404999165919416,
+              4.892453031805584e-05
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 91313,
+            "log_loss": 1.5263059653789066,
+            "constant_log_loss": 1.534372878799344,
+            "multiclass_brier": 0.7091951020415904,
+            "nonout": {
+              "n": 91313,
+              "events": 29555,
+              "prevalence": 0.3236669477511417,
+              "brier": 0.21929026000805543,
+              "constant_brier": 0.21891809029009673,
+              "log_loss": 0.6311066968278928,
+              "auc": 0.5235116867251769,
+              "ece": 0.013772228200541968,
+              "calibration": [
+                {
+                  "lower": 0.0,
+                  "n": 337,
+                  "predicted": 0.06505590427829173,
+                  "observed": 0.29376854599406527
+                },
+                {
+                  "lower": 0.1,
+                  "n": 515,
+                  "predicted": 0.17054262708771223,
+                  "observed": 0.3106796116504854
+                },
+                {
+                  "lower": 0.2,
+                  "n": 19790,
+                  "predicted": 0.27543900219932005,
+                  "observed": 0.3008590197069227
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 69146,
+                  "predicted": 0.3371676245514787,
+                  "observed": 0.3299106238972609
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1512,
+                  "predicted": 0.41431514700213756,
+                  "observed": 0.34854497354497355
+                },
+                {
+                  "lower": 0.5,
+                  "n": 12,
+                  "predicted": 0.5318996024223317,
+                  "observed": 0.25
+                },
+                {
+                  "lower": 0.6000000000000001,
+                  "n": 1,
+                  "predicted": 0.6547551597443274,
+                  "observed": 0.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91313,
+            "delta": -0.0025818186282612413,
+            "interval": [
+              -0.005360057174369757,
+              0.0013714477126590145
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "delta_nonout_brier": {
+            "n": 91313,
+            "delta": 0.0007264393533629808,
+            "interval": [
+              0.00034325208314238116,
+              0.0011466274430537212
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 91313,
+            "log_loss": 1.5226964978940332,
+            "constant_log_loss": 1.534372878799344,
+            "multiclass_brier": 0.7081428463247601,
+            "nonout": {
+              "n": 91313,
+              "events": 29555,
+              "prevalence": 0.3236669477511417,
+              "brier": 0.21855764478292983,
+              "constant_brier": 0.21891809029009673,
+              "log_loss": 0.6288068954809828,
+              "auc": 0.5268323833222694,
+              "ece": 0.007271306220144765,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 23878,
+                  "predicted": 0.2897597525019457,
+                  "observed": 0.29621408828210066
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 67425,
+                  "predicted": 0.3258759274651363,
+                  "observed": 0.33340748980348534
+                },
+                {
+                  "lower": 0.4,
+                  "n": 10,
+                  "predicted": 0.40325644583529574,
+                  "observed": 0.2
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 91313,
+            "delta": -0.006191286113134418,
+            "interval": [
+              -0.007782207460013775,
+              -0.00482148891282307
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "delta_nonout_brier": {
+            "n": 91313,
+            "delta": -6.175871762627589e-06,
+            "interval": [
+              -0.00021020243803312943,
+              0.000259781812434394
+            ],
+            "games": 2429,
+            "pitchers": 377
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        }
+      ],
+      "run": [
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 91313,
+            "events": 8551,
+            "prevalence": 0.09364493555134537,
+            "brier": 0.07202795315210328,
+            "constant_brier": 0.0848796878687266,
+            "log_loss": 0.2581021739977636,
+            "auc": 0.7742929799892486,
+            "ece": 0.006823123685345732,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 70620,
+                "predicted": 0.03932388576703118,
+                "observed": 0.043769470404984426
+              },
+              {
+                "lower": 0.1,
+                "n": 12173,
+                "predicted": 0.17301680624037769,
+                "observed": 0.17974205208247762
+              },
+              {
+                "lower": 0.2,
+                "n": 3850,
+                "predicted": 0.23207005039704784,
+                "observed": 0.23662337662337662
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 663,
+                "predicted": 0.3285933294886754,
+                "observed": 0.3212669683257919
+              },
+              {
+                "lower": 0.4,
+                "n": 2652,
+                "predicted": 0.46534350911930633,
+                "observed": 0.5211161387631976
+              },
+              {
+                "lower": 0.5,
+                "n": 1355,
+                "predicted": 0.5232991947794269,
+                "observed": 0.5653136531365314
+              }
+            ],
+            "average_precision": 0.3365704952659112
+          },
+          "delta_brier": {
+            "n": 91313,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2429,
+            "pitchers": 377
+          }
+        },
+        {
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 91313,
+            "events": 8551,
+            "prevalence": 0.09364493555134537,
+            "brier": 0.0720384787972317,
+            "constant_brier": 0.0848796878687266,
+            "log_loss": 0.2576876702936228,
+            "auc": 0.779602750869975,
+            "ece": 0.00720256746736909,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 70620,
+                "predicted": 0.03954977312760307,
+                "observed": 0.043769470404984426
+              },
+              {
+                "lower": 0.1,
+                "n": 11863,
+                "predicted": 0.17146980064807676,
+                "observed": 0.17794824243446009
+              },
+              {
+                "lower": 0.2,
+                "n": 4237,
+                "predicted": 0.23157670907121283,
+                "observed": 0.23884824168043428
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 608,
+                "predicted": 0.3240448361571987,
+                "observed": 0.33223684210526316
+              },
+              {
+                "lower": 0.4,
+                "n": 3018,
+                "predicted": 0.45841449542173957,
+                "observed": 0.5241882041086813
+              },
+              {
+                "lower": 0.5,
+                "n": 967,
+                "predicted": 0.5216711577989116,
+                "observed": 0.5718717683557394
+              }
+            ],
+            "average_precision": 0.3404431129762232
+          },
+          "delta_brier": {
+            "n": 91313,
+            "delta": 1.052564512842289e-05,
+            "interval": [
+              -6.142776228528357e-05,
+              8.626008870563721e-05
+            ],
+            "games": 2429,
+            "pitchers": 377
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 95865,
+          "games": 2429,
+          "appearances": 4854,
+          "alerts": 2073,
+          "alerts_per100_appearances": 42.707045735475894,
+          "known_alerts": 1984,
+          "unknown_alerts": 89,
+          "true_observed": 707,
+          "precision_observed": 0.3563508064516129,
+          "events_observed": 8551,
+          "sensitivity_observed": 0.0826803882586832,
+          "early_alerts": 1224,
+          "same_boundary_change": 80,
+          "advance_change_2pa600s": 152,
+          "advance_seconds_median": 273.7850000858307,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_base",
+          "threshold": 0.19399342240472392,
+          "primary_alerts": 2073,
+          "primary_unknown_alerts": 89
+        },
+        {
+          "n": 95865,
+          "games": 2429,
+          "appearances": 4854,
+          "alerts": 2045,
+          "alerts_per100_appearances": 42.130201895344044,
+          "known_alerts": 1953,
+          "unknown_alerts": 92,
+          "true_observed": 701,
+          "precision_observed": 0.35893497183819767,
+          "events_observed": 8551,
+          "sensitivity_observed": 0.08197871593965618,
+          "early_alerts": 1279,
+          "same_boundary_change": 80,
+          "advance_change_2pa600s": 127,
+          "advance_seconds_median": 320.2720000743866,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2023,
+          "role": "SP",
+          "config": "hgb_full",
+          "threshold": 0.19446441847513485,
+          "primary_alerts": 2045,
+          "primary_unknown_alerts": 92
+        }
+      ],
+      "paired_binary_reference": []
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "primary_n": 12301,
+      "observed_n": 10760,
+      "pa": [
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 10760,
+            "log_loss": 1.5547597556685273,
+            "constant_log_loss": 1.562305789790645,
+            "multiclass_brier": 0.7236345881128106,
+            "nonout": {
+              "n": 10760,
+              "events": 3458,
+              "prevalence": 0.32137546468401484,
+              "brier": 0.21773426805261595,
+              "constant_brier": 0.2181050994572046,
+              "log_loss": 0.6270860804855029,
+              "auc": 0.5281062225122253,
+              "ece": 0.0031508409924878487,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 1998,
+                  "predicted": 0.28850352242790256,
+                  "observed": 0.3003003003003003
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8762,
+                  "predicted": 0.325001930279603,
+                  "observed": 0.32618123716046565
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10760,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 10760,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 10760,
+            "log_loss": 1.5530403890493387,
+            "constant_log_loss": 1.562305789790645,
+            "multiclass_brier": 0.7232787995725343,
+            "nonout": {
+              "n": 10760,
+              "events": 3458,
+              "prevalence": 0.32137546468401484,
+              "brier": 0.2175971686853861,
+              "constant_brier": 0.2181050994572046,
+              "log_loss": 0.6267649697571207,
+              "auc": 0.5316759996191731,
+              "ece": 0.0022871075714659033,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 1862,
+                  "predicted": 0.2896681409989836,
+                  "observed": 0.2916219119226638
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8898,
+                  "predicted": 0.32524484648133506,
+                  "observed": 0.3276017082490447
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10760,
+            "delta": -0.0017193666191881337,
+            "interval": [
+              -0.003499793831489936,
+              0.00031478479880763145
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 10760,
+            "delta": -0.00013709936722984913,
+            "interval": [
+              -0.00046824891156121474,
+              0.00024798846603554196
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 10760,
+            "log_loss": 1.546233939383965,
+            "constant_log_loss": 1.562305789790645,
+            "multiclass_brier": 0.7198728605237359,
+            "nonout": {
+              "n": 10760,
+              "events": 3458,
+              "prevalence": 0.32137546468401484,
+              "brier": 0.21746807230698326,
+              "constant_brier": 0.2181050994572046,
+              "log_loss": 0.6264779622774231,
+              "auc": 0.5344110941027431,
+              "ece": 0.0035678324060394754,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 2465,
+                  "predicted": 0.2861150603521113,
+                  "observed": 0.29087221095334687
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 8294,
+                  "predicted": 0.32721454435931197,
+                  "observed": 0.33035929587653723
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1,
+                  "predicted": 0.4190686269272099,
+                  "observed": 1.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10760,
+            "delta": -0.008525816284562398,
+            "interval": [
+              -0.013237334187165764,
+              -0.0032577805613652868
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 10760,
+            "delta": -0.0002661957456326623,
+            "interval": [
+              -0.0008145258516704578,
+              0.00042726142780510326
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 10760,
+            "log_loss": 1.5535882263494287,
+            "constant_log_loss": 1.562305789790645,
+            "multiclass_brier": 0.7216351694728691,
+            "nonout": {
+              "n": 10760,
+              "events": 3458,
+              "prevalence": 0.32137546468401484,
+              "brier": 0.2186791836537164,
+              "constant_brier": 0.2181050994572046,
+              "log_loss": 0.6293437700519655,
+              "auc": 0.5212555755737869,
+              "ece": 0.025193046350937717,
+              "calibration": [
+                {
+                  "lower": 0.1,
+                  "n": 52,
+                  "predicted": 0.1618749833712717,
+                  "observed": 0.2692307692307692
+                },
+                {
+                  "lower": 0.2,
+                  "n": 993,
+                  "predicted": 0.2782345894931104,
+                  "observed": 0.3121852970795569
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 9508,
+                  "predicted": 0.34504705574218003,
+                  "observed": 0.3213083718973496
+                },
+                {
+                  "lower": 0.4,
+                  "n": 207,
+                  "predicted": 0.4109865663836089,
+                  "observed": 0.38164251207729466
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10760,
+            "delta": -0.0011715293190982757,
+            "interval": [
+              -0.008659442879319235,
+              0.006301573185920022
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 10760,
+            "delta": 0.0009449156011004516,
+            "interval": [
+              -0.00027942530025153135,
+              0.0021247031543552256
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 10760,
+            "log_loss": 1.5497336734056482,
+            "constant_log_loss": 1.562305789790645,
+            "multiclass_brier": 0.7206958879918616,
+            "nonout": {
+              "n": 10760,
+              "events": 3458,
+              "prevalence": 0.32137546468401484,
+              "brier": 0.21759864854443214,
+              "constant_brier": 0.2181050994572046,
+              "log_loss": 0.626771898439263,
+              "auc": 0.5294713143391949,
+              "ece": 0.0029206682573865344,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 1560,
+                  "predicted": 0.29291843898534986,
+                  "observed": 0.30128205128205127
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 9199,
+                  "predicted": 0.32277624649970893,
+                  "observed": 0.3247092075225568
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1,
+                  "predicted": 0.40215318255241117,
+                  "observed": 1.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10760,
+            "delta": -0.005026082262878862,
+            "interval": [
+              -0.010136943136343194,
+              0.00018016712256420709
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 10760,
+            "delta": -0.00013561950818380614,
+            "interval": [
+              -0.0007875389386318068,
+              0.0005229877009597865
+            ],
+            "games": 2154,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        }
+      ],
+      "run": [
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 10760,
+            "events": 1616,
+            "prevalence": 0.15018587360594796,
+            "brier": 0.10854835626464336,
+            "constant_brier": 0.12851435400076255,
+            "log_loss": 0.3560583974663164,
+            "auc": 0.7738189111726133,
+            "ece": 0.008612427638341373,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5485,
+                "predicted": 0.04545889861578222,
+                "observed": 0.04886052871467639
+              },
+              {
+                "lower": 0.1,
+                "n": 3135,
+                "predicted": 0.16094133759811413,
+                "observed": 0.16682615629984052
+              },
+              {
+                "lower": 0.2,
+                "n": 865,
+                "predicted": 0.23271450793468249,
+                "observed": 0.26242774566473986
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 337,
+                "predicted": 0.3533827533924466,
+                "observed": 0.3649851632047478
+              },
+              {
+                "lower": 0.4,
+                "n": 669,
+                "predicted": 0.45988130607024574,
+                "observed": 0.4977578475336323
+              },
+              {
+                "lower": 0.5,
+                "n": 269,
+                "predicted": 0.5301542925054117,
+                "observed": 0.5278810408921933
+              }
+            ],
+            "average_precision": 0.38659268844977646
+          },
+          "delta_brier": {
+            "n": 10760,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2154,
+            "pitchers": 366
+          }
+        },
+        {
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 10760,
+            "events": 1616,
+            "prevalence": 0.15018587360594796,
+            "brier": 0.10852362272737966,
+            "constant_brier": 0.12851435400076255,
+            "log_loss": 0.355971766630905,
+            "auc": 0.775727049821124,
+            "ece": 0.008902232624382021,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5485,
+                "predicted": 0.04458885490226449,
+                "observed": 0.04886052871467639
+              },
+              {
+                "lower": 0.1,
+                "n": 3083,
+                "predicted": 0.1623217961652983,
+                "observed": 0.1670450859552384
+              },
+              {
+                "lower": 0.2,
+                "n": 860,
+                "predicted": 0.2274194052131682,
+                "observed": 0.24883720930232558
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 434,
+                "predicted": 0.34743421956139975,
+                "observed": 0.3686635944700461
+              },
+              {
+                "lower": 0.4,
+                "n": 664,
+                "predicted": 0.46091668912083056,
+                "observed": 0.4924698795180723
+              },
+              {
+                "lower": 0.5,
+                "n": 234,
+                "predicted": 0.5247358499825233,
+                "observed": 0.5641025641025641
+              }
+            ],
+            "average_precision": 0.39060213978821445
+          },
+          "delta_brier": {
+            "n": 10760,
+            "delta": -2.473353726371342e-05,
+            "interval": [
+              -0.000246965249888893,
+              0.00018000653627013677
+            ],
+            "games": 2154,
+            "pitchers": 366
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 43700,
+          "games": 2424,
+          "appearances": 13625,
+          "alerts": 985,
+          "alerts_per100_appearances": 7.229357798165138,
+          "known_alerts": 829,
+          "unknown_alerts": 156,
+          "true_observed": 348,
+          "precision_observed": 0.41978287092882993,
+          "events_observed": 4185,
+          "sensitivity_observed": 0.08315412186379928,
+          "early_alerts": 35,
+          "same_boundary_change": 141,
+          "advance_change_2pa600s": 152,
+          "advance_seconds_median": 252.18650007247925,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_base",
+          "threshold": 0.23058039622290508,
+          "primary_alerts": 411,
+          "primary_unknown_alerts": 81
+        },
+        {
+          "n": 43700,
+          "games": 2424,
+          "appearances": 13625,
+          "alerts": 994,
+          "alerts_per100_appearances": 7.295412844036697,
+          "known_alerts": 837,
+          "unknown_alerts": 157,
+          "true_observed": 349,
+          "precision_observed": 0.4169653524492234,
+          "events_observed": 4185,
+          "sensitivity_observed": 0.08339307048984468,
+          "early_alerts": 35,
+          "same_boundary_change": 140,
+          "advance_change_2pa600s": 151,
+          "advance_seconds_median": 262.1160001754761,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2023,
+          "role": "RP",
+          "config": "hgb_full",
+          "threshold": 0.2320527765147789,
+          "primary_alerts": 418,
+          "primary_unknown_alerts": 82
+        }
+      ],
+      "paired_binary_reference": [
+        {
+          "config": "frozen15_3_binary",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21681130680498792,
+            "constant_brier": 0.21689399599553733,
+            "log_loss": 0.625172775210049,
+            "auc": 0.5174348949123515,
+            "ece": 0.007878114571226837,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 720,
+                "predicted": 0.2900554476497841,
+                "observed": 0.2611111111111111
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6093,
+                "predicted": 0.32985644431209826,
+                "observed": 0.3249630723781389
+              },
+              {
+                "lower": 0.4,
+                "n": 10,
+                "predicted": 0.4097138218021623,
+                "observed": 0.1
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_base",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21646351922771495,
+            "constant_brier": 0.21688576665463027,
+            "log_loss": 0.6244079010833696,
+            "auc": 0.528388059033183,
+            "ece": 0.0028711396217257074,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1308,
+                "predicted": 0.2884089613781527,
+                "observed": 0.2958715596330275
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5515,
+                "predicted": 0.3249009441743714,
+                "observed": 0.32311876699909337
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": -0.000347787577272964,
+            "interval": [
+              -0.0010753513140487618,
+              0.00047767606315470484
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21642939998454636,
+            "constant_brier": 0.21688576665463027,
+            "log_loss": 0.6243239544909072,
+            "auc": 0.5289273612252818,
+            "ece": 0.0008308020074105152,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1220,
+                "predicted": 0.28966858882729496,
+                "observed": 0.28524590163934427
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5603,
+                "predicted": 0.32495575874937316,
+                "observed": 0.32500446189541315
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": -0.0003819068204415558,
+            "interval": [
+              -0.001277418856693747,
+              0.0004457118044722675
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_full",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21624739098673199,
+            "constant_brier": 0.21688576665463027,
+            "log_loss": 0.6239062686321842,
+            "auc": 0.5329112035572547,
+            "ece": 0.0011592020802438402,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1656,
+                "predicted": 0.2859507495107015,
+                "observed": 0.2856280193236715
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5167,
+                "predicted": 0.32680960042504703,
+                "observed": 0.3282368879427134
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": -0.0005639158182559356,
+            "interval": [
+              -0.0016393297450854906,
+              0.0004443697653145509
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "linear_full",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21775829176515038,
+            "constant_brier": 0.21688576665463027,
+            "log_loss": 0.6274717153304621,
+            "auc": 0.5190772701957477,
+            "ece": 0.030197270360544193,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "n": 27,
+                "predicted": 0.15521447171319924,
+                "observed": 0.2962962962962963
+              },
+              {
+                "lower": 0.2,
+                "n": 534,
+                "predicted": 0.28037934266180614,
+                "observed": 0.31273408239700373
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6108,
+                "predicted": 0.3463764632872422,
+                "observed": 0.316633922724296
+              },
+              {
+                "lower": 0.4,
+                "n": 154,
+                "predicted": 0.4109214131764849,
+                "observed": 0.38961038961038963
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": 0.000946984960162444,
+            "interval": [
+              -0.000761072159544442,
+              0.0023493124367615524
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "rf_full",
+          "metrics": {
+            "n": 6823,
+            "events": 2169,
+            "prevalence": 0.31789535394987545,
+            "brier": 0.21614384571166104,
+            "constant_brier": 0.21688576665463027,
+            "log_loss": 0.6236844979236136,
+            "auc": 0.5359524558161523,
+            "ece": 0.0005483010451425236,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 1047,
+                "predicted": 0.2926798161347774,
+                "observed": 0.2913085004775549
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5775,
+                "predicted": 0.3223017413471086,
+                "observed": 0.3225974025974026
+              },
+              {
+                "lower": 0.4,
+                "n": 1,
+                "predicted": 0.40215318255241117,
+                "observed": 1.0
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6823,
+            "delta": -0.000667461093326897,
+            "interval": [
+              -0.0017553258500678584,
+              0.0002686907937835022
+            ],
+            "games": 2138,
+            "pitchers": 364
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "primary_n": 96627,
+      "observed_n": 92010,
+      "pa": [
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 92010,
+            "log_loss": 1.512046347239862,
+            "constant_log_loss": 1.5169734489166473,
+            "multiclass_brier": 0.7050675031187543,
+            "nonout": {
+              "n": 92010,
+              "events": 29165,
+              "prevalence": 0.31697641560699924,
+              "brier": 0.21616082129957903,
+              "constant_brier": 0.21650238732644797,
+              "log_loss": 0.6237732301643408,
+              "auc": 0.5255038366853746,
+              "ece": 0.006111403684300599,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 12956,
+                  "predicted": 0.2900376271578895,
+                  "observed": 0.2822630441494288
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 79038,
+                  "predicted": 0.32848909043426694,
+                  "observed": 0.3226928819049065
+                },
+                {
+                  "lower": 0.4,
+                  "n": 16,
+                  "predicted": 0.403876611955829,
+                  "observed": 0.1875
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 92010,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 92010,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 92010,
+            "log_loss": 1.5118596878708888,
+            "constant_log_loss": 1.5169734489166473,
+            "multiclass_brier": 0.7049603054214775,
+            "nonout": {
+              "n": 92010,
+              "events": 29165,
+              "prevalence": 0.31697641560699924,
+              "brier": 0.21608275056484752,
+              "constant_brier": 0.21650238732644797,
+              "log_loss": 0.6235964760976578,
+              "auc": 0.5276619466169921,
+              "ece": 0.005704402992252881,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 13769,
+                  "predicted": 0.2896950408059747,
+                  "observed": 0.2818650591909362
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 78233,
+                  "predicted": 0.32847793529867814,
+                  "observed": 0.32315007733309475
+                },
+                {
+                  "lower": 0.4,
+                  "n": 8,
+                  "predicted": 0.40459877977970904,
+                  "observed": 0.375
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 92010,
+            "delta": -0.0001866593689729024,
+            "interval": [
+              -0.0006951632254559528,
+              0.0003235580206670047
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 92010,
+            "delta": -7.807073473154224e-05,
+            "interval": [
+              -0.00016586008689403744,
+              9.351671094284541e-06
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 92010,
+            "log_loss": 1.5042047442549327,
+            "constant_log_loss": 1.5169734489166473,
+            "multiclass_brier": 0.7016025329448915,
+            "nonout": {
+              "n": 92010,
+              "events": 29165,
+              "prevalence": 0.31697641560699924,
+              "brier": 0.21592890686251665,
+              "constant_brier": 0.21650238732644797,
+              "log_loss": 0.6232431328186003,
+              "auc": 0.5312599716153494,
+              "ece": 0.003053797121028697,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 21324,
+                  "predicted": 0.28623648487352116,
+                  "observed": 0.2864847120615269
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 70626,
+                  "predicted": 0.3300102446282017,
+                  "observed": 0.32616883300767424
+                },
+                {
+                  "lower": 0.4,
+                  "n": 60,
+                  "predicted": 0.4063856572906938,
+                  "observed": 0.3333333333333333
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 92010,
+            "delta": -0.007841602984928864,
+            "interval": [
+              -0.009245353437892716,
+              -0.006551251365747962
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 92010,
+            "delta": -0.00023191443706241792,
+            "interval": [
+              -0.00043349942719903754,
+              -2.6606482723010408e-05
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 92010,
+            "log_loss": 1.5103193990787454,
+            "constant_log_loss": 1.5169734489166473,
+            "multiclass_brier": 0.7032669027916111,
+            "nonout": {
+              "n": 92010,
+              "events": 29165,
+              "prevalence": 0.31697641560699924,
+              "brier": 0.21698966254610372,
+              "constant_brier": 0.21650238732644797,
+              "log_loss": 0.6263096625104565,
+              "auc": 0.5228088034454407,
+              "ece": 0.015929939804816193,
+              "calibration": [
+                {
+                  "lower": 0.0,
+                  "n": 345,
+                  "predicted": 0.07556182089809935,
+                  "observed": 0.2782608695652174
+                },
+                {
+                  "lower": 0.1,
+                  "n": 886,
+                  "predicted": 0.15402100972556926,
+                  "observed": 0.31376975169300225
+                },
+                {
+                  "lower": 0.2,
+                  "n": 18192,
+                  "predicted": 0.2797769209681915,
+                  "observed": 0.2896877748460862
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 71040,
+                  "predicted": 0.33716350548810825,
+                  "observed": 0.322705518018018
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1546,
+                  "predicted": 0.41485204310079427,
+                  "observed": 0.3848641655886158
+                },
+                {
+                  "lower": 0.5,
+                  "n": 1,
+                  "predicted": 0.5097379878627208,
+                  "observed": 1.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 92010,
+            "delta": -0.0017269481611164423,
+            "interval": [
+              -0.004035956033253834,
+              0.0014228894087410426
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 92010,
+            "delta": 0.0008288412465247109,
+            "interval": [
+              0.00042589760750879246,
+              0.0012973710861235734
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 92010,
+            "log_loss": 1.5062525335294712,
+            "constant_log_loss": 1.5169734489166473,
+            "multiclass_brier": 0.7019739123719203,
+            "nonout": {
+              "n": 92010,
+              "events": 29165,
+              "prevalence": 0.31697641560699924,
+              "brier": 0.21613039299710607,
+              "constant_brier": 0.21650238732644797,
+              "log_loss": 0.623705927333866,
+              "auc": 0.5263192561596247,
+              "ece": 0.003916659326201003,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 19021,
+                  "predicted": 0.2900921085628053,
+                  "observed": 0.28673571315913987
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 72987,
+                  "predicted": 0.3288851087021364,
+                  "observed": 0.3248386699001192
+                },
+                {
+                  "lower": 0.4,
+                  "n": 2,
+                  "predicted": 0.4038006060963434,
+                  "observed": 1.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 92010,
+            "delta": -0.0057938137103906795,
+            "interval": [
+              -0.007506635163419774,
+              -0.0043045236447601
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "delta_nonout_brier": {
+            "n": 92010,
+            "delta": -3.0428302472961805e-05,
+            "interval": [
+              -0.0002566832277954385,
+              0.00018064117731754882
+            ],
+            "games": 2427,
+            "pitchers": 366
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        }
+      ],
+      "run": [
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 92010,
+            "events": 8230,
+            "prevalence": 0.0894467992609499,
+            "brier": 0.06857538355502062,
+            "constant_brier": 0.08144687970346799,
+            "log_loss": 0.246436743970735,
+            "auc": 0.7861572344046361,
+            "ece": 0.007233005909289543,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 71619,
+                "predicted": 0.0444657812906435,
+                "observed": 0.03955654225833927
+              },
+              {
+                "lower": 0.1,
+                "n": 11323,
+                "predicted": 0.1815019666385215,
+                "observed": 0.18140068886337543
+              },
+              {
+                "lower": 0.2,
+                "n": 4395,
+                "predicted": 0.23774059027107164,
+                "observed": 0.22639362912400454
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 817,
+                "predicted": 0.33749396374627594,
+                "observed": 0.35006119951040393
+              },
+              {
+                "lower": 0.4,
+                "n": 3035,
+                "predicted": 0.4558289917601687,
+                "observed": 0.5228995057660626
+              },
+              {
+                "lower": 0.5,
+                "n": 821,
+                "predicted": 0.5187929606058285,
+                "observed": 0.5785627283800243
+              }
+            ],
+            "average_precision": 0.34315488964703267
+          },
+          "delta_brier": {
+            "n": 92010,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2427,
+            "pitchers": 366
+          }
+        },
+        {
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 92010,
+            "events": 8230,
+            "prevalence": 0.0894467992609499,
+            "brier": 0.06854244182627589,
+            "constant_brier": 0.08144687970346799,
+            "log_loss": 0.24605145239614987,
+            "auc": 0.7905213736027384,
+            "ece": 0.007205080997971117,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 71619,
+                "predicted": 0.0441536534214668,
+                "observed": 0.03955654225833927
+              },
+              {
+                "lower": 0.1,
+                "n": 11287,
+                "predicted": 0.18143923770281717,
+                "observed": 0.18047311065827942
+              },
+              {
+                "lower": 0.2,
+                "n": 4505,
+                "predicted": 0.23793971764816294,
+                "observed": 0.2290788013318535
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 708,
+                "predicted": 0.33068328043261586,
+                "observed": 0.3418079096045198
+              },
+              {
+                "lower": 0.4,
+                "n": 3165,
+                "predicted": 0.4533396096830675,
+                "observed": 0.5263823064770932
+              },
+              {
+                "lower": 0.5,
+                "n": 726,
+                "predicted": 0.5181549291076846,
+                "observed": 0.5785123966942148
+              }
+            ],
+            "average_precision": 0.3444778313636951
+          },
+          "delta_brier": {
+            "n": 92010,
+            "delta": -3.294172874472625e-05,
+            "interval": [
+              -8.211589569726093e-05,
+              1.4950468998734753e-05
+            ],
+            "games": 2427,
+            "pitchers": 366
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 96627,
+          "games": 2427,
+          "appearances": 4848,
+          "alerts": 1995,
+          "alerts_per100_appearances": 41.1509900990099,
+          "known_alerts": 1893,
+          "unknown_alerts": 102,
+          "true_observed": 704,
+          "precision_observed": 0.3718964606444797,
+          "events_observed": 8230,
+          "sensitivity_observed": 0.08554070473876063,
+          "early_alerts": 1152,
+          "same_boundary_change": 86,
+          "advance_change_2pa600s": 153,
+          "advance_seconds_median": 227.02100014686584,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_base",
+          "threshold": 0.19906154698186834,
+          "primary_alerts": 1995,
+          "primary_unknown_alerts": 102
+        },
+        {
+          "n": 96627,
+          "games": 2427,
+          "appearances": 4848,
+          "alerts": 1939,
+          "alerts_per100_appearances": 39.995874587458744,
+          "known_alerts": 1837,
+          "unknown_alerts": 102,
+          "true_observed": 677,
+          "precision_observed": 0.3685356559608057,
+          "events_observed": 8230,
+          "sensitivity_observed": 0.08226002430133657,
+          "early_alerts": 1152,
+          "same_boundary_change": 85,
+          "advance_change_2pa600s": 131,
+          "advance_seconds_median": 233.67700004577637,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2024,
+          "role": "SP",
+          "config": "hgb_full",
+          "threshold": 0.2010042149624587,
+          "primary_alerts": 1939,
+          "primary_unknown_alerts": 102
+        }
+      ],
+      "paired_binary_reference": []
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "primary_n": 12134,
+      "observed_n": 10534,
+      "pa": [
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 10534,
+            "log_loss": 1.527520664071966,
+            "constant_log_loss": 1.5360356019298513,
+            "multiclass_brier": 0.7169055102483007,
+            "nonout": {
+              "n": 10534,
+              "events": 3313,
+              "prevalence": 0.31450541104993357,
+              "brier": 0.21574210089100002,
+              "constant_brier": 0.21572932660919314,
+              "log_loss": 0.6229885083231887,
+              "auc": 0.5190537643146249,
+              "ece": 0.01834145580314654,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 435,
+                  "predicted": 0.2924125950396013,
+                  "observed": 0.29195402298850576
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 10099,
+                  "predicted": 0.3345885153567798,
+                  "observed": 0.315476779879196
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10534,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "delta_nonout_brier": {
+            "n": 10534,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 10534,
+            "log_loss": 1.5277180937517942,
+            "constant_log_loss": 1.5360356019298513,
+            "multiclass_brier": 0.7167945791816567,
+            "nonout": {
+              "n": 10534,
+              "events": 3313,
+              "prevalence": 0.31450541104993357,
+              "brier": 0.2156274153669749,
+              "constant_brier": 0.21572932660919314,
+              "log_loss": 0.6227265293950808,
+              "auc": 0.5228933469653043,
+              "ece": 0.01795777901720956,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 487,
+                  "predicted": 0.29179328870211435,
+                  "observed": 0.2915811088295688
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 10047,
+                  "predicted": 0.3344345488772127,
+                  "observed": 0.31561660197073754
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10534,
+            "delta": 0.0001974296798280841,
+            "interval": [
+              -0.001520132702461761,
+              0.001809681795429107
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "delta_nonout_brier": {
+            "n": 10534,
+            "delta": -0.00011468552402509462,
+            "interval": [
+              -0.000384132308121334,
+              0.00016051019635327315
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 10534,
+            "log_loss": 1.5146534416288637,
+            "constant_log_loss": 1.5360356019298513,
+            "multiclass_brier": 0.7108965281689349,
+            "nonout": {
+              "n": 10534,
+              "events": 3313,
+              "prevalence": 0.31450541104993357,
+              "brier": 0.21527568111198223,
+              "constant_brier": 0.21572932660919314,
+              "log_loss": 0.6219265251915471,
+              "auc": 0.5316178585507867,
+              "ece": 0.0173218560821948,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 1087,
+                  "predicted": 0.2887491048383226,
+                  "observed": 0.2824287028518859
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 9437,
+                  "predicted": 0.3365105449721176,
+                  "observed": 0.31800360283988555
+                },
+                {
+                  "lower": 0.4,
+                  "n": 10,
+                  "predicted": 0.40518578912903,
+                  "observed": 0.5
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10534,
+            "delta": -0.012867222443102205,
+            "interval": [
+              -0.017891031019993776,
+              -0.007990071870897559
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "delta_nonout_brier": {
+            "n": 10534,
+            "delta": -0.0004664197790177763,
+            "interval": [
+              -0.0010519891817851706,
+              0.00022864580203320906
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        },
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "linear_full",
+          "metrics": {
+            "n": 10534,
+            "log_loss": 1.5200389442152134,
+            "constant_log_loss": 1.5360356019298513,
+            "multiclass_brier": 0.7124935738212942,
+            "nonout": {
+              "n": 10534,
+              "events": 3313,
+              "prevalence": 0.31450541104993357,
+              "brier": 0.21651066016700693,
+              "constant_brier": 0.21572932660919314,
+              "log_loss": 0.6247068109226709,
+              "auc": 0.523957545263749,
+              "ece": 0.03300158131401908,
+              "calibration": [
+                {
+                  "lower": 0.1,
+                  "n": 15,
+                  "predicted": 0.16400635537655797,
+                  "observed": 0.3333333333333333
+                },
+                {
+                  "lower": 0.2,
+                  "n": 519,
+                  "predicted": 0.2805101181542446,
+                  "observed": 0.2678227360308285
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 9753,
+                  "predicted": 0.3492516737491347,
+                  "observed": 0.31672305957141395
+                },
+                {
+                  "lower": 0.4,
+                  "n": 247,
+                  "predicted": 0.409969342085676,
+                  "observed": 0.32388663967611336
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10534,
+            "delta": -0.007481719856752794,
+            "interval": [
+              -0.01331237067599557,
+              -0.0012957464880949123
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "delta_nonout_brier": {
+            "n": 10534,
+            "delta": 0.000768559276006963,
+            "interval": [
+              -0.0002890129322629282,
+              0.0017495887468633412
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "fit_warning": false,
+          "predictive_gate": false
+        },
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "rf_full",
+          "metrics": {
+            "n": 10534,
+            "log_loss": 1.5184898111557408,
+            "constant_log_loss": 1.5360356019298513,
+            "multiclass_brier": 0.7115839702953373,
+            "nonout": {
+              "n": 10534,
+              "events": 3313,
+              "prevalence": 0.31450541104993357,
+              "brier": 0.215361288890263,
+              "constant_brier": 0.21572932660919314,
+              "log_loss": 0.6221187686766417,
+              "auc": 0.5285764141738222,
+              "ece": 0.01745524488954967,
+              "calibration": [
+                {
+                  "lower": 0.2,
+                  "n": 395,
+                  "predicted": 0.2952290457671453,
+                  "observed": 0.25316455696202533
+                },
+                {
+                  "lower": 0.30000000000000004,
+                  "n": 10138,
+                  "predicted": 0.3333850879624616,
+                  "observed": 0.3169264154665615
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1,
+                  "predicted": 0.4000548250585272,
+                  "observed": 0.0
+                }
+              ]
+            }
+          },
+          "delta_log_loss": {
+            "n": 10534,
+            "delta": -0.00903085291622533,
+            "interval": [
+              -0.014214940417786223,
+              -0.004457501840465749
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "delta_nonout_brier": {
+            "n": 10534,
+            "delta": -0.0003808120007369746,
+            "interval": [
+              -0.001085921507046755,
+              0.00019608647936630156
+            ],
+            "games": 2181,
+            "pitchers": 364
+          },
+          "fit_warning": false,
+          "predictive_gate": true
+        }
+      ],
+      "run": [
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_base",
+          "metrics": {
+            "n": 10534,
+            "events": 1581,
+            "prevalence": 0.1500854376305297,
+            "brier": 0.1056985879818816,
+            "constant_brier": 0.1284732146498192,
+            "log_loss": 0.34726490847361435,
+            "auc": 0.786813391148787,
+            "ece": 0.012146709719612294,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5560,
+                "predicted": 0.05353788374245196,
+                "observed": 0.04658273381294964
+              },
+              {
+                "lower": 0.1,
+                "n": 2785,
+                "predicted": 0.17558672479507456,
+                "observed": 0.17342908438061042
+              },
+              {
+                "lower": 0.2,
+                "n": 933,
+                "predicted": 0.24119737086157866,
+                "observed": 0.22508038585209003
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 301,
+                "predicted": 0.3407190837577895,
+                "observed": 0.3388704318936877
+              },
+              {
+                "lower": 0.4,
+                "n": 708,
+                "predicted": 0.4647784714130503,
+                "observed": 0.536723163841808
+              },
+              {
+                "lower": 0.5,
+                "n": 247,
+                "predicted": 0.5273548803256178,
+                "observed": 0.5951417004048583
+              }
+            ],
+            "average_precision": 0.4208604187115851
+          },
+          "delta_brier": {
+            "n": 10534,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2181,
+            "pitchers": 364
+          }
+        },
+        {
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_full",
+          "metrics": {
+            "n": 10534,
+            "events": 1581,
+            "prevalence": 0.1500854376305297,
+            "brier": 0.10556421182654054,
+            "constant_brier": 0.1284732146498192,
+            "log_loss": 0.3467970324070769,
+            "auc": 0.7891933791852639,
+            "ece": 0.012670172537754425,
+            "calibration": [
+              {
+                "lower": 0.0,
+                "n": 5560,
+                "predicted": 0.05312903215776704,
+                "observed": 0.04658273381294964
+              },
+              {
+                "lower": 0.1,
+                "n": 2783,
+                "predicted": 0.17819898083248226,
+                "observed": 0.17319439453826804
+              },
+              {
+                "lower": 0.2,
+                "n": 937,
+                "predicted": 0.24171853098584503,
+                "observed": 0.22838847385272146
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 334,
+                "predicted": 0.3479421267855284,
+                "observed": 0.3413173652694611
+              },
+              {
+                "lower": 0.4,
+                "n": 584,
+                "predicted": 0.45895037842141756,
+                "observed": 0.5308219178082192
+              },
+              {
+                "lower": 0.5,
+                "n": 336,
+                "predicted": 0.5224211244740274,
+                "observed": 0.6011904761904762
+              }
+            ],
+            "average_precision": 0.42416143755548563
+          },
+          "delta_brier": {
+            "n": 10534,
+            "delta": -0.00013437615534107108,
+            "interval": [
+              -0.0003545951079342228,
+              0.00010607555071989624
+            ],
+            "games": 2181,
+            "pitchers": 364
+          }
+        }
+      ],
+      "warnings": [
+        {
+          "n": 41447,
+          "games": 2426,
+          "appearances": 13515,
+          "alerts": 807,
+          "alerts_per100_appearances": 5.971143174250832,
+          "known_alerts": 668,
+          "unknown_alerts": 139,
+          "true_observed": 305,
+          "precision_observed": 0.4565868263473054,
+          "events_observed": 3744,
+          "sensitivity_observed": 0.08146367521367522,
+          "early_alerts": 21,
+          "same_boundary_change": 122,
+          "advance_change_2pa600s": 157,
+          "advance_seconds_median": 244.2369999885559,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_base",
+          "threshold": 0.25450514911799016,
+          "primary_alerts": 369,
+          "primary_unknown_alerts": 76
+        },
+        {
+          "n": 41447,
+          "games": 2426,
+          "appearances": 13515,
+          "alerts": 809,
+          "alerts_per100_appearances": 5.985941546429893,
+          "known_alerts": 669,
+          "unknown_alerts": 140,
+          "true_observed": 310,
+          "precision_observed": 0.4633781763826607,
+          "events_observed": 3744,
+          "sensitivity_observed": 0.0827991452991453,
+          "early_alerts": 20,
+          "same_boundary_change": 123,
+          "advance_change_2pa600s": 157,
+          "advance_seconds_median": 241.5770001411438,
+          "limits": "target is scoring DURING next organic PA, conditional observed incumbent; unknown outcomes not negatives. Role-specific replay/cooldown stream, not integrated SP-to-RP policy. Match only eligible-cohort observed changes, no causal efficacy or full-official-event recall",
+          "year": 2024,
+          "role": "RP",
+          "config": "hgb_full",
+          "threshold": 0.2553723386071741,
+          "primary_alerts": 375,
+          "primary_unknown_alerts": 78
+        }
+      ],
+      "paired_binary_reference": [
+        {
+          "config": "frozen15_3_binary",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21547572843812857,
+            "constant_brier": 0.21560655324043926,
+            "log_loss": 0.6224174030236901,
+            "auc": 0.516709973187706,
+            "ece": 0.01383933078066243,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 21,
+                "predicted": 0.2974092328564786,
+                "observed": 0.23809523809523808
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6632,
+                "predicted": 0.328080137785549,
+                "observed": 0.3143848009650181
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": 0.0,
+            "interval": [
+              0.0,
+              0.0
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_base",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21544866799193665,
+            "constant_brier": 0.21560372332041985,
+            "log_loss": 0.6223433577263828,
+            "auc": 0.5240376357785266,
+            "ece": 0.018656601319546263,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 291,
+                "predicted": 0.29269568285816766,
+                "observed": 0.281786941580756
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6362,
+                "predicted": 0.3346350086242085,
+                "observed": 0.31562401760452685
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": -2.7060446191875526e-05,
+            "interval": [
+              -0.0006955395004848963,
+              0.0005993157609393852
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_pe",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21531335078842456,
+            "constant_brier": 0.21560372332041985,
+            "log_loss": 0.6220345883763867,
+            "auc": 0.5272871977325418,
+            "ece": 0.01775935228996227,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 351,
+                "predicted": 0.2918357651462538,
+                "observed": 0.27635327635327633
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6302,
+                "predicted": 0.3341349757567096,
+                "observed": 0.3162488099016185
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": -0.0001623776497039844,
+            "interval": [
+              -0.0008402164764002976,
+              0.0005181551828813619
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "hgb_full",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21485775591473835,
+            "constant_brier": 0.21560372332041985,
+            "log_loss": 0.6209905108447693,
+            "auc": 0.5391822302753477,
+            "ece": 0.017611561893027008,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 684,
+                "predicted": 0.28882224509585464,
+                "observed": 0.26608187134502925
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 5963,
+                "predicted": 0.33607964807726454,
+                "observed": 0.31930236458158645
+              },
+              {
+                "lower": 0.4,
+                "n": 6,
+                "predicted": 0.40460597599738485,
+                "observed": 0.6666666666666666
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": -0.0006179725233901668,
+            "interval": [
+              -0.0015507334173865228,
+              0.0002966293794205804
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "linear_full",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21644923758147955,
+            "constant_brier": 0.21560372332041985,
+            "log_loss": 0.6246015338855742,
+            "auc": 0.5241326374929614,
+            "ece": 0.03483246569649074,
+            "calibration": [
+              {
+                "lower": 0.1,
+                "n": 8,
+                "predicted": 0.15768077558056814,
+                "observed": 0.375
+              },
+              {
+                "lower": 0.2,
+                "n": 286,
+                "predicted": 0.28045620151615497,
+                "observed": 0.2692307692307692
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6207,
+                "predicted": 0.35032091580460106,
+                "observed": 0.31545029805058805
+              },
+              {
+                "lower": 0.4,
+                "n": 152,
+                "predicted": 0.41019370033301544,
+                "observed": 0.34210526315789475
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": 0.0009735091433510131,
+            "interval": [
+              -0.00028059927408865333,
+              0.002108000189665813
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        },
+        {
+          "config": "rf_full",
+          "metrics": {
+            "n": 6653,
+            "events": 2090,
+            "prevalence": 0.3141439951901398,
+            "brier": 0.21499687433002332,
+            "constant_brier": 0.21560372332041985,
+            "log_loss": 0.6213149497050052,
+            "auc": 0.5365255377401127,
+            "ece": 0.017504216271581694,
+            "calibration": [
+              {
+                "lower": 0.2,
+                "n": 264,
+                "predicted": 0.2950672550663362,
+                "observed": 0.22348484848484848
+              },
+              {
+                "lower": 0.30000000000000004,
+                "n": 6389,
+                "predicted": 0.33315977391099083,
+                "observed": 0.3178901236500235
+              }
+            ]
+          },
+          "delta_brier": {
+            "n": 6653,
+            "delta": -0.00047885410810524347,
+            "interval": [
+              -0.0012804615157367503,
+              0.0002841477833263292
+            ],
+            "games": 2149,
+            "pitchers": 363
+          },
+          "note": "same paired validation cases; training cohort/task differs, not a pure learner ablation"
+        }
+      ]
+    }
+  ],
+  "selection": {
+    "selected": {
+      "SP": {
+        "config": "hgb_full",
+        "development_predictive_support": true,
+        "ranking": [
+          {
+            "role": "SP",
+            "config": "hgb_full",
+            "failed_folds": 0,
+            "mean_log_loss": 1.5082621720330742
+          },
+          {
+            "role": "SP",
+            "config": "rf_full",
+            "failed_folds": 0,
+            "mean_log_loss": 1.5105368321943091
+          },
+          {
+            "role": "SP",
+            "config": "hgb_pe",
+            "failed_folds": 2,
+            "mean_log_loss": 1.5167711595487716
+          },
+          {
+            "role": "SP",
+            "config": "hgb_base",
+            "failed_folds": 2,
+            "mean_log_loss": 1.5167861347631781
+          },
+          {
+            "role": "SP",
+            "config": "linear_full",
+            "failed_folds": 2,
+            "mean_log_loss": 1.5342402410749028
+          }
+        ]
+      },
+      "RP": {
+        "config": "hgb_full",
+        "development_predictive_support": true,
+        "ranking": [
+          {
+            "role": "RP",
+            "config": "hgb_full",
+            "failed_folds": 0,
+            "mean_log_loss": 1.5394821236695586
+          },
+          {
+            "role": "RP",
+            "config": "rf_full",
+            "failed_folds": 1,
+            "mean_log_loss": 1.5415438753720339
+          },
+          {
+            "role": "RP",
+            "config": "hgb_pe",
+            "failed_folds": 2,
+            "mean_log_loss": 1.547600071010259
+          },
+          {
+            "role": "RP",
+            "config": "hgb_base",
+            "failed_folds": 2,
+            "mean_log_loss": 1.5489141839039062
+          },
+          {
+            "role": "RP",
+            "config": "linear_full",
+            "failed_folds": 2,
+            "mean_log_loss": 1.5632929232087789
+          }
+        ]
+      }
+    },
+    "selection_uses2024": false
+  },
+  "primary2024": [
+    {
+      "year": 2024,
+      "role": "SP",
+      "config": "hgb_full",
+      "metrics": {
+        "n": 92010,
+        "log_loss": 1.5042047442549327,
+        "constant_log_loss": 1.5169734489166473,
+        "multiclass_brier": 0.7016025329448915,
+        "nonout": {
+          "n": 92010,
+          "events": 29165,
+          "prevalence": 0.31697641560699924,
+          "brier": 0.21592890686251665,
+          "constant_brier": 0.21650238732644797,
+          "log_loss": 0.6232431328186003,
+          "auc": 0.5312599716153494,
+          "ece": 0.003053797121028697,
+          "calibration": [
+            {
+              "lower": 0.2,
+              "n": 21324,
+              "predicted": 0.28623648487352116,
+              "observed": 0.2864847120615269
+            },
+            {
+              "lower": 0.30000000000000004,
+              "n": 70626,
+              "predicted": 0.3300102446282017,
+              "observed": 0.32616883300767424
+            },
+            {
+              "lower": 0.4,
+              "n": 60,
+              "predicted": 0.4063856572906938,
+              "observed": 0.3333333333333333
+            }
+          ]
+        }
+      },
+      "delta_log_loss": {
+        "n": 92010,
+        "delta": -0.007841602984928864,
+        "interval": [
+          -0.009245353437892716,
+          -0.006551251365747962
+        ],
+        "games": 2427,
+        "pitchers": 366
+      },
+      "delta_nonout_brier": {
+        "n": 92010,
+        "delta": -0.00023191443706241792,
+        "interval": [
+          -0.00043349942719903754,
+          -2.6606482723010408e-05
+        ],
+        "games": 2427,
+        "pitchers": 366
+      },
+      "fit_warning": false,
+      "predictive_gate": true,
+      "development_predictive_support": true,
+      "original_system_promoted": false
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "config": "hgb_full",
+      "metrics": {
+        "n": 10534,
+        "log_loss": 1.5146534416288637,
+        "constant_log_loss": 1.5360356019298513,
+        "multiclass_brier": 0.7108965281689349,
+        "nonout": {
+          "n": 10534,
+          "events": 3313,
+          "prevalence": 0.31450541104993357,
+          "brier": 0.21527568111198223,
+          "constant_brier": 0.21572932660919314,
+          "log_loss": 0.6219265251915471,
+          "auc": 0.5316178585507867,
+          "ece": 0.0173218560821948,
+          "calibration": [
+            {
+              "lower": 0.2,
+              "n": 1087,
+              "predicted": 0.2887491048383226,
+              "observed": 0.2824287028518859
+            },
+            {
+              "lower": 0.30000000000000004,
+              "n": 9437,
+              "predicted": 0.3365105449721176,
+              "observed": 0.31800360283988555
+            },
+            {
+              "lower": 0.4,
+              "n": 10,
+              "predicted": 0.40518578912903,
+              "observed": 0.5
+            }
+          ]
+        }
+      },
+      "delta_log_loss": {
+        "n": 10534,
+        "delta": -0.012867222443102205,
+        "interval": [
+          -0.017891031019993776,
+          -0.007990071870897559
+        ],
+        "games": 2181,
+        "pitchers": 364
+      },
+      "delta_nonout_brier": {
+        "n": 10534,
+        "delta": -0.0004664197790177763,
+        "interval": [
+          -0.0010519891817851706,
+          0.00022864580203320906
+        ],
+        "games": 2181,
+        "pitchers": 364
+      },
+      "fit_warning": false,
+      "predictive_gate": true,
+      "development_predictive_support": true,
+      "original_system_promoted": false
+    }
+  ],
+  "balance_reference": [
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 23904,
+      "change": {
+        "n": 2726,
+        "ess": 1845.560307899867,
+        "max": 0.9909654633145883,
+        "q99": 0.9846377915160948,
+        "sum": 1194.460327027853
+      },
+      "continue": {
+        "n": 21178,
+        "ess": 4132.606827842827,
+        "max": 0.9046317908476535,
+        "q99": 0.6892165259164602,
+        "sum": 1312.948608556347
+      },
+      "max_abs_smd_after": 0.26141723948300355,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.008929425936633878,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_location:value",
+          "before": -0.10638746258958667,
+          "after": -0.26141723948300355,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:value",
+          "before": -0.10621281477571586,
+          "after": -0.26131157273932465,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.1061780663171152,
+          "after": -0.26130246105261734,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.12568060176317533,
+          "after": 0.2111683234168199,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 2.011756470872541,
+          "after": 0.18134114169428064,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72108,
+      "retained": 70068,
+      "change": {
+        "n": 1813,
+        "ess": 1726.0270226421724,
+        "max": 0.9980119025468804,
+        "q99": 0.9960778927613279,
+        "sum": 1402.7276576688832
+      },
+      "continue": {
+        "n": 68255,
+        "ess": 9524.761963437657,
+        "max": 0.7331235010319829,
+        "q99": 0.3459603033423685,
+        "sum": 1713.8192296139425
+      },
+      "max_abs_smd_after": 0.2282008672408073,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.004435015503097067,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_velocity:value",
+          "before": -0.1631113060649768,
+          "after": -0.2282008672408073,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.16306956887016252,
+          "after": -0.2281945554255891,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:value",
+          "before": -0.16313791598430097,
+          "after": -0.22807933683491208,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.17252518333198974,
+          "after": -0.17196280478122195,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.28151862763508667,
+          "after": -0.17150875885747635,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12601,
+      "retained": 12601,
+      "change": {
+        "n": 1426,
+        "ess": 1397.3476475098357,
+        "max": 0.9836858171699898,
+        "q99": 0.9707725736487791,
+        "sum": 1162.198738169137
+      },
+      "continue": {
+        "n": 11175,
+        "ess": 6663.363803785132,
+        "max": 0.5302398248611039,
+        "q99": 0.38864000484116273,
+        "sum": 1111.0649795500499
+      },
+      "max_abs_smd_after": 0.15604707423895273,
+      "over_0_1": 5,
+      "diagnostic_gate": false,
+      "ece": 0.01062808623428425,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.32728331351889145,
+          "after": 0.15604707423895273,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.32519925919530046,
+          "after": -0.15491687582545588,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.15570357205433202,
+          "after": -0.14595965236748992,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.45583920823330815,
+          "after": 0.11493447305517275,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.08733984090156002,
+          "after": -0.1140567688773589,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 23853,
+      "retained": 23485,
+      "change": {
+        "n": 2657,
+        "ess": 1611.12962872435,
+        "max": 0.9939404269151068,
+        "q99": 0.9921845357381887,
+        "sum": 1022.6867320330364
+      },
+      "continue": {
+        "n": 20828,
+        "ess": 3577.0003266173767,
+        "max": 0.9420730224414308,
+        "q99": 0.7295712489188354,
+        "sum": 1308.352754326294
+      },
+      "max_abs_smd_after": 0.2777326190007056,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.011922565478276024,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.15823085341454277,
+          "after": 0.2777326190007056,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "entry_rest_hours:value",
+          "before": -0.012759041762581885,
+          "after": -0.18831485939582174,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.10020465505050125,
+          "after": 0.18210465975528317,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09451464225289893,
+          "after": 0.1787940433359556,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.09175663352812778,
+          "after": 0.17669921707015082,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72012,
+      "retained": 69707,
+      "change": {
+        "n": 1775,
+        "ess": 1688.0805843543333,
+        "max": 0.9989597505578769,
+        "q99": 0.9980744656242422,
+        "sum": 1393.0317394251238
+      },
+      "continue": {
+        "n": 67932,
+        "ess": 7493.8554162991295,
+        "max": 0.7277416913187073,
+        "q99": 0.33905099483087986,
+        "sum": 1418.5494305896052
+      },
+      "max_abs_smd_after": 0.1718816688997097,
+      "over_0_1": 10,
+      "diagnostic_gate": false,
+      "ece": 0.0018294882890525959,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.13855460283146886,
+          "after": 0.1718816688997097,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": -0.19305971299026714,
+          "after": -0.13933166639327926,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.09190797254625137,
+          "after": -0.12509866358775307,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.3558739492181198,
+          "after": 0.1227119718497666,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hr_rate:value",
+          "before": 0.10111846556367755,
+          "after": 0.11682817951127028,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12301,
+      "retained": 12301,
+      "change": {
+        "n": 1410,
+        "ess": 1373.6787068623305,
+        "max": 0.9893275977256211,
+        "q99": 0.9759580248180316,
+        "sum": 1133.082483998509
+      },
+      "continue": {
+        "n": 10891,
+        "ess": 5868.765609349018,
+        "max": 0.5928301780556389,
+        "q99": 0.4230390536998488,
+        "sum": 1087.9884891992126
+      },
+      "max_abs_smd_after": 0.20585541699618576,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.013788884388541383,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.4291524512358236,
+          "after": 0.20585541699618576,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.42871980024384077,
+          "after": -0.20571038982303075,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:missing",
+          "before": 0.00665905660042313,
+          "after": 0.13429214599304393,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": -0.06711830796685603,
+          "after": 0.1295121903518217,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17415636327181325,
+          "after": -0.12413716435309749,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 24243,
+      "change": {
+        "n": 2662,
+        "ess": 1664.0202986545291,
+        "max": 0.9943206327332476,
+        "q99": 0.9894285353663302,
+        "sum": 1051.4272039715775
+      },
+      "continue": {
+        "n": 21581,
+        "ess": 3478.5761400510037,
+        "max": 0.9337540668546698,
+        "q99": 0.642047542747779,
+        "sum": 1148.394834719778
+      },
+      "max_abs_smd_after": 0.1950831678540232,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.007120654257442674,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.14524541815726597,
+          "after": 0.1950831678540232,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.11278013023406613,
+          "after": 0.166931520295742,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.1063599951786734,
+          "after": 0.16161513680064024,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.11916116671351219,
+          "after": 0.1363324178435202,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.10601326839345596,
+          "after": -0.12964991841844287,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72384,
+      "retained": 70226,
+      "change": {
+        "n": 1849,
+        "ess": 1770.583419789756,
+        "max": 0.9987108856584163,
+        "q99": 0.9970587702831569,
+        "sum": 1470.988270357233
+      },
+      "continue": {
+        "n": 68377,
+        "ess": 8152.966396888421,
+        "max": 0.673395050811338,
+        "q99": 0.29969525617137166,
+        "sum": 1353.256447832442
+      },
+      "max_abs_smd_after": 0.14756321985377518,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.0016302411149871877,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17437569514517692,
+          "after": -0.14756321985377518,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.12276964095580399,
+          "after": -0.1449260978806917,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.2490908961443736,
+          "after": -0.13315009665442892,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=4:value",
+          "before": 0.024326869884564162,
+          "after": -0.12764900270457427,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.11473613612274511,
+          "after": -0.1050594144960319,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12134,
+      "retained": 12134,
+      "change": {
+        "n": 1448,
+        "ess": 1407.4854695577749,
+        "max": 0.9848586077356252,
+        "q99": 0.976632894294585,
+        "sum": 1156.1291368085365
+      },
+      "continue": {
+        "n": 10686,
+        "ess": 5622.310436942405,
+        "max": 0.6303881671212007,
+        "q99": 0.4447051582958866,
+        "sum": 1088.624070894091
+      },
+      "max_abs_smd_after": 0.13337508199189058,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.013688145002364517,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.1705391312506399,
+          "after": -0.13337508199189058,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.39756855004355457,
+          "after": 0.12569093383600632,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.3939077173964408,
+          "after": -0.12408861178429609,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        }
+      ]
+    }
+  ],
+  "slice16_entry_allowed": false,
+  "strategy_value_estimated": false,
+  "recommendation_allowed": false,
+  "test2025_outcomes_examined": false,
+  "stop": "15.5.4",
+  "updatedAt": "2026-11-21",
+  "flow": {
+    "progress": "48/55",
+    "models_pa": 30,
+    "models_run": 12,
+    "features_boundaries": 546880
+  },
+  "methodNotes": [
+    "PA版PE是競賽／論文啟發的固定代理，不是精確複製或生理疲勞標籤；結果、最終一球前好壞球與已知EV加權，揮空另列，避免每球／打席混計。只用已完成PA，未知打斷近期窗，部分累積附coverage。",
+    "FF只比較四縫線，採截點前prefix與進場前最近50個有FF的PA個人參考（至少10才有均值），不使用全場最終平均。個人PE參考同樣在進場前鎖定；既有球數／角色條件殘差仍在共同基準。",
+    "預定下三棒以先前已完成PA的棒次球員推估，包含零球／IBB占棒次。預定身分不是已確認下一打者，事後代打不回填或用來篩好案例；未知身分／冷啟動有獨立狀態。",
+    "打者九類先驗只用截點前歷史，向前一UTC日已完成PA的聯盟分布收縮20；無日參考時僅有Laplace1的未資訊先驗，不冒稱觀測。D為負荷／恢復，相性／預定下一棒另列。",
+    "主要任務原投手下一完整自然PA九類結果；輔助任務該PA期間是否失分，不是從anchor到半局終點WPA／RE24。當下換投或actor／時鐘不合者未知，不接接任者成績。",
+    "每個角色／年度各模型同一批自然60000上限fit，整場80/20時間切學習／late-cal，跨界場排除；補值與尺度只fit學習資料。HGB三特徵群、同完整特徵的正則化線性／RF，另HGB基準／完整失分模型，共42擬合。",
+    "2022/23決定研究排序、guard後才做2024診斷；2024已看過，不是新獨立確認，2025封存。群聚區間只條件於固定模型與已觀測者，不涵蓋重訓或解決非隨機缺失。",
+    "警示為角色別研究回放：過去全部cal邊界風險第90百分位、同半局／同登板連續兩PA、一登板最多一次、角色流內同隊兩PA冷卻；未整合SP轉RP跨角色狀態機。早局不硬剔除，未知後續不算誤報。",
+    "警示與換投只配對既有合法母體中的實際事件：同邊界與提前1–2PA且600秒內分列，不是正確率或全部官方換投召回。角色全部母體提醒與RP主要受限母體預測分母不同，明確分列。",
+    "原15.3二元模型只在相同配對監測案例作補充對照，其訓練資料／任務與新九類模型不同，不是純演算法比較；十球舊任務保留原研究版本，不參與新模型排序。",
+    "沒有訓練換投傾向或重算因果權重；原15.4主要SMD及16拒絕條件保留。新增預測支持也不能稱SMD改善、換投有效或直接啟用推薦。"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": "decision_role_observation_v2",
+  "protocol_sha256": "df433ce70c7a7c990b593c7e7fddb1f3c9f8f5051531d7eeb311cc66ed9317c2",
+  "artifact_counts": {
+    "decision_preparation_v1": 100,
+    "decision_baseline_v1": 39,
+    "decision_ablation_v1": 35,
+    "decision_action_values_v1": 27,
+    "decision_role_observation_v2": 263
+  },
+  "formal_metadata_guards_verified": 2,
+  "option_rows": 10415470,
+  "source_clock_keys_support_probability_checks": "passed",
+  "tracker_done": 27,
+  "tracker_total": 39,
+  "test_outcome_metrics_examined": false,
+  "ui_acceptance": "pending_user",
+  "recommendation_allowed": false
+}

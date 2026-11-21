@@ -51,6 +51,9 @@ class LeverageLeaderboardRow(BaseModel):
     inli: float | None = None
     gmli: float | None = None
     exli: float | None = None
+    entry_wpa_low: float | None = None
+    entry_wpa_mid: float | None = None
+    entry_wpa_high: float | None = None
     pulls: int | None = None
     wpa_li: float | None = None
     clutch: float | None = None
@@ -70,6 +73,25 @@ class LeverageValidationRow(BaseModel):
     intercept: float | None = None
 
 
+class TeamSubstitutionRow(BaseModel):
+    team: str
+    moves: int
+    announced_moves: int | None = None
+    wpa_n: int
+    re24_n: int
+    wpa: float | None = None
+    re24: float | None = None
+    wpa_per_move: float | None = None
+    re24_per_move: float | None = None
+    mean_entry_li: float | None = None
+    entry_wpa_low: float | None = None
+    entry_wpa_mid: float | None = None
+    entry_wpa_high: float | None = None
+    entry_wpa_low_moves: int | None = None
+    entry_wpa_mid_moves: int | None = None
+    entry_wpa_high_moves: int | None = None
+
+
 class LeverageOverviewResponse(BaseModel):
     year: int
     data_as_of: str | None = None
@@ -80,3 +102,6 @@ class LeverageOverviewResponse(BaseModel):
     estimated_rows: list[LeverageLeaderboardRow] = Field(default_factory=list)
     reference_rows: list[LeverageLeaderboardRow] = Field(default_factory=list)
     validation: list[LeverageValidationRow] = Field(default_factory=list)
+    team_pitching_rows: list[TeamSubstitutionRow] = Field(default_factory=list)
+    team_pinch_hit_rows: list[TeamSubstitutionRow] = Field(default_factory=list)
+    pinch_hit_data_as_of: str | None = None

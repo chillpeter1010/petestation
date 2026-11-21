@@ -1,0 +1,6261 @@
+{
+  "version": "decision_entry_review_v1",
+  "progress": "44/51",
+  "primary_folds": [
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 23904,
+      "change": {
+        "n": 2726,
+        "ess": 1845.560307899867,
+        "max": 0.9909654633145883,
+        "q99": 0.9846377915160948,
+        "sum": 1194.460327027853
+      },
+      "continue": {
+        "n": 21178,
+        "ess": 4132.606827842827,
+        "max": 0.9046317908476535,
+        "q99": 0.6892165259164602,
+        "sum": 1312.948608556347
+      },
+      "max_abs_smd_after": 0.26141723948300355,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.008929425936633878,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_location:value",
+          "before": -0.10638746258958667,
+          "after": -0.26141723948300355,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:value",
+          "before": -0.10621281477571586,
+          "after": -0.26131157273932465,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.1061780663171152,
+          "after": -0.26130246105261734,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.12568060176317533,
+          "after": 0.2111683234168199,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 2.011756470872541,
+          "after": 0.18134114169428064,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72108,
+      "retained": 70068,
+      "change": {
+        "n": 1813,
+        "ess": 1726.0270226421724,
+        "max": 0.9980119025468804,
+        "q99": 0.9960778927613279,
+        "sum": 1402.7276576688832
+      },
+      "continue": {
+        "n": 68255,
+        "ess": 9524.761963437657,
+        "max": 0.7331235010319829,
+        "q99": 0.3459603033423685,
+        "sum": 1713.8192296139425
+      },
+      "max_abs_smd_after": 0.2282008672408073,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.004435015503097067,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_velocity:value",
+          "before": -0.1631113060649768,
+          "after": -0.2282008672408073,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.16306956887016252,
+          "after": -0.2281945554255891,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:value",
+          "before": -0.16313791598430097,
+          "after": -0.22807933683491208,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.17252518333198974,
+          "after": -0.17196280478122195,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.28151862763508667,
+          "after": -0.17150875885747635,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12601,
+      "retained": 12601,
+      "change": {
+        "n": 1426,
+        "ess": 1397.3476475098357,
+        "max": 0.9836858171699898,
+        "q99": 0.9707725736487791,
+        "sum": 1162.198738169137
+      },
+      "continue": {
+        "n": 11175,
+        "ess": 6663.363803785132,
+        "max": 0.5302398248611039,
+        "q99": 0.38864000484116273,
+        "sum": 1111.0649795500499
+      },
+      "max_abs_smd_after": 0.15604707423895273,
+      "over_0_1": 5,
+      "diagnostic_gate": false,
+      "ece": 0.01062808623428425,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.32728331351889145,
+          "after": 0.15604707423895273,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.32519925919530046,
+          "after": -0.15491687582545588,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.15570357205433202,
+          "after": -0.14595965236748992,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.45583920823330815,
+          "after": 0.11493447305517275,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.08733984090156002,
+          "after": -0.1140567688773589,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 23853,
+      "retained": 23485,
+      "change": {
+        "n": 2657,
+        "ess": 1611.12962872435,
+        "max": 0.9939404269151068,
+        "q99": 0.9921845357381887,
+        "sum": 1022.6867320330364
+      },
+      "continue": {
+        "n": 20828,
+        "ess": 3577.0003266173767,
+        "max": 0.9420730224414308,
+        "q99": 0.7295712489188354,
+        "sum": 1308.352754326294
+      },
+      "max_abs_smd_after": 0.2777326190007056,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.011922565478276024,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.15823085341454277,
+          "after": 0.2777326190007056,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "entry_rest_hours:value",
+          "before": -0.012759041762581885,
+          "after": -0.18831485939582174,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.10020465505050125,
+          "after": 0.18210465975528317,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09451464225289893,
+          "after": 0.1787940433359556,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.09175663352812778,
+          "after": 0.17669921707015082,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72012,
+      "retained": 69707,
+      "change": {
+        "n": 1775,
+        "ess": 1688.0805843543333,
+        "max": 0.9989597505578769,
+        "q99": 0.9980744656242422,
+        "sum": 1393.0317394251238
+      },
+      "continue": {
+        "n": 67932,
+        "ess": 7493.8554162991295,
+        "max": 0.7277416913187073,
+        "q99": 0.33905099483087986,
+        "sum": 1418.5494305896052
+      },
+      "max_abs_smd_after": 0.1718816688997097,
+      "over_0_1": 10,
+      "diagnostic_gate": false,
+      "ece": 0.0018294882890525959,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.13855460283146886,
+          "after": 0.1718816688997097,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": -0.19305971299026714,
+          "after": -0.13933166639327926,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.09190797254625137,
+          "after": -0.12509866358775307,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.3558739492181198,
+          "after": 0.1227119718497666,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hr_rate:value",
+          "before": 0.10111846556367755,
+          "after": 0.11682817951127028,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12301,
+      "retained": 12301,
+      "change": {
+        "n": 1410,
+        "ess": 1373.6787068623305,
+        "max": 0.9893275977256211,
+        "q99": 0.9759580248180316,
+        "sum": 1133.082483998509
+      },
+      "continue": {
+        "n": 10891,
+        "ess": 5868.765609349018,
+        "max": 0.5928301780556389,
+        "q99": 0.4230390536998488,
+        "sum": 1087.9884891992126
+      },
+      "max_abs_smd_after": 0.20585541699618576,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.013788884388541383,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.4291524512358236,
+          "after": 0.20585541699618576,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.42871980024384077,
+          "after": -0.20571038982303075,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:missing",
+          "before": 0.00665905660042313,
+          "after": 0.13429214599304393,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": -0.06711830796685603,
+          "after": 0.1295121903518217,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17415636327181325,
+          "after": -0.12413716435309749,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 24243,
+      "change": {
+        "n": 2662,
+        "ess": 1664.0202986545291,
+        "max": 0.9943206327332476,
+        "q99": 0.9894285353663302,
+        "sum": 1051.4272039715775
+      },
+      "continue": {
+        "n": 21581,
+        "ess": 3478.5761400510037,
+        "max": 0.9337540668546698,
+        "q99": 0.642047542747779,
+        "sum": 1148.394834719778
+      },
+      "max_abs_smd_after": 0.1950831678540232,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.007120654257442674,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.14524541815726597,
+          "after": 0.1950831678540232,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.11278013023406613,
+          "after": 0.166931520295742,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.1063599951786734,
+          "after": 0.16161513680064024,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.11916116671351219,
+          "after": 0.1363324178435202,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.10601326839345596,
+          "after": -0.12964991841844287,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72384,
+      "retained": 70226,
+      "change": {
+        "n": 1849,
+        "ess": 1770.583419789756,
+        "max": 0.9987108856584163,
+        "q99": 0.9970587702831569,
+        "sum": 1470.988270357233
+      },
+      "continue": {
+        "n": 68377,
+        "ess": 8152.966396888421,
+        "max": 0.673395050811338,
+        "q99": 0.29969525617137166,
+        "sum": 1353.256447832442
+      },
+      "max_abs_smd_after": 0.14756321985377518,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.0016302411149871877,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17437569514517692,
+          "after": -0.14756321985377518,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.12276964095580399,
+          "after": -0.1449260978806917,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.2490908961443736,
+          "after": -0.13315009665442892,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=4:value",
+          "before": 0.024326869884564162,
+          "after": -0.12764900270457427,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.11473613612274511,
+          "after": -0.1050594144960319,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12134,
+      "retained": 12134,
+      "change": {
+        "n": 1448,
+        "ess": 1407.4854695577749,
+        "max": 0.9848586077356252,
+        "q99": 0.976632894294585,
+        "sum": 1156.1291368085365
+      },
+      "continue": {
+        "n": 10686,
+        "ess": 5622.310436942405,
+        "max": 0.6303881671212007,
+        "q99": 0.4447051582958866,
+        "sum": 1088.624070894091
+      },
+      "max_abs_smd_after": 0.13337508199189058,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.013688145002364517,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.1705391312506399,
+          "after": -0.13337508199189058,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.39756855004355457,
+          "after": 0.12569093383600632,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.3939077173964408,
+          "after": -0.12408861178429609,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "year": 2022,
+      "target": "next_pa",
+      "n": 7873,
+      "observed": 7027,
+      "coverage": 0.892544138193827,
+      "metrics": {
+        "n": 7027,
+        "events": 2267,
+        "prevalence": 0.3226127792799203,
+        "brier": 0.2188924602262977,
+        "constant_brier": 0.21853377566267512,
+        "log_loss": 0.6296281117753547,
+        "auc": 0.474896904063787,
+        "ece": 0.018063381926901323,
+        "calibration": [
+          {
+            "lower": 0.30000000000000004,
+            "n": 7027,
+            "predicted": 0.34067616120682165,
+            "observed": 0.3226127792799203
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 7027,
+        "delta": 0.0003586845636225909,
+        "interval": [
+          -0.000382935053418741,
+          0.0010667636531051013
+        ],
+        "games": 2161,
+        "pitchers": 378,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7873,
+        "observed": 7027,
+        "missing": 846,
+        "observed_rate": 0.3226127792799203,
+        "g10_observed": 7027,
+        "ip_observation_rate": 0.3235756109202999,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 7027,
+            "ess": 6963.1787766768975,
+            "max": 1.9090160047767089,
+            "q99": 1.5065212711725264,
+            "sum": 7885.213098424359
+          },
+          {
+            "cap": 10.0,
+            "n": 7027,
+            "ess": 6963.1787766768975,
+            "max": 1.9090160047767089,
+            "q99": 1.5065212711725264,
+            "sum": 7885.213098424359
+          },
+          {
+            "cap": 20.0,
+            "n": 7027,
+            "ess": 6963.1787766768975,
+            "max": 1.9090160047767089,
+            "q99": 1.5065212711725264,
+            "sum": 7885.213098424359
+          },
+          {
+            "cap": 50.0,
+            "n": 7027,
+            "ess": 6963.1787766768975,
+            "max": 1.9090160047767089,
+            "q99": 1.5065212711725264,
+            "sum": 7885.213098424359
+          }
+        ],
+        "worst_case_bounds": [
+          0.2879461450527118,
+          0.39540200685888477
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.30999373932574303
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.3245342179919591
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.342535036981549
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "observed": 7027,
+        "immediate_change": 748,
+        "organic_actor_or_clock_unavailable": 98
+      }
+    },
+    {
+      "year": 2022,
+      "target": "future_ten",
+      "n": 7873,
+      "observed": 741,
+      "coverage": 0.09411914136923663,
+      "metrics": {
+        "n": 741,
+        "events": 232,
+        "prevalence": 0.31309041835357626,
+        "brier": 0.21519105727922674,
+        "constant_brier": 0.2153057246197008,
+        "log_loss": 0.6218485644815456,
+        "auc": 0.5,
+        "ece": 0.01123605760344415,
+        "calibration": [
+          {
+            "lower": 0.30000000000000004,
+            "n": 741,
+            "predicted": 0.3018543607501321,
+            "observed": 0.31309041835357626
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 741,
+        "delta": -0.00011466734047404822,
+        "interval": [
+          -0.0034993734801700826,
+          0.0033565620208232086
+        ],
+        "games": 528,
+        "pitchers": 255,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7873,
+        "observed": 741,
+        "missing": 7132,
+        "observed_rate": 0.31309041835357626,
+        "g10_observed": 0,
+        "ip_observation_rate": null,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 0,
+            "ess": 0.0,
+            "max": null,
+            "q99": null,
+            "sum": 0.0
+          },
+          {
+            "cap": 10.0,
+            "n": 0,
+            "ess": 0.0,
+            "max": null,
+            "q99": null,
+            "sum": 0.0
+          },
+          {
+            "cap": 20.0,
+            "n": 0,
+            "ess": 0.0,
+            "max": null,
+            "q99": null,
+            "sum": 0.0
+          },
+          {
+            "cap": 50.0,
+            "n": 0,
+            "ess": 0.0,
+            "max": null,
+            "q99": null,
+            "sum": 0.0
+          }
+        ],
+        "worst_case_bounds": [
+          0.02946780134637368,
+          0.935348659977137
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.1904929108408455
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.30291188884414355
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.44955179190920536
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "no_entire_future_block_in_current_session": 6280,
+        "immediate_change": 748,
+        "observed": 741,
+        "measurement_or_support": 104
+      }
+    },
+    {
+      "year": 2023,
+      "target": "next_pa",
+      "n": 7702,
+      "observed": 6823,
+      "coverage": 0.8858737990132434,
+      "metrics": {
+        "n": 6823,
+        "events": 2169,
+        "prevalence": 0.31789535394987545,
+        "brier": 0.21681130680498792,
+        "constant_brier": 0.21689399599553733,
+        "log_loss": 0.625172775210049,
+        "auc": 0.5174348949123515,
+        "ece": 0.007878114571226837,
+        "calibration": [
+          {
+            "lower": 0.2,
+            "n": 720,
+            "predicted": 0.2900554476497841,
+            "observed": 0.2611111111111111
+          },
+          {
+            "lower": 0.30000000000000004,
+            "n": 6093,
+            "predicted": 0.32985644431209826,
+            "observed": 0.3249630723781389
+          },
+          {
+            "lower": 0.4,
+            "n": 10,
+            "predicted": 0.4097138218021623,
+            "observed": 0.1
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 6823,
+        "delta": -8.268919054941188e-05,
+        "interval": [
+          -0.0009261113415014366,
+          0.0008520538282225058
+        ],
+        "games": 2138,
+        "pitchers": 364,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7702,
+        "observed": 6823,
+        "missing": 879,
+        "observed_rate": 0.31789535394987545,
+        "g10_observed": 6823,
+        "ip_observation_rate": 0.31877310769259914,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 6823,
+            "ess": 6729.054310409704,
+            "max": 2.006441377517487,
+            "q99": 1.651506674428161,
+            "sum": 7658.54831937911
+          },
+          {
+            "cap": 10.0,
+            "n": 6823,
+            "ess": 6729.054310409704,
+            "max": 2.006441377517487,
+            "q99": 1.651506674428161,
+            "sum": 7658.54831937911
+          },
+          {
+            "cap": 20.0,
+            "n": 6823,
+            "ess": 6729.054310409704,
+            "max": 2.006441377517487,
+            "q99": 1.651506674428161,
+            "sum": 7658.54831937911
+          },
+          {
+            "cap": 50.0,
+            "n": 6823,
+            "ess": 6729.054310409704,
+            "max": 2.006441377517487,
+            "q99": 1.651506674428161,
+            "sum": 7658.54831937911
+          }
+        ],
+        "worst_case_bounds": [
+          0.28161516489223576,
+          0.39574136587899245
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.30397319834709263
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.31897805154492503
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.33787082477470903
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "observed": 6823,
+        "immediate_change": 793,
+        "organic_actor_or_clock_unavailable": 86
+      }
+    },
+    {
+      "year": 2023,
+      "target": "future_ten",
+      "n": 7702,
+      "observed": 729,
+      "coverage": 0.09465074006751494,
+      "metrics": {
+        "n": 729,
+        "events": 244,
+        "prevalence": 0.3347050754458162,
+        "brier": 0.2069760524624477,
+        "constant_brier": 0.22507092161374154,
+        "log_loss": 0.6033964615031656,
+        "auc": 0.6571404427919554,
+        "ece": 0.06083213424841094,
+        "calibration": [
+          {
+            "lower": 0.1,
+            "n": 83,
+            "predicted": 0.16731865242248853,
+            "observed": 0.2289156626506024
+          },
+          {
+            "lower": 0.2,
+            "n": 221,
+            "predicted": 0.25232312213058317,
+            "observed": 0.22171945701357465
+          },
+          {
+            "lower": 0.30000000000000004,
+            "n": 175,
+            "predicted": 0.3443916269317061,
+            "observed": 0.32571428571428573
+          },
+          {
+            "lower": 0.4,
+            "n": 95,
+            "predicted": 0.4471567975155074,
+            "observed": 0.2736842105263158
+          },
+          {
+            "lower": 0.5,
+            "n": 43,
+            "predicted": 0.5363282082979122,
+            "observed": 0.4883720930232558
+          },
+          {
+            "lower": 0.6000000000000001,
+            "n": 50,
+            "predicted": 0.6586790368122425,
+            "observed": 0.7
+          },
+          {
+            "lower": 0.7000000000000001,
+            "n": 62,
+            "predicted": 0.7353882650657964,
+            "observed": 0.5967741935483871
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 729,
+        "delta": -0.018094869151293807,
+        "interval": [
+          -0.04654665686930712,
+          0.00803436207033188
+        ],
+        "games": 541,
+        "pitchers": 258,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7702,
+        "observed": 729,
+        "missing": 6973,
+        "observed_rate": 0.3347050754458162,
+        "g10_observed": 505,
+        "ip_observation_rate": 0.3298032062840064,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 505,
+            "ess": 415.49361603034737,
+            "max": 9.956055121256801,
+            "q99": 9.559428377608125,
+            "sum": 2584.2212647503393
+          },
+          {
+            "cap": 10.0,
+            "n": 505,
+            "ess": 415.49361603034737,
+            "max": 9.956055121256801,
+            "q99": 9.559428377608125,
+            "sum": 2584.2212647503393
+          },
+          {
+            "cap": 20.0,
+            "n": 505,
+            "ess": 415.49361603034737,
+            "max": 9.956055121256801,
+            "q99": 9.559428377608125,
+            "sum": 2584.2212647503393
+          },
+          {
+            "cap": 50.0,
+            "n": 505,
+            "ess": 415.49361603034737,
+            "max": 9.956055121256801,
+            "q99": 9.559428377608125,
+            "sum": 2584.2212647503393
+          }
+        ],
+        "worst_case_bounds": [
+          0.031680083095299925,
+          0.937029343027785
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.2615894669128527
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.38232178003994216
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.5203028753530189
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "no_entire_future_block_in_current_session": 5993,
+        "immediate_change": 793,
+        "observed": 729,
+        "measurement_or_support": 187
+      }
+    },
+    {
+      "year": 2024,
+      "target": "next_pa",
+      "n": 7589,
+      "observed": 6653,
+      "coverage": 0.8766635920411121,
+      "metrics": {
+        "n": 6653,
+        "events": 2090,
+        "prevalence": 0.3141439951901398,
+        "brier": 0.21547572843812857,
+        "constant_brier": 0.21560655324043926,
+        "log_loss": 0.6224174030236901,
+        "auc": 0.516709973187706,
+        "ece": 0.01383933078066243,
+        "calibration": [
+          {
+            "lower": 0.2,
+            "n": 21,
+            "predicted": 0.2974092328564786,
+            "observed": 0.23809523809523808
+          },
+          {
+            "lower": 0.30000000000000004,
+            "n": 6632,
+            "predicted": 0.328080137785549,
+            "observed": 0.3143848009650181
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 6653,
+        "delta": -0.00013082480231072055,
+        "interval": [
+          -0.0005641254459803523,
+          0.0002976937072000467
+        ],
+        "games": 2149,
+        "pitchers": 363,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7589,
+        "observed": 6653,
+        "missing": 936,
+        "observed_rate": 0.3141439951901398,
+        "g10_observed": 6653,
+        "ip_observation_rate": 0.31689618004717207,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 6653,
+            "ess": 6531.426655601734,
+            "max": 2.3738417142457915,
+            "q99": 1.7595399772014444,
+            "sum": 7511.453688037942
+          },
+          {
+            "cap": 10.0,
+            "n": 6653,
+            "ess": 6531.426655601734,
+            "max": 2.3738417142457915,
+            "q99": 1.7595399772014444,
+            "sum": 7511.453688037942
+          },
+          {
+            "cap": 20.0,
+            "n": 6653,
+            "ess": 6531.426655601734,
+            "max": 2.3738417142457915,
+            "q99": 1.7595399772014444,
+            "sum": 7511.453688037942
+          },
+          {
+            "cap": 50.0,
+            "n": 6653,
+            "ess": 6531.426655601734,
+            "max": 2.3738417142457915,
+            "q99": 1.7595399772014444,
+            "sum": 7511.453688037942
+          }
+        ],
+        "worst_case_bounds": [
+          0.2753986032415338,
+          0.39873501120042165
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.2997954235977466
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.31612514307697237
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.33661877547398644
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "observed": 6653,
+        "immediate_change": 833,
+        "organic_actor_or_clock_unavailable": 103
+      }
+    },
+    {
+      "year": 2024,
+      "target": "future_ten",
+      "n": 7589,
+      "observed": 639,
+      "coverage": 0.08420081697193306,
+      "metrics": {
+        "n": 639,
+        "events": 222,
+        "prevalence": 0.3474178403755869,
+        "brier": 0.2093273469089728,
+        "constant_brier": 0.22818693953422456,
+        "log_loss": 0.6053752309165773,
+        "auc": 0.6730885561820813,
+        "ece": 0.03735282911707972,
+        "calibration": [
+          {
+            "lower": 0.1,
+            "n": 121,
+            "predicted": 0.15210437496409546,
+            "observed": 0.1322314049586777
+          },
+          {
+            "lower": 0.2,
+            "n": 98,
+            "predicted": 0.2553823739258344,
+            "observed": 0.2755102040816326
+          },
+          {
+            "lower": 0.30000000000000004,
+            "n": 238,
+            "predicted": 0.3378404509378033,
+            "observed": 0.35294117647058826
+          },
+          {
+            "lower": 0.4,
+            "n": 62,
+            "predicted": 0.4439366838374198,
+            "observed": 0.46774193548387094
+          },
+          {
+            "lower": 0.5,
+            "n": 38,
+            "predicted": 0.5303471572281352,
+            "observed": 0.39473684210526316
+          },
+          {
+            "lower": 0.6000000000000001,
+            "n": 31,
+            "predicted": 0.6645394567780095,
+            "observed": 0.5483870967741935
+          },
+          {
+            "lower": 0.7000000000000001,
+            "n": 36,
+            "predicted": 0.7628519759422999,
+            "observed": 0.6388888888888888
+          },
+          {
+            "lower": 0.8,
+            "n": 15,
+            "predicted": 0.813654435486476,
+            "observed": 0.7333333333333333
+          }
+        ]
+      },
+      "cluster_brier": {
+        "n": 639,
+        "delta": -0.01885959262525166,
+        "interval": [
+          -0.04580896457980648,
+          0.005029275138542127
+        ],
+        "games": 465,
+        "pitchers": 239,
+        "reps": 300,
+        "unit": "Brier(model)-Brier(own past constant); negative favors forecast; conditional on observed outcomes and fixed models"
+      },
+      "observation": {
+        "n": 7589,
+        "observed": 639,
+        "missing": 6950,
+        "observed_rate": 0.3474178403755869,
+        "g10_observed": 444,
+        "ip_observation_rate": 0.36732976669605305,
+        "weight_caps": [
+          {
+            "cap": null,
+            "n": 444,
+            "ess": 356.6669454924001,
+            "max": 9.752952292886004,
+            "q99": 9.66583220052777,
+            "sum": 2107.175040284408
+          },
+          {
+            "cap": 10.0,
+            "n": 444,
+            "ess": 356.6669454924001,
+            "max": 9.752952292886004,
+            "q99": 9.66583220052777,
+            "sum": 2107.175040284408
+          },
+          {
+            "cap": 20.0,
+            "n": 444,
+            "ess": 356.6669454924001,
+            "max": 9.752952292886004,
+            "q99": 9.66583220052777,
+            "sum": 2107.175040284408
+          },
+          {
+            "cap": 50.0,
+            "n": 444,
+            "ess": 356.6669454924001,
+            "max": 9.752952292886004,
+            "q99": 9.66583220052777,
+            "sum": 2107.175040284408
+          }
+        ],
+        "worst_case_bounds": [
+          0.029252865990249045,
+          0.945052049018316
+        ],
+        "missing_scenarios": [
+          {
+            "missing_odds_multiplier": 0.5,
+            "scenario_rate": 0.26182253357043117
+          },
+          {
+            "missing_odds_multiplier": 1.0,
+            "scenario_rate": 0.3801462937026427
+          },
+          {
+            "missing_odds_multiplier": 2.0,
+            "scenario_rate": 0.5161520618937374
+          }
+        ],
+        "label": "aggregate sensitivity only; unobserved labels remain NaN, not causal outcomes"
+      },
+      "missing_reasons": {
+        "no_entire_future_block_in_current_session": 5965,
+        "immediate_change": 833,
+        "observed": 639,
+        "measurement_or_support": 152
+      }
+    }
+  ],
+  "flows": [
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "between_innings",
+      "boundaries": 24243,
+      "population": 24243,
+      "initial_support": 23904,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 23904,
+        "past_cell_unsupported": 339
+      }
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "within_inning",
+      "boundaries": 72108,
+      "population": 72108,
+      "initial_support": 70068,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 70068,
+        "past_cell_unsupported": 2040
+      }
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "boundaries": 13001,
+      "population": 0,
+      "initial_support": 0,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 13001
+      }
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "boundaries": 27971,
+      "population": 12601,
+      "initial_support": 12601,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 15370,
+        "development_comparison_failed": 12601
+      }
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "between_innings",
+      "boundaries": 23853,
+      "population": 23853,
+      "initial_support": 23485,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 23485,
+        "past_cell_unsupported": 368
+      }
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "within_inning",
+      "boundaries": 72012,
+      "population": 72012,
+      "initial_support": 69707,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 69707,
+        "past_cell_unsupported": 2305
+      }
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "boundaries": 13235,
+      "population": 0,
+      "initial_support": 0,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 13235
+      }
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "boundaries": 30465,
+      "population": 12301,
+      "initial_support": 12301,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 18164,
+        "development_comparison_failed": 12301
+      }
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "between_innings",
+      "boundaries": 24243,
+      "population": 24243,
+      "initial_support": 24243,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 24243
+      }
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "within_inning",
+      "boundaries": 72384,
+      "population": 72384,
+      "initial_support": 70226,
+      "review_eligible": 0,
+      "rejections": {
+        "development_comparison_failed": 70226,
+        "past_cell_unsupported": 2158
+      }
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "boundaries": 12996,
+      "population": 0,
+      "initial_support": 0,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 12996
+      }
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "boundaries": 28451,
+      "population": 12134,
+      "initial_support": 12134,
+      "review_eligible": 0,
+      "rejections": {
+        "outside_fixed_population": 16317,
+        "development_comparison_failed": 12134
+      }
+    }
+  ],
+  "qualifications": [
+    {
+      "role": "SP",
+      "phase": "between_innings",
+      "development_pass": false,
+      "diagnostic2024_pass": false,
+      "passed_folds": 0,
+      "folds": 3,
+      "comparison_qualified": false
+    },
+    {
+      "role": "SP",
+      "phase": "within_inning",
+      "development_pass": false,
+      "diagnostic2024_pass": false,
+      "passed_folds": 0,
+      "folds": 3,
+      "comparison_qualified": false
+    },
+    {
+      "role": "RP",
+      "phase": "within_inning",
+      "development_pass": false,
+      "diagnostic2024_pass": false,
+      "passed_folds": 0,
+      "folds": 3,
+      "comparison_qualified": false
+    }
+  ],
+  "barriers": [
+    {
+      "id": "comparison_balance",
+      "passed": false,
+      "status": "measured",
+      "evidence": "frozen nine primary phase/year gates; no subgroup rescue"
+    },
+    {
+      "id": "multilight_predictive_support",
+      "passed": false,
+      "status": "inherited_failed",
+      "evidence": "14.2.4 fixed two-red research combinations, not refitted"
+    },
+    {
+      "id": "common_clock_four_reason_value_replay",
+      "passed": false,
+      "status": "not_ready",
+      "evidence": "common anchor A/B/C available, future next-batter D and value/persistence replay not revalidated; old-clock scores not substituted"
+    },
+    {
+      "id": "candidate_joint_support_availability",
+      "passed": false,
+      "status": "not_ready",
+      "evidence": "nominal snapshot is not active/warm/healthy availability; candidate-specific joint behavior must align common clock"
+    },
+    {
+      "id": "aligned_half_endpoint_followup",
+      "passed": false,
+      "status": "not_ready",
+      "evidence": "existing old-clock WPA labels/rollout are retained, not asserted aligned to common anchor or the new uniform supported-pool law"
+    }
+  ],
+  "strategy_contract": {
+    "status": "specified for future feasibility; not executed or enabled",
+    "trial": "one intervention at each eligible common-clock PA boundary, correlated trials retained and clustered; not a count of independent recommendations",
+    "population": "SP all, between/within separate; RP within-inning short_profile from15.3; no2024 population/model/weight search",
+    "reference": "continue the incumbent at the index boundary when legally possible; same frozen subsequent-action policy and terminal handling as research arm",
+    "research": "at index boundary, apply existing four-reason two-red rule including A or B, mature observation and fresh-block persistence. Change only if all frozen14.2 value gates and legal/availability/support gates pass; otherwise continue when known safe, abstain if any required evidence unknown",
+    "replacement_law": "for this pool-level timing estimand, uniform over predecision nominal RP options with legal and candidate-specific historical/joint-probability support and confirmed availability. No eligible options or unknown availability => abstain; not best-reliever ranking",
+    "value_rule": "minimum delta defense xWPA .005; unsupported mass<=.01; MC95 lower>0 and model-bootstrap80 lower>0; original persistence/cooldown/one-alert constraints retained, never loosened for more cases",
+    "subsequent_policy": "same versioned joint behavior policy at subsequent legal boundaries for both arms until the fixed half-ending endpoint. Must rebuild/version at common clock before16; original old-clock candidate behavior is not substituted",
+    "primary_endpoint": "defense WE at natural end of the current/upcoming half minus defense WE at common anchor; include all intervening plays, IBB and runner events, absorbing game end; same WE version and horizon for both arms",
+    "secondary_endpoint": "RE(anchor) - runs conceded from anchor to same half endpoint - RE(endpoint), defense positive; same RE version and terminal convention",
+    "exploratory_endpoint": "same-definition next-PA defense WPA only if prespecified in16, reported separately; next_pa nonout and future_ten deviation are observation tasks, never substitutes for strategy WPA/RE24",
+    "methods": "direct, SNIPS and doubly robust under the SAME joint action/candidate/observation support; game and pitcher dependence, year/role subgroups, weight and hidden-confounding sensitivity; no simulator-only benefit claim",
+    "implementation_ready": false,
+    "required_before16": [
+      "common-clock four-reason/persistence/value replay",
+      "candidate-specific joint propensities and availability at common clock",
+      "aligned half-ending actual endpoint adapters and common subsequent policy",
+      "forward comparison qualification and adequate strategy events"
+    ],
+    "minimum_effect": "retain original .005 probability-point candidate gate; a positive strategy mean alone cannot promote, cluster interval and robustness required;16 must separately freeze any inferential minimum"
+  },
+  "slice16_entry_allowed": false,
+  "strategy_value_estimated": false,
+  "recommendation_allowed": false,
+  "test2025_outcomes_examined": false,
+  "stop": "15.4",
+  "interpretation": "review completion is a documented no-entry decision when gates fail; bootstrap intervals conditional on observed labels and fixed models do not solve censoring, confounding or candidate availability",
+  "balance_results": [
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 23904,
+      "change": {
+        "n": 2726,
+        "ess": 1845.560307899867,
+        "max": 0.9909654633145883,
+        "q99": 0.9846377915160948,
+        "sum": 1194.460327027853
+      },
+      "continue": {
+        "n": 21178,
+        "ess": 4132.606827842827,
+        "max": 0.9046317908476535,
+        "q99": 0.6892165259164602,
+        "sum": 1312.948608556347
+      },
+      "max_abs_smd_after": 0.26141723948300355,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.008929425936633878,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_location:value",
+          "before": -0.10638746258958667,
+          "after": -0.26141723948300355,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:value",
+          "before": -0.10621281477571586,
+          "after": -0.26131157273932465,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.1061780663171152,
+          "after": -0.26130246105261734,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.12568060176317533,
+          "after": 0.2111683234168199,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 2.011756470872541,
+          "after": 0.18134114169428064,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 24243,
+      "retained": 7286,
+      "change": {
+        "n": 2575,
+        "ess": 1116.3294305666914,
+        "max": 19.807802431183724,
+        "q99": 17.69991653290789,
+        "sum": 7460.727733279602
+      },
+      "continue": {
+        "n": 4711,
+        "ess": 3203.0962107417317,
+        "max": 10.485674512379116,
+        "q99": 6.973495687696977,
+        "sum": 7059.4585265332935
+      },
+      "max_abs_smd_after": 0.23182543208339082,
+      "over_0_1": 20,
+      "diagnostic_gate": false,
+      "ece": 0.008929425936633878,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "smooth_stuff:missing",
+          "before": -0.013629535238185202,
+          "after": 0.23182543208339082,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:missing",
+          "before": -0.013629535238185202,
+          "after": 0.23182543208339082,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_location:missing",
+          "before": -0.013629535238185202,
+          "after": 0.23182543208339082,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.05155434844025472,
+          "after": 0.22637639622428063,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:value",
+          "before": 0.06508079343241872,
+          "after": -0.1890643396169279,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72108,
+      "retained": 70068,
+      "change": {
+        "n": 1813,
+        "ess": 1726.0270226421724,
+        "max": 0.9980119025468804,
+        "q99": 0.9960778927613279,
+        "sum": 1402.7276576688832
+      },
+      "continue": {
+        "n": 68255,
+        "ess": 9524.761963437657,
+        "max": 0.7331235010319829,
+        "q99": 0.3459603033423685,
+        "sum": 1713.8192296139425
+      },
+      "max_abs_smd_after": 0.2282008672408073,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.004435015503097067,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_velocity:value",
+          "before": -0.1631113060649768,
+          "after": -0.2282008672408073,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.16306956887016252,
+          "after": -0.2281945554255891,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:value",
+          "before": -0.16313791598430097,
+          "after": -0.22807933683491208,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.17252518333198974,
+          "after": -0.17196280478122195,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.28151862763508667,
+          "after": -0.17150875885747635,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 72108,
+      "retained": 9688,
+      "change": {
+        "n": 1489,
+        "ess": 976.7784022581895,
+        "max": 19.99829416315192,
+        "q99": 18.210248848693222,
+        "sum": 8477.943984235526
+      },
+      "continue": {
+        "n": 8199,
+        "ess": 7914.880248484161,
+        "max": 3.7470515533098383,
+        "q99": 2.130986688008477,
+        "sum": 9929.500890931251
+      },
+      "max_abs_smd_after": 0.24509794498349308,
+      "over_0_1": 22,
+      "diagnostic_gate": false,
+      "ece": 0.004435015503097067,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_location:value",
+          "before": -0.09629845972411043,
+          "after": -0.24509794498349308,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": -0.0959917387517494,
+          "after": -0.24502608645562832,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:value",
+          "before": -0.0959917387517494,
+          "after": -0.24502608645562832,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_location:missing",
+          "before": 0.1467642525765905,
+          "after": 0.23505358753815384,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:missing",
+          "before": 0.14603458052324347,
+          "after": 0.23435426838827525,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 13001,
+      "retained": 12951,
+      "change": {
+        "n": 7645,
+        "ess": 4727.4399775630645,
+        "max": 0.9342624615082357,
+        "q99": 0.8621186665427054,
+        "sum": 2170.2022135825264
+      },
+      "continue": {
+        "n": 5306,
+        "ess": 3752.7310588225737,
+        "max": 0.9423374950657126,
+        "q99": 0.9144981352987709,
+        "sum": 2107.564240282739
+      },
+      "max_abs_smd_after": 0.36454349900616556,
+      "over_0_1": 15,
+      "diagnostic_gate": false,
+      "ece": 0.027669881321004286,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.22053354606805933,
+          "after": -0.36454349900616556,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.2205335460680593,
+          "after": 0.3645434990061629,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17371498588961398,
+          "after": -0.21513528044883498,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.28821169377719513,
+          "after": 0.1757030144926088,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_bf:value",
+          "before": 0.2129152827146371,
+          "after": -0.16254436186474097,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 13001,
+      "retained": 12951,
+      "change": {
+        "n": 7645,
+        "ess": 5088.222824727616,
+        "max": 15.21200858662027,
+        "q99": 7.252683613240361,
+        "sum": 13074.031244119407
+      },
+      "continue": {
+        "n": 5306,
+        "ess": 2827.0919630081808,
+        "max": 17.34229203430561,
+        "q99": 11.69565156652109,
+        "sum": 13017.663065820989
+      },
+      "max_abs_smd_after": 0.44539101211667464,
+      "over_0_1": 11,
+      "diagnostic_gate": false,
+      "ece": 0.027669881321004286,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.22053354606805933,
+          "after": -0.44539101211667464,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.2205335460680593,
+          "after": 0.4453910121166712,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17371498588961398,
+          "after": -0.2371058011460305,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.28821169377719513,
+          "after": 0.17470179187370008,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_rp_median_bf:value",
+          "before": -0.6066594716025854,
+          "after": -0.15420614012447895,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 11723,
+      "retained": 11694,
+      "change": {
+        "n": 7221,
+        "ess": 4421.513951351812,
+        "max": 0.9323102746226059,
+        "q99": 0.8515056426711763,
+        "sum": 1966.2174589226865
+      },
+      "continue": {
+        "n": 4473,
+        "ess": 3214.2826557944686,
+        "max": 0.9423374950657126,
+        "q99": 0.91790738632258,
+        "sum": 1851.6841758650344
+      },
+      "max_abs_smd_after": 0.3764067699514265,
+      "over_0_1": 11,
+      "diagnostic_gate": false,
+      "ece": 0.029886110388766717,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": 0.23297805922096154,
+          "after": 0.3764067699514265,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=2:value",
+          "before": -0.23297805922096174,
+          "after": -0.37640676995142586,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.14150499367789157,
+          "after": -0.2028112313158939,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.2448916539793099,
+          "after": 0.1783874964840558,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_rp_median_bf:value",
+          "before": -0.5845499494419492,
+          "after": -0.1601850160410133,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 11723,
+      "retained": 11694,
+      "change": {
+        "n": 7221,
+        "ess": 4972.206857848212,
+        "max": 14.773290841773198,
+        "q99": 6.7342897267942226,
+        "sum": 11932.898861077094
+      },
+      "continue": {
+        "n": 4473,
+        "ess": 2370.1309170382556,
+        "max": 17.34229203430561,
+        "q99": 12.18163116377931,
+        "sum": 11591.849803760331
+      },
+      "max_abs_smd_after": 0.46235411334987375,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.029886110388766717,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.23297805922096174,
+          "after": -0.46235411334987375,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.23297805922096154,
+          "after": 0.46235411334987353,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.14150499367789157,
+          "after": -0.22464948118827385,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.2448916539793099,
+          "after": 0.18031555712324063,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.27588141256518944,
+          "after": 0.1734824242342959,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 6571,
+      "retained": 6570,
+      "change": {
+        "n": 4717,
+        "ess": 2647.9916684767054,
+        "max": 0.9134857867065149,
+        "q99": 0.8270521077548366,
+        "sum": 1048.798312159177
+      },
+      "continue": {
+        "n": 1853,
+        "ess": 1423.138573570237,
+        "max": 0.9423374950657126,
+        "q99": 0.9303504709451502,
+        "sum": 915.8379575513588
+      },
+      "max_abs_smd_after": 0.44228789511143723,
+      "over_0_1": 15,
+      "diagnostic_gate": false,
+      "ece": 0.03778351928187913,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": 0.28639565623471397,
+          "after": 0.44228789511143723,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=2:value",
+          "before": -0.2863956562347138,
+          "after": -0.4422878951114365,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16551213060392803,
+          "after": -0.24733020454460466,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.1817773771564837,
+          "after": 0.14987382506203073,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.7535485691953543,
+          "after": -0.14727695602811625,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 6571,
+      "retained": 6570,
+      "change": {
+        "n": 4717,
+        "ess": 3439.3008844270676,
+        "max": 11.558794352179648,
+        "q99": 5.782088391007643,
+        "sum": 6997.100049759808
+      },
+      "continue": {
+        "n": 1853,
+        "ess": 998.9349864980342,
+        "max": 17.34229203430561,
+        "q99": 14.35761200784483,
+        "sum": 6297.621447170382
+      },
+      "max_abs_smd_after": 0.5674557361572006,
+      "over_0_1": 15,
+      "diagnostic_gate": false,
+      "ece": 0.03778351928187913,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.2863956562347138,
+          "after": -0.5674557361572006,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.28639565623471397,
+          "after": 0.5674557361572001,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16551213060392803,
+          "after": -0.27588958622938126,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.1817773771564837,
+          "after": 0.15830148273891656,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.15708421002820516,
+          "after": 0.1531878518038227,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 5152,
+      "retained": 5124,
+      "change": {
+        "n": 2504,
+        "ess": 1833.8257927346976,
+        "max": 0.9323102746226059,
+        "q99": 0.877736302422213,
+        "sum": 917.4191467635097
+      },
+      "continue": {
+        "n": 2620,
+        "ess": 1834.7466415820566,
+        "max": 0.9279246231340446,
+        "q99": 0.8866715304011916,
+        "sum": 935.8462183136755
+      },
+      "max_abs_smd_after": 0.27134775977291675,
+      "over_0_1": 20,
+      "diagnostic_gate": false,
+      "ece": 0.02781311525549855,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.18479950850635024,
+          "after": -0.27134775977291675,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.1847995085063501,
+          "after": 0.2713477597729161,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.294396871291247,
+          "after": 0.2174708296263892,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_rp_median_bf:value",
+          "before": -0.5533644155886279,
+          "after": -0.19951557214856375,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.13988683699042953,
+          "after": 0.19796570926356394,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 5152,
+      "retained": 5124,
+      "change": {
+        "n": 2504,
+        "ess": 1691.493255849554,
+        "max": 14.773290841773198,
+        "q99": 8.179083705329248,
+        "sum": 4935.798811317286
+      },
+      "continue": {
+        "n": 2620,
+        "ess": 1649.6133551788178,
+        "max": 13.874363804712155,
+        "q99": 8.824070485354962,
+        "sum": 5294.228356589948
+      },
+      "max_abs_smd_after": 0.243294169212974,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.02781311525549855,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=2:value",
+          "before": -0.18479950850635024,
+          "after": -0.243294169212974,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.1847995085063501,
+          "after": 0.24329416921297398,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.294396871291247,
+          "after": 0.2225488896212831,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_rp_median_bf:value",
+          "before": -0.5533644155886279,
+          "after": -0.21669435627845762,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.13988683699042953,
+          "after": 0.2062458235017545,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 5388,
+      "retained": 5388,
+      "change": {
+        "n": 3668,
+        "ess": 2188.92716448303,
+        "max": 0.9134857867065149,
+        "q99": 0.8384806646007,
+        "sum": 933.0877539762562
+      },
+      "continue": {
+        "n": 1720,
+        "ess": 1306.478816572678,
+        "max": 0.9397104411386236,
+        "q99": 0.9224347754719833,
+        "sum": 806.2705509737509
+      },
+      "max_abs_smd_after": 0.4564901517015214,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.041021637903886576,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": 0.284718687115016,
+          "after": 0.4564901517015214,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=2:value",
+          "before": -0.2847186871150162,
+          "after": -0.4564901517015208,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16254217389832298,
+          "after": -0.24183478065135464,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.11520185525902615,
+          "after": -0.1409877895329491,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.8392142299041407,
+          "after": -0.13899476084774534,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 5388,
+      "retained": 5388,
+      "change": {
+        "n": 3668,
+        "ess": 2620.774651159626,
+        "max": 11.558794352179648,
+        "q99": 6.193586743868824,
+        "sum": 5808.914589478938
+      },
+      "continue": {
+        "n": 1720,
+        "ess": 934.7818741997432,
+        "max": 16.58661995353617,
+        "q99": 12.89248970032002,
+        "sum": 5265.703699326268
+      },
+      "max_abs_smd_after": 0.5986583163957806,
+      "over_0_1": 19,
+      "diagnostic_gate": false,
+      "ece": 0.041021637903886576,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": 0.284718687115016,
+          "after": 0.5986583163957806,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=2:value",
+          "before": -0.2847186871150162,
+          "after": -0.5986583163957796,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16254217389832298,
+          "after": -0.3037794341240558,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.11520185525902615,
+          "after": -0.17049974959957498,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.85871522896721,
+          "after": -0.14175788781175527,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 27971,
+      "retained": 27856,
+      "change": {
+        "n": 2403,
+        "ess": 2361.2983415845024,
+        "max": 0.9867175566151033,
+        "q99": 0.976389586497074,
+        "sum": 2005.6998493340986
+      },
+      "continue": {
+        "n": 25453,
+        "ess": 13981.718591691993,
+        "max": 0.5302398248611039,
+        "q99": 0.3529719736583593,
+        "sum": 2003.0164568047762
+      },
+      "max_abs_smd_after": 0.12379713092978908,
+      "over_0_1": 5,
+      "diagnostic_gate": false,
+      "ece": 0.007991691893004008,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.2643129729343138,
+          "after": 0.12379713092978908,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.1464687915700332,
+          "after": 0.12006752239304151,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.260537261752903,
+          "after": -0.11948672788893651,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.14555849588618425,
+          "after": -0.11155284022382697,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.12390340584374566,
+          "after": 0.10174931859404286,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 27971,
+      "retained": 15805,
+      "change": {
+        "n": 2160,
+        "ess": 1623.6821739813797,
+        "max": 19.982563185069257,
+        "q99": 19.29639894239587,
+        "sum": 16906.3574165203
+      },
+      "continue": {
+        "n": 13645,
+        "ess": 13492.65875059619,
+        "max": 2.1287458003529682,
+        "q99": 1.6434835588022592,
+        "sum": 15643.663055509991
+      },
+      "max_abs_smd_after": 0.11769133171650684,
+      "over_0_1": 4,
+      "diagnostic_gate": false,
+      "ece": 0.007991691893004008,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.11639973759276812,
+          "after": 0.11769133171650684,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.09904892973597096,
+          "after": -0.10990856937852789,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.06559500471609131,
+          "after": -0.105206088322521,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1160338036103351,
+          "after": -0.10243328305004278,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.10025988995558802,
+          "after": 0.09805125827591055,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 24265,
+      "retained": 24195,
+      "change": {
+        "n": 2219,
+        "ess": 2179.3763396794775,
+        "max": 0.9867175566151033,
+        "q99": 0.976823918435201,
+        "sum": 1846.137821913257
+      },
+      "continue": {
+        "n": 21976,
+        "ess": 12266.051582064416,
+        "max": 0.5302398248611039,
+        "q99": 0.3631619688583584,
+        "sum": 1811.415006867066
+      },
+      "max_abs_smd_after": 0.11720126882409117,
+      "over_0_1": 5,
+      "diagnostic_gate": false,
+      "ece": 0.006916648713791483,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.2640487324655285,
+          "after": 0.11720126882409117,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.26072098506830166,
+          "after": -0.11290579757405933,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.02993046511194352,
+          "after": -0.11014660501361397,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1350519811473455,
+          "after": -0.10968753468688461,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.1076652010919068,
+          "after": 0.10638124970421453,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 24265,
+      "retained": 14412,
+      "change": {
+        "n": 2002,
+        "ess": 1496.6315692915434,
+        "max": 19.982563185069257,
+        "q99": 19.278394243497292,
+        "sum": 15503.60972867414
+      },
+      "continue": {
+        "n": 12410,
+        "ess": 12266.306289454622,
+        "max": 2.1287458003529682,
+        "q99": 1.656360720479976,
+        "sum": 14260.7311549914
+      },
+      "max_abs_smd_after": 0.12693019823189658,
+      "over_0_1": 4,
+      "diagnostic_gate": false,
+      "ece": 0.006916648713791483,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.09002947664512774,
+          "after": -0.12693019823189658,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.0995227503590137,
+          "after": -0.11035160558024623,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.11844055840202533,
+          "after": -0.10915122505575323,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.10322414239264101,
+          "after": 0.1071199472302397,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.0724560700653508,
+          "after": -0.09362704358577387,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12601,
+      "retained": 12601,
+      "change": {
+        "n": 1426,
+        "ess": 1397.3476475098357,
+        "max": 0.9836858171699898,
+        "q99": 0.9707725736487791,
+        "sum": 1162.198738169137
+      },
+      "continue": {
+        "n": 11175,
+        "ess": 6663.363803785132,
+        "max": 0.5302398248611039,
+        "q99": 0.38864000484116273,
+        "sum": 1111.0649795500499
+      },
+      "max_abs_smd_after": 0.15604707423895273,
+      "over_0_1": 5,
+      "diagnostic_gate": false,
+      "ece": 0.01062808623428425,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.32728331351889145,
+          "after": 0.15604707423895273,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.32519925919530046,
+          "after": -0.15491687582545588,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.15570357205433202,
+          "after": -0.14595965236748992,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.45583920823330815,
+          "after": 0.11493447305517275,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.08733984090156002,
+          "after": -0.1140567688773589,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 12601,
+      "retained": 8883,
+      "change": {
+        "n": 1321,
+        "ess": 975.3075452192654,
+        "max": 19.982563185069257,
+        "q99": 19.10578517695406,
+        "sum": 9412.664088595691
+      },
+      "continue": {
+        "n": 7562,
+        "ess": 7459.908336970429,
+        "max": 2.1287458003529682,
+        "q99": 1.691739753118043,
+        "sum": 8796.58246950133
+      },
+      "max_abs_smd_after": 0.14100407405428206,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.01062808623428425,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.1324823150406211,
+          "after": -0.14100407405428206,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.1042789483340648,
+          "after": -0.13964486662026407,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.21614661443180672,
+          "after": 0.13029698818289145,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.214844528411573,
+          "after": -0.12835925120034208,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.11068196036278817,
+          "after": -0.12076435455536033,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 11664,
+      "retained": 11594,
+      "change": {
+        "n": 793,
+        "ess": 783.2343657623686,
+        "max": 0.9867175566151033,
+        "q99": 0.9800627989935955,
+        "sum": 683.9390837441206
+      },
+      "continue": {
+        "n": 10801,
+        "ess": 5963.918513988067,
+        "max": 0.5088966873747991,
+        "q99": 0.30068403986121645,
+        "sum": 700.3500273170159
+      },
+      "max_abs_smd_after": 0.1585946641278852,
+      "over_0_1": 13,
+      "diagnostic_gate": false,
+      "ece": 0.005126515485429825,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.15642858894612718,
+          "after": 0.1585946641278852,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.13383744636869305,
+          "after": 0.13885927236121007,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.15445613234025302,
+          "after": -0.1271789222345534,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=1:value",
+          "before": -0.07522219425935964,
+          "after": -0.11993571722400563,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:value",
+          "before": 0.08667722148819863,
+          "after": 0.1170809755806416,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 11664,
+      "retained": 5529,
+      "change": {
+        "n": 681,
+        "ess": 531.8134591956989,
+        "max": 19.933639200736586,
+        "q99": 19.5668173183165,
+        "sum": 6090.945640078451
+      },
+      "continue": {
+        "n": 4848,
+        "ess": 4810.4543330732395,
+        "max": 2.0362314288911705,
+        "q99": 1.5176665835774237,
+        "sum": 5464.148685490069
+      },
+      "max_abs_smd_after": 0.16219089605087025,
+      "over_0_1": 13,
+      "diagnostic_gate": false,
+      "ece": 0.005126515485429825,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "smooth_contact:value",
+          "before": 0.11622352734642355,
+          "after": 0.16219089605087025,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.15443139010402648,
+          "after": 0.14918926156895124,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.07101247575643597,
+          "after": -0.14548006277652648,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.13064698892281623,
+          "after": -0.1359187142637395,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.1309772658537573,
+          "after": -0.1359164520447198,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 10011,
+      "retained": 10011,
+      "change": {
+        "n": 894,
+        "ess": 884.1548307109017,
+        "max": 0.9836858171699898,
+        "q99": 0.9755500184604609,
+        "sum": 763.1776025004773
+      },
+      "continue": {
+        "n": 9117,
+        "ess": 5573.414755126684,
+        "max": 0.4651963950238615,
+        "q99": 0.33462723930578636,
+        "sum": 758.8615464929912
+      },
+      "max_abs_smd_after": 0.19012964418816353,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.009216631513013933,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.1920114418588702,
+          "after": -0.19012964418816353,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.4061105887495083,
+          "after": -0.1681250263773982,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.4071728323540851,
+          "after": 0.1680698770254797,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.09648391511343467,
+          "after": -0.11945663439303367,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_bf:value",
+          "before": 0.36824042225589787,
+          "after": 0.11693166827713034,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 10011,
+      "retained": 6377,
+      "change": {
+        "n": 796,
+        "ess": 624.0312277505922,
+        "max": 19.982563185069257,
+        "q99": 19.21339202095453,
+        "sum": 6598.887559704544
+      },
+      "continue": {
+        "n": 5581,
+        "ess": 5535.129063054582,
+        "max": 1.8698452865601334,
+        "q99": 1.5473908746569023,
+        "sum": 6348.008423239464
+      },
+      "max_abs_smd_after": 0.17940894156094075,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.009216631513013933,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.19193616102370495,
+          "after": -0.17940894156094075,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_stuff:value",
+          "before": -0.11990345317057574,
+          "after": -0.14265327199562564,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.2874969455711378,
+          "after": 0.12350486461677485,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.28774183818731885,
+          "after": -0.1224358578339148,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": -0.07956183055526984,
+          "after": -0.1198207537669478,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 23853,
+      "retained": 23485,
+      "change": {
+        "n": 2657,
+        "ess": 1611.12962872435,
+        "max": 0.9939404269151068,
+        "q99": 0.9921845357381887,
+        "sum": 1022.6867320330364
+      },
+      "continue": {
+        "n": 20828,
+        "ess": 3577.0003266173767,
+        "max": 0.9420730224414308,
+        "q99": 0.7295712489188354,
+        "sum": 1308.352754326294
+      },
+      "max_abs_smd_after": 0.2777326190007056,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.011922565478276024,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.15823085341454277,
+          "after": 0.2777326190007056,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "entry_rest_hours:value",
+          "before": -0.012759041762581885,
+          "after": -0.18831485939582174,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.10020465505050125,
+          "after": 0.18210465975528317,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09451464225289893,
+          "after": 0.1787940433359556,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.09175663352812778,
+          "after": 0.17669921707015082,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 23853,
+      "retained": 7248,
+      "change": {
+        "n": 2507,
+        "ess": 1112.4983742321763,
+        "max": 19.530901627502008,
+        "q99": 14.657396206990782,
+        "sum": 6151.6067182546885
+      },
+      "continue": {
+        "n": 4741,
+        "ess": 2393.198367161642,
+        "max": 17.2631137018829,
+        "q99": 10.89032357255918,
+        "sum": 7782.840595669078
+      },
+      "max_abs_smd_after": 0.28659559775442434,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.011922565478276024,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.08513673364649801,
+          "after": 0.28659559775442434,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.07708945993790786,
+          "after": 0.1882439573375158,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.07243268453794831,
+          "after": 0.18721439173306012,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.07230233648098595,
+          "after": 0.18384903359305918,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "entry_rest_hours:value",
+          "before": -0.07043452527564256,
+          "after": -0.14267256185398636,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72012,
+      "retained": 69707,
+      "change": {
+        "n": 1775,
+        "ess": 1688.0805843543333,
+        "max": 0.9989597505578769,
+        "q99": 0.9980744656242422,
+        "sum": 1393.0317394251238
+      },
+      "continue": {
+        "n": 67932,
+        "ess": 7493.8554162991295,
+        "max": 0.7277416913187073,
+        "q99": 0.33905099483087986,
+        "sum": 1418.5494305896052
+      },
+      "max_abs_smd_after": 0.1718816688997097,
+      "over_0_1": 10,
+      "diagnostic_gate": false,
+      "ece": 0.0018294882890525959,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.13855460283146886,
+          "after": 0.1718816688997097,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": -0.19305971299026714,
+          "after": -0.13933166639327926,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.09190797254625137,
+          "after": -0.12509866358775307,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.3558739492181198,
+          "after": 0.1227119718497666,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hr_rate:value",
+          "before": 0.10111846556367755,
+          "after": 0.11682817951127028,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 72012,
+      "retained": 8085,
+      "change": {
+        "n": 1408,
+        "ess": 880.5274102343672,
+        "max": 19.96196882871237,
+        "q99": 19.109779892596258,
+        "sum": 8736.44650891903
+      },
+      "continue": {
+        "n": 6677,
+        "ess": 6417.776481526304,
+        "max": 3.6729824880040893,
+        "q99": 2.2153532039588533,
+        "sum": 8151.397027028741
+      },
+      "max_abs_smd_after": 0.23905222228120174,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.0018294882890525959,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": -0.1188336771587432,
+          "after": 0.23905222228120174,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.06516668988202723,
+          "after": 0.19266111529896368,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hr_rate:value",
+          "before": 0.045604126501845435,
+          "after": 0.1366047616733855,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.0707201276495875,
+          "after": -0.119803103034715,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": -0.028905289735414272,
+          "after": -0.1181303599215519,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 13235,
+      "retained": 13223,
+      "change": {
+        "n": 7187,
+        "ess": 4364.443880832074,
+        "max": 0.9569742873934433,
+        "q99": 0.8587509215360813,
+        "sum": 1933.4331143928305
+      },
+      "continue": {
+        "n": 6036,
+        "ess": 4051.6633476870325,
+        "max": 0.9368145350840243,
+        "q99": 0.9098681219007934,
+        "sum": 2211.373925930083
+      },
+      "max_abs_smd_after": 0.19851232068464783,
+      "over_0_1": 23,
+      "diagnostic_gate": false,
+      "ece": 0.026908352987774352,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.11176792129825383,
+          "after": -0.19851232068464783,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.5662937648991733,
+          "after": 0.19145390468741985,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.2916363880510913,
+          "after": 0.1563665635749405,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.21307261826758214,
+          "after": 0.13967537095467594,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.19969561155945986,
+          "after": 0.13251848010095899,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 13235,
+      "retained": 12818,
+      "change": {
+        "n": 7182,
+        "ess": 4662.034897067869,
+        "max": 17.950396303312633,
+        "q99": 6.925220051851683,
+        "sum": 11922.146455631591
+      },
+      "continue": {
+        "n": 5636,
+        "ess": 3119.1777911015583,
+        "max": 15.826424658421125,
+        "q99": 11.247087635523851,
+        "sum": 13230.331665108672
+      },
+      "max_abs_smd_after": 0.22121874670747274,
+      "over_0_1": 16,
+      "diagnostic_gate": false,
+      "ece": 0.026908352987774352,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.5234130278869324,
+          "after": 0.22121874670747274,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.12022478430407982,
+          "after": -0.19258387182242817,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.2866727370070002,
+          "after": 0.17301685763988292,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.08759813153330288,
+          "after": 0.1395406913273132,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.2926457262826591,
+          "after": 0.1390704835790821,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 11861,
+      "retained": 11856,
+      "change": {
+        "n": 6851,
+        "ess": 4124.810371212146,
+        "max": 0.9569742873934433,
+        "q99": 0.847137687056798,
+        "sum": 1762.5685570245923
+      },
+      "continue": {
+        "n": 5005,
+        "ess": 3469.498094350797,
+        "max": 0.9368145350840243,
+        "q99": 0.9123766197787604,
+        "sum": 1962.9875359074633
+      },
+      "max_abs_smd_after": 0.21782731562048274,
+      "over_0_1": 24,
+      "diagnostic_gate": false,
+      "ece": 0.023899076936771846,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.43544226776129014,
+          "after": 0.21782731562048274,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.09441598805961084,
+          "after": -0.18641867927728398,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.3374149917377601,
+          "after": 0.17619230006888098,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.1663020380020376,
+          "after": 0.13693328405776853,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.21590792921752172,
+          "after": 0.13577255384479897,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 11861,
+      "retained": 11617,
+      "change": {
+        "n": 6847,
+        "ess": 4551.730681237768,
+        "max": 17.881786954256462,
+        "q99": 6.51943832061592,
+        "sum": 11009.391440969339
+      },
+      "continue": {
+        "n": 4770,
+        "ess": 2640.1573032818287,
+        "max": 15.826424658421125,
+        "q99": 11.48565604680093,
+        "sum": 11883.096440379337
+      },
+      "max_abs_smd_after": 0.24757758117430465,
+      "over_0_1": 16,
+      "diagnostic_gate": false,
+      "ece": 0.023899076936771846,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.41102529591782844,
+          "after": 0.24757758117430465,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.3261661370476794,
+          "after": 0.20103338402895735,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.10472111543433837,
+          "after": -0.17935625068896405,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.2926728685761676,
+          "after": 0.15214237828179736,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.08147799883745124,
+          "after": 0.13288596077159137,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 6205,
+      "retained": 6205,
+      "change": {
+        "n": 4343,
+        "ess": 2414.5712319163995,
+        "max": 0.9025758441061932,
+        "q99": 0.8036302389412106,
+        "sum": 890.4885364402959
+      },
+      "continue": {
+        "n": 1862,
+        "ess": 1420.4143348090129,
+        "max": 0.9368145350840243,
+        "q99": 0.9226144983278267,
+        "sum": 910.5902291527162
+      },
+      "max_abs_smd_after": 0.2776502735076667,
+      "over_0_1": 23,
+      "diagnostic_gate": false,
+      "ece": 0.027618881203940873,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.26770415391485847,
+          "after": 0.2776502735076667,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.27890080227289643,
+          "after": 0.19873017890616063,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1337725076489002,
+          "after": -0.19503699116902928,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.8077109052886788,
+          "after": 0.16647627983133578,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.8077109052886788,
+          "after": 0.16647627983133578,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 6205,
+      "retained": 6199,
+      "change": {
+        "n": 4343,
+        "ess": 3199.0152977223997,
+        "max": 10.264394808716732,
+        "q99": 5.092434066849094,
+        "sum": 6201.38908522274
+      },
+      "continue": {
+        "n": 1856,
+        "ess": 1038.918092558341,
+        "max": 15.826424658421125,
+        "q99": 12.931445887750833,
+        "sum": 6062.964320849834
+      },
+      "max_abs_smd_after": 0.3079229829879734,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.027618881203940873,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.26958392380302987,
+          "after": 0.3079229829879734,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.27894003468346606,
+          "after": 0.2237400263110774,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.167893998707534,
+          "after": 0.18870079689679145,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1293961551539555,
+          "after": -0.1823057343078677,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:value",
+          "before": 0.19257062359980973,
+          "after": 0.1707263978713899,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 5656,
+      "retained": 5651,
+      "change": {
+        "n": 2508,
+        "ess": 1790.515452233316,
+        "max": 0.9569742873934433,
+        "q99": 0.8909346380099499,
+        "sum": 872.0800205842964
+      },
+      "continue": {
+        "n": 3143,
+        "ess": 2102.104264698567,
+        "max": 0.9272392267749032,
+        "q99": 0.879509496659794,
+        "sum": 1052.397306754747
+      },
+      "max_abs_smd_after": 0.18318918225959677,
+      "over_0_1": 15,
+      "diagnostic_gate": false,
+      "ece": 0.032236906890707795,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.2681638867752411,
+          "after": 0.18318918225959677,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.050157935854426274,
+          "after": -0.17903049040486688,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.1341231587503783,
+          "after": 0.1761506925888495,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_rest:missing",
+          "before": -0.1341231587503783,
+          "after": 0.1761506925888495,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.2307192840904052,
+          "after": 0.16264070434043462,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 5656,
+      "retained": 5418,
+      "change": {
+        "n": 2504,
+        "ess": 1582.5762107845328,
+        "max": 17.881786954256462,
+        "q99": 8.757240037101445,
+        "sum": 4808.002355746598
+      },
+      "continue": {
+        "n": 2914,
+        "ess": 1871.2640993904547,
+        "max": 13.743669228285198,
+        "q99": 8.378227639900796,
+        "sum": 5820.132119529502
+      },
+      "max_abs_smd_after": 0.1748807881451794,
+      "over_0_1": 15,
+      "diagnostic_gate": false,
+      "ece": 0.032236906890707795,
+      "warning": false,
+      "failures": [
+        "balance_smd",
+        "action_calibration"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.0672183074421124,
+          "after": -0.1748807881451794,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.2637184884641493,
+          "after": 0.17331943607020878,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.13494137130290745,
+          "after": 0.15637681014817204,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_rest:missing",
+          "before": -0.13494137130290745,
+          "after": 0.15637681014817204,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_5d:value",
+          "before": 0.2171613590398754,
+          "after": 0.15272898919668443,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 5103,
+      "retained": 5103,
+      "change": {
+        "n": 3384,
+        "ess": 1946.704531078867,
+        "max": 0.9025758441061932,
+        "q99": 0.8243146266674022,
+        "sum": 778.1187100505564
+      },
+      "continue": {
+        "n": 1719,
+        "ess": 1293.174920007552,
+        "max": 0.9368145350840243,
+        "q99": 0.9208647401328423,
+        "sum": 798.1912921382229
+      },
+      "max_abs_smd_after": 0.22880071645047764,
+      "over_0_1": 26,
+      "diagnostic_gate": false,
+      "ece": 0.027929338762014654,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.24665939971064327,
+          "after": 0.22880071645047764,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.8219425810086827,
+          "after": -0.20594910448325526,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.82232324932675,
+          "after": -0.20527910824197435,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.3424770792514886,
+          "after": 0.1908517902378009,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.7672987029413479,
+          "after": 0.18908914601195867,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 5103,
+      "retained": 5097,
+      "change": {
+        "n": 3384,
+        "ess": 2424.1028387055317,
+        "max": 10.264394808716732,
+        "q99": 5.6921391416191875,
+        "sum": 5106.7913998038675
+      },
+      "continue": {
+        "n": 1713,
+        "ess": 944.7494086645102,
+        "max": 15.826424658421125,
+        "q99": 12.638369314802278,
+        "sum": 5143.378337875919
+      },
+      "max_abs_smd_after": 0.25534864036788735,
+      "over_0_1": 20,
+      "diagnostic_gate": false,
+      "ece": 0.027929338762014654,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "ability_log_n:value",
+          "before": 0.24857796517712444,
+          "after": 0.25534864036788735,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.3423091553135483,
+          "after": 0.21183444542619373,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hr_rate:value",
+          "before": -0.11870188895779643,
+          "after": -0.17311332378829686,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.12475180920851535,
+          "after": -0.16984507630657578,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.1691283208751119,
+          "after": 0.16355071034376448,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 30465,
+      "retained": 30439,
+      "change": {
+        "n": 2571,
+        "ess": 2512.443171275359,
+        "max": 0.9911651869488459,
+        "q99": 0.9836302830400193,
+        "sum": 2134.388640155637
+      },
+      "continue": {
+        "n": 27868,
+        "ess": 12934.44218522863,
+        "max": 0.5928301780556389,
+        "q99": 0.3886367528430468,
+        "sum": 2056.2436592361337
+      },
+      "max_abs_smd_after": 0.13561556495091553,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.008687039594130799,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.15682519004820095,
+          "after": -0.13561556495091553,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.3247443168531457,
+          "after": -0.12391307429363597,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:missing",
+          "before": 0.054239668345200893,
+          "after": 0.1229886084849564,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.3300145529140243,
+          "after": 0.12250097912219118,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_contact:value",
+          "before": -0.13799964799670203,
+          "after": -0.11975484877011629,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 30465,
+      "retained": 14683,
+      "change": {
+        "n": 2198,
+        "ess": 1606.308584367653,
+        "max": 19.982962785816678,
+        "q99": 19.27557507220124,
+        "sum": 16864.116039311266
+      },
+      "continue": {
+        "n": 12485,
+        "ess": 12276.560205767724,
+        "max": 2.4559776931028248,
+        "q99": 1.7710999544002646,
+        "sum": 14562.487592247478
+      },
+      "max_abs_smd_after": 0.16426930775180792,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.008687039594130799,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "load_relative:value",
+          "before": 0.121595401748658,
+          "after": -0.16426930775180792,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.12184112933792697,
+          "after": -0.16397493639194083,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": 0.006962683793607228,
+          "after": 0.15398821737308016,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": 0.006962683793607228,
+          "after": 0.15398821737308016,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": 0.006962683793607228,
+          "after": 0.15398821737308016,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 26255,
+      "retained": 26238,
+      "change": {
+        "n": 2399,
+        "ess": 2343.3027669791086,
+        "max": 0.989960971873876,
+        "q99": 0.9827144303541925,
+        "sum": 1982.788967371806
+      },
+      "continue": {
+        "n": 23839,
+        "ess": 11411.406213012484,
+        "max": 0.5928301780556389,
+        "q99": 0.394799318096177,
+        "sum": 1866.2599416344742
+      },
+      "max_abs_smd_after": 0.14316101504965592,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.010341769269281136,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16421032345622535,
+          "after": -0.14316101504965592,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.33797426605962777,
+          "after": -0.13620265947947172,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.34426562693204277,
+          "after": 0.13538631188081718,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_contact:value",
+          "before": -0.13830841777644318,
+          "after": -0.1187121830262533,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:missing",
+          "before": 0.03872073619275843,
+          "after": 0.11659575689426348,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 26255,
+      "retained": 13531,
+      "change": {
+        "n": 2077,
+        "ess": 1514.6702966867988,
+        "max": 19.982962785816678,
+        "q99": 19.221937228805846,
+        "sum": 15752.309701613092
+      },
+      "continue": {
+        "n": 11454,
+        "ess": 11257.730309904377,
+        "max": 2.4559776931028248,
+        "q99": 1.7855568980144148,
+        "sum": 13386.393346608267
+      },
+      "max_abs_smd_after": 0.1684354512450464,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.010341769269281136,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1497967483432182,
+          "after": -0.1684354512450464,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": 0.009689380092126507,
+          "after": 0.1662457441249251,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": 0.009689380092126507,
+          "after": 0.1662457441249251,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": 0.009689380092126507,
+          "after": 0.1662457441249251,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_contact:missing",
+          "before": 0.009689380092126507,
+          "after": 0.1662457441249251,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12301,
+      "retained": 12301,
+      "change": {
+        "n": 1410,
+        "ess": 1373.6787068623305,
+        "max": 0.9893275977256211,
+        "q99": 0.9759580248180316,
+        "sum": 1133.082483998509
+      },
+      "continue": {
+        "n": 10891,
+        "ess": 5868.765609349018,
+        "max": 0.5928301780556389,
+        "q99": 0.4230390536998488,
+        "sum": 1087.9884891992126
+      },
+      "max_abs_smd_after": 0.20585541699618576,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.013788884388541383,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.4291524512358236,
+          "after": 0.20585541699618576,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.42871980024384077,
+          "after": -0.20571038982303075,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_contact:missing",
+          "before": 0.00665905660042313,
+          "after": 0.13429214599304393,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": -0.06711830796685603,
+          "after": 0.1295121903518217,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17415636327181325,
+          "after": -0.12413716435309749,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 12301,
+      "retained": 8001,
+      "change": {
+        "n": 1297,
+        "ess": 932.4656704211474,
+        "max": 19.911307351902845,
+        "q99": 19.157379892353664,
+        "sum": 9021.37421630196
+      },
+      "continue": {
+        "n": 6704,
+        "ess": 6575.620876503765,
+        "max": 2.4559776931028248,
+        "q99": 1.814527985869542,
+        "sum": 7941.715541217919
+      },
+      "max_abs_smd_after": 0.186559127191979,
+      "over_0_1": 14,
+      "diagnostic_gate": false,
+      "ece": 0.013788884388541383,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.2924981022199598,
+          "after": -0.186559127191979,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.29249810221995964,
+          "after": 0.1865591271919789,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.017597050132293644,
+          "after": 0.1821303304417893,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.017597050132293644,
+          "after": 0.1821303304417893,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": -0.017597050132293644,
+          "after": 0.1821303304417893,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 13954,
+      "retained": 13937,
+      "change": {
+        "n": 989,
+        "ess": 971.5890873000302,
+        "max": 0.989960971873876,
+        "q99": 0.9852885134825413,
+        "sum": 849.7064833732971
+      },
+      "continue": {
+        "n": 12948,
+        "ess": 5851.312210083511,
+        "max": 0.5709266146189174,
+        "q99": 0.3396799327871716,
+        "sum": 778.2714524352616
+      },
+      "max_abs_smd_after": 0.19304048535186505,
+      "over_0_1": 18,
+      "diagnostic_gate": false,
+      "ece": 0.00750710220914696,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_bb_rate:value",
+          "before": 0.12570145430820703,
+          "after": 0.19304048535186505,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.1899025611039129,
+          "after": 0.17196390820034282,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.16951646597322295,
+          "after": -0.1685105932706623,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=1:value",
+          "before": -0.1116382940660417,
+          "after": -0.16827609093364185,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_bf:value",
+          "before": 0.17764865792944218,
+          "after": -0.153650120919296,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 13954,
+      "retained": 5530,
+      "change": {
+        "n": 780,
+        "ess": 591.9056787537448,
+        "max": 19.982962785816678,
+        "q99": 19.387259525794114,
+        "sum": 6730.9354853111345
+      },
+      "continue": {
+        "n": 4750,
+        "ess": 4686.187044560745,
+        "max": 2.3306036544584265,
+        "q99": 1.6896218739903657,
+        "sum": 5444.677805390349
+      },
+      "max_abs_smd_after": 0.24867255458742302,
+      "over_0_1": 28,
+      "diagnostic_gate": false,
+      "ece": 0.00750710220914696,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "load_relative:value",
+          "before": 0.04080739397714274,
+          "after": -0.24867255458742302,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.04075633449645403,
+          "after": -0.24849843329097512,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": -0.010967873113535087,
+          "after": -0.2328917633552113,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_bf:value",
+          "before": -0.08259599941957835,
+          "after": -0.23231280721580536,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": -0.027341753272608522,
+          "after": -0.212976048967285,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 9648,
+      "retained": 9648,
+      "change": {
+        "n": 885,
+        "ess": 869.1604775102456,
+        "max": 0.9893275977256211,
+        "q99": 0.979916679386261,
+        "sum": 742.3380799295485
+      },
+      "continue": {
+        "n": 8763,
+        "ess": 4692.473632581532,
+        "max": 0.5495537096903591,
+        "q99": 0.3575830201196601,
+        "sum": 713.1457730014804
+      },
+      "max_abs_smd_after": 0.24150196058745002,
+      "over_0_1": 19,
+      "diagnostic_gate": false,
+      "ece": 0.01009329033962175,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.5279584849377353,
+          "after": 0.24150196058745002,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.5274031391268835,
+          "after": -0.24127967597234312,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.23619454911214904,
+          "after": -0.19910885369394496,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=0:value",
+          "before": 0.0016634405797606026,
+          "after": 0.1642246455354222,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.21709852864284163,
+          "after": -0.14826914691649176,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 9648,
+      "retained": 5431,
+      "change": {
+        "n": 776,
+        "ess": 581.0291441703512,
+        "max": 19.911307351902845,
+        "q99": 19.456244969862084,
+        "sum": 6198.66702416781
+      },
+      "continue": {
+        "n": 4655,
+        "ess": 4596.3354294947285,
+        "max": 2.220020503027322,
+        "q99": 1.6481689055178648,
+        "sum": 5380.316049402301
+      },
+      "max_abs_smd_after": 0.20935766435925252,
+      "over_0_1": 26,
+      "diagnostic_gate": false,
+      "ece": 0.01009329033962175,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.36914313302762763,
+          "after": 0.20935766435925252,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.36914313302762763,
+          "after": -0.20935766435925207,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": 0.02583135766817255,
+          "after": 0.20778442908342576,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": 0.02583135766817255,
+          "after": 0.20778442908342576,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": 0.02583135766817255,
+          "after": 0.20778442908342576,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 24243,
+      "retained": 24243,
+      "change": {
+        "n": 2662,
+        "ess": 1664.0202986545291,
+        "max": 0.9943206327332476,
+        "q99": 0.9894285353663302,
+        "sum": 1051.4272039715775
+      },
+      "continue": {
+        "n": 21581,
+        "ess": 3478.5761400510037,
+        "max": 0.9337540668546698,
+        "q99": 0.642047542747779,
+        "sum": 1148.394834719778
+      },
+      "max_abs_smd_after": 0.1950831678540232,
+      "over_0_1": 8,
+      "diagnostic_gate": false,
+      "ece": 0.007120654257442674,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.14524541815726597,
+          "after": 0.1950831678540232,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.11278013023406613,
+          "after": 0.166931520295742,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.1063599951786734,
+          "after": 0.16161513680064024,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:value",
+          "before": 0.11916116671351219,
+          "after": 0.1363324178435202,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.10601326839345596,
+          "after": -0.12964991841844287,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 24243,
+      "retained": 7007,
+      "change": {
+        "n": 2521,
+        "ess": 1072.5057553523147,
+        "max": 19.72266415345623,
+        "q99": 15.72849346800701,
+        "sum": 6473.643878887847
+      },
+      "continue": {
+        "n": 4486,
+        "ess": 2825.4891231844604,
+        "max": 15.095266267986618,
+        "q99": 7.540943124968196,
+        "sum": 6689.505792762619
+      },
+      "max_abs_smd_after": 0.17278389210720874,
+      "over_0_1": 9,
+      "diagnostic_gate": false,
+      "ece": 0.007120654257442674,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.0676351254486153,
+          "after": 0.17278389210720874,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09134273729249989,
+          "after": 0.14770001091813323,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.08417132610289467,
+          "after": 0.13985529698275748,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_location:value",
+          "before": -0.09519317753935905,
+          "after": -0.1383069668170993,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.0670936329268662,
+          "after": -0.12710393544716211,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 72384,
+      "retained": 70226,
+      "change": {
+        "n": 1849,
+        "ess": 1770.583419789756,
+        "max": 0.9987108856584163,
+        "q99": 0.9970587702831569,
+        "sum": 1470.988270357233
+      },
+      "continue": {
+        "n": 68377,
+        "ess": 8152.966396888421,
+        "max": 0.673395050811338,
+        "q99": 0.29969525617137166,
+        "sum": 1353.256447832442
+      },
+      "max_abs_smd_after": 0.14756321985377518,
+      "over_0_1": 6,
+      "diagnostic_gate": false,
+      "ece": 0.0016302411149871877,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.17437569514517692,
+          "after": -0.14756321985377518,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.12276964095580399,
+          "after": -0.1449260978806917,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": -0.2490908961443736,
+          "after": -0.13315009665442892,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=4:value",
+          "before": 0.024326869884564162,
+          "after": -0.12764900270457427,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.11473613612274511,
+          "after": -0.1050594144960319,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "SP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 72384,
+      "retained": 7957,
+      "change": {
+        "n": 1442,
+        "ess": 932.0455109362914,
+        "max": 19.9714885164073,
+        "q99": 19.03152008659711,
+        "sum": 8917.352523097672
+      },
+      "continue": {
+        "n": 6515,
+        "ess": 6333.342861195411,
+        "max": 3.0618029594596075,
+        "q99": 2.0238200773353574,
+        "sum": 7810.5426216782525
+      },
+      "max_abs_smd_after": 0.1990668475606494,
+      "over_0_1": 7,
+      "diagnostic_gate": false,
+      "ece": 0.0016302411149871877,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "base_state=0:value",
+          "before": -0.11190539430668406,
+          "after": 0.1990668475606494,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=4:value",
+          "before": -0.09595364774203557,
+          "after": -0.1257886030644482,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.08290604099660548,
+          "after": -0.1121027130600826,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "smooth_velocity:value",
+          "before": -0.06807237899320634,
+          "after": -0.1099183037334084,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=1:value",
+          "before": -0.15906059832277605,
+          "after": -0.10621189696869204,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 12996,
+      "retained": 12985,
+      "change": {
+        "n": 7314,
+        "ess": 4445.556767130906,
+        "max": 0.963367035161808,
+        "q99": 0.8902100763926404,
+        "sum": 2053.3108316505004
+      },
+      "continue": {
+        "n": 5671,
+        "ess": 3703.1149306719417,
+        "max": 0.938718592352277,
+        "q99": 0.9071923710089577,
+        "sum": 1978.2761198214048
+      },
+      "max_abs_smd_after": 0.23703918142934147,
+      "over_0_1": 22,
+      "diagnostic_gate": false,
+      "ece": 0.013966552415177193,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17190847639467036,
+          "after": -0.23703918142934147,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.3012960544693412,
+          "after": 0.16606699593068988,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.10452753384412806,
+          "after": 0.15570021806774834,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.4726684093071906,
+          "after": 0.14887931362110796,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.15530076072653884,
+          "after": 0.14509551652098304,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 12996,
+      "retained": 12575,
+      "change": {
+        "n": 7308,
+        "ess": 4283.677926248766,
+        "max": 19.300941731731104,
+        "q99": 8.693598133349095,
+        "sum": 12787.087096162053
+      },
+      "continue": {
+        "n": 5267,
+        "ess": 2913.007505537915,
+        "max": 16.318163018521258,
+        "q99": 10.980681696357337,
+        "sum": 11860.663931701658
+      },
+      "max_abs_smd_after": 0.23284072573148168,
+      "over_0_1": 14,
+      "diagnostic_gate": false,
+      "ece": 0.013966552415177193,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17939157636034586,
+          "after": -0.23284072573148168,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.2882582265959065,
+          "after": 0.19007148946544764,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.44105225252544517,
+          "after": 0.16925222937334738,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09936396545617417,
+          "after": 0.16353929875877707,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.14745968270911564,
+          "after": 0.1528127903517888,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 12138,
+      "retained": 12132,
+      "change": {
+        "n": 7080,
+        "ess": 4276.909526025476,
+        "max": 0.963367035161808,
+        "q99": 0.8827721075911877,
+        "sum": 1930.3046897672782
+      },
+      "continue": {
+        "n": 5052,
+        "ess": 3353.960420704816,
+        "max": 0.938718592352277,
+        "q99": 0.909425307906529,
+        "sum": 1830.674896028262
+      },
+      "max_abs_smd_after": 0.24212907755667745,
+      "over_0_1": 20,
+      "diagnostic_gate": false,
+      "ece": 0.014875397112767827,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17220577743663368,
+          "after": -0.24212907755667745,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.3605615694601956,
+          "after": 0.18457856030127998,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.3863110388456299,
+          "after": 0.15607539800376094,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09717944098435673,
+          "after": 0.1512493489468406,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.152179409525859,
+          "after": 0.13892064040931168,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 12138,
+      "retained": 11830,
+      "change": {
+        "n": 7075,
+        "ess": 4235.285164807987,
+        "max": 18.44686141521049,
+        "q99": 8.087078382807597,
+        "sum": 12089.262408708933
+      },
+      "continue": {
+        "n": 4755,
+        "ess": 2619.8784174143425,
+        "max": 16.318163018521258,
+        "q99": 11.209597811009695,
+        "sum": 11051.334378071573
+      },
+      "max_abs_smd_after": 0.24352980547383118,
+      "over_0_1": 13,
+      "diagnostic_gate": false,
+      "ece": 0.014875397112767827,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.17723717459107766,
+          "after": -0.24352980547383118,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.33667425444131716,
+          "after": 0.21131806096481295,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.3720672237682512,
+          "after": 0.18337260171699574,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.09456398059029351,
+          "after": 0.15487030957472622,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.14595625090641792,
+          "after": 0.14275729141429852,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 6446,
+      "retained": 6446,
+      "change": {
+        "n": 4547,
+        "ess": 2489.8633487172037,
+        "max": 0.9514070588751892,
+        "q99": 0.8558969215846293,
+        "sum": 982.0893644526784
+      },
+      "continue": {
+        "n": 1899,
+        "ess": 1385.9399985014736,
+        "max": 0.938718592352277,
+        "q99": 0.9219379746555552,
+        "sum": 861.6370558083108
+      },
+      "max_abs_smd_after": 0.308341011758425,
+      "over_0_1": 22,
+      "diagnostic_gate": false,
+      "ece": 0.0240573965580251,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.18679818377319984,
+          "after": -0.308341011758425,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.25048350954472665,
+          "after": 0.19664698768870198,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.8015726173862687,
+          "after": 0.19569859628446434,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.8015726173862687,
+          "after": 0.19569859628446434,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": -0.8015726173862687,
+          "after": 0.19569859628446434,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 6446,
+      "retained": 6420,
+      "change": {
+        "n": 4546,
+        "ess": 2837.286878513381,
+        "max": 18.16962643650647,
+        "q99": 6.939477011848036,
+        "sum": 6882.462788598764
+      },
+      "continue": {
+        "n": 1874,
+        "ess": 1028.1132807010727,
+        "max": 16.318163018521258,
+        "q99": 12.814974242052825,
+        "sum": 5640.048539923922
+      },
+      "max_abs_smd_after": 0.30160381057626556,
+      "over_0_1": 17,
+      "diagnostic_gate": false,
+      "ece": 0.0240573965580251,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.19074412976619276,
+          "after": -0.30160381057626556,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.24932218255245733,
+          "after": 0.20115461648950983,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.14980646662387145,
+          "after": 0.1768711709365914,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "defense_lead:value",
+          "before": 0.2298002868955529,
+          "after": 0.16000267724225328,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:value",
+          "before": 0.19810278965034472,
+          "after": 0.15267573828579853,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 5692,
+      "retained": 5686,
+      "change": {
+        "n": 2533,
+        "ess": 1858.2952547914404,
+        "max": 0.963367035161808,
+        "q99": 0.9116627421934471,
+        "sum": 948.2153253146
+      },
+      "continue": {
+        "n": 3153,
+        "ess": 2025.7489648719634,
+        "max": 0.930524424862904,
+        "q99": 0.8761662854084561,
+        "sum": 969.0378402199512
+      },
+      "max_abs_smd_after": 0.207169645515349,
+      "over_0_1": 14,
+      "diagnostic_gate": false,
+      "ece": 0.019689726815338912,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.3352679098960816,
+          "after": 0.207169645515349,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.14154780314684304,
+          "after": -0.1886476224348654,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.2808639539266736,
+          "after": 0.17434430597326148,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.17696801039750787,
+          "after": 0.1652538913735483,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_rest:missing",
+          "before": -0.17696801039750787,
+          "after": 0.1652538913735483,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 5692,
+      "retained": 5410,
+      "change": {
+        "n": 2529,
+        "ess": 1521.9779129672029,
+        "max": 18.44686141521049,
+        "q99": 9.621370281398516,
+        "sum": 5206.7996201101705
+      },
+      "continue": {
+        "n": 2881,
+        "ess": 1867.8192589639673,
+        "max": 14.393547632052012,
+        "q99": 8.224638996890768,
+        "sum": 5411.28583814765
+      },
+      "max_abs_smd_after": 0.20577581323906072,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.019689726815338912,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": 0.31475149131389846,
+          "after": 0.20577581323906072,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.14674152721207714,
+          "after": -0.1852781684792232,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitch_rest_hours:value",
+          "before": 0.1605472591549063,
+          "after": 0.16202126864701116,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_snapshot_age_minutes:value",
+          "before": 0.12721919248404645,
+          "after": 0.1585899062912581,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.25451223084115193,
+          "after": 0.1507877160082936,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 5295,
+      "retained": 5295,
+      "change": {
+        "n": 3517,
+        "ess": 2009.6437781195439,
+        "max": 0.9514070588751892,
+        "q99": 0.8677678026683416,
+        "sum": 858.3658877685232
+      },
+      "continue": {
+        "n": 1778,
+        "ess": 1279.946973153028,
+        "max": 0.9344108577122674,
+        "q99": 0.9174902990697685,
+        "sum": 768.4196746422227
+      },
+      "max_abs_smd_after": 0.28692403257228094,
+      "over_0_1": 24,
+      "diagnostic_gate": false,
+      "ece": 0.024770865491801897,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.18321539199303222,
+          "after": -0.28692403257228094,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.740957515017725,
+          "after": 0.23254132788679735,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.740957515017725,
+          "after": 0.23254132788679735,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": -0.740957515017725,
+          "after": 0.23254132788679735,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_contact:missing",
+          "before": -0.740957515017725,
+          "after": 0.23254132788679735,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "between_innings",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 5295,
+      "retained": 5269,
+      "change": {
+        "n": 3516,
+        "ess": 2121.0368393573026,
+        "max": 18.16962643650647,
+        "q99": 7.304940684382419,
+        "sum": 5699.950926004616
+      },
+      "continue": {
+        "n": 1753,
+        "ess": 962.0137829150711,
+        "max": 15.246425934541211,
+        "q99": 12.161127213050953,
+        "sum": 4895.0680950588885
+      },
+      "max_abs_smd_after": 0.28606173823433745,
+      "over_0_1": 24,
+      "diagnostic_gate": false,
+      "ece": 0.024770865491801897,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:value",
+          "before": -0.1867735768934383,
+          "after": -0.28606173823433745,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "ability_log_n:value",
+          "before": 0.25646280300880975,
+          "after": 0.2032308660507299,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.8159597042270785,
+          "after": -0.18226482389600668,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.8160718174467455,
+          "after": -0.1820871211713849,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.7280364983448051,
+          "after": 0.17942184390200497,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "overlap",
+      "source_n": 28451,
+      "retained": 28448,
+      "change": {
+        "n": 2495,
+        "ess": 2434.7698867800113,
+        "max": 0.9895265557268923,
+        "q99": 0.9822207904386364,
+        "sum": 2059.7436323216552
+      },
+      "continue": {
+        "n": 25953,
+        "ess": 11930.213513920526,
+        "max": 0.6303881671212007,
+        "q99": 0.4050536841101669,
+        "sum": 1986.2254382630272
+      },
+      "max_abs_smd_after": 0.1052295304646648,
+      "over_0_1": 1,
+      "diagnostic_gate": false,
+      "ece": 0.008040591569679685,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.15318179470731114,
+          "after": 0.1052295304646648,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.33453569364030183,
+          "after": 0.09134525878378456,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.4840453976024236,
+          "after": -0.08974086929767668,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.48377546232511703,
+          "after": -0.08935153110382847,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.21920254419256763,
+          "after": 0.08878878048860864,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "all",
+      "scheme": "ipw",
+      "source_n": 28451,
+      "retained": 14135,
+      "change": {
+        "n": 2144,
+        "ess": 1537.1054011700746,
+        "max": 19.99613521796607,
+        "q99": 19.44350820877694,
+        "sum": 16279.127251568454
+      },
+      "continue": {
+        "n": 11991,
+        "ess": 11763.696964173763,
+        "max": 2.7055410867430574,
+        "q99": 1.8288294595992747,
+        "sum": 14053.307200225216
+      },
+      "max_abs_smd_after": 0.14387696209635437,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.008040591569679685,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.012925293529423246,
+          "after": 0.14387696209635437,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_rest:missing",
+          "before": -0.012925293529423246,
+          "after": 0.14387696209635437,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.05766041661864128,
+          "after": -0.14366282677056647,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.1170682646908418,
+          "after": -0.14159623370906055,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.11705678282309034,
+          "after": -0.1414255907528671,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "overlap",
+      "source_n": 25834,
+      "retained": 25831,
+      "change": {
+        "n": 2376,
+        "ess": 2317.784410701454,
+        "max": 0.9895265557268923,
+        "q99": 0.9818787998287997,
+        "sum": 1953.8219577004397
+      },
+      "continue": {
+        "n": 23455,
+        "ess": 10983.263233394773,
+        "max": 0.6303881671212007,
+        "q99": 0.4110109432610407,
+        "sum": 1865.2465363321112
+      },
+      "max_abs_smd_after": 0.11137818961081748,
+      "over_0_1": 1,
+      "diagnostic_gate": false,
+      "ece": 0.008742854232934295,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "current_bf:value",
+          "before": 0.1053979578403889,
+          "after": -0.11137818961081748,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.19631652768824723,
+          "after": -0.09942413757350259,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.12190934313609506,
+          "after": 0.09568557534919749,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.5008005532565432,
+          "after": -0.09472254369312125,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.3453608984678383,
+          "after": 0.09467563651839883,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "known_history",
+      "scheme": "ipw",
+      "source_n": 25834,
+      "retained": 13362,
+      "change": {
+        "n": 2058,
+        "ess": 1469.12308455906,
+        "max": 19.99613521796607,
+        "q99": 19.43809368394214,
+        "sum": 15414.023219897714
+      },
+      "continue": {
+        "n": 11304,
+        "ess": 11084.946841544968,
+        "max": 2.7055410867430574,
+        "q99": 1.844298393046349,
+        "sum": 13271.499330619692
+      },
+      "max_abs_smd_after": 0.14820607419281961,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.008742854232934295,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "load_relative:value",
+          "before": 0.14071719142841763,
+          "after": -0.14820607419281961,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.14072610347336653,
+          "after": -0.1480134392937751,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_pitches3:missing",
+          "before": -0.022990284883386853,
+          "after": 0.1427355340066285,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pool_rest:missing",
+          "before": -0.022990284883386853,
+          "after": 0.1427355340066285,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": 0.07892626949259898,
+          "after": -0.13888810930842335,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "overlap",
+      "source_n": 12134,
+      "retained": 12134,
+      "change": {
+        "n": 1448,
+        "ess": 1407.4854695577749,
+        "max": 0.9848586077356252,
+        "q99": 0.976632894294585,
+        "sum": 1156.1291368085365
+      },
+      "continue": {
+        "n": 10686,
+        "ess": 5622.310436942405,
+        "max": 0.6303881671212007,
+        "q99": 0.4447051582958866,
+        "sum": 1088.624070894091
+      },
+      "max_abs_smd_after": 0.13337508199189058,
+      "over_0_1": 12,
+      "diagnostic_gate": false,
+      "ece": 0.013688145002364517,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.1705391312506399,
+          "after": -0.13337508199189058,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.39756855004355457,
+          "after": 0.12569093383600632,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=R:value",
+          "before": -0.3939077173964408,
+          "after": -0.12408861178429609,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.17487538343578204,
+          "after": 0.10850482023568676,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_profile",
+      "scheme": "ipw",
+      "source_n": 12134,
+      "retained": 7939,
+      "change": {
+        "n": 1321,
+        "ess": 923.2174447063642,
+        "max": 19.99613521796607,
+        "q99": 19.41075346921032,
+        "sum": 9026.306771324202
+      },
+      "continue": {
+        "n": 6618,
+        "ess": 6470.6039350234505,
+        "max": 2.7055410867430574,
+        "q99": 1.8856336015999429,
+        "sum": 7882.949860810706
+      },
+      "max_abs_smd_after": 0.1637508632648904,
+      "over_0_1": 9,
+      "diagnostic_gate": false,
+      "ece": 0.013688145002364517,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": true,
+      "worst_balance": [
+        {
+          "field": "n_stuff:missing",
+          "before": -0.0039949529538190875,
+          "after": 0.1637508632648904,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_velocity:missing",
+          "before": -0.0039949529538190875,
+          "after": 0.1637508632648904,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_location:missing",
+          "before": -0.0039949529538190875,
+          "after": 0.1637508632648904,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_contact:missing",
+          "before": -0.0039949529538190875,
+          "after": 0.1637508632648904,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "block_age_minutes:missing",
+          "before": -0.0039949529538190875,
+          "after": 0.1637508632648904,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "overlap",
+      "source_n": 13700,
+      "retained": 13697,
+      "change": {
+        "n": 928,
+        "ess": 912.472460645245,
+        "max": 0.9895265557268923,
+        "q99": 0.9835898604899388,
+        "sum": 797.6928208919031
+      },
+      "continue": {
+        "n": 12769,
+        "ess": 5690.9790697806675,
+        "max": 0.5672933541658274,
+        "q99": 0.3526696165611124,
+        "sum": 776.6224654380205
+      },
+      "max_abs_smd_after": 0.174019856916693,
+      "over_0_1": 14,
+      "diagnostic_gate": false,
+      "ece": 0.006693019348658157,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "current_bf:value",
+          "before": 0.20655530428226124,
+          "after": -0.174019856916693,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "prior_games_pitches_3d:value",
+          "before": 0.15063400224827464,
+          "after": 0.1621933750611606,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "base_state=1:value",
+          "before": -0.10244985947791209,
+          "after": -0.1505323797290275,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.2890712179329762,
+          "after": -0.14072205514653016,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.4873625291686264,
+          "after": -0.13312134715781826,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "extended_profile",
+      "scheme": "ipw",
+      "source_n": 13700,
+      "retained": 5423,
+      "change": {
+        "n": 737,
+        "ess": 555.3422812797678,
+        "max": 19.900384593904974,
+        "q99": 19.43870813873222,
+        "sum": 6387.716448573514
+      },
+      "continue": {
+        "n": 4686,
+        "ess": 4619.383201125091,
+        "max": 2.311034530269805,
+        "q99": 1.7246597725507407,
+        "sum": 5388.549469808987
+      },
+      "max_abs_smd_after": 0.22468152896843538,
+      "over_0_1": 10,
+      "diagnostic_gate": false,
+      "ece": 0.006693019348658157,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "load_relative:value",
+          "before": 0.036290441646400814,
+          "after": -0.22468152896843538,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.03664049573715474,
+          "after": -0.22371471670624782,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_bf:value",
+          "before": -0.01513070653834681,
+          "after": -0.22346408643917887,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_bf:value",
+          "before": -0.06828194500425537,
+          "after": -0.21049748193686246,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": -0.007805933888834424,
+          "after": -0.18713141236171443,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "overlap",
+      "source_n": 9580,
+      "retained": 9580,
+      "change": {
+        "n": 952,
+        "ess": 935.2448908205872,
+        "max": 0.9848586077356252,
+        "q99": 0.9791996373253208,
+        "sum": 797.8835673716212
+      },
+      "continue": {
+        "n": 8628,
+        "ess": 4547.262441992377,
+        "max": 0.5661618166559764,
+        "q99": 0.3799576885030856,
+        "sum": 711.3140348336874
+      },
+      "max_abs_smd_after": 0.20940037784499962,
+      "over_0_1": 20,
+      "diagnostic_gate": false,
+      "ece": 0.0112305070351539,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.2466142360583329,
+          "after": -0.20940037784499962,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.31756790834863685,
+          "after": -0.18480727171434363,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.319052209965062,
+          "after": -0.1833617063191583,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.22788583159967502,
+          "after": -0.18023861439369032,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "pitcher_hand=L:value",
+          "before": 0.5196570295316275,
+          "after": 0.16464088900112062,
+          "arm_constant_separation": false
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "role": "RP",
+      "phase": "within_inning",
+      "subset": "short_load",
+      "scheme": "ipw",
+      "source_n": 9580,
+      "retained": 5455,
+      "change": {
+        "n": 825,
+        "ess": 606.6165682407966,
+        "max": 19.99613521796607,
+        "q99": 19.69893442962653,
+        "sum": 6501.241408204982
+      },
+      "continue": {
+        "n": 4630,
+        "ess": 4564.521086990946,
+        "max": 2.30500688595919,
+        "q99": 1.7176237888097983,
+        "sum": 5365.951705894726
+      },
+      "max_abs_smd_after": 0.22628142524781542,
+      "over_0_1": 21,
+      "diagnostic_gate": false,
+      "ece": 0.0112305070351539,
+      "warning": false,
+      "failures": [
+        "balance_smd"
+      ],
+      "full_gate": false,
+      "primary": false,
+      "worst_balance": [
+        {
+          "field": "pitcher_k_rate:value",
+          "before": -0.2336574458080617,
+          "after": -0.22628142524781542,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "relative_pitches:value",
+          "before": 0.06913015684761575,
+          "after": -0.2088617592601905,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "load_relative:value",
+          "before": 0.07065837774234636,
+          "after": -0.20759705118166655,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "current_pitches:value",
+          "before": 0.008704274976536436,
+          "after": -0.203224576059586,
+          "arm_constant_separation": false
+        },
+        {
+          "field": "n_stuff:missing",
+          "before": 0.023823811291764387,
+          "after": 0.17571661930627477,
+          "arm_constant_separation": false
+        }
+      ]
+    }
+  ],
+  "updatedAt": "2026-11-21",
+  "flow": {
+    "progress": "44/51",
+    "new_models": 0,
+    "reviewed_rows": 414962,
+    "initial_support": 318669,
+    "qualified_rows": 0,
+    "primary_folds": 9,
+    "primary_passed": 0
+  },
+  "methodNotes": [
+    "15.4重算既有前推機率／平衡與固定模型條件結果，沒有訓練新模型、依2024改選母體或估策略收益。2024先前已看過且15.3修正標籤後重跑，這輪不是新的獨立確認。",
+    "SP沿15.2完整HGB、局間／局中分開；RP沿15.3新增歷史HGB，主要局中短型歷史，其他固定母體只列敏感度。相同豐富欄位檢查，不能移除失衡欄位過關。",
+    "主要overlap、次要IPW是不同目標母體。要求SMD≤.1、兩行動ESS≥500、ECE≤.03且無擬合警告，2022／23開發與2024診斷均過；通過也不能證明無隱藏混雜。",
+    "初步點支持只用當時母體、過去分格及有效機率；年度／開發資格與拒絕原因是事後研究稽核，不是當時已知特徵、換投時點或歷史預警回放。缺失後續與實際換投不拿來挑可用點。",
+    "Brier群聚區間採300次比賽與投手兩組獨立重抽後相乘權重，配對比較模型與其過去常數。只條件於固定模型及已觀測結果，沒有重訓不確定性，也不解決非隨機缺失或多重比較。",
+    "缺失者維持未知；觀測加權與odds假設情境不是反事實。下一PA非出局與十球偏離不能替代策略WPA／RE24終點。",
+    "16策略契約以同半局終點比較續投與多燈條件換投，接任採固定等機率支持名義RP池，屬時機／池層級研究，不是最佳人選排名；實際可用性及共同後續策略未知時拒絕評估。",
+    "研究工作44/51不等於16進入資格。原xWPA／人選／燈號與0正式推薦不變，2025封存；畫面使用者驗收。"
+  ]
+}

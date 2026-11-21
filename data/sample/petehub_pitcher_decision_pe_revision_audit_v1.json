@@ -1,0 +1,14 @@
+{
+  "version": "decision_pe_revision_source_audit_v1",
+  "previous_artifacts": 1556,
+  "new_artifacts": 98,
+  "common_boundaries": 546880,
+  "models": 42,
+  "progress": "48/55",
+  "stop": "15.5.4",
+  "recommendation_allowed": false,
+  "slice16_entry_allowed": false,
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user",
+  "checks": "source/clock/prefix/forecast hypotheses/actor/labels/splits/probabilities/selection/selected uncertainty/warning-threshold/accounting only; not causal or visual acceptance"
+}

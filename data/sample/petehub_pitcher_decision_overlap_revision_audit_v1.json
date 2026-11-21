@@ -1,0 +1,16 @@
+{
+  "version": "decision_overlap_revision_source_audit_v1",
+  "previous_hashes": 1205,
+  "new_artifact_hashes": 160,
+  "original": 546930,
+  "included": 546880,
+  "excluded": 50,
+  "models": 48,
+  "progress": "42/51",
+  "stop": "15.2",
+  "2024_complete_balance_passed": false,
+  "recommendation_allowed": false,
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user",
+  "checks": "source/clock/actor/paired model/probability/ranking/accounting only; not causal or visual acceptance"
+}

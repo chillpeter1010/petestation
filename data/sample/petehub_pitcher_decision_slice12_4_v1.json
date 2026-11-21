@@ -1,0 +1,240 @@
+{
+  "version": "decision_preparation_v1",
+  "slice": "12.4",
+  "years": [
+    {
+      "year": 2021,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 35792
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1294
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 12
+        },
+        {
+          "signal_support": "state_model_warmup",
+          "n": 77297
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 14100
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 3427
+        }
+      ],
+      "coverage": {
+        "n": 131922,
+        "stuff": 67081,
+        "location": 67034,
+        "quality": 14112,
+        "physical": 14112,
+        "command": 14100
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    },
+    {
+      "year": 2022,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 36225
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1374
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 107
+        },
+        {
+          "signal_support": "resumed_session_needs_new_baseline",
+          "n": 1
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 81151
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 18463
+        }
+      ],
+      "coverage": {
+        "n": 137321,
+        "stuff": 136666,
+        "location": 136666,
+        "quality": 81257,
+        "physical": 81155,
+        "command": 81255
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    },
+    {
+      "year": 2023,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 36033
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1858
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 69
+        },
+        {
+          "signal_support": "resumed_session_needs_new_baseline",
+          "n": 6
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 80994
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 20609
+        }
+      ],
+      "coverage": {
+        "n": 139569,
+        "stuff": 139077,
+        "location": 139077,
+        "quality": 81063,
+        "physical": 81008,
+        "command": 81049
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    },
+    {
+      "year": 2024,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 36447
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1271
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 140
+        },
+        {
+          "signal_support": "resumed_session_needs_new_baseline",
+          "n": 2
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 77973
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 22247
+        }
+      ],
+      "coverage": {
+        "n": 138080,
+        "stuff": 138041,
+        "location": 138041,
+        "quality": 78113,
+        "physical": 77992,
+        "command": 78094
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    },
+    {
+      "year": 2025,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 36846
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1316
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 36
+        },
+        {
+          "signal_support": "resumed_session_needs_new_baseline",
+          "n": 6
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 74502
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 25668
+        }
+      ],
+      "coverage": {
+        "n": 138374,
+        "stuff": 138140,
+        "location": 138171,
+        "quality": 74513,
+        "physical": 74537,
+        "command": 74528
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    },
+    {
+      "year": 2026,
+      "time_or_interval_violations": 0,
+      "support": [
+        {
+          "signal_support": "insufficient_current_prefix",
+          "n": 36403
+        },
+        {
+          "signal_support": "outside_modeled_pitch_count",
+          "n": 1629
+        },
+        {
+          "signal_support": "partial_signals",
+          "n": 53
+        },
+        {
+          "signal_support": "resumed_session_needs_new_baseline",
+          "n": 1
+        },
+        {
+          "signal_support": "three_signals_available",
+          "n": 70132
+        },
+        {
+          "signal_support": "tracking_or_mix_support_unavailable",
+          "n": 30978
+        }
+      ],
+      "coverage": {
+        "n": 139196,
+        "stuff": 138823,
+        "location": 138823,
+        "quality": 70185,
+        "physical": 70136,
+        "command": 70181
+      },
+      "scale": "separate reference-centered scores; reliability is shrinkage weight, interval is approximate 80% sampling only"
+    }
+  ]
+}

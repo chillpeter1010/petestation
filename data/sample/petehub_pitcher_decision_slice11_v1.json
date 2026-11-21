@@ -1,0 +1,2006 @@
+{
+  "version": "pitcher_decision_sample_v1",
+  "years": [
+    {
+      "year": 2021,
+      "raw_boundaries": 182162,
+      "included": 131922,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 799
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 2837
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 7853
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 2
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 18
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 8
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 5
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 309
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 24
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 70
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 31662
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 28
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 29734
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 82
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 137
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 12
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 29
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 263
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 889
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 3608
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "initial_start",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 4
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 4
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 15
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 68
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 88799
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4857
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 34
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9702
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 64
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 185
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 33
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 7853,
+          "mean_current_pitches": 19.44,
+          "n_pa_li": 4202,
+          "mean_pa_li": 0.706,
+          "n_quality": 1009,
+          "mean_quality": 100.4,
+          "n_physical": 1009,
+          "mean_physical": 100.33,
+          "n_command": 1009,
+          "mean_command": 99.95,
+          "n_half_wpa": 7842,
+          "n_half_runs": 7849,
+          "n_next_pa_wpa": 7852,
+          "n_next_pa_re24": 7834
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 31662,
+          "mean_current_pitches": 18.81,
+          "n_pa_li": 16239,
+          "mean_pa_li": 0.92,
+          "n_quality": 3494,
+          "mean_quality": 100.27,
+          "n_physical": 3494,
+          "mean_physical": 100.57,
+          "n_command": 3493,
+          "mean_command": 99.63,
+          "n_half_wpa": 31634,
+          "n_half_runs": 31659,
+          "n_next_pa_wpa": 31654,
+          "n_next_pa_re24": 31394
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 3608,
+          "mean_current_pitches": 82.06,
+          "n_pa_li": 1886,
+          "mean_pa_li": 0.934,
+          "n_quality": 570,
+          "mean_quality": 99.84,
+          "n_physical": 570,
+          "mean_physical": 99.32,
+          "n_command": 569,
+          "mean_command": 98.9,
+          "n_half_wpa": 3605,
+          "n_half_runs": 3608,
+          "n_next_pa_wpa": 3608,
+          "n_next_pa_re24": 3605
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 88799,
+          "mean_current_pitches": 47.72,
+          "n_pa_li": 44849,
+          "mean_pa_li": 1.131,
+          "n_quality": 9039,
+          "mean_quality": 100.47,
+          "n_physical": 9039,
+          "mean_physical": 100.18,
+          "n_command": 9029,
+          "mean_command": 99.66,
+          "n_half_wpa": 88751,
+          "n_half_runs": 88798,
+          "n_next_pa_wpa": 88785,
+          "n_next_pa_re24": 88601
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "632234:64:boundary",
+          "game_pk": 632234,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 22,
+          "candidate_count": 12,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "632234:35:boundary",
+          "game_pk": 632234,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 13,
+          "candidate_count": 13,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "632234:27:boundary",
+          "game_pk": 632234,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 62,
+          "candidate_count": 14,
+          "next_pa_result": "grounded_into_double_play",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "632234:16:boundary",
+          "game_pk": 632234,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 35,
+          "candidate_count": 14,
+          "next_pa_result": "intent_walk",
+          "half_remaining_runs_allowed": 0
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "raw_boundaries": 182468,
+      "included": 137321,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 639
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 16
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 10089
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 1
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 14
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 12
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 10
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 13
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 20
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 373
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 27
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 62
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 30879
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 31
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 28482
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 49
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 154
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 8
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 10
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 229
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 6
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 4542
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "initial_start",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 4
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 7
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 12
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 61
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 91811
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4857
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 28
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9710
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 56
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 245
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 1
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 10089,
+          "mean_current_pitches": 18.93,
+          "n_pa_li": 10089,
+          "mean_pa_li": 0.749,
+          "n_quality": 6066,
+          "mean_quality": 100.05,
+          "n_physical": 6054,
+          "mean_physical": 100.18,
+          "n_command": 6065,
+          "mean_command": 100.17,
+          "n_half_wpa": 10085,
+          "n_half_runs": 10089,
+          "n_next_pa_wpa": 10089,
+          "n_next_pa_re24": 10078
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 30879,
+          "mean_current_pitches": 18.64,
+          "n_pa_li": 30879,
+          "mean_pa_li": 0.978,
+          "n_quality": 17188,
+          "mean_quality": 100.07,
+          "n_physical": 17135,
+          "mean_physical": 100.04,
+          "n_command": 17187,
+          "mean_command": 99.87,
+          "n_half_wpa": 30868,
+          "n_half_runs": 30872,
+          "n_next_pa_wpa": 30878,
+          "n_next_pa_re24": 30671
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4542,
+          "mean_current_pitches": 84.64,
+          "n_pa_li": 4542,
+          "mean_pa_li": 0.892,
+          "n_quality": 3568,
+          "mean_quality": 98.8,
+          "n_physical": 3566,
+          "mean_physical": 99.27,
+          "n_command": 3568,
+          "mean_command": 98.84,
+          "n_half_wpa": 4538,
+          "n_half_runs": 4542,
+          "n_next_pa_wpa": 4541,
+          "n_next_pa_re24": 4540
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91811,
+          "mean_current_pitches": 48.52,
+          "n_pa_li": 91811,
+          "mean_pa_li": 1.071,
+          "n_quality": 54435,
+          "mean_quality": 99.27,
+          "n_physical": 54400,
+          "mean_physical": 99.72,
+          "n_command": 54435,
+          "mean_command": 99.36,
+          "n_half_wpa": 91718,
+          "n_half_runs": 91811,
+          "n_next_pa_wpa": 91786,
+          "n_next_pa_re24": 91730
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "661032:56:boundary",
+          "game_pk": 661032,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 12,
+          "candidate_count": 12,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "661033:48:boundary",
+          "game_pk": 661033,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 16,
+          "candidate_count": 13,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "661032:45:boundary",
+          "game_pk": 661032,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 90,
+          "candidate_count": 13,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "661032:26:boundary",
+          "game_pk": 661032,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 37,
+          "candidate_count": 14,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "raw_boundaries": 184506,
+      "included": 139569,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 758
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 19
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 9770
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 2
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 15
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 10
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 10
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 20
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 338
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 25
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 13
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 33934
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 193
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 27838
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 1
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 133
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 8
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 25
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 334
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 4442
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 7
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 4
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 9
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 12
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 91423
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4860
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 274
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9706
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 24
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 252
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 40
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9770,
+          "mean_current_pitches": 19.88,
+          "n_pa_li": 9770,
+          "mean_pa_li": 0.79,
+          "n_quality": 5659,
+          "mean_quality": 99.85,
+          "n_physical": 5654,
+          "mean_physical": 99.89,
+          "n_command": 5658,
+          "mean_command": 100.12,
+          "n_half_wpa": 9764,
+          "n_half_runs": 9770,
+          "n_next_pa_wpa": 9770,
+          "n_next_pa_re24": 9647
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 33934,
+          "mean_current_pitches": 20.31,
+          "n_pa_li": 33934,
+          "mean_pa_li": 0.873,
+          "n_quality": 17949,
+          "mean_quality": 99.84,
+          "n_physical": 17934,
+          "mean_physical": 100.0,
+          "n_command": 17936,
+          "mean_command": 99.79,
+          "n_half_wpa": 33919,
+          "n_half_runs": 33932,
+          "n_next_pa_wpa": 33930,
+          "n_next_pa_re24": 33644
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4442,
+          "mean_current_pitches": 84.61,
+          "n_pa_li": 4442,
+          "mean_pa_li": 0.894,
+          "n_quality": 3416,
+          "mean_quality": 99.07,
+          "n_physical": 3413,
+          "mean_physical": 98.98,
+          "n_command": 3416,
+          "mean_command": 99.12,
+          "n_half_wpa": 4442,
+          "n_half_runs": 4442,
+          "n_next_pa_wpa": 4442,
+          "n_next_pa_re24": 4399
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91423,
+          "mean_current_pitches": 48.8,
+          "n_pa_li": 91423,
+          "mean_pa_li": 1.072,
+          "n_quality": 54039,
+          "mean_quality": 99.38,
+          "n_physical": 54007,
+          "mean_physical": 99.78,
+          "n_command": 54039,
+          "mean_command": 99.41,
+          "n_half_wpa": 91360,
+          "n_half_runs": 91423,
+          "n_next_pa_wpa": 91407,
+          "n_next_pa_re24": 91149
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "716352:53:boundary",
+          "game_pk": 716352,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 20,
+          "candidate_count": 12,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "716352:56:boundary",
+          "game_pk": 716352,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 12,
+          "candidate_count": 11,
+          "next_pa_result": "force_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "716352:38:boundary",
+          "game_pk": 716352,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 71,
+          "candidate_count": 13,
+          "next_pa_result": "triple",
+          "half_remaining_runs_allowed": 1
+        },
+        {
+          "decision_id": "716352:24:boundary",
+          "game_pk": 716352,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 41,
+          "candidate_count": 13,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "raw_boundaries": 182903,
+      "included": 138080,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 751
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 15
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 9812
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 13
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 13
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 7
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_batter",
+          "n": 1
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 9
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 354
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 29
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 7
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 31638
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 119
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 27885
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 46
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 146
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 9
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 25
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 270
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 4515
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "initial_start",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 7
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 8
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 8
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 92115
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4857
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 135
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9703
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_nominal_candidate",
+          "n": 49
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 288
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 45
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9812,
+          "mean_current_pitches": 19.03,
+          "n_pa_li": 9812,
+          "mean_pa_li": 0.785,
+          "n_quality": 5345,
+          "mean_quality": 99.82,
+          "n_physical": 5335,
+          "mean_physical": 100.32,
+          "n_command": 5345,
+          "mean_command": 100.28,
+          "n_half_wpa": 9808,
+          "n_half_runs": 9811,
+          "n_next_pa_wpa": 9812,
+          "n_next_pa_re24": 9738
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 31638,
+          "mean_current_pitches": 19.23,
+          "n_pa_li": 31638,
+          "mean_pa_li": 0.89,
+          "n_quality": 15930,
+          "mean_quality": 99.82,
+          "n_physical": 15906,
+          "mean_physical": 100.28,
+          "n_command": 15930,
+          "mean_command": 100.01,
+          "n_half_wpa": 31623,
+          "n_half_runs": 31637,
+          "n_next_pa_wpa": 31631,
+          "n_next_pa_re24": 31345
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4515,
+          "mean_current_pitches": 85.18,
+          "n_pa_li": 4515,
+          "mean_pa_li": 0.913,
+          "n_quality": 3556,
+          "mean_quality": 99.51,
+          "n_physical": 3549,
+          "mean_physical": 99.13,
+          "n_command": 3555,
+          "mean_command": 100.16,
+          "n_half_wpa": 4511,
+          "n_half_runs": 4515,
+          "n_next_pa_wpa": 4515,
+          "n_next_pa_re24": 4484
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 92115,
+          "mean_current_pitches": 48.49,
+          "n_pa_li": 92115,
+          "mean_pa_li": 1.044,
+          "n_quality": 53282,
+          "mean_quality": 99.73,
+          "n_physical": 53202,
+          "mean_physical": 99.61,
+          "n_command": 53264,
+          "mean_command": 100.42,
+          "n_half_wpa": 92032,
+          "n_half_runs": 92113,
+          "n_next_pa_wpa": 92093,
+          "n_next_pa_re24": 91923
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "744795:48:boundary",
+          "game_pk": 744795,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 42,
+          "candidate_count": 11,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "744795:32:boundary",
+          "game_pk": 744795,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 12,
+          "candidate_count": 11,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "744795:42:boundary",
+          "game_pk": 744795,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 81,
+          "candidate_count": 13,
+          "next_pa_result": "single",
+          "half_remaining_runs_allowed": 2
+        },
+        {
+          "decision_id": "744795:17:boundary",
+          "game_pk": 744795,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 36,
+          "candidate_count": 13,
+          "next_pa_result": "single",
+          "half_remaining_runs_allowed": 1
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "raw_boundaries": 183387,
+      "included": 138374,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 755
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 10
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 9974
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 3
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 15
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 8
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 363
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 23
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 1
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 32096
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 96
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 28242
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 153
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 9
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 8
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 310
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 4481
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "initial_start",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 16
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 3
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 9
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 4
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 91823
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4859
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 110
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9713
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 277
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9974,
+          "mean_current_pitches": 18.87,
+          "n_pa_li": 9974,
+          "mean_pa_li": 0.808,
+          "n_quality": 5205,
+          "mean_quality": 100.01,
+          "n_physical": 5205,
+          "mean_physical": 100.29,
+          "n_command": 5204,
+          "mean_command": 100.35,
+          "n_half_wpa": 9971,
+          "n_half_runs": 9973,
+          "n_next_pa_wpa": 9974,
+          "n_next_pa_re24": 9913
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 32096,
+          "mean_current_pitches": 19.35,
+          "n_pa_li": 32096,
+          "mean_pa_li": 0.92,
+          "n_quality": 15235,
+          "mean_quality": 99.86,
+          "n_physical": 15235,
+          "mean_physical": 100.12,
+          "n_command": 15226,
+          "mean_command": 100.18,
+          "n_half_wpa": 32090,
+          "n_half_runs": 32094,
+          "n_next_pa_wpa": 32094,
+          "n_next_pa_re24": 31800
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4481,
+          "mean_current_pitches": 84.66,
+          "n_pa_li": 4481,
+          "mean_pa_li": 0.934,
+          "n_quality": 3449,
+          "mean_quality": 99.92,
+          "n_physical": 3451,
+          "mean_physical": 99.52,
+          "n_command": 3451,
+          "mean_command": 99.88,
+          "n_half_wpa": 4479,
+          "n_half_runs": 4481,
+          "n_next_pa_wpa": 4481,
+          "n_next_pa_re24": 4453
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91823,
+          "mean_current_pitches": 48.12,
+          "n_pa_li": 91823,
+          "mean_pa_li": 1.056,
+          "n_quality": 50624,
+          "mean_quality": 100.06,
+          "n_physical": 50646,
+          "mean_physical": 99.93,
+          "n_command": 50647,
+          "mean_command": 100.15,
+          "n_half_wpa": 91745,
+          "n_half_runs": 91819,
+          "n_next_pa_wpa": 91803,
+          "n_next_pa_re24": 91614
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "776136:49:boundary",
+          "game_pk": 776136,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 22,
+          "candidate_count": 12,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "776135:79:boundary",
+          "game_pk": 776135,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 12,
+          "candidate_count": 11,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "776135:34:boundary",
+          "game_pk": 776135,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 54,
+          "candidate_count": 13,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "776135:14:boundary",
+          "game_pk": 776135,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 40,
+          "candidate_count": 13,
+          "next_pa_result": "walk",
+          "half_remaining_runs_allowed": 0
+        }
+      ]
+    },
+    {
+      "year": 2026,
+      "raw_boundaries": 184328,
+      "included": 139196,
+      "checks": {
+        "feature_time": 0,
+        "outcome_time_or_runs": 0,
+        "candidate_key_or_time": 0
+      },
+      "cohorts": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 861
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "forced_or_injury",
+          "n": 11
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 9823
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 4
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 22
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 16
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "observed_replacement_outside_nominal_set",
+          "n": 12
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 44
+        },
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 356
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 24
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "forced_or_injury",
+          "n": 3
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 35594
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 71
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 28131
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 182
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "uncertain_batter",
+          "n": 13
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "cohort_reason": "unknown_state_or_clock",
+          "n": 13
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "compound_prelude",
+          "n": 416
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "included",
+          "n": 4381
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "initial_start",
+          "n": 1
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "no_legal_choice",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 13
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "cohort_reason": "uncertain_observed_action",
+          "n": 2
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "compound_prelude",
+          "n": 16
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "included",
+          "n": 89398
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "initial_start",
+          "n": 4857
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "mid_pa_change_or_nonzero_count",
+          "n": 89
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "no_legal_choice",
+          "n": 9705
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "cohort_reason": "not_completed_batter_play",
+          "n": 268
+        }
+      ],
+      "exploration": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9823,
+          "mean_current_pitches": 19.9,
+          "n_pa_li": 9823,
+          "mean_pa_li": 0.797,
+          "n_quality": 4800,
+          "mean_quality": 99.88,
+          "n_physical": 4800,
+          "mean_physical": 100.28,
+          "n_command": 4800,
+          "mean_command": 99.46,
+          "n_half_wpa": 9816,
+          "n_half_runs": 9823,
+          "n_next_pa_wpa": 9822,
+          "n_next_pa_re24": 9767
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 35594,
+          "mean_current_pitches": 20.64,
+          "n_pa_li": 35594,
+          "mean_pa_li": 0.903,
+          "n_quality": 15979,
+          "mean_quality": 99.83,
+          "n_physical": 15979,
+          "mean_physical": 100.21,
+          "n_command": 15975,
+          "mean_command": 99.2,
+          "n_half_wpa": 35565,
+          "n_half_runs": 35594,
+          "n_next_pa_wpa": 35586,
+          "n_next_pa_re24": 35296
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4381,
+          "mean_current_pitches": 82.65,
+          "n_pa_li": 4381,
+          "mean_pa_li": 0.934,
+          "n_quality": 3136,
+          "mean_quality": 99.96,
+          "n_physical": 3133,
+          "mean_physical": 99.39,
+          "n_command": 3136,
+          "mean_command": 96.43,
+          "n_half_wpa": 4380,
+          "n_half_runs": 4381,
+          "n_next_pa_wpa": 4381,
+          "n_next_pa_re24": 4355
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 89398,
+          "mean_current_pitches": 48.05,
+          "n_pa_li": 89398,
+          "mean_pa_li": 1.058,
+          "n_quality": 46270,
+          "mean_quality": 100.14,
+          "n_physical": 46224,
+          "mean_physical": 100.06,
+          "n_command": 46270,
+          "mean_command": 97.2,
+          "n_half_wpa": 89333,
+          "n_half_runs": 89397,
+          "n_next_pa_wpa": 89378,
+          "n_next_pa_re24": 89236
+        }
+      ],
+      "examples": [
+        {
+          "decision_id": "822678:71:boundary",
+          "game_pk": 822678,
+          "role": "RP",
+          "observed_action": "change",
+          "current_pitches": 18,
+          "candidate_count": 10,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "822678:27:boundary",
+          "game_pk": 822678,
+          "role": "RP",
+          "observed_action": "continue",
+          "current_pitches": 20,
+          "candidate_count": 12,
+          "next_pa_result": "field_out",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "822678:42:boundary",
+          "game_pk": 822678,
+          "role": "SP",
+          "observed_action": "change",
+          "current_pitches": 87,
+          "candidate_count": 13,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        },
+        {
+          "decision_id": "822678:22:boundary",
+          "game_pk": 822678,
+          "role": "SP",
+          "observed_action": "continue",
+          "current_pitches": 36,
+          "candidate_count": 13,
+          "next_pa_result": "strikeout",
+          "half_remaining_runs_allowed": 0
+        }
+      ]
+    }
+  ],
+  "individual_ranking_allowed": false,
+  "observed_actions_only": true,
+  "candidate_availability": "nominal_only"
+}

@@ -1,0 +1,910 @@
+{
+  "version": "decision_role_observation_v2",
+  "protocol_sha256": "df433ce70c7a7c990b593c7e7fddb1f3c9f8f5051531d7eeb311cc66ed9317c2",
+  "audit": {
+    "year": 2024,
+    "current_rp_rows": 31638,
+    "legacy_vs_repaired": 7334,
+    "entry_vs_physical_session_differences": 20,
+    "all_differences_reconstructed": true,
+    "difference_rows": [
+      {
+        "decision_id": "746283:54:boundary",
+        "pitcher_id": 670167,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-07-03",
+        "current_physical_session_day": "2024-07-03",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745282:42:boundary",
+        "pitcher_id": 678495,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-29",
+        "current_physical_session_day": "2024-09-29",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745282:43:boundary",
+        "pitcher_id": 678495,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-29",
+        "current_physical_session_day": "2024-09-29",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745282:44:boundary",
+        "pitcher_id": 678495,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-29",
+        "current_physical_session_day": "2024-09-29",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745282:45:boundary",
+        "pitcher_id": 678495,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-29",
+        "current_physical_session_day": "2024-09-29",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "746172:100:boundary",
+        "pitcher_id": 650671,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-18",
+        "current_physical_session_day": "2024-09-18",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "746172:99:boundary",
+        "pitcher_id": 650671,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-09-18",
+        "current_physical_session_day": "2024-09-18",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745341:72:boundary",
+        "pitcher_id": 666808,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-05-15",
+        "current_physical_session_day": "2024-05-16",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745341:73:boundary",
+        "pitcher_id": 666808,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-05-15",
+        "current_physical_session_day": "2024-05-16",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745424:72:boundary",
+        "pitcher_id": 663568,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-04-26",
+        "current_physical_session_day": "2024-04-27",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745424:73:boundary",
+        "pitcher_id": 663568,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-04-26",
+        "current_physical_session_day": "2024-04-27",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745424:74:boundary",
+        "pitcher_id": 663568,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-04-26",
+        "current_physical_session_day": "2024-04-27",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745424:75:boundary",
+        "pitcher_id": 663568,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-04-26",
+        "current_physical_session_day": "2024-04-27",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745428:75:boundary",
+        "pitcher_id": 663568,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-04-28",
+        "current_physical_session_day": "2024-04-28",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "746095:52:boundary",
+        "pitcher_id": 669093,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-09-25",
+        "current_physical_session_day": "2024-09-25",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "747179:38:boundary",
+        "pitcher_id": 573009,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-07-10",
+        "current_physical_session_day": "2024-07-10",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "746507:35:boundary",
+        "pitcher_id": 669211,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 2,
+        "current_entry_day": "2024-08-31",
+        "current_physical_session_day": "2024-08-31",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "746126:58:boundary",
+        "pitcher_id": 681911,
+        "repaired_entry_streak": 0,
+        "old_physical_session_streak": 1,
+        "current_entry_day": "2024-07-04",
+        "current_physical_session_day": "2024-07-04",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745613:63:boundary",
+        "pitcher_id": 674944,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-09-07",
+        "current_physical_session_day": "2024-09-07",
+        "source_reconstruction_verified": true
+      },
+      {
+        "decision_id": "745613:68:boundary",
+        "pitcher_id": 674944,
+        "repaired_entry_streak": 1,
+        "old_physical_session_streak": 0,
+        "current_entry_day": "2024-09-07",
+        "current_physical_session_day": "2024-09-07",
+        "source_reconstruction_verified": true
+      }
+    ],
+    "scope": "Core uses NY appearance-entry day at actual/hypothetical entry. Physical pitch-day and decision-day counters retained separately; zero-pitch entries, midnight boundaries and resumed sessions can differ."
+  },
+  "years": [
+    {
+      "year": 2021,
+      "rows": 1716128,
+      "legacy_streak_differences": 130801,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1085631,
+          "streak": 1002219,
+          "three_day": 1065440,
+          "five_day": 1052974
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 498575,
+          "streak": 469851,
+          "three_day": 497131,
+          "five_day": 493313
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 39515,
+          "streak": 36555,
+          "three_day": 38913,
+          "five_day": 38428
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 92407,
+          "streak": 85689,
+          "three_day": 91129,
+          "five_day": 90218
+        }
+      ],
+      "time_violations": 0
+    },
+    {
+      "year": 2022,
+      "rows": 1774983,
+      "legacy_streak_differences": 26956,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1107781,
+          "streak": 1107781,
+          "three_day": 1107781,
+          "five_day": 1107781
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 529881,
+          "streak": 529881,
+          "three_day": 529881,
+          "five_day": 529881
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 40968,
+          "streak": 40968,
+          "three_day": 40968,
+          "five_day": 40968
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96353,
+          "streak": 96353,
+          "three_day": 96353,
+          "five_day": 96353
+        }
+      ],
+      "time_violations": 0
+    },
+    {
+      "year": 2023,
+      "rows": 1726750,
+      "legacy_streak_differences": 26900,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1065503,
+          "streak": 1065503,
+          "three_day": 1065503,
+          "five_day": 1065503
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 521678,
+          "streak": 521678,
+          "three_day": 521678,
+          "five_day": 521678
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 43704,
+          "streak": 43704,
+          "three_day": 43704,
+          "five_day": 43704
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 95865,
+          "streak": 95865,
+          "three_day": 95865,
+          "five_day": 95865
+        }
+      ],
+      "time_violations": 0
+    },
+    {
+      "year": 2024,
+      "rows": 1728765,
+      "legacy_streak_differences": 20975,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1054536,
+          "streak": 1054536,
+          "three_day": 1054536,
+          "five_day": 1054536
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 536149,
+          "streak": 536149,
+          "three_day": 536149,
+          "five_day": 536149
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 41450,
+          "streak": 41450,
+          "three_day": 41450,
+          "five_day": 41450
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96630,
+          "streak": 96630,
+          "three_day": 96630,
+          "five_day": 96630
+        }
+      ],
+      "time_violations": 0
+    },
+    {
+      "year": 2025,
+      "rows": 1731915,
+      "legacy_streak_differences": 20898,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1050218,
+          "streak": 1050218,
+          "three_day": 1050218,
+          "five_day": 1050218
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 543323,
+          "streak": 543323,
+          "three_day": 543323,
+          "five_day": 543323
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 42070,
+          "streak": 42070,
+          "three_day": 42070,
+          "five_day": 42070
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 96304,
+          "streak": 96304,
+          "three_day": 96304,
+          "five_day": 96304
+        }
+      ],
+      "time_violations": 0
+    },
+    {
+      "year": 2026,
+      "rows": 1736929,
+      "legacy_streak_differences": 22121,
+      "coverage": [
+        {
+          "is_current": false,
+          "option_role": "RP",
+          "n": 1052359,
+          "streak": 1052359,
+          "three_day": 1052336,
+          "five_day": 1052287
+        },
+        {
+          "is_current": false,
+          "option_role": "SP",
+          "n": 545374,
+          "streak": 545374,
+          "three_day": 545321,
+          "five_day": 545252
+        },
+        {
+          "is_current": true,
+          "option_role": "RP",
+          "n": 45417,
+          "streak": 45417,
+          "three_day": 45414,
+          "five_day": 45413
+        },
+        {
+          "is_current": true,
+          "option_role": "SP",
+          "n": 93779,
+          "streak": 93779,
+          "three_day": 93771,
+          "five_day": 93771
+        }
+      ],
+      "time_violations": 0
+    }
+  ],
+  "baseline_validation": {
+    "training_n": 407505,
+    "validation_n": 137699,
+    "models": {
+      "workload": {
+        "validation": {
+          "n": 137699,
+          "log_loss": 1.5190977991191685,
+          "brier": 0.7089053364236837,
+          "accuracy": 0.45941510105374767,
+          "ece": 0.0018058640960613222,
+          "calibration_bins": [
+            {
+              "lower": 0.4,
+              "n": 135848,
+              "mean_confidence": 0.46061742856372484,
+              "accuracy": 0.45888787468346975
+            },
+            {
+              "lower": 0.5,
+              "n": 1851,
+              "mean_confidence": 0.505515529248328,
+              "accuracy": 0.49810913019989195
+            }
+          ],
+          "classwise_calibration": [
+            {
+              "outcome": "k",
+              "events": 30713,
+              "brier": 0.17283863938426283,
+              "ece": 0.0031822125742668036,
+              "bins": [
+                {
+                  "lower": 0.1,
+                  "n": 20763,
+                  "mean_probability": 0.18654482591879498,
+                  "event_rate": 0.18479988440976738
+                },
+                {
+                  "lower": 0.2,
+                  "n": 116911,
+                  "mean_probability": 0.23325077137440092,
+                  "event_rate": 0.22981584282060713
+                },
+                {
+                  "lower": 0.3,
+                  "n": 25,
+                  "mean_probability": 0.30494653762245777,
+                  "event_rate": 0.32
+                }
+              ]
+            },
+            {
+              "outcome": "bb",
+              "events": 10644,
+              "brier": 0.07125371433825727,
+              "ece": 0.0002994308976059822,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 133585,
+                  "mean_probability": 0.07638494936518618,
+                  "event_rate": 0.0765654826514953
+                },
+                {
+                  "lower": 0.1,
+                  "n": 4114,
+                  "mean_probability": 0.10527826838061292,
+                  "event_rate": 0.1011181332036947
+                }
+              ]
+            },
+            {
+              "outcome": "hbp",
+              "events": 1464,
+              "brier": 0.010515404806151088,
+              "ece": 0.000151426498090107,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.01078331198745459,
+                  "event_rate": 0.010631885489364484
+                }
+              ]
+            },
+            {
+              "outcome": "hr",
+              "events": 4152,
+              "brier": 0.029237852496540057,
+              "ece": 0.00017949619778394668,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.030332220618440597,
+                  "event_rate": 0.03015272442065665
+                }
+              ]
+            },
+            {
+              "outcome": "single",
+              "events": 19758,
+              "brier": 0.12284969269828554,
+              "ece": 0.0046145997662540295,
+              "bins": [
+                {
+                  "lower": 0.1,
+                  "n": 137699,
+                  "mean_probability": 0.13887228103898058,
+                  "event_rate": 0.1434868808052346
+                }
+              ]
+            },
+            {
+              "outcome": "double",
+              "events": 5962,
+              "brier": 0.041409900409635665,
+              "ece": 8.787604579593711e-05,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.043385212990871794,
+                  "event_rate": 0.04329733694507586
+                }
+              ]
+            },
+            {
+              "outcome": "triple",
+              "events": 532,
+              "brier": 0.003848639160231797,
+              "ece": 0.0004056575269140287,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.0034578418449042127,
+                  "event_rate": 0.0038634993718182414
+                }
+              ]
+            },
+            {
+              "outcome": "other_out",
+              "events": 63261,
+              "brier": 0.2482228115822584,
+              "ece": 0.0018058640960613222,
+              "bins": [
+                {
+                  "lower": 0.4,
+                  "n": 135848,
+                  "mean_probability": 0.46061742856372484,
+                  "event_rate": 0.45888787468346975
+                },
+                {
+                  "lower": 0.5,
+                  "n": 1851,
+                  "mean_probability": 0.505515529248328,
+                  "event_rate": 0.49810913019989195
+                }
+              ]
+            },
+            {
+              "outcome": "other_reach",
+              "events": 1213,
+              "brier": 0.00872868154806106,
+              "ece": 0.00033030386779963304,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.00847876518862053,
+                  "event_rate": 0.008809069056420163
+                }
+              ]
+            }
+          ]
+        },
+        "convergence_warning": false,
+        "delta_vs_v1": {
+          "games": 2427,
+          "mean_challenger_minus_baseline": -6.33205795427051e-05,
+          "game_cluster_95pct": [
+            -0.00010755094268738148,
+            -8.373306697606276e-06
+          ],
+          "replicates": 100
+        }
+      },
+      "matchup": {
+        "validation": {
+          "n": 137699,
+          "log_loss": 1.500161253874768,
+          "brier": 0.7016601822622632,
+          "accuracy": 0.4605625313183102,
+          "ece": 0.012519561363510047,
+          "calibration_bins": [
+            {
+              "lower": 0.2,
+              "n": 1,
+              "mean_confidence": 0.29184441873667627,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.3,
+              "n": 12937,
+              "mean_confidence": 0.3799070549773269,
+              "accuracy": 0.37396614361907704
+            },
+            {
+              "lower": 0.4,
+              "n": 79654,
+              "mean_confidence": 0.4565477068063428,
+              "accuracy": 0.4413839857383182
+            },
+            {
+              "lower": 0.5,
+              "n": 44946,
+              "mean_confidence": 0.5286569737192045,
+              "accuracy": 0.5190228273928714
+            },
+            {
+              "lower": 0.6,
+              "n": 159,
+              "mean_confidence": 0.6258393197807874,
+              "accuracy": 0.5911949685534591
+            },
+            {
+              "lower": 0.7,
+              "n": 2,
+              "mean_confidence": 0.7029174763055708,
+              "accuracy": 0.5
+            }
+          ],
+          "classwise_calibration": [
+            {
+              "outcome": "k",
+              "events": 30713,
+              "brier": 0.1692949009846228,
+              "ece": 0.006922213771894692,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 2132,
+                  "mean_probability": 0.08785693309557124,
+                  "event_rate": 0.08395872420262664
+                },
+                {
+                  "lower": 0.1,
+                  "n": 57842,
+                  "mean_probability": 0.16066719391748033,
+                  "event_rate": 0.16894298260779364
+                },
+                {
+                  "lower": 0.2,
+                  "n": 60815,
+                  "mean_probability": 0.24323745683362477,
+                  "event_rate": 0.24872153251664886
+                },
+                {
+                  "lower": 0.3,
+                  "n": 15610,
+                  "mean_probability": 0.33368542867732304,
+                  "event_rate": 0.32696989109545166
+                },
+                {
+                  "lower": 0.4,
+                  "n": 1254,
+                  "mean_probability": 0.4273134297439615,
+                  "event_rate": 0.40669856459330145
+                },
+                {
+                  "lower": 0.5,
+                  "n": 46,
+                  "mean_probability": 0.5214808299177595,
+                  "event_rate": 0.4782608695652174
+                }
+              ]
+            },
+            {
+              "outcome": "bb",
+              "events": 10644,
+              "brier": 0.07074913456250216,
+              "ece": 0.0026332331994542847,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 118659,
+                  "mean_probability": 0.06760566736114818,
+                  "event_rate": 0.07031914983271391
+                },
+                {
+                  "lower": 0.1,
+                  "n": 18957,
+                  "mean_probability": 0.11886357921385651,
+                  "event_rate": 0.12069420266919871
+                },
+                {
+                  "lower": 0.2,
+                  "n": 83,
+                  "mean_probability": 0.2157991915086157,
+                  "event_rate": 0.14457831325301204
+                }
+              ]
+            },
+            {
+              "outcome": "hbp",
+              "events": 1464,
+              "brier": 0.010485833745463705,
+              "ece": 0.000792822796933903,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137697,
+                  "mean_probability": 0.009840824630943941,
+                  "event_rate": 0.01063203991372361
+                },
+                {
+                  "lower": 0.1,
+                  "n": 2,
+                  "mean_probability": 0.11146776104469988,
+                  "event_rate": 0.0
+                }
+              ]
+            },
+            {
+              "outcome": "hr",
+              "events": 4152,
+              "brier": 0.029142128105072013,
+              "ece": 0.00013260868688195248,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137686,
+                  "mean_probability": 0.03027819833329876,
+                  "event_rate": 0.03015557137254332
+                },
+                {
+                  "lower": 0.1,
+                  "n": 13,
+                  "mean_probability": 0.10585137356805983,
+                  "event_rate": 0.0
+                }
+              ]
+            },
+            {
+              "outcome": "single",
+              "events": 19758,
+              "brier": 0.1224072069169661,
+              "ece": 0.0031839169969061823,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 4628,
+                  "mean_probability": 0.09180279393981472,
+                  "event_rate": 0.09140017286084702
+                },
+                {
+                  "lower": 0.1,
+                  "n": 132413,
+                  "mean_probability": 0.14168911868151912,
+                  "event_rate": 0.1448649301805714
+                },
+                {
+                  "lower": 0.2,
+                  "n": 658,
+                  "mean_probability": 0.2081457018548429,
+                  "event_rate": 0.23252279635258358
+                }
+              ]
+            },
+            {
+              "outcome": "double",
+              "events": 5962,
+              "brier": 0.04140182659368369,
+              "ece": 0.0006286673590342809,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.04392600430411014,
+                  "event_rate": 0.04329733694507586
+                }
+              ]
+            },
+            {
+              "outcome": "triple",
+              "events": 532,
+              "brier": 0.0038463083945103737,
+              "ece": 0.0004988958243480521,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.0033646035474701893,
+                  "event_rate": 0.0038634993718182414
+                }
+              ]
+            },
+            {
+              "outcome": "other_out",
+              "events": 63261,
+              "brier": 0.24560503688901483,
+              "ece": 0.012374210099946933,
+              "bins": [
+                {
+                  "lower": 0.2,
+                  "n": 355,
+                  "mean_probability": 0.280013208750328,
+                  "event_rate": 0.323943661971831
+                },
+                {
+                  "lower": 0.3,
+                  "n": 13867,
+                  "mean_probability": 0.3720978371050943,
+                  "event_rate": 0.36698637051993943
+                },
+                {
+                  "lower": 0.4,
+                  "n": 78416,
+                  "mean_probability": 0.4570049202856268,
+                  "event_rate": 0.44195062232197513
+                },
+                {
+                  "lower": 0.5,
+                  "n": 44900,
+                  "mean_probability": 0.5286643256705379,
+                  "event_rate": 0.5190645879732739
+                },
+                {
+                  "lower": 0.6,
+                  "n": 159,
+                  "mean_probability": 0.6258393197807874,
+                  "event_rate": 0.5911949685534591
+                },
+                {
+                  "lower": 0.7,
+                  "n": 2,
+                  "mean_probability": 0.7029174763055708,
+                  "event_rate": 0.5
+                }
+              ]
+            },
+            {
+              "outcome": "other_reach",
+              "events": 1213,
+              "brier": 0.008727806070427595,
+              "ece": 0.0010417011396787867,
+              "bins": [
+                {
+                  "lower": 0.0,
+                  "n": 137699,
+                  "mean_probability": 0.007767367916741376,
+                  "event_rate": 0.008809069056420163
+                }
+              ]
+            }
+          ]
+        },
+        "convergence_warning": false,
+        "delta_vs_v1": {
+          "games": 2427,
+          "mean_challenger_minus_baseline": -8.026333906643522e-05,
+          "game_cluster_95pct": [
+            -0.00014430213375210243,
+            -3.165898066261829e-05
+          ],
+          "replicates": 100
+        }
+      }
+    },
+    "test_outcome_metrics_examined": false,
+    "promotion": "research_only"
+  }
+}

@@ -98,7 +98,7 @@ def test_tracker_and_generated_decision_snapshot_preserve_utf8_chinese():
     project=next(p for p in tracker['projects'] if p['id']=='pitcher-decision-support')
     snapshot=json.loads((root/'frontend/data/pitcherDecisionPlan.json').read_text('utf-8'))
     assert snapshot['project']==project
-    assert '資料' in project['summary']
+    assert sum('\u4e00' <= char <= '\u9fff' for char in project['summary']) >= 20
     for obj in [project,snapshot]:
         text=json.dumps(obj,ensure_ascii=False)
         assert '???' not in text and '\ufffd' not in text

@@ -1,0 +1,20 @@
+{
+  "version": "decision_overlap_source_audit_v1",
+  "previous_hashes": 1081,
+  "retained_core_hashes": 96,
+  "new_final_hashes": 124,
+  "boundaries": 546930,
+  "changes": 54669,
+  "restored_out_of_nominal": 38,
+  "models": 24,
+  "progress": "40/47",
+  "stop": "15",
+  "primary_balance_passed2024": {
+    "SP": false,
+    "RP": false
+  },
+  "operational_recommendations": 0,
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user",
+  "checks": "source/data/clock/assignment-mass/accounting; no efficacy, exchangeability or visual acceptance claim"
+}

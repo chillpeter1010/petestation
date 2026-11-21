@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+import json
 from pathlib import Path
 from typing import Any
 
@@ -10,12 +11,18 @@ import pandas as pd
 
 from app.api.schemas.leverage import LeverageScenarioRequest, LeverageStateInput
 from app.core.config import settings
+from app.core.mlb_teams import MLB_TEAM_CODE_TO_ID
 from app.repositories.pitch_repository import get_season_duckdb_path, resolve_pitch_table
 from app.services.wpa_service import WPA_CALIBRATION_VERSION, calibrate_pitcher_wpa
 
 
 MODEL_VERSION = f"pete_empirical_li_v2_pa_boundary_{WPA_CALIBRATION_VERSION}"
 SUPPORTED_YEARS = {2025, 2026}
+ENTRY_WPA_COLUMNS = {
+    "entry_wpa_low": "gmLI < 1", "entry_wpa_mid": "1 ≤ gmLI ≤ 2", "entry_wpa_high": "gmLI > 2",
+}
+TEAM_CODE_ALIASES = {"ARI": "AZ", "CHW": "CWS", "KCR": "KC", "OAK": "ATH", "SDP": "SD",
+                     "SFG": "SF", "TBR": "TB", "WAS": "WSH", "WSN": "WSH"}
 REFERENCE_COLUMNS = {
     "WPA": "wpa", "-WPA": "negative_wpa", "+WPA": "positive_wpa", "RE24": "re24", "REW": "rew",
     "pLI": "pli", "inLI": "inli", "gmLI": "gmli", "exLI": "exli", "Pulls": "pulls", "WPA/LI": "wpa_li",
@@ -97,6 +104,7 @@ def _prepare_plate_appearances(year: int) -> tuple[pd.DataFrame, str | None]:
                 ARG_MAX(b.post_home_score, b.pitch_number) AS final_home_score,
                 ARG_MAX(b.post_away_score, b.pitch_number) AS final_away_score,
                 SUM(b.delta_pitcher_run_exp) AS pa_re24,
+                CASE WHEN COUNT(b.delta_pitcher_run_exp) = COUNT(*) THEN SUM(b.delta_pitcher_run_exp) END AS complete_pa_re24,
                 pg.pitcher_first_seq > tg.team_first_seq AS is_reliever,
                 MIN(b.pitch_seq) AS pa_seq
             FROM base b
@@ -185,7 +193,8 @@ def _build_bundle(year: int) -> dict[str, Any]:
     )
     states["li"] = (states["mean_abs_wpa"] / global_abs_wpa).clip(0, 10)
     state_li = states.set_index("state_key")["li"]
-    pa["li"] = pa["state_key"].map(state_li).fillna(1.0)
+    pa["entry_li"] = pa["state_key"].map(state_li)
+    pa["li"] = pa["entry_li"].fillna(1.0)
 
     half_end = pa.groupby(["game_pk", "inning", "inning_topbot"], as_index=False)["post_bat_score"].max().rename(columns={"post_bat_score": "inning_end_score"})
     pa = pa.merge(half_end, on=["game_pk", "inning", "inning_topbot"], how="left")
@@ -220,6 +229,9 @@ def _build_bundle(year: int) -> dict[str, Any]:
         re24=("pa_re24", "sum"), pli=("li", "mean"), wpa_li=("wpa_li_event", "sum"),
     )
     local = local.merge(appearance_summary, on="pitcher", how="left").merge(inning_li, on="pitcher", how="left").merge(latest_teams, on="pitcher", how="left")
+    moves = _pitching_moves(pa)
+    player_entry_wpa = moves.groupby("pitcher", as_index=False)[list(ENTRY_WPA_COLUMNS)].sum(min_count=1)
+    local = local.merge(player_entry_wpa, on="pitcher", how="left")
     reference = _reference_rows(year)
     run_ratios = (reference["re24"] / reference["rew"]).replace([np.inf, -np.inf], np.nan).dropna()
     run_ratios = run_ratios[run_ratios.abs().between(7, 13)]
@@ -239,6 +251,7 @@ def _build_bundle(year: int) -> dict[str, Any]:
         "reference": reference,
         "data_as_of": data_as_of,
         "runs_per_win": runs_per_win,
+        "team_pitching_rows": _team_pitching_rows(moves),
     }
 
 
@@ -263,6 +276,54 @@ def _clean(value: Any, digits: int = 3) -> float | int | None:
     return round(float(numeric), digits)
 
 
+def _pitching_moves(pa: pd.DataFrame) -> pd.DataFrame:
+    keys = ["game_pk", "pitcher_team"]
+    ordered = pa.sort_values([*keys, "pa_seq"]).copy()
+    previous = ordered.groupby(keys)["pitcher"].shift()
+    ordered["stint"] = ordered["pitcher"].ne(previous).cumsum()
+    ordered["initial"] = previous.isna()
+    moves = ordered.groupby("stint", as_index=False).agg(
+        pitcher=("pitcher", "first"), pitcher_team=("pitcher_team", "first"),
+        initial=("initial", "any"), entry_li=("entry_li", lambda values: values.iloc[0]),
+        move_wpa=("pa_wpa", "sum"), wpa_n=("pa_wpa", "count"),
+        move_re24=("complete_pa_re24", "sum"), re24_n=("complete_pa_re24", "count"),
+        pa_n=("pa_seq", "size"),
+    )
+    moves = moves[~moves["initial"]].copy()
+    moves["move_wpa"] = moves["move_wpa"].where(moves["wpa_n"].eq(moves["pa_n"]))
+    moves["move_re24"] = moves["move_re24"].where(moves["re24_n"].eq(moves["pa_n"]))
+    li = moves["entry_li"]
+    for column, mask in zip(ENTRY_WPA_COLUMNS, (li.lt(1), li.between(1, 2), li.gt(2)), strict=True):
+        moves[column] = moves["move_wpa"].where(mask)
+        moves[f"{column}_moves"] = mask
+    return moves
+
+
+def _team_pitching_rows(appearances: pd.DataFrame) -> list[dict[str, Any]]:
+    appearances = appearances.assign(pitcher_team=appearances["pitcher_team"].replace(TEAM_CODE_ALIASES))
+    rows = []
+    for team, moves in appearances.groupby("pitcher_team", sort=True):
+        if team not in MLB_TEAM_CODE_TO_ID:
+            continue
+        wpa, re24 = moves["move_wpa"], moves["move_re24"]
+        rows.append({
+            "team": team, "moves": len(moves), "wpa_n": int(wpa.count()), "re24_n": int(re24.count()),
+            "wpa": _clean(wpa.sum(min_count=1), 6), "re24": _clean(re24.sum(min_count=1), 6),
+            "wpa_per_move": _clean(wpa.mean(), 6), "re24_per_move": _clean(re24.mean(), 6),
+            "mean_entry_li": _clean(moves["entry_li"].mean(), 6),
+            **{column: _clean(moves[column].sum(min_count=1), 6) for column in ENTRY_WPA_COLUMNS},
+            **{f"{column}_moves": int(moves[f"{column}_moves"].sum()) for column in ENTRY_WPA_COLUMNS},
+        })
+    return rows
+
+
+def _pinch_hit_snapshot(year: int) -> dict[str, Any]:
+    path = settings.data_dir / "sample" / "petehub_leverage_pinch_hits_v1.json"
+    if not path.is_file():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))["seasons"].get(str(year), {})
+
+
 def _leaderboard_records(frame: pd.DataFrame) -> list[dict[str, Any]]:
     ranked = frame.sort_values(["wpa", "re24"], ascending=[False, False]).reset_index(drop=True)
     rows: list[dict[str, Any]] = []
@@ -271,6 +332,7 @@ def _leaderboard_records(frame: pd.DataFrame) -> list[dict[str, Any]]:
             "rank": index + 1, "player_id": int(row["player_id"]), "name": str(row.get("name") or row["player_id"]),
             "team": str(row.get("team") or "-"), "appearances": int(row["appearances"]) if pd.notna(row.get("appearances")) else None,
             **{key: _clean(row.get(key), 3) for key in ["wpa", "negative_wpa", "positive_wpa", "re24", "rew", "pli", "inli", "gmli", "exli", "wpa_li", "clutch"]},
+            **{key: _clean(row.get(key), 6) for key in ENTRY_WPA_COLUMNS},
             "pulls": int(row["pulls"]) if pd.notna(row.get("pulls")) else None,
             "shutdowns": int(row["shutdowns"]) if pd.notna(row.get("shutdowns")) else None,
             "meltdowns": int(row["meltdowns"]) if pd.notna(row.get("meltdowns")) else None,
@@ -306,6 +368,7 @@ def _validation(local: pd.DataFrame, reference: pd.DataFrame) -> list[dict[str, 
 
 def get_leverage_overview(year: int) -> dict[str, Any]:
     bundle = _bundle(year)
+    pinch_hits = _pinch_hit_snapshot(year)
     raw_reference = bundle["reference"].copy()
     relief_ids = set(bundle["local"]["player_id"].astype(int))
     reference = raw_reference[raw_reference["player_id"].isin(relief_ids)].copy()
@@ -327,6 +390,9 @@ def get_leverage_overview(year: int) -> dict[str, Any]:
         "estimated_rows": _leaderboard_records(bundle["local"]),
         "reference_rows": _leaderboard_records(reference),
         "validation": _validation(bundle["local"], reference),
+        "team_pitching_rows": bundle["team_pitching_rows"],
+        "team_pinch_hit_rows": pinch_hits.get("rows", []),
+        "pinch_hit_data_as_of": pinch_hits.get("data_as_of"),
     }
 
 

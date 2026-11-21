@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type {
-  LeverageLeaderboardRow,
   LeverageOverviewResponse,
   LeverageScenarioInput,
   LeverageScenarioResponse,
@@ -20,6 +19,13 @@ const search = ref('')
 const team = ref('All')
 const minimumAppearances = ref(0)
 const stateSides = ['entry', 'exit'] as const
+const teamMode = ref<'pitching' | 'pinch-hit'>('pitching')
+const entryWpaColumns = [
+  { key: 'entry_wpa_low', label: 'WPA · gmLI < 1' },
+  { key: 'entry_wpa_mid', label: 'WPA · 1 ≤ gmLI ≤ 2' },
+  { key: 'entry_wpa_high', label: 'WPA · gmLI > 2' }
+]
+let overviewRequest = 0
 
 function defaultEntry(): LeverageStateInput {
   return { inning: 8, half: 'Top', outs: 1, runner_first: true, runner_second: false, runner_third: false, fielding_score: 2, opponent_score: 2 }
@@ -44,12 +50,28 @@ const leaderboardTable = computed<TablePayload>(() => ({
     { key: 'rank', label: '#' }, { key: 'name', label: 'Name' }, { key: 'team', label: 'Team' },
     { key: 'appearances', label: 'G' }, { key: 'wpa', label: 'WPA' }, { key: 'negative_wpa', label: '-WPA' },
     { key: 'positive_wpa', label: '+WPA' }, { key: 're24', label: 'RE24' }, { key: 'rew', label: 'REW' },
-    { key: 'pli', label: 'pLI' }, { key: 'inli', label: 'inLI' }, { key: 'gmli', label: 'gmLI' },
-    { key: 'exli', label: 'exLI' }, { key: 'pulls', label: 'Pulls' }, { key: 'wpa_li', label: 'WPA/LI' },
+    ...entryWpaColumns,
+    { key: 'pulls', label: 'Pulls' }, { key: 'wpa_li', label: 'WPA/LI' },
     { key: 'clutch', label: 'Clutch' }, { key: 'shutdowns', label: 'SD' }, { key: 'meltdowns', label: 'MD' }
   ],
   rows: filteredRows.value as unknown as Record<string, unknown>[]
 }))
+const teamTable = computed<TablePayload>(() => {
+  const pitching = teamMode.value === 'pitching'
+  const rows = (pitching ? overview.value?.team_pitching_rows : overview.value?.team_pinch_hit_rows) || []
+  return {
+    columns: [
+      { key: 'team', label: 'Team' },
+      { key: 'moves', label: pitching ? 'Observed entries' : 'Matched PH' },
+      ...(pitching ? [] : [{ key: 'announced_moves', label: 'Announced PH' }]),
+      { key: 'wpa', label: 'Total WPA' }, { key: 'wpa_n', label: 'WPA N' },
+      { key: 're24', label: 'Total RE24' }, { key: 're24_n', label: 'RE24 N' },
+      { key: 'wpa_per_move', label: 'WPA / move' }, { key: 're24_per_move', label: 'RE24 / move' },
+      ...(pitching ? entryWpaColumns : [])
+    ],
+    rows: [...rows].sort((a, b) => (b.wpa ?? -Infinity) - (a.wpa ?? -Infinity)).map(row => ({ ...row }))
+  }
+})
 const validationTable = computed<TablePayload>(() => ({
   columns: [
     { key: 'label', label: 'Metric' }, { key: 'samples', label: 'N' }, { key: 'correlation', label: 'Correlation' },
@@ -74,11 +96,18 @@ watch(year, async value => {
 onMounted(() => Promise.all([loadOverview(), calculate()]))
 
 async function loadOverview() {
+  const request = ++overviewRequest
   loading.value = true
   errorMessage.value = ''
-  try { overview.value = await api.leverageOverview(year.value) }
-  catch (error: unknown) { errorMessage.value = error instanceof Error ? error.message : 'Unable to load leverage data.' }
-  finally { loading.value = false }
+  overview.value = null
+  try {
+    const payload = await api.leverageOverview(year.value)
+    if (request === overviewRequest) overview.value = payload
+  } catch (error: unknown) {
+    if (request === overviewRequest) errorMessage.value = error instanceof Error ? error.message : 'Unable to load leverage data.'
+  } finally {
+    if (request === overviewRequest) loading.value = false
+  }
 }
 async function calculate() {
   calculating.value = true
@@ -218,6 +247,38 @@ function playerLink(row: Record<string, unknown>) {
         headshot-id-key="player_id"
         :link-to="playerLink"
       />
+      <p v-if="!loading" class="substitution-note">
+        {{ source === 'estimated'
+          ? 'Entry gmLI is the local LI at the first observed pitch of a relief stint. Each bin sums complete stint WPA.'
+          : 'Collected Reference has season totals. Entry gmLI WPA bins are available in Local Estimate.' }}
+      </p>
+    </section>
+
+    <section class="leaderboard-section panel">
+      <header class="section-header">
+        <div><span>Team leaderboard</span><h2>Substitution outcomes</h2></div>
+        <small>{{ year }}</small>
+      </header>
+      <div class="substitution-controls">
+        <label>Move type<select v-model="teamMode"><option value="pitching">Pitching changes</option><option value="pinch-hit">Pinch hitters</option></select></label>
+        <p>
+          {{ teamMode === 'pitching'
+            ? 'Local estimate · incoming pitcher’s observed stint, grouped by the team at entry.'
+            : 'Official pinch-hit announcements matched to the batter’s completed plate appearance. Offensive perspective.' }}
+          Data through {{ (teamMode === 'pitching' ? overview?.data_as_of : overview?.pinch_hit_data_as_of) || '—' }}.
+          Per-move values use each metric’s scored N.
+        </p>
+      </div>
+      <div v-if="loading" class="loading-panel">Loading substitution outcomes…</div>
+      <DataTable v-else :key="teamMode" :table="teamTable" :max-rows="30" empty-text="No substitution data for this season." />
+      <p class="substitution-note">Observed outcomes reflect the situations and players selected. Comparing managerial decisions requires a comparable alternative.</p>
+    </section>
+    <section v-if="overview?.team_pitching_rows?.length" class="panel" aria-labelledby="entry-leverage-heading">
+      <header class="section-header">
+        <div><span>Pitching changes</span><h2 id="entry-leverage-heading">Entry gmLI mix &amp; WPA</h2></div>
+        <small>{{ year }}</small>
+      </header>
+      <TeamEntryLeverage :rows="overview.team_pitching_rows" />
     </section>
   </main>
 </template>
@@ -260,6 +321,10 @@ button:disabled{opacity:.55;cursor:wait}
 .metric-grid strong{font-family:var(--leverage-number-font);font-size:32px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
 .metric-grid em{max-width:100%;width:max-content;padding:4px 7px;color:var(--color-primary);background:color-mix(in srgb,var(--color-primary) 10%,transparent);font-size:12px;font-style:normal;text-transform:uppercase}
 .panel>.section-header{padding:20px 22px;border-bottom:1px solid var(--color-border)}
+.substitution-controls{display:flex;align-items:end;flex-wrap:wrap;gap:12px 22px;padding:14px 22px}
+.substitution-controls label{min-width:210px}
+.substitution-controls p,.substitution-note{color:var(--color-muted-text);font-size:14px;margin:0}
+.substitution-note{padding:12px 22px}
 .state-output{border:0;box-shadow:none;background:transparent}
 .state-output-grid{display:grid;gap:16px}
 .state-output-grid article{min-width:0;border:1px solid var(--color-border);padding:20px;background:var(--color-surface)}

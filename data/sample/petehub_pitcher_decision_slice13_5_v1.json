@@ -1,0 +1,1309 @@
+{
+  "version": "decision_batter_matchup_v1",
+  "protocol_sha256": "e1eebdfca26d21d29ec605a6a6123f075eaed31565d0af20e9b10cfeba8ff92e",
+  "years": [
+    {
+      "year": 2021,
+      "rows": 131922,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 42902,
+          "same_game_pa": 39876,
+          "same_pitcher_pa": 2749,
+          "historical_pair": 14377,
+          "known_type": 22053,
+          "type_own_pa": 19537,
+          "affinity_whiff": 39701
+        },
+        {
+          "role": "SP",
+          "n": 89020,
+          "same_game_pa": 59219,
+          "same_pitcher_pa": 59031,
+          "historical_pair": 66694,
+          "known_type": 83134,
+          "type_own_pa": 79055,
+          "affinity_whiff": 83604
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    },
+    {
+      "year": 2022,
+      "rows": 137321,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 45217,
+          "same_game_pa": 43162,
+          "same_pitcher_pa": 2826,
+          "historical_pair": 21540,
+          "known_type": 25748,
+          "type_own_pa": 24649,
+          "affinity_whiff": 43976
+        },
+        {
+          "role": "SP",
+          "n": 92104,
+          "same_game_pa": 63115,
+          "same_pitcher_pa": 62861,
+          "historical_pair": 76095,
+          "known_type": 90223,
+          "type_own_pa": 89070,
+          "affinity_whiff": 90617
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    },
+    {
+      "year": 2023,
+      "rows": 139569,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 47721,
+          "same_game_pa": 45399,
+          "same_pitcher_pa": 4451,
+          "historical_pair": 22721,
+          "known_type": 29254,
+          "type_own_pa": 28372,
+          "affinity_whiff": 46356
+        },
+        {
+          "role": "SP",
+          "n": 91848,
+          "same_game_pa": 63168,
+          "same_pitcher_pa": 62808,
+          "historical_pair": 75098,
+          "known_type": 90066,
+          "type_own_pa": 89267,
+          "affinity_whiff": 90400
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    },
+    {
+      "year": 2024,
+      "rows": 138080,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 45680,
+          "same_game_pa": 43425,
+          "same_pitcher_pa": 3461,
+          "historical_pair": 23940,
+          "known_type": 27057,
+          "type_own_pa": 26544,
+          "affinity_whiff": 44738
+        },
+        {
+          "role": "SP",
+          "n": 92400,
+          "same_game_pa": 63545,
+          "same_pitcher_pa": 63301,
+          "historical_pair": 77197,
+          "known_type": 90853,
+          "type_own_pa": 90181,
+          "affinity_whiff": 91018
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    },
+    {
+      "year": 2025,
+      "rows": 138374,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 46211,
+          "same_game_pa": 44012,
+          "same_pitcher_pa": 3645,
+          "historical_pair": 24295,
+          "known_type": 26668,
+          "type_own_pa": 26035,
+          "affinity_whiff": 44993
+        },
+        {
+          "role": "SP",
+          "n": 92163,
+          "same_game_pa": 63177,
+          "same_pitcher_pa": 62885,
+          "historical_pair": 77909,
+          "known_type": 90738,
+          "type_own_pa": 90077,
+          "affinity_whiff": 90904
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    },
+    {
+      "year": 2026,
+      "rows": 139196,
+      "coverage": [
+        {
+          "role": "RP",
+          "n": 49328,
+          "same_game_pa": 46591,
+          "same_pitcher_pa": 4929,
+          "historical_pair": 26924,
+          "known_type": 30152,
+          "type_own_pa": 29538,
+          "affinity_whiff": 48003
+        },
+        {
+          "role": "SP",
+          "n": 89868,
+          "same_game_pa": 61275,
+          "same_pitcher_pa": 60899,
+          "historical_pair": 75993,
+          "known_type": 88656,
+          "type_own_pa": 88066,
+          "affinity_whiff": 88980
+        }
+      ],
+      "time_violations": 0,
+      "scope": "actual observed actor; prior completed PAs only; same-game, exact pair, other pitchers, team and historical family/type scopes remain distinct"
+    }
+  ],
+  "associations": {
+    "version": "decision_batter_matchup_v1",
+    "panels": [
+      {
+        "role": "SP",
+        "metric": "contact_rate",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 124852,
+            "appearances": 14513,
+            "pitchers": 644,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 114847,
+            "appearances": 13934,
+            "pitchers": 519,
+            "delta": 0.0032347461541469853,
+            "low95": -0.0017452650444301212,
+            "high95": 0.008214757352724093,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 59979,
+            "appearances": 11821,
+            "pitchers": 458,
+            "delta": 0.005761523211799713,
+            "low95": -0.00032683661922762366,
+            "high95": 0.01184988304282705,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 1588,
+            "appearances": 844,
+            "pitchers": 200,
+            "delta": 0.013499205728275733,
+            "low95": -0.01576088560419872,
+            "high95": 0.04275929706075019,
+            "supported": true
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 41551,
+            "appearances": 4853,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 39490,
+            "appearances": 4694,
+            "pitchers": 328,
+            "delta": -0.00144643177721873,
+            "low95": -0.009616224479633487,
+            "high95": 0.006723360925196027,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 20918,
+            "appearances": 4153,
+            "pitchers": 291,
+            "delta": 0.000830103813365127,
+            "low95": -0.00913735242191344,
+            "high95": 0.010797560048643694,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 415,
+            "appearances": 240,
+            "pitchers": 117,
+            "delta": 0.01966175763337517,
+            "low95": -0.036758507558308784,
+            "high95": 0.07608202282505913,
+            "supported": true
+          }
+        ]
+      },
+      {
+        "role": "SP",
+        "metric": "contact_rate",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 124658,
+            "appearances": 14513,
+            "pitchers": 644,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 104124,
+            "appearances": 13910,
+            "pitchers": 520,
+            "delta": 0.0020659665512597837,
+            "low95": -0.0028265721045435785,
+            "high95": 0.006958505207063146,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 63078,
+            "appearances": 13390,
+            "pitchers": 490,
+            "delta": 0.005375196815375806,
+            "low95": -0.0011389203800526628,
+            "high95": 0.011889314010804276,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 9405,
+            "appearances": 6700,
+            "pitchers": 416,
+            "delta": 0.006597831819884729,
+            "low95": -0.005104863624485627,
+            "high95": 0.018300527264255084,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 1,
+            "appearances": 1,
+            "pitchers": 1,
+            "delta": -0.22909702326390702,
+            "low95": -0.23236490118865644,
+            "high95": -0.2258291453391576,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 41459,
+            "appearances": 4853,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 35944,
+            "appearances": 4688,
+            "pitchers": 328,
+            "delta": -0.002374341206061506,
+            "low95": -0.011104934840804926,
+            "high95": 0.0063562524286819135,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 21640,
+            "appearances": 4579,
+            "pitchers": 315,
+            "delta": 0.001410729315062339,
+            "low95": -0.00858445802247278,
+            "high95": 0.011405916652597457,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 3329,
+            "appearances": 2393,
+            "pitchers": 268,
+            "delta": 0.006220074528110764,
+            "low95": -0.013764812182054475,
+            "high95": 0.026204961238276002,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 2,
+            "appearances": 2,
+            "pitchers": 2,
+            "delta": 0.2488853164208788,
+            "low95": 0.19486595206379598,
+            "high95": 0.3029046807779616,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "SP",
+        "metric": "whiff_rate",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 124852,
+            "appearances": 14513,
+            "pitchers": 644,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 114847,
+            "appearances": 13934,
+            "pitchers": 519,
+            "delta": -0.0032345358837369727,
+            "low95": -0.008214548916786473,
+            "high95": 0.001745477149312528,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 59979,
+            "appearances": 11821,
+            "pitchers": 458,
+            "delta": -0.005761234326803871,
+            "low95": -0.011849596095517912,
+            "high95": 0.0003271274419101699,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 1588,
+            "appearances": 844,
+            "pitchers": 200,
+            "delta": -0.01349912350998911,
+            "low95": -0.04275922516914721,
+            "high95": 0.015760978149168985,
+            "supported": true
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 41551,
+            "appearances": 4853,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 39490,
+            "appearances": 4694,
+            "pitchers": 328,
+            "delta": 0.0014465842191599965,
+            "low95": -0.006723232268396183,
+            "high95": 0.009616400706716176,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 20918,
+            "appearances": 4153,
+            "pitchers": 291,
+            "delta": -0.000829898991019254,
+            "low95": -0.010797354916459459,
+            "high95": 0.009137556934420952,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 415,
+            "appearances": 240,
+            "pitchers": 117,
+            "delta": -0.019661446606992827,
+            "low95": -0.07608193335883327,
+            "high95": 0.03675904014484761,
+            "supported": true
+          }
+        ]
+      },
+      {
+        "role": "SP",
+        "metric": "whiff_rate",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 124658,
+            "appearances": 14513,
+            "pitchers": 644,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 104124,
+            "appearances": 13910,
+            "pitchers": 520,
+            "delta": -0.0020657748752221433,
+            "low95": -0.006958322079031647,
+            "high95": 0.0028267723285873604,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 63078,
+            "appearances": 13390,
+            "pitchers": 490,
+            "delta": -0.005374928671120618,
+            "low95": -0.01188904798056396,
+            "high95": 0.0011391906383227254,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 9405,
+            "appearances": 6700,
+            "pitchers": 416,
+            "delta": -0.006597562558527183,
+            "low95": -0.01830026346427579,
+            "high95": 0.005105138347221423,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 1,
+            "appearances": 1,
+            "pitchers": 1,
+            "delta": 0.22909971977727556,
+            "low95": 0.22583184143397964,
+            "high95": 0.23236759812057148,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 41459,
+            "appearances": 4853,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 35944,
+            "appearances": 4688,
+            "pitchers": 328,
+            "delta": 0.0023744697077189665,
+            "low95": -0.006356140327116175,
+            "high95": 0.011105079742554109,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 21640,
+            "appearances": 4579,
+            "pitchers": 315,
+            "delta": -0.001410529475869109,
+            "low95": -0.011405720812726956,
+            "high95": 0.008584661860988739,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 3329,
+            "appearances": 2393,
+            "pitchers": 268,
+            "delta": -0.006219883089445004,
+            "low95": -0.026204799856091567,
+            "high95": 0.013765033677201556,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 2,
+            "appearances": 2,
+            "pitchers": 2,
+            "delta": -0.2488850279865387,
+            "low95": -0.30290682268716335,
+            "high95": -0.19486323328591404,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "SP",
+        "metric": "ev",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 86912,
+            "appearances": 14507,
+            "pitchers": 643,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 83649,
+            "appearances": 13895,
+            "pitchers": 516,
+            "delta": 0.24140251834928292,
+            "low95": -0.038705124132888985,
+            "high95": 0.5215101608314548,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 44712,
+            "appearances": 11507,
+            "pitchers": 455,
+            "delta": 0.5249220450025768,
+            "low95": 0.16038336654941515,
+            "high95": 0.8894607234557383,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 1222,
+            "appearances": 735,
+            "pitchers": 192,
+            "delta": 0.3107645980556416,
+            "low95": -1.4699816913529715,
+            "high95": 2.091510887464255,
+            "supported": true
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 28999,
+            "appearances": 4851,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 28638,
+            "appearances": 4686,
+            "pitchers": 325,
+            "delta": 0.26799875902139725,
+            "low95": -0.2653963384674515,
+            "high95": 0.801393856510246,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 15499,
+            "appearances": 4019,
+            "pitchers": 287,
+            "delta": 0.4279546783086851,
+            "low95": -0.24979571436285913,
+            "high95": 1.1057050709802294,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 327,
+            "appearances": 208,
+            "pitchers": 102,
+            "delta": 0.16574199816790636,
+            "low95": -3.512726917816566,
+            "high95": 3.8442109141523786,
+            "supported": true
+          }
+        ]
+      },
+      {
+        "role": "SP",
+        "metric": "ev",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 86775,
+            "appearances": 14507,
+            "pitchers": 643,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 76194,
+            "appearances": 13838,
+            "pitchers": 516,
+            "delta": 0.22451080357436,
+            "low95": -0.02791472111348961,
+            "high95": 0.47693632826220966,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 46642,
+            "appearances": 12920,
+            "pitchers": 483,
+            "delta": 0.5904461048026091,
+            "low95": 0.26761934548052774,
+            "high95": 0.9132728641246903,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 6884,
+            "appearances": 5366,
+            "pitchers": 404,
+            "delta": 0.8019170652558175,
+            "low95": 0.11348175298714636,
+            "high95": 1.4903523775244887,
+            "supported": true
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 28932,
+            "appearances": 4851,
+            "pitchers": 369,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 26174,
+            "appearances": 4668,
+            "pitchers": 325,
+            "delta": 0.3032724602558693,
+            "low95": -0.25259432637706414,
+            "high95": 0.8591392468888027,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 15855,
+            "appearances": 4440,
+            "pitchers": 311,
+            "delta": 0.31794722397781916,
+            "low95": -0.3450568449729552,
+            "high95": 0.9809512929285935,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 2500,
+            "appearances": 1942,
+            "pitchers": 260,
+            "delta": 0.13072107034538738,
+            "low95": -1.020470197060067,
+            "high95": 1.2819123377508417,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 2,
+            "appearances": 2,
+            "pitchers": 2,
+            "delta": 8.864283079731411,
+            "low95": -9.217010147611706,
+            "high95": 26.94557630707453,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "contact_rate",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 205875,
+            "appearances": 48248,
+            "pitchers": 1255,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 8854,
+            "appearances": 2547,
+            "pitchers": 721,
+            "delta": 0.01127138785315989,
+            "low95": -0.001217159985498999,
+            "high95": 0.02375993569181878,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 764,
+            "appearances": 236,
+            "pitchers": 141,
+            "delta": 0.02134926552510655,
+            "low95": -0.013340492090057495,
+            "high95": 0.056039023140270594,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 14,
+            "appearances": 8,
+            "pitchers": 8,
+            "delta": 0.005655965242711421,
+            "low95": -0.2792878994882698,
+            "high95": 0.2905998299736927,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 67166,
+            "appearances": 15753,
+            "pitchers": 668,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 3047,
+            "appearances": 835,
+            "pitchers": 316,
+            "delta": 0.008945260037176269,
+            "low95": -0.01730251593438583,
+            "high95": 0.03519303600873837,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 291,
+            "appearances": 88,
+            "pitchers": 52,
+            "delta": 0.028091841571127003,
+            "low95": -0.04483568963241549,
+            "high95": 0.10101937277466949,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 5,
+            "appearances": 4,
+            "pitchers": 4,
+            "delta": -0.09150118980164679,
+            "low95": -0.3249800066706424,
+            "high95": 0.14197762706734882,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "contact_rate",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 205751,
+            "appearances": 48248,
+            "pitchers": 1255,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 7460,
+            "appearances": 2511,
+            "pitchers": 743,
+            "delta": 0.013758242996050623,
+            "low95": 0.00039370673534267625,
+            "high95": 0.02712277925675857,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 2198,
+            "appearances": 1180,
+            "pitchers": 456,
+            "delta": 0.004397905755525477,
+            "low95": -0.02179015980102794,
+            "high95": 0.03058597131207889,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 98,
+            "appearances": 85,
+            "pitchers": 67,
+            "delta": 0.003381505943553658,
+            "low95": -0.10028970533482283,
+            "high95": 0.10705271722193015,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 67110,
+            "appearances": 15753,
+            "pitchers": 668,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 2607,
+            "appearances": 847,
+            "pitchers": 332,
+            "delta": 0.008624834648686113,
+            "low95": -0.01752596198831302,
+            "high95": 0.03477563128568525,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 748,
+            "appearances": 406,
+            "pitchers": 193,
+            "delta": 0.014355347055985377,
+            "low95": -0.023664403932817806,
+            "high95": 0.05237509804478856,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 44,
+            "appearances": 38,
+            "pitchers": 29,
+            "delta": -0.012111320452185808,
+            "low95": -0.15643977349481927,
+            "high95": 0.13221713259044768,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "whiff_rate",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 205875,
+            "appearances": 48248,
+            "pitchers": 1255,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 8854,
+            "appearances": 2547,
+            "pitchers": 721,
+            "delta": -0.011270846669826569,
+            "low95": -0.023759365866942952,
+            "high95": 0.0012176725272898155,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 764,
+            "appearances": 236,
+            "pitchers": 141,
+            "delta": -0.021348564702689914,
+            "low95": -0.05603822223806416,
+            "high95": 0.01334109283268433,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 14,
+            "appearances": 8,
+            "pitchers": 8,
+            "delta": -0.00565494291968282,
+            "low95": -0.29059926921219986,
+            "high95": 0.2792893833728342,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 67166,
+            "appearances": 15753,
+            "pitchers": 668,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 3047,
+            "appearances": 835,
+            "pitchers": 316,
+            "delta": -0.008944857613606434,
+            "low95": -0.035192696579726006,
+            "high95": 0.01730298135251314,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 291,
+            "appearances": 88,
+            "pitchers": 52,
+            "delta": -0.028091263546549096,
+            "low95": -0.1010189255570634,
+            "high95": 0.04483639846396522,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 5,
+            "appearances": 4,
+            "pitchers": 4,
+            "delta": 0.09150088379291166,
+            "low95": -0.14198035026064365,
+            "high95": 0.32498211784646697,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "whiff_rate",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 205751,
+            "appearances": 48248,
+            "pitchers": 1255,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 7460,
+            "appearances": 2511,
+            "pitchers": 743,
+            "delta": -0.01375768545063548,
+            "low95": -0.027122088082815847,
+            "high95": -0.0003932828184551162,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 2198,
+            "appearances": 1180,
+            "pitchers": 456,
+            "delta": -0.004397465934605954,
+            "low95": -0.030585240419328155,
+            "high95": 0.021790308550116246,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 98,
+            "appearances": 85,
+            "pitchers": 67,
+            "delta": -0.003381313428482406,
+            "low95": -0.10705171361539756,
+            "high95": 0.10028908675843273,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 67110,
+            "appearances": 15753,
+            "pitchers": 668,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 2607,
+            "appearances": 847,
+            "pitchers": 332,
+            "delta": -0.008624401570449493,
+            "low95": -0.034775212085151636,
+            "high95": 0.01752640894425265,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 748,
+            "appearances": 406,
+            "pitchers": 193,
+            "delta": -0.01435493837303324,
+            "low95": -0.05237468671647358,
+            "high95": 0.023664809970407097,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 44,
+            "appearances": 38,
+            "pitchers": 29,
+            "delta": 0.012111151874018261,
+            "low95": -0.13221730229496534,
+            "high95": 0.15643960604300186,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "ev",
+        "axis": "encounter",
+        "training": [
+          {
+            "bin": 1,
+            "n": 141675,
+            "appearances": 46256,
+            "pitchers": 1254,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 6693,
+            "appearances": 2294,
+            "pitchers": 678,
+            "delta": 0.3058609574663412,
+            "low95": -0.6135387932278282,
+            "high95": 1.2252607081605107,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 600,
+            "appearances": 222,
+            "pitchers": 137,
+            "delta": -0.20923333605142647,
+            "low95": -3.201062671387308,
+            "high95": 2.782595999284455,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 11,
+            "appearances": 7,
+            "pitchers": 7,
+            "delta": -2.6551042766440416,
+            "low95": -23.636644460839662,
+            "high95": 18.326435907551577,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 1,
+            "n": 46601,
+            "appearances": 15139,
+            "pitchers": 667,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 2296,
+            "appearances": 761,
+            "pitchers": 302,
+            "delta": 0.37141548137751906,
+            "low95": -0.862644558233782,
+            "high95": 1.60547552098882,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 242,
+            "appearances": 84,
+            "pitchers": 50,
+            "delta": 0.558465307592157,
+            "low95": -2.750475036194772,
+            "high95": 3.867405651379086,
+            "supported": true
+          },
+          {
+            "bin": 4,
+            "n": 3,
+            "appearances": 3,
+            "pitchers": 3,
+            "delta": 2.706156822115199,
+            "low95": -12.790540198478658,
+            "high95": 18.202853842709054,
+            "supported": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "metric": "ev",
+        "axis": "prior_physical_pitches",
+        "training": [
+          {
+            "bin": 0,
+            "n": 141581,
+            "appearances": 46253,
+            "pitchers": 1254,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 5654,
+            "appearances": 2212,
+            "pitchers": 682,
+            "delta": 0.2298794706218174,
+            "low95": -0.7114279116917024,
+            "high95": 1.171186852935337,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 1670,
+            "appearances": 995,
+            "pitchers": 428,
+            "delta": 0.7132450824007448,
+            "low95": -0.7581419395361386,
+            "high95": 2.184632104337628,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 74,
+            "appearances": 67,
+            "pitchers": 54,
+            "delta": 1.0515578164761212,
+            "low95": -5.315022715025022,
+            "high95": 7.418138347977265,
+            "supported": false
+          }
+        ],
+        "validation_2024": [
+          {
+            "bin": 0,
+            "n": 46558,
+            "appearances": 15139,
+            "pitchers": 667,
+            "delta": 0.0,
+            "low95": 0.0,
+            "high95": 0.0,
+            "supported": true
+          },
+          {
+            "bin": 1,
+            "n": 1981,
+            "appearances": 747,
+            "pitchers": 308,
+            "delta": 0.622496907213576,
+            "low95": -0.7176760709496008,
+            "high95": 1.9626698853767528,
+            "supported": true
+          },
+          {
+            "bin": 2,
+            "n": 565,
+            "appearances": 334,
+            "pitchers": 174,
+            "delta": 0.8478723586769598,
+            "low95": -1.4516901837870493,
+            "high95": 3.147434901140969,
+            "supported": true
+          },
+          {
+            "bin": 3,
+            "n": 38,
+            "appearances": 34,
+            "pitchers": 28,
+            "delta": 1.728617228911573,
+            "low95": -5.806542108028825,
+            "high95": 9.263776565851972,
+            "supported": false
+          }
+        ]
+      }
+    ],
+    "controls": "pitch count, prior batter ability, identities/hand/date/context, response pitch-family mix, balls/strikes/zone and research Plus; response controls are diagnostic only, never prediction inputs",
+    "pitch_bins": [
+      "0",
+      "1-5",
+      "6-10",
+      "11-20",
+      "21+"
+    ],
+    "interval": "200 game x pitcher bootstrap, simultaneous95 within panel, nuisance fit fixed; cross-panel comparisons exploratory",
+    "scope": "observed retained pitchers; no causal familiarity or psychological-targeting claim; no test outcome metrics"
+  },
+  "recommendation_allowed": false,
+  "test_outcome_metrics_examined": false
+}

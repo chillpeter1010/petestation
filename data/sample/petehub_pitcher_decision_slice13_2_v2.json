@@ -1,0 +1,169 @@
+{
+  "version": "decision_role_observation_v2",
+  "protocol_sha256": "df433ce70c7a7c990b593c7e7fddb1f3c9f8f5051531d7eeb311cc66ed9317c2",
+  "years": [
+    {
+      "year": 2021,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 92407,
+          "stuff": 46661,
+          "location": 46625,
+          "quality": 9609,
+          "physical": 9609,
+          "command": 9598,
+          "same_type_delta": 28051,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 39515,
+          "stuff": 20418,
+          "location": 20407,
+          "quality": 4503,
+          "physical": 4503,
+          "command": 4502,
+          "same_type_delta": 11886,
+          "time_violations": 0
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 96353,
+          "stuff": 95728,
+          "location": 95728,
+          "quality": 58003,
+          "physical": 57966,
+          "command": 58003,
+          "same_type_delta": 58934,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 40968,
+          "stuff": 40937,
+          "location": 40937,
+          "quality": 23254,
+          "physical": 23189,
+          "command": 23252,
+          "same_type_delta": 23523,
+          "time_violations": 0
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 95865,
+          "stuff": 95385,
+          "location": 95385,
+          "quality": 57455,
+          "physical": 57420,
+          "command": 57455,
+          "same_type_delta": 58295,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 43704,
+          "stuff": 43683,
+          "location": 43683,
+          "quality": 23608,
+          "physical": 23588,
+          "command": 23594,
+          "same_type_delta": 24197,
+          "time_violations": 0
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 96630,
+          "stuff": 96607,
+          "location": 96607,
+          "quality": 56838,
+          "physical": 56751,
+          "command": 56819,
+          "same_type_delta": 57524,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 41450,
+          "stuff": 41432,
+          "location": 41432,
+          "quality": 21275,
+          "physical": 21241,
+          "command": 21275,
+          "same_type_delta": 21638,
+          "time_violations": 0
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 96304,
+          "stuff": 96082,
+          "location": 96113,
+          "quality": 54073,
+          "physical": 54097,
+          "command": 54098,
+          "same_type_delta": 54599,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 42070,
+          "stuff": 42050,
+          "location": 42050,
+          "quality": 20440,
+          "physical": 20440,
+          "command": 20430,
+          "same_type_delta": 20925,
+          "time_violations": 0
+        }
+      ]
+    },
+    {
+      "year": 2026,
+      "roles": [
+        {
+          "role": "SP",
+          "n": 93779,
+          "stuff": 93578,
+          "location": 93578,
+          "quality": 49406,
+          "physical": 49357,
+          "command": 49406,
+          "same_type_delta": 49935,
+          "time_violations": 0
+        },
+        {
+          "role": "RP",
+          "n": 45417,
+          "stuff": 45243,
+          "location": 45243,
+          "quality": 20779,
+          "physical": 20779,
+          "command": 20775,
+          "same_type_delta": 21426,
+          "time_violations": 0
+        }
+      ]
+    }
+  ],
+  "scope": "Observed prefix levels, same-type deltas, personal past references and outcome support; not a causal fatigue or swap indicator"
+}

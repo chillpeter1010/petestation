@@ -1,0 +1,26 @@
+{
+  "stage": "sources",
+  "artifact_counts": {
+    "decision_preparation_v1": 100,
+    "decision_baseline_v1": 39,
+    "decision_ablation_v1": 35,
+    "decision_action_values_v1": 27,
+    "decision_role_observation_v2": 263,
+    "decision_batter_matchup_v1": 85
+  },
+  "identity_exclusions": 110,
+  "forecast_vs_prior_role_changes": {
+    "2021": 221,
+    "2022": 293,
+    "2023": 425,
+    "2024": 285,
+    "2025": 340,
+    "2026": 470
+  },
+  "frozen_protocols_verified": true,
+  "formal_metadata_guards_verified": 2,
+  "test_outcome_metrics_examined": false,
+  "recommendation_allowed": false,
+  "ui_acceptance": "pending_user",
+  "status": "source_checks_passed"
+}

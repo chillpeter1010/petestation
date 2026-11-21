@@ -1,0 +1,468 @@
+{
+  "version": "decision_action_values_v2",
+  "protocol_sha256": "da967129a006e23142399044deb8f4f493855901c30a6120ffccc0d47aeba5b9",
+  "original_cases": 484,
+  "modeled_role_cases": 484,
+  "role_supported": 437,
+  "role_direction_counts": {
+    "uncertain_or_unsupported": 423,
+    "pool_higher": 50,
+    "continue_higher": 11
+  },
+  "old_direction_counts": {
+    "uncertain_or_unsupported": 417,
+    "pool_higher": 55,
+    "continue_higher": 12
+  },
+  "old_new_direction_crosstab": {
+    "continue_higher": {
+      "continue_higher": 6,
+      "pool_higher": 0,
+      "uncertain_or_unsupported": 6
+    },
+    "pool_higher": {
+      "continue_higher": 0,
+      "pool_higher": 33,
+      "uncertain_or_unsupported": 22
+    },
+    "uncertain_or_unsupported": {
+      "continue_higher": 5,
+      "pool_higher": 17,
+      "uncertain_or_unsupported": 395
+    }
+  },
+  "role_value_delta_changes": {
+    "wpa": {
+      "mean_change": 0.00013774576319176398,
+      "median_change": 4.703162000628644e-05,
+      "p10_p90": [
+        -0.004478887532991681,
+        0.0045365109445272295
+      ],
+      "mean_old": 0.004299956579250321,
+      "mean_new": 0.004437702342442086
+    },
+    "re24": {
+      "mean_change": 0.0008151472107438016,
+      "median_change": 0.0,
+      "p10_p90": [
+        -0.0390625,
+        0.0390625
+      ],
+      "mean_old": 0.036576704545454544,
+      "mean_new": 0.037391851756198344
+    }
+  },
+  "role_unsupported_mass": {
+    "mean": 6.424955946810605e-05,
+    "maximum": 0.007902861216343617
+  },
+  "examples": [
+    {
+      "decision_id": "744814:45:boundary",
+      "wpa_delta_old": 0.0026371832,
+      "wpa_delta_new": 0.0014565167,
+      "wpa_mc95_low_new": -0.0045940247,
+      "wpa_mc95_high_new": 0.0075070581,
+      "wpa_bootstrap80_low_new": 0.0024591897,
+      "wpa_bootstrap80_high_new": 0.0043634743,
+      "re24_delta_old": 0.046875,
+      "re24_delta_new": 0.01953125,
+      "pitches_continue": 5.17578125,
+      "pitches_pool": 5.43359375,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744814,
+      "inning": 6,
+      "half": "top",
+      "outs": 2,
+      "base_state": 5
+    },
+    {
+      "decision_id": "744819:56:boundary",
+      "wpa_delta_old": -0.0022896372,
+      "wpa_delta_new": -0.000646455,
+      "wpa_mc95_low_new": -0.0187858574,
+      "wpa_mc95_high_new": 0.0174929475,
+      "wpa_bootstrap80_low_new": -0.0114112434,
+      "wpa_bootstrap80_high_new": -0.0040777285,
+      "re24_delta_old": -0.046875,
+      "re24_delta_new": -0.03125,
+      "pitches_continue": 16.70703125,
+      "pitches_pool": 16.0859375,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 6,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744819,
+      "inning": 7,
+      "half": "bottom",
+      "outs": 0,
+      "base_state": 0
+    },
+    {
+      "decision_id": "744819:69:boundary",
+      "wpa_delta_old": -0.0155151844,
+      "wpa_delta_new": -0.0181748667,
+      "wpa_mc95_low_new": -0.0450528588,
+      "wpa_mc95_high_new": 0.0087031253,
+      "wpa_bootstrap80_low_new": -0.0177668321,
+      "wpa_bootstrap80_high_new": -0.0027529339,
+      "re24_delta_old": -0.1328125,
+      "re24_delta_new": -0.14453125,
+      "pitches_continue": 10.05078125,
+      "pitches_pool": 9.98828125,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 4,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744819,
+      "inning": 9,
+      "half": "top",
+      "outs": 1,
+      "base_state": 3
+    },
+    {
+      "decision_id": "744826:46:boundary",
+      "wpa_delta_old": 0.0011860964,
+      "wpa_delta_new": 0.0010112814,
+      "wpa_mc95_low_new": -0.0002876976,
+      "wpa_mc95_high_new": 0.0023102604,
+      "wpa_bootstrap80_low_new": 0.001228967,
+      "wpa_bootstrap80_high_new": 0.0020095672,
+      "re24_delta_old": 0.06640625,
+      "re24_delta_new": 0.05078125,
+      "pitches_continue": 11.3671875,
+      "pitches_pool": 11.79296875,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 6,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744826,
+      "inning": 6,
+      "half": "bottom",
+      "outs": 1,
+      "base_state": 4
+    },
+    {
+      "decision_id": "744833:50:boundary",
+      "wpa_delta_old": 0.003003331,
+      "wpa_delta_new": 0.0024561104,
+      "wpa_mc95_low_new": -0.0023842551,
+      "wpa_mc95_high_new": 0.0072964759,
+      "wpa_bootstrap80_low_new": 0.0004463715,
+      "wpa_bootstrap80_high_new": 0.0034769432,
+      "re24_delta_old": 0.05078125,
+      "re24_delta_new": 0.046875,
+      "pitches_continue": 10.32421875,
+      "pitches_pool": 10.58203125,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744833,
+      "inning": 7,
+      "half": "top",
+      "outs": 1,
+      "base_state": 0
+    },
+    {
+      "decision_id": "744839:10:boundary",
+      "wpa_delta_old": 0.0035790964,
+      "wpa_delta_new": 0.0055668403,
+      "wpa_mc95_low_new": -0.0088316773,
+      "wpa_mc95_high_new": 0.0199653579,
+      "wpa_bootstrap80_low_new": 0.0062724788,
+      "wpa_bootstrap80_high_new": 0.01518471,
+      "re24_delta_old": 0.0234375,
+      "re24_delta_new": 0.04296875,
+      "pitches_continue": 15.61328125,
+      "pitches_pool": 16.0546875,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "top",
+      "outs": 0,
+      "base_state": 0
+    },
+    {
+      "decision_id": "744839:11:boundary",
+      "wpa_delta_old": 0.0210871422,
+      "wpa_delta_new": 0.0209537936,
+      "wpa_mc95_low_new": 0.0023469167,
+      "wpa_mc95_high_new": 0.0395606706,
+      "wpa_bootstrap80_low_new": 0.0114708501,
+      "wpa_bootstrap80_high_new": 0.0215507233,
+      "re24_delta_old": 0.19921875,
+      "re24_delta_new": 0.19140625,
+      "pitches_continue": 15.234375,
+      "pitches_pool": 15.1640625,
+      "simulation_supported_new": true,
+      "research_direction_new": "pool_higher",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "top",
+      "outs": 0,
+      "base_state": 1
+    },
+    {
+      "decision_id": "744839:12:boundary",
+      "wpa_delta_old": 0.001522624,
+      "wpa_delta_new": 0.0018535801,
+      "wpa_mc95_low_new": -0.0129812583,
+      "wpa_mc95_high_new": 0.0166884186,
+      "wpa_bootstrap80_low_new": 0.0015509113,
+      "wpa_bootstrap80_high_new": 0.0085311159,
+      "re24_delta_old": 0.015625,
+      "re24_delta_new": 0.01953125,
+      "pitches_continue": 10.1640625,
+      "pitches_pool": 10.3203125,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "top",
+      "outs": 1,
+      "base_state": 1
+    },
+    {
+      "decision_id": "744839:13:boundary",
+      "wpa_delta_old": -0.0055993698,
+      "wpa_delta_new": -0.0065112646,
+      "wpa_mc95_low_new": -0.019178699,
+      "wpa_mc95_high_new": 0.0061561698,
+      "wpa_bootstrap80_low_new": -0.0010098971,
+      "wpa_bootstrap80_high_new": 0.0051826691,
+      "re24_delta_old": -0.04296875,
+      "re24_delta_new": -0.05078125,
+      "pitches_continue": 5.0390625,
+      "pitches_pool": 5.30859375,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 8,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "top",
+      "outs": 2,
+      "base_state": 1
+    },
+    {
+      "decision_id": "744839:14:boundary",
+      "wpa_delta_old": -0.0004971238,
+      "wpa_delta_new": 0.0021304238,
+      "wpa_mc95_low_new": -0.0054335161,
+      "wpa_mc95_high_new": 0.0096943636,
+      "wpa_bootstrap80_low_new": -0.0069877066,
+      "wpa_bootstrap80_high_new": -0.0015893504,
+      "re24_delta_old": -0.0078125,
+      "re24_delta_new": 0.02734375,
+      "pitches_continue": 16.44921875,
+      "pitches_pool": 16.49609375,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 9,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "bottom",
+      "outs": 0,
+      "base_state": 0
+    },
+    {
+      "decision_id": "744839:15:boundary",
+      "wpa_delta_old": -0.002663791,
+      "wpa_delta_new": -0.0025836024,
+      "wpa_mc95_low_new": -0.0124974881,
+      "wpa_mc95_high_new": 0.0073302833,
+      "wpa_bootstrap80_low_new": -0.0014935716,
+      "wpa_bootstrap80_high_new": 0.0037980988,
+      "re24_delta_old": -0.04296875,
+      "re24_delta_new": -0.07421875,
+      "pitches_continue": 15.8984375,
+      "pitches_pool": 16.046875,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 9,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "bottom",
+      "outs": 0,
+      "base_state": 2
+    },
+    {
+      "decision_id": "744839:16:boundary",
+      "wpa_delta_old": 0.0049793139,
+      "wpa_delta_new": 0.0004840257,
+      "wpa_mc95_low_new": -0.00906138,
+      "wpa_mc95_high_new": 0.0100294314,
+      "wpa_bootstrap80_low_new": 0.0031751061,
+      "wpa_bootstrap80_high_new": 0.00943664,
+      "re24_delta_old": 0.04296875,
+      "re24_delta_new": 0.0,
+      "pitches_continue": 10.47265625,
+      "pitches_pool": 10.53125,
+      "simulation_supported_new": true,
+      "research_direction_new": "uncertain_or_unsupported",
+      "pool_n": 9,
+      "unsupported_mass_new": 0.0,
+      "game_pk": 744839,
+      "inning": 2,
+      "half": "bottom",
+      "outs": 1,
+      "base_state": 1
+    }
+  ],
+  "example_selection": "first12 decision IDs, including unsupported; no value/outcome-based selection",
+  "conditional_pool_comparisons": 1072,
+  "pool_summary": [
+    {
+      "pool": "hand_L",
+      "n": 309,
+      "supported": 272,
+      "directions": {
+        "uncertain_or_unsupported": 276,
+        "pool_higher": 24,
+        "continue_higher": 9
+      }
+    },
+    {
+      "pool": "hand_R",
+      "n": 480,
+      "supported": 433,
+      "directions": {
+        "uncertain_or_unsupported": 409,
+        "pool_higher": 61,
+        "continue_higher": 10
+      }
+    },
+    {
+      "pool": "role",
+      "n": 484,
+      "supported": 437,
+      "directions": {
+        "uncertain_or_unsupported": 423,
+        "pool_higher": 50,
+        "continue_higher": 11
+      }
+    },
+    {
+      "pool": "type_L:fastball:90to95",
+      "n": 9,
+      "supported": 9,
+      "directions": {
+        "uncertain_or_unsupported": 7,
+        "continue_higher": 1,
+        "pool_higher": 1
+      }
+    },
+    {
+      "pool": "type_L:fastball:under90",
+      "n": 4,
+      "supported": 4,
+      "directions": {
+        "uncertain_or_unsupported": 3,
+        "continue_higher": 1
+      }
+    },
+    {
+      "pool": "type_L:mixed:90to95",
+      "n": 1,
+      "supported": 1,
+      "directions": {
+        "uncertain_or_unsupported": 1
+      }
+    },
+    {
+      "pool": "type_R:breaking:90to95",
+      "n": 6,
+      "supported": 6,
+      "directions": {
+        "uncertain_or_unsupported": 4,
+        "pool_higher": 2
+      }
+    },
+    {
+      "pool": "type_R:breaking:95plus",
+      "n": 12,
+      "supported": 9,
+      "directions": {
+        "uncertain_or_unsupported": 9,
+        "pool_higher": 3
+      }
+    },
+    {
+      "pool": "type_R:fastball:90to95",
+      "n": 162,
+      "supported": 144,
+      "directions": {
+        "uncertain_or_unsupported": 139,
+        "pool_higher": 18,
+        "continue_higher": 5
+      }
+    },
+    {
+      "pool": "type_R:fastball:95plus",
+      "n": 69,
+      "supported": 64,
+      "directions": {
+        "uncertain_or_unsupported": 57,
+        "pool_higher": 11,
+        "continue_higher": 1
+      }
+    },
+    {
+      "pool": "type_R:mixed:90to95",
+      "n": 18,
+      "supported": 15,
+      "directions": {
+        "uncertain_or_unsupported": 17,
+        "pool_higher": 1
+      }
+    },
+    {
+      "pool": "type_R:mixed:95plus",
+      "n": 2,
+      "supported": 2,
+      "directions": {
+        "uncertain_or_unsupported": 2
+      }
+    }
+  ],
+  "first_PA_models": {
+    "SP": "repaired_global_matchup",
+    "RP": "repaired_global_matchup"
+  },
+  "future_PA_model": "repaired_global_matchup; no hypothetical signal evolution",
+  "future_lineup": "all484 explicitly paired historical league fallback",
+  "paths": 256,
+  "bootstrap_models": 8,
+  "bootstrap_convergence_warning": false,
+  "resources": "expected added pitches/BF per arm; remaining nominal RP count; medical/warmup/budget unknown, no long-term cost priced",
+  "scope": "stratified fixed484 research comparisons, conditional pools exploratory and not best-pool selection; no event matching/deduplication (14.2)",
+  "recommendation_allowed": false,
+  "individual_ranking_allowed": false,
+  "test_outcome_metrics_examined": false,
+  "preparation": {
+    "original_cases": 484,
+    "modeled_cases": 484,
+    "options": 3880,
+    "excluded": [],
+    "conditional_pool_comparisons": 1072,
+    "future_lineup_verified": 0,
+    "future_lineup_fallback": 484,
+    "individual_availability": "game-listed/nominal legality known; active/warmup/medical/manual confirmation unknown",
+    "type_pool": "same past hand:dominant family:velocity type, each candidate >=20 own batter-vs-type PA and >=50 repertoire pitches; >=2 candidates",
+    "resource_scope": "expected added pitches/BF and nominal RP counts, no arbitrary run/WPA fatigue penalty or unobserved long-term budget"
+  }
+}

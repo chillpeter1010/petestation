@@ -1,0 +1,3833 @@
+{
+  "version": "decision_signal_lights_calibrated_tails_v2",
+  "updatedAt": "2026-11-19",
+  "mode": "observed",
+  "cases": [
+    {
+      "id": "744862:9:boundary",
+      "decisionId": "744862:9:boundary",
+      "label": "744862 · 1上 · Jake Irvin",
+      "gamePk": 744862,
+      "pitcherName": "Jake Irvin",
+      "role": "SP",
+      "inning": 1,
+      "half": "top",
+      "pitches": 32.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：82.00球",
+            "本場／個人中位用球：0.39",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.93"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.84pp，ΔxRE24 +0.176分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744862:home:1:1:2；決策前資料年齡 1.0分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.9925266901437133
+    },
+    {
+      "id": "745274:15:boundary",
+      "decisionId": "745274:15:boundary",
+      "label": "745274 · 2下 · Jordan Wicks",
+      "gamePk": 745274,
+      "pitcherName": "Jordan Wicks",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 26.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：88.00球",
+            "本場／個人中位用球：0.30",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +2.78pp，ΔxRE24 +0.328分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745274:away:1:1:1；決策前資料年齡 2.6分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.7492605830423242
+    },
+    {
+      "id": "745274:9:boundary",
+      "decisionId": "745274:9:boundary",
+      "label": "745274 · 2上 · Bryce Miller",
+      "gamePk": 745274,
+      "pitcherName": "Bryce Miller",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 21.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：84.50球",
+            "本場／個人中位用球：0.25",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.12pp，ΔxRE24 +0.086分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745274:home:1:1:1；決策前資料年齡 0.8分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7394832939661448
+    },
+    {
+      "id": "745311:27:boundary",
+      "decisionId": "745311:27:boundary",
+      "label": "745311 · 4上 · Hayden Birdsong",
+      "gamePk": 745311,
+      "pitcherName": "Hayden Birdsong",
+      "role": "SP",
+      "inning": 4,
+      "half": "top",
+      "pitches": 50.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.09 Plus點",
+            "平滑後額外Stuff偏離：3.85 Plus點",
+            "額外球速偏離：0.11 mph",
+            "標準化／百分位嚴重度：-0.13"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.15 Plus點",
+            "平滑後位置偏離：-1.11 Plus點",
+            "標準化／百分位嚴重度：0.36"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.75",
+            "平滑接觸率偏離：-0.20",
+            "標準化／百分位嚴重度：-1.09"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：87.00球",
+            "本場／個人中位用球：未知",
+            "近72h其他場／中位用球：未知",
+            "進場前連續登板日：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +2.19pp，ΔxRE24 +0.234分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745311:home:1:1:4；決策前資料年齡 0.6分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.6116199419133772
+    },
+    {
+      "id": "745311:15:boundary",
+      "decisionId": "745311:15:boundary",
+      "label": "745311 · 2下 · Simeon Woods Richardson",
+      "gamePk": 745311,
+      "pitcherName": "Simeon Woods Richardson",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 24.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：85.50球",
+            "本場／個人中位用球：0.28",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.07pp，ΔxRE24 +0.070分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745311:away:1:1:1；決策前資料年齡 12.4分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.9572069168903257
+    },
+    {
+      "id": "745479:40:boundary",
+      "decisionId": "745479:40:boundary",
+      "label": "745479 · 5下 · Luis Severino",
+      "gamePk": 745479,
+      "pitcherName": "Luis Severino",
+      "role": "SP",
+      "inning": 5,
+      "half": "bottom",
+      "pitches": 53.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.26 Plus點",
+            "平滑後額外Stuff偏離：-0.48 Plus點",
+            "額外球速偏離：-0.52 mph",
+            "標準化／百分位嚴重度：0.61"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.12 Plus點",
+            "平滑後位置偏離：0.17 Plus點",
+            "標準化／百分位嚴重度：-0.05"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "yellow",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.79",
+            "平滑接觸率偏離：0.21",
+            "標準化／百分位嚴重度：1.10"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：96.00球",
+            "本場／個人中位用球：0.55",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.68"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +2.41pp，ΔxRE24 +0.277分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745479:away:1:1:4；決策前資料年齡 2.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.7835137864857937
+    },
+    {
+      "id": "745964:36:boundary",
+      "decisionId": "745964:36:boundary",
+      "label": "745964 · 4下 · Trevor Rogers",
+      "gamePk": 745964,
+      "pitcherName": "Trevor Rogers",
+      "role": "SP",
+      "inning": 4,
+      "half": "bottom",
+      "pitches": 69.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.07 Plus點",
+            "平滑後額外Stuff偏離：0.10 Plus點",
+            "額外球速偏離：-0.64 mph",
+            "標準化／百分位嚴重度：0.75"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.09 Plus點",
+            "平滑後位置偏離：2.03 Plus點",
+            "標準化／百分位嚴重度：-0.65"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：90.00球",
+            "本場／個人中位用球：0.77",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.75"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.75pp，ΔxRE24 +0.066分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745964:away:1:1:5；決策前資料年齡 4.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.15883444120361523
+    },
+    {
+      "id": "746229:21:boundary",
+      "decisionId": "746229:21:boundary",
+      "label": "746229 · 3上 · Griffin Canning",
+      "gamePk": 746229,
+      "pitcherName": "Griffin Canning",
+      "role": "SP",
+      "inning": 3,
+      "half": "top",
+      "pitches": 33.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：88.00球",
+            "本場／個人中位用球：0.38",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.06pp，ΔxRE24 +0.078分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746229:home:1:1:2；決策前資料年齡 1.4分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7784749107272543
+    },
+    {
+      "id": "746447:5:boundary",
+      "decisionId": "746447:5:boundary",
+      "label": "746447 · 1上 · Keider Montero",
+      "gamePk": 746447,
+      "pitcherName": "Keider Montero",
+      "role": "SP",
+      "inning": 1,
+      "half": "top",
+      "pitches": 16.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：80.00球",
+            "本場／個人中位用球：未知",
+            "近72h其他場／中位用球：未知",
+            "進場前連續登板日：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.57pp，ΔxRE24 +0.180分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746447:home:1:1:0；決策前資料年齡 3.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.9626549012506326
+    },
+    {
+      "id": "746447:47:boundary",
+      "decisionId": "746447:47:boundary",
+      "label": "746447 · 5下 · Justin Wrobleski",
+      "gamePk": 746447,
+      "pitcherName": "Justin Wrobleski",
+      "role": "SP",
+      "inning": 5,
+      "half": "bottom",
+      "pitches": 73.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "yellow",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.79",
+            "平滑接觸率偏離：0.21",
+            "標準化／百分位嚴重度：1.12"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：76.00球",
+            "本場／個人中位用球：未知",
+            "近72h其他場／中位用球：未知",
+            "進場前連續登板日：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.86pp，ΔxRE24 +0.094分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746447:away:1:1:6；決策前資料年齡 1.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7226092580932965
+    },
+    {
+      "id": "746938:11:boundary",
+      "decisionId": "746938:11:boundary",
+      "label": "746938 · 2上 · Josh Winckowski",
+      "gamePk": 746938,
+      "pitcherName": "Josh Winckowski",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 19.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：63.00球",
+            "本場／個人中位用球：0.30",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：1.00"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.51pp，ΔxRE24 +0.137分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746938:home:1:1:0；決策前資料年齡 17.5分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.4059518595038396
+    },
+    {
+      "id": "746382:35:boundary",
+      "decisionId": "746382:35:boundary",
+      "label": "746382 · 4下 · Kyle Gibson",
+      "gamePk": 746382,
+      "pitcherName": "Kyle Gibson",
+      "role": "SP",
+      "inning": 4,
+      "half": "bottom",
+      "pitches": 59.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：92.50球",
+            "本場／個人中位用球：0.64",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.61"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.89pp，ΔxRE24 -0.047分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746382:away:1:1:2；決策前資料年齡 31.8分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.8643440804528373
+    },
+    {
+      "id": "744982:32:boundary",
+      "decisionId": "744982:32:boundary",
+      "label": "744982 · 5上 · Andrew Heaney",
+      "gamePk": 744982,
+      "pitcherName": "Andrew Heaney",
+      "role": "SP",
+      "inning": 5,
+      "half": "top",
+      "pitches": 61.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.08 Plus點",
+            "平滑後額外Stuff偏離：-1.28 Plus點",
+            "額外球速偏離：0.17 mph",
+            "標準化／百分位嚴重度：0.41"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.60 Plus點",
+            "平滑後位置偏離：-0.66 Plus點",
+            "標準化／百分位嚴重度：0.21"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.71",
+            "平滑接觸率偏離：0.04",
+            "標準化／百分位嚴重度：0.22"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：87.50球",
+            "本場／個人中位用球：0.70",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.67"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.10pp，ΔxRE24 -0.016分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744982:home:1:1:5；決策前資料年齡 0.6分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7334667683410467
+    },
+    {
+      "id": "745311:11:boundary",
+      "decisionId": "745311:11:boundary",
+      "label": "745311 · 2上 · Hayden Birdsong",
+      "gamePk": 745311,
+      "pitcherName": "Hayden Birdsong",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 18.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：87.00球",
+            "本場／個人中位用球：未知",
+            "近72h其他場／中位用球：未知",
+            "進場前連續登板日：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +1.01pp，ΔxRE24 +0.082分。收益門檻：mc_interval_includes_zero。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745311:home:1:1:0；決策前資料年齡 18.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7394832939661448
+    },
+    {
+      "id": "747179:9:boundary",
+      "decisionId": "747179:9:boundary",
+      "label": "747179 · 2上 · Slade Cecconi",
+      "gamePk": 747179,
+      "pitcherName": "Slade Cecconi",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 18.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：79.50球",
+            "本場／個人中位用球：0.23",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.92"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.91pp，ΔxRE24 +0.086分。收益門檻：mc_interval_includes_zero。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 747179:home:1:1:0；決策前資料年齡 11.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.8115570358895838
+    },
+    {
+      "id": "744982:39:boundary",
+      "decisionId": "744982:39:boundary",
+      "label": "744982 · 6上 · Andrew Heaney",
+      "gamePk": 744982,
+      "pitcherName": "Andrew Heaney",
+      "role": "SP",
+      "inning": 6,
+      "half": "top",
+      "pitches": 73.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.31 Plus點",
+            "平滑後額外Stuff偏離：-0.67 Plus點",
+            "額外球速偏離：0.22 mph",
+            "標準化／百分位嚴重度：0.21"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.34 Plus點",
+            "平滑後位置偏離：-0.66 Plus點",
+            "標準化／百分位嚴重度：0.21"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.77",
+            "平滑接觸率偏離：-0.02",
+            "標準化／百分位嚴重度：-0.12"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：87.50球",
+            "本場／個人中位用球：0.83",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.82"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.86pp，ΔxRE24 -0.055分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744982:home:1:1:6；決策前資料年齡 1.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.0380948785234003
+    },
+    {
+      "id": "745129:14:boundary",
+      "decisionId": "745129:14:boundary",
+      "label": "745129 · 3上 · Sonny Gray",
+      "gamePk": 745129,
+      "pitcherName": "Sonny Gray",
+      "role": "SP",
+      "inning": 3,
+      "half": "top",
+      "pitches": 27.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：93.50球",
+            "本場／個人中位用球：0.29",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.21pp，ΔxRE24 +0.000分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745129:home:1:1:1；決策前資料年齡 13.8分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.3173666626267961
+    },
+    {
+      "id": "746447:93:boundary",
+      "decisionId": "746447:93:boundary",
+      "label": "746447 · 10上 · Will Vest",
+      "gamePk": 746447,
+      "pitcherName": "Will Vest",
+      "role": "RP",
+      "inning": 10,
+      "half": "top",
+      "pitches": 11.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：-4.17 Plus點",
+            "額外球速偏離：-0.34 mph",
+            "標準化／百分位嚴重度：1.14"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-1.00 Plus點",
+            "平滑後位置偏離：-0.84 Plus點",
+            "標準化／百分位嚴重度：0.24"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.78",
+            "平滑接觸率偏離：0.22",
+            "標準化／百分位嚴重度：1.08"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "yellow",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：15.50球",
+            "本場／個人中位用球：0.71",
+            "近72h其他場／中位用球：1.10",
+            "進場前連續登板日：1.00日",
+            "標準化／百分位嚴重度：0.97"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.66pp，ΔxRE24 +0.070分。收益門檻：mc_interval_includes_zero。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746447:home:6:1:0；決策前資料年齡 1.2分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 5.574847739430506
+    },
+    {
+      "id": "745311:63:boundary",
+      "decisionId": "745311:63:boundary",
+      "label": "745311 · 8上 · Erik Miller",
+      "gamePk": 745311,
+      "pitcherName": "Erik Miller",
+      "role": "RP",
+      "inning": 8,
+      "half": "top",
+      "pitches": 13.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：2.08 Plus點",
+            "額外球速偏離：1.02 mph",
+            "標準化／百分位嚴重度：-0.57"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.31 Plus點",
+            "平滑後位置偏離：2.15 Plus點",
+            "標準化／百分位嚴重度：-0.60"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.70",
+            "平滑接觸率偏離：-0.10",
+            "標準化／百分位嚴重度：-0.50"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：19.50球",
+            "本場／個人中位用球：0.67",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.60"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.14pp，ΔxRE24 +0.062分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745311:home:4:1:0；決策前資料年齡 1.9分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.748426278574106
+    },
+    {
+      "id": "744982:27:boundary",
+      "decisionId": "744982:27:boundary",
+      "label": "744982 · 4下 · Hunter Brown",
+      "gamePk": 744982,
+      "pitcherName": "Hunter Brown",
+      "role": "SP",
+      "inning": 4,
+      "half": "bottom",
+      "pitches": 51.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.26 Plus點",
+            "平滑後額外Stuff偏離：-0.79 Plus點",
+            "額外球速偏離：0.43 mph",
+            "標準化／百分位嚴重度：0.25"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.20 Plus點",
+            "平滑後位置偏離：3.56 Plus點",
+            "標準化／百分位嚴重度：-1.15"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.80",
+            "平滑接觸率偏離：-0.03",
+            "標準化／百分位嚴重度：-0.18"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：97.50球",
+            "本場／個人中位用球：0.52",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.26pp，ΔxRE24 -0.016分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744982:away:1:1:4；決策前資料年齡 0.7分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.8643440804528373
+    },
+    {
+      "id": "746739:12:boundary",
+      "decisionId": "746739:12:boundary",
+      "label": "746739 · 2下 · Jake Irvin",
+      "gamePk": 746739,
+      "pitcherName": "Jake Irvin",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 13.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：94.00球",
+            "本場／個人中位用球：0.14",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.63pp，ΔxRE24 +0.082分。收益門檻：mc_interval_includes_zero。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746739:away:1:1:0；決策前資料年齡 7.9分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.3254698814572383
+    },
+    {
+      "id": "746229:65:boundary",
+      "decisionId": "746229:65:boundary",
+      "label": "746229 · 8下 · Luke Weaver",
+      "gamePk": 746229,
+      "pitcherName": "Luke Weaver",
+      "role": "RP",
+      "inning": 8,
+      "half": "bottom",
+      "pitches": 26.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：-1.39 Plus點",
+            "額外球速偏離：0.33 mph",
+            "標準化／百分位嚴重度：0.38"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.20 Plus點",
+            "平滑後位置偏離：1.58 Plus點",
+            "標準化／百分位嚴重度：-0.44"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.78",
+            "平滑接觸率偏離：-0.13",
+            "標準化／百分位嚴重度：-0.64"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：25.50球",
+            "本場／個人中位用球：1.02",
+            "近72h其他場／中位用球：0.24",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.76"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.22pp，ΔxRE24 -0.004分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746229:away:3:1:1；決策前資料年齡 5.5分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 5.080219384995388
+    },
+    {
+      "id": "744839:19:boundary",
+      "decisionId": "744839:19:boundary",
+      "label": "744839 · 3上 · Mitchell Parker",
+      "gamePk": 744839,
+      "pitcherName": "Mitchell Parker",
+      "role": "SP",
+      "inning": 3,
+      "half": "top",
+      "pitches": 28.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：82.00球",
+            "本場／個人中位用球：0.34",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.90"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.45pp，ΔxRE24 -0.031分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744839:home:1:1:1；決策前資料年齡 13.2分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.7784749107272543
+    },
+    {
+      "id": "746377:24:boundary",
+      "decisionId": "746377:24:boundary",
+      "label": "746377 · 4上 · Ronel Blanco",
+      "gamePk": 746377,
+      "pitcherName": "Ronel Blanco",
+      "role": "SP",
+      "inning": 4,
+      "half": "top",
+      "pitches": 37.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：97.00球",
+            "本場／個人中位用球：0.38",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.99"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.03pp，ΔxRE24 +0.031分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746377:home:1:1:2；決策前資料年齡 11.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.25625840913409614
+    },
+    {
+      "id": "745964:17:boundary",
+      "decisionId": "745964:17:boundary",
+      "label": "745964 · 2下 · Trevor Rogers",
+      "gamePk": 745964,
+      "pitcherName": "Trevor Rogers",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 12.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：90.00球",
+            "本場／個人中位用球：0.13",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.64"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.57pp，ΔxRE24 +0.066分。收益門檻：mc_interval_includes_zero。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745964:away:1:1:0；決策前資料年齡 17.8分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.23126325803141332
+    },
+    {
+      "id": "745479:50:boundary",
+      "decisionId": "745479:50:boundary",
+      "label": "745479 · 7上 · Paul Skenes",
+      "gamePk": 745479,
+      "pitcherName": "Paul Skenes",
+      "role": "SP",
+      "inning": 7,
+      "half": "top",
+      "pitches": 98.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.56 Plus點",
+            "平滑後額外Stuff偏離：-1.52 Plus點",
+            "額外球速偏離：0.46 mph",
+            "標準化／百分位嚴重度：0.49"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.34 Plus點",
+            "平滑後位置偏離：-0.32 Plus點",
+            "標準化／百分位嚴重度：0.10"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "yellow",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：96.00球",
+            "本場／個人中位用球：1.02",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.96"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.45pp，ΔxRE24 -0.016分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745479:home:1:1:8；決策前資料年齡 12.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.5713516581732088
+    },
+    {
+      "id": "745479:77:boundary",
+      "decisionId": "745479:77:boundary",
+      "label": "745479 · 9上 · Daulton Jefferies",
+      "gamePk": 745479,
+      "pitcherName": "Daulton Jefferies",
+      "role": "RP",
+      "inning": 9,
+      "half": "top",
+      "pitches": 24.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.76",
+            "平滑接觸率偏離：-0.16",
+            "標準化／百分位嚴重度：-0.82"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：51.50球",
+            "本場／個人中位用球：0.47",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.44"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.00pp，ΔxRE24 +0.039分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745479:home:2:1:1；決策前資料年齡 2.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.42166633159953454
+    },
+    {
+      "id": "745376:45:boundary",
+      "decisionId": "745376:45:boundary",
+      "label": "745376 · 6下 · Jose Quintana",
+      "gamePk": 745376,
+      "pitcherName": "Jose Quintana",
+      "role": "SP",
+      "inning": 6,
+      "half": "bottom",
+      "pitches": 65.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.22 Plus點",
+            "平滑後額外Stuff偏離：-2.02 Plus點",
+            "額外球速偏離：0.91 mph",
+            "標準化／百分位嚴重度：0.65"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.17 Plus點",
+            "平滑後位置偏離：-1.24 Plus點",
+            "標準化／百分位嚴重度：0.40"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.85",
+            "平滑接觸率偏離：0.15",
+            "標準化／百分位嚴重度：0.81"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：94.50球",
+            "本場／個人中位用球：0.69",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.87"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +4.46pp，ΔxRE24 +0.219分。收益門檻：qualifies。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745376:away:1:1:5；決策前資料年齡 10.3分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 2.1139530316321133
+    },
+    {
+      "id": "744918:62:boundary",
+      "decisionId": "744918:62:boundary",
+      "label": "744918 · 7下 · Nick Pivetta",
+      "gamePk": 744918,
+      "pitcherName": "Nick Pivetta",
+      "role": "SP",
+      "inning": 7,
+      "half": "bottom",
+      "pitches": 102.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.32 Plus點",
+            "平滑後額外Stuff偏離：-3.22 Plus點",
+            "額外球速偏離：-1.03 mph",
+            "標準化／百分位嚴重度：1.21"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.35 Plus點",
+            "平滑後位置偏離：0.88 Plus點",
+            "標準化／百分位嚴重度：-0.28"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.81",
+            "平滑接觸率偏離：0.14",
+            "標準化／百分位嚴重度：0.76"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "red",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：85.50球",
+            "本場／個人中位用球：1.19",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：1.00"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.01pp，ΔxRE24 +0.020分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744918:away:1:1:9；決策前資料年齡 1.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.0731462389249067
+    },
+    {
+      "id": "746447:67:boundary",
+      "decisionId": "746447:67:boundary",
+      "label": "746447 · 7下 · Blake Treinen",
+      "gamePk": 746447,
+      "pitcherName": "Blake Treinen",
+      "role": "RP",
+      "inning": 7,
+      "half": "bottom",
+      "pitches": 14.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：-1.80 Plus點",
+            "額外球速偏離：-0.40 mph",
+            "標準化／百分位嚴重度：0.49"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.18 Plus點",
+            "平滑後位置偏離：-0.32 Plus點",
+            "標準化／百分位嚴重度：0.09"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.71",
+            "平滑接觸率偏離：-0.11",
+            "標準化／百分位嚴重度：-0.54"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "yellow",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：13.00球",
+            "本場／個人中位用球：1.08",
+            "近72h其他場／中位用球：2.31",
+            "進場前連續登板日：1.00日",
+            "標準化／百分位嚴重度：0.99"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.05pp，ΔxRE24 -0.004分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746447:away:3:1:0；決策前資料年齡 2.0分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.4586023084332726
+    },
+    {
+      "id": "746382:12:boundary",
+      "decisionId": "746382:12:boundary",
+      "label": "746382 · 2上 · Justin Verlander",
+      "gamePk": 746382,
+      "pitcherName": "Justin Verlander",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 24.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後額外Stuff偏離：未知",
+            "額外球速偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。",
+          "evidence": [
+            "正常進程預期差：未知",
+            "平滑後位置偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "gray",
+          "calibrated": true,
+          "supportKnown": false,
+          "reason": "未達角色／量測／個人參考支持；不補正常值。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：未知",
+            "平滑接觸率偏離：未知",
+            "標準化／百分位嚴重度：未知"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：96.50球",
+            "本場／個人中位用球：0.25",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.92"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.20pp，ΔxRE24 +0.008分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746382:home:1:1:1；決策前資料年齡 14.2分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.18450215416113544
+    },
+    {
+      "id": "746360:77:boundary",
+      "decisionId": "746360:77:boundary",
+      "label": "746360 · 9下 · David Bednar",
+      "gamePk": 746360,
+      "pitcherName": "David Bednar",
+      "role": "RP",
+      "inning": 9,
+      "half": "bottom",
+      "pitches": 10.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：3.05 Plus點",
+            "額外球速偏離：-0.42 mph",
+            "標準化／百分位嚴重度：0.51"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.23 Plus點",
+            "平滑後位置偏離：-1.53 Plus點",
+            "標準化／百分位嚴重度：0.43"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "red",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.66",
+            "平滑接觸率偏離：0.34",
+            "標準化／百分位嚴重度：1.71"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：14.00球",
+            "本場／個人中位用球：0.71",
+            "近72h其他場／中位用球：1.29",
+            "進場前連續登板日：1.00日",
+            "標準化／百分位嚴重度：0.93"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.97pp，ΔxRE24 -0.090分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746360:away:4:1:0；決策前資料年齡 0.5分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 2.960873002756016
+    },
+    {
+      "id": "745479:56:boundary",
+      "decisionId": "745479:56:boundary",
+      "label": "745479 · 7下 · Luis Severino",
+      "gamePk": 745479,
+      "pitcherName": "Luis Severino",
+      "role": "SP",
+      "inning": 7,
+      "half": "bottom",
+      "pitches": 91.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.47 Plus點",
+            "平滑後額外Stuff偏離：-1.56 Plus點",
+            "額外球速偏離：-0.18 mph",
+            "標準化／百分位嚴重度：0.50"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.09 Plus點",
+            "平滑後位置偏離：-1.62 Plus點",
+            "標準化／百分位嚴重度：0.52"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.77",
+            "平滑接觸率偏離：0.06",
+            "標準化／百分位嚴重度：0.30"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：96.00球",
+            "本場／個人中位用球：0.95",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.92"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.17pp，ΔxRE24 +0.172分。收益門檻：simulation_censor_or_extrapolation。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 745479:away:1:1:8；決策前資料年齡 2.5分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.5743344692411293
+    },
+    {
+      "id": "746711:62:boundary",
+      "decisionId": "746711:62:boundary",
+      "label": "746711 · 8下 · Yohan Ramírez",
+      "gamePk": 746711,
+      "pitcherName": "Yohan Ramírez",
+      "role": "RP",
+      "inning": 8,
+      "half": "bottom",
+      "pitches": 10.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.00 Plus點",
+            "平滑後額外Stuff偏離：-0.36 Plus點",
+            "額外球速偏離：-0.23 mph",
+            "標準化／百分位嚴重度：0.28"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.16 Plus點",
+            "平滑後位置偏離：3.11 Plus點",
+            "標準化／百分位嚴重度：-0.87"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.76",
+            "平滑接觸率偏離：0.24",
+            "標準化／百分位嚴重度：1.21"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：23.50球",
+            "本場／個人中位用球：0.43",
+            "近72h其他場／中位用球：0.55",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.82"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA +0.03pp，ΔxRE24 +0.074分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746711:away:3:1:0；決策前資料年齡 0.4分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.07871728299922041
+    },
+    {
+      "id": "746938:30:boundary",
+      "decisionId": "746938:30:boundary",
+      "label": "746938 · 4下 · Matt Waldron",
+      "gamePk": 746938,
+      "pitcherName": "Matt Waldron",
+      "role": "SP",
+      "inning": 4,
+      "half": "bottom",
+      "pitches": 59.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.25 Plus點",
+            "平滑後額外Stuff偏離：-0.39 Plus點",
+            "額外球速偏離：-0.56 mph",
+            "標準化／百分位嚴重度：0.66"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.25 Plus點",
+            "平滑後位置偏離：-1.44 Plus點",
+            "標準化／百分位嚴重度：0.46"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.78",
+            "平滑接觸率偏離：-0.07",
+            "標準化／百分位嚴重度：-0.35"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：94.50球",
+            "本場／個人中位用球：0.62",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.61"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.01pp，ΔxRE24 +0.004分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 746938:away:1:1:4；決策前資料年齡 15.1分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 0.3508828057465017
+    },
+    {
+      "id": "744839:37:boundary",
+      "decisionId": "744839:37:boundary",
+      "label": "744839 · 5下 · Jesús Luzardo · 持續狀態事件",
+      "gamePk": 744839,
+      "pitcherName": "Jesús Luzardo",
+      "role": "SP",
+      "inning": 5,
+      "half": "bottom",
+      "pitches": 62.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質偏離",
+          "state": "red",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：0.46 Plus點",
+            "平滑後額外Stuff偏離：-3.85 Plus點",
+            "額外球速偏離：-2.41 mph",
+            "標準化／百分位嚴重度：2.83"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "red",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。",
+          "evidence": [
+            "正常進程預期差：-0.92 Plus點",
+            "平滑後位置偏離：-5.10 Plus點",
+            "標準化／百分位嚴重度：1.64"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手接觸偏離",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 接觸率代理尚不等於打者鎖定球種或熟悉度的因果效果。",
+          "evidence": [
+            "對手／球質條件下接觸參考：0.87",
+            "平滑接觸率偏離：-0.09",
+            "標準化／百分位嚴重度：-0.45"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "green",
+          "calibrated": true,
+          "supportKnown": true,
+          "reason": "通過量測與角色支持；燈色描述相對過去校準尾端，不代表疲勞成立。 高負荷不直接等同壓制力下降；局間不清除累積負荷。",
+          "evidence": [
+            "進場前同角色近期中位用球：93.50球",
+            "本場／個人中位用球：0.66",
+            "近72h其他場／中位用球：0.00",
+            "進場前連續登板日：0.00日",
+            "標準化／百分位嚴重度：0.93"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "fail",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "pass",
+        "validation": "fail"
+      },
+      "valueNote": "沿用原14.2替代池：ΔxWPA -0.07pp，ΔxRE24 -0.043分。收益門檻：below_minimum_gain。兩角色新增特徵皆未通過替換，未改xWPA。",
+      "matchupNote": "區段 744839:away:1:1:5；決策前資料年齡 11.7分鐘。相性／LI不加票，後續打線仍用聯盟池。",
+      "li": 1.3760918039501253
+    }
+  ],
+  "counts": {
+    "cases": 36,
+    "belowObservationMinimum": 16,
+    "matureObservation": 20
+  },
+  "scoreStatus": "分燈為訓練內尾端校準；0–8等權及兩紅未通過預測支持，只供狀態展示。灰不補0，任何總燈都不直接換投。",
+  "recommendationAllowed": false,
+  "calibrationSummary": {
+    "version": "decision_signal_calibration_v1",
+    "stop": "14.2.4",
+    "updatedAt": "2026-11-19",
+    "blocks": 244179,
+    "actorRows": 545204,
+    "normal2024": [
+      {
+        "year": 2024,
+        "role": "SP",
+        "group": "A",
+        "n": 16902,
+        "censored_or_insufficient": 21437,
+        "smooth_brier": 0.16682820587428684,
+        "raw_brier": 0.16860123755255232,
+        "constant_brier": 0.20689126325349622,
+        "vs_raw": {
+          "mean": -0.0017730316782654527,
+          "paired_two_way95": [
+            -0.005663951744011355,
+            0.0018034652717041964
+          ],
+          "role_family97_5": [
+            -0.006553409314723557,
+            0.003007345958192651
+          ],
+          "replicates": 200,
+          "games": 2283,
+          "pitchers": 262
+        },
+        "vs_constant": {
+          "mean": -0.04006305737920443,
+          "paired_two_way95": [
+            -0.046127340016051864,
+            -0.03333999922203598
+          ],
+          "role_family97_5": [
+            -0.049043083230122755,
+            -0.031083031528286103
+          ],
+          "replicates": 200,
+          "games": 2283,
+          "pitchers": 262
+        },
+        "predictive_gate": false
+      },
+      {
+        "year": 2024,
+        "role": "SP",
+        "group": "B",
+        "n": 16902,
+        "censored_or_insufficient": 21437,
+        "smooth_brier": 0.05975067955675823,
+        "raw_brier": 0.05972923053959954,
+        "constant_brier": 0.0597669639198389,
+        "vs_raw": {
+          "mean": 2.1449017158695272e-05,
+          "paired_two_way95": [
+            -0.00011298078304200302,
+            0.00014898108398088848
+          ],
+          "role_family97_5": [
+            -0.0001714322192172407,
+            0.00021433025353463124
+          ],
+          "replicates": 200,
+          "games": 2283,
+          "pitchers": 262
+        },
+        "vs_constant": {
+          "mean": -1.6284363080663925e-05,
+          "paired_two_way95": [
+            -0.00017277279803135865,
+            0.00011027049887971544
+          ],
+          "role_family97_5": [
+            -0.00022074260105158143,
+            0.00018817387489025356
+          ],
+          "replicates": 200,
+          "games": 2283,
+          "pitchers": 262
+        },
+        "predictive_gate": false
+      },
+      {
+        "year": 2024,
+        "role": "SP",
+        "group": "C",
+        "n": 13306,
+        "censored_or_insufficient": 25033,
+        "smooth_brier": 0.19622056434892488,
+        "raw_brier": 0.1963346798395634,
+        "constant_brier": 0.1962910039045721,
+        "vs_raw": {
+          "mean": -0.00011411549063856886,
+          "paired_two_way95": [
+            -0.0006244608105495877,
+            0.0004198188327435229
+          ],
+          "role_family97_5": [
+            -0.000782700565794729,
+            0.0005544695845175913
+          ],
+          "replicates": 200,
+          "games": 2389,
+          "pitchers": 304
+        },
+        "vs_constant": {
+          "mean": -7.043955564723686e-05,
+          "paired_two_way95": [
+            -0.0006621645273031305,
+            0.000438997025118596
+          ],
+          "role_family97_5": [
+            -0.0007580568908934389,
+            0.0006171777795989652
+          ],
+          "replicates": 200,
+          "games": 2389,
+          "pitchers": 304
+        },
+        "predictive_gate": false
+      },
+      {
+        "year": 2024,
+        "role": "RP",
+        "group": "A",
+        "n": 5921,
+        "censored_or_insufficient": 16193,
+        "smooth_brier": 0.1578035130145362,
+        "raw_brier": 0.15645960191884348,
+        "constant_brier": 0.19876660887798547,
+        "vs_raw": {
+          "mean": 0.0013439110956927549,
+          "paired_two_way95": [
+            -0.0012828305813759114,
+            0.0043476403797660015
+          ],
+          "role_family97_5": [
+            -0.002353738505597552,
+            0.005041560696983061
+          ],
+          "replicates": 200,
+          "games": 1982,
+          "pitchers": 451
+        },
+        "vs_constant": {
+          "mean": -0.04096309586345104,
+          "paired_two_way95": [
+            -0.04879719475124184,
+            -0.033708906423166936
+          ],
+          "role_family97_5": [
+            -0.05054338789259376,
+            -0.03138280383430832
+          ],
+          "replicates": 200,
+          "games": 1982,
+          "pitchers": 451
+        },
+        "predictive_gate": false
+      },
+      {
+        "year": 2024,
+        "role": "RP",
+        "group": "B",
+        "n": 5919,
+        "censored_or_insufficient": 16195,
+        "smooth_brier": 0.0719571945307206,
+        "raw_brier": 0.07198469446387115,
+        "constant_brier": 0.0718187257673242,
+        "vs_raw": {
+          "mean": -2.7499933150553866e-05,
+          "paired_two_way95": [
+            -0.00032103620021337905,
+            0.0002458637980124102
+          ],
+          "role_family97_5": [
+            -0.0003801598410732421,
+            0.0003251599747721344
+          ],
+          "replicates": 200,
+          "games": 1982,
+          "pitchers": 451
+        },
+        "vs_constant": {
+          "mean": 0.0001384687633963785,
+          "paired_two_way95": [
+            -0.00019206746442752154,
+            0.00047002675173063094
+          ],
+          "role_family97_5": [
+            -0.0002663870202375225,
+            0.0005433245470302796
+          ],
+          "replicates": 200,
+          "games": 1982,
+          "pitchers": 451
+        },
+        "predictive_gate": false
+      },
+      {
+        "year": 2024,
+        "role": "RP",
+        "group": "C",
+        "n": 4881,
+        "censored_or_insufficient": 17233,
+        "smooth_brier": 0.19638018635200372,
+        "raw_brier": 0.19664023622543061,
+        "constant_brier": 0.19641837733522485,
+        "vs_raw": {
+          "mean": -0.0002600498734268926,
+          "paired_two_way95": [
+            -0.001486134536211273,
+            0.0011136397256527736
+          ],
+          "role_family97_5": [
+            -0.0017611339616733098,
+            0.0012410342148195244
+          ],
+          "replicates": 200,
+          "games": 1907,
+          "pitchers": 562
+        },
+        "vs_constant": {
+          "mean": -3.819098322118214e-05,
+          "paired_two_way95": [
+            -0.001108639393412953,
+            0.0011889545410805032
+          ],
+          "role_family97_5": [
+            -0.0014068071321385255,
+            0.001330425165696161
+          ],
+          "replicates": 200,
+          "games": 1907,
+          "pitchers": 562
+        },
+        "predictive_gate": false
+      }
+    ],
+    "outcomeModels": [
+      {
+        "role": "SP",
+        "n": 92013,
+        "selected": "retain_previous",
+        "referenceLL": 1.4965050527074955,
+        "variants": [
+          {
+            "variant": "control",
+            "LL": 1.5006400982868187,
+            "Brier": 0.7001793886269263,
+            "vsControl": {
+              "mean": 0.0,
+              "paired_two_way95": [
+                0.0,
+                0.0
+              ],
+              "role_family97_5": [
+                0.0,
+                0.0
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.00413504557932311,
+              "paired_two_way95": [
+                0.0017416450036958867,
+                0.008487488177354115
+              ],
+              "role_family97_5": [
+                -0.0007577141118509942,
+                0.009027805270497215
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          },
+          {
+            "variant": "A",
+            "LL": 1.4998057748888778,
+            "Brier": 0.7001485989576404,
+            "vsControl": {
+              "mean": -0.0008343233979405889,
+              "paired_two_way95": [
+                -0.0030803268969830187,
+                0.00024946093589335876
+              ],
+              "role_family97_5": [
+                -0.0031690270103992123,
+                0.0015003802145180344
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.003300722181382593,
+              "paired_two_way95": [
+                0.0017003185457629862,
+                0.005727642311267589
+              ],
+              "role_family97_5": [
+                0.00022752685463835274,
+                0.006373917508126833
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          },
+          {
+            "variant": "B",
+            "LL": 1.4997979735286566,
+            "Brier": 0.7001814846682269,
+            "vsControl": {
+              "mean": -0.0008421247581621708,
+              "paired_two_way95": [
+                -0.0025381416586549386,
+                5.829508259846819e-06
+              ],
+              "role_family97_5": [
+                -0.0026733755679152855,
+                0.0009891260515909437
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.0032929208211609526,
+              "paired_two_way95": [
+                0.0015290493964914178,
+                0.005865820564968741
+              ],
+              "role_family97_5": [
+                -7.059711310191275e-05,
+                0.006656438755423818
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          },
+          {
+            "variant": "C",
+            "LL": 1.49956100661767,
+            "Brier": 0.7000041179191965,
+            "vsControl": {
+              "mean": -0.001079091669148486,
+              "paired_two_way95": [
+                -0.0032318200640203258,
+                -5.2995745669734065e-05
+              ],
+              "role_family97_5": [
+                -0.003237603911395656,
+                0.0010794205730986837
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.0030559539101746675,
+              "paired_two_way95": [
+                0.001306091505822064,
+                0.0054897749349427935
+              ],
+              "role_family97_5": [
+                -0.0001492125853020834,
+                0.006261120405651419
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          },
+          {
+            "variant": "D",
+            "LL": 1.5011598091015321,
+            "Brier": 0.7001566081338899,
+            "vsControl": {
+              "mean": 0.0005197108147136658,
+              "paired_two_way95": [
+                -9.460402929908546e-05,
+                0.001755570632388817
+              ],
+              "role_family97_5": [
+                -0.0008684772693516967,
+                0.0019078988987790285
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.004654756394036835,
+              "paired_two_way95": [
+                0.001723025767352957,
+                0.010816033784611085
+              ],
+              "role_family97_5": [
+                -0.001509104997312387,
+                0.010818617785386057
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          },
+          {
+            "variant": "all",
+            "LL": 1.500399195334776,
+            "Brier": 0.7003839518740446,
+            "vsControl": {
+              "mean": -0.00024090295204257973,
+              "paired_two_way95": [
+                -0.002125790392126746,
+                0.000864027676953785
+              ],
+              "role_family97_5": [
+                -0.002241745948264378,
+                0.0017599400441792186
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "vsRetained": {
+              "mean": 0.0038941426272805276,
+              "paired_two_way95": [
+                0.0021703084422071872,
+                0.006327174933559392
+              ],
+              "role_family97_5": [
+                0.0006635821113654661,
+                0.007124703143195589
+              ],
+              "replicates": 200,
+              "games": 2427,
+              "pitchers": 366
+            },
+            "passed": false
+          }
+        ]
+      },
+      {
+        "role": "RP",
+        "n": 45686,
+        "selected": "retain_previous",
+        "referenceLL": 1.5069358864575548,
+        "variants": [
+          {
+            "variant": "control",
+            "LL": 1.5068592121463502,
+            "Brier": 0.7056278671137123,
+            "vsControl": {
+              "mean": 0.0,
+              "paired_two_way95": [
+                0.0,
+                0.0
+              ],
+              "role_family97_5": [
+                0.0,
+                0.0
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": -7.667431120458313e-05,
+              "paired_two_way95": [
+                -0.0002634652418780506,
+                0.00015021752876895114
+              ],
+              "role_family97_5": [
+                -0.0003701671355139478,
+                0.0002168185131047815
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          },
+          {
+            "variant": "A",
+            "LL": 1.5070423403488653,
+            "Brier": 0.7057062759798443,
+            "vsControl": {
+              "mean": 0.0001831282025151526,
+              "paired_two_way95": [
+                -6.001356838459269e-05,
+                0.0004615534692404717
+              ],
+              "role_family97_5": [
+                -0.00022367847704398677,
+                0.0005899348820742919
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": 0.00010645389131056777,
+              "paired_two_way95": [
+                -0.00016663057449216082,
+                0.00039311835221908005
+              ],
+              "role_family97_5": [
+                -0.0003300872442809154,
+                0.0005429950269020509
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          },
+          {
+            "variant": "B",
+            "LL": 1.5071909802893844,
+            "Brier": 0.7057101049298093,
+            "vsControl": {
+              "mean": 0.0003317681430338765,
+              "paired_two_way95": [
+                1.3819700896598255e-05,
+                0.0007103862415569758
+              ],
+              "role_family97_5": [
+                -0.00022994192535774746,
+                0.0008934782114255004
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": 0.0002550938318292935,
+              "paired_two_way95": [
+                -6.597018202522045e-05,
+                0.0005995011794828706
+              ],
+              "role_family97_5": [
+                -0.00028784188089414875,
+                0.0007980295445527358
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          },
+          {
+            "variant": "C",
+            "LL": 1.506999645805044,
+            "Brier": 0.7056822170626664,
+            "vsControl": {
+              "mean": 0.00014043365869395317,
+              "paired_two_way95": [
+                -0.00012870070688015937,
+                0.00037001592379391096
+              ],
+              "role_family97_5": [
+                -0.000256883558401278,
+                0.0005377508757891843
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": 6.37593474893689e-05,
+              "paired_two_way95": [
+                -0.00020384231894568668,
+                0.0003262496482913192
+              ],
+              "role_family97_5": [
+                -0.00033407907563373683,
+                0.00046159777061247466
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          },
+          {
+            "variant": "D",
+            "LL": 1.5070662250252274,
+            "Brier": 0.7057222347786768,
+            "vsControl": {
+              "mean": 0.00020701287887694286,
+              "paired_two_way95": [
+                -9.798782710829605e-05,
+                0.0005467788164866153
+              ],
+              "role_family97_5": [
+                -0.0002645781182413121,
+                0.0006786038759951979
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": 0.00013033856767235793,
+              "paired_two_way95": [
+                -0.00019989096944317145,
+                0.0004959810864550168
+              ],
+              "role_family97_5": [
+                -0.0003599381813054536,
+                0.0006206153166501694
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          },
+          {
+            "variant": "all",
+            "LL": 1.5069684401897905,
+            "Brier": 0.7056862576168774,
+            "vsControl": {
+              "mean": 0.00010922804343997338,
+              "paired_two_way95": [
+                -0.0002332051644034542,
+                0.0004439159683088712
+              ],
+              "role_family97_5": [
+                -0.00039685309061790507,
+                0.0006153091774978518
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "vsRetained": {
+              "mean": 3.2553732235391026e-05,
+              "paired_two_way95": [
+                -0.0002473037751957948,
+                0.0003414494710934756
+              ],
+              "role_family97_5": [
+                -0.00042811335600322965,
+                0.0004932208204740117
+              ],
+              "replicates": 200,
+              "games": 2426,
+              "pitchers": 665
+            },
+            "passed": false
+          }
+        ]
+      }
+    ],
+    "replay": {
+      "version": "multi_signal_episode_v1",
+      "selection": {
+        "selected": {
+          "SP": {
+            "minimum_red": 2,
+            "training_predictive_support": false
+          },
+          "RP": {
+            "minimum_red": 2,
+            "training_predictive_support": false
+          }
+        },
+        "contrasts": [
+          {
+            "role": "SP",
+            "minimum_red": 2,
+            "n": 22474,
+            "flagged": 86,
+            "appearances": 75,
+            "risk": 0.46511627906976744,
+            "reference_risk": 0.31921331316187596,
+            "difference": 0.14590296590789148,
+            "interval": [
+              -0.08487370042068582,
+              0.37667963223646883
+            ],
+            "annual": [
+              {
+                "n": 11262,
+                "flagged": 48,
+                "appearances": 39,
+                "risk": 0.4375,
+                "reference_risk": 0.2878707156810513,
+                "difference": 0.14962928431894867,
+                "interval": [
+                  -0.1544963934033392,
+                  0.45375496204123655
+                ]
+              },
+              {
+                "n": 11212,
+                "flagged": 38,
+                "appearances": 36,
+                "risk": 0.5,
+                "reference_risk": 0.3506956831965751,
+                "difference": 0.14930431680342487,
+                "interval": [
+                  -0.17983767494683583,
+                  0.4784463085536857
+                ]
+              }
+            ],
+            "gate": false
+          },
+          {
+            "role": "SP",
+            "minimum_red": 3,
+            "n": 22474,
+            "flagged": 3,
+            "appearances": 3,
+            "risk": 1.0,
+            "reference_risk": 0.31921331316187596,
+            "difference": 0.680786686838124,
+            "interval": [
+              0.6578256672924243,
+              0.7037477063838238
+            ],
+            "annual": [
+              {
+                "n": 11262,
+                "flagged": 3,
+                "appearances": 3,
+                "risk": 1.0,
+                "reference_risk": 0.2878707156810513,
+                "difference": 0.7121292843189486,
+                "interval": [
+                  0.6856488152681377,
+                  0.7386097533697598
+                ]
+              },
+              {
+                "n": 11212,
+                "flagged": 0,
+                "appearances": 0,
+                "risk": null,
+                "reference_risk": null,
+                "difference": null,
+                "interval": null
+              }
+            ],
+            "gate": false
+          },
+          {
+            "role": "RP",
+            "minimum_red": 2,
+            "n": 3540,
+            "flagged": 11,
+            "appearances": 11,
+            "risk": 0.36363636363636365,
+            "reference_risk": 0.3307909604519774,
+            "difference": 0.032845403184386224,
+            "interval": [
+              -0.48724858257322723,
+              0.5529393889419997
+            ],
+            "annual": [
+              {
+                "n": 1654,
+                "flagged": 5,
+                "appearances": 5,
+                "risk": 0.4,
+                "reference_risk": 0.3041112454655381,
+                "difference": 0.09588875453446194,
+                "interval": [
+                  -0.757959053904357,
+                  0.949736562973281
+                ]
+              },
+              {
+                "n": 1886,
+                "flagged": 6,
+                "appearances": 6,
+                "risk": 0.3333333333333333,
+                "reference_risk": 0.35418875927889715,
+                "difference": -0.020855425945563832,
+                "interval": [
+                  -0.7830208203231066,
+                  0.7413099684319788
+                ]
+              }
+            ],
+            "gate": false
+          },
+          {
+            "role": "RP",
+            "minimum_red": 3,
+            "n": 3540,
+            "flagged": 0,
+            "appearances": 0,
+            "risk": null,
+            "reference_risk": null,
+            "difference": null,
+            "interval": null,
+            "annual": [
+              {
+                "n": 1654,
+                "flagged": 0,
+                "appearances": 0,
+                "risk": null,
+                "reference_risk": null,
+                "difference": null,
+                "interval": null
+              },
+              {
+                "n": 1886,
+                "flagged": 0,
+                "appearances": 0,
+                "risk": null,
+                "reference_risk": null,
+                "difference": null,
+                "interval": null
+              }
+            ],
+            "gate": false
+          }
+        ],
+        "2024_used_for_selection": false,
+        "matching_used_for_selection": false
+      },
+      "combination_validation2024": [
+        {
+          "role": "SP",
+          "n": 11249,
+          "flagged": 37,
+          "appearances": 32,
+          "risk": 0.5945945945945946,
+          "reference_risk": 0.3298070939639079,
+          "difference": 0.26478750063068673,
+          "interval": [
+            -0.1176680537654437,
+            0.6472430550268171
+          ],
+          "diagnostic_gate": false
+        },
+        {
+          "role": "RP",
+          "n": 1691,
+          "flagged": 1,
+          "appearances": 1,
+          "risk": 0.0,
+          "reference_risk": 0.3228858663512714,
+          "difference": -0.3228858663512714,
+          "interval": [
+            -0.3703998168142877,
+            -0.27537191588825516
+          ],
+          "diagnostic_gate": false
+        }
+      ],
+      "flow": {
+        "raw_boundaries": 2376,
+        "modeled": 1737,
+        "full_four": 842,
+        "state_episodes": 1,
+        "observed_recovery": 0,
+        "nominal_research_alerts": 0,
+        "same_boundary": 0,
+        "advance_window": 0,
+        "unmatched_alerts": 0,
+        "official_events": 208,
+        "operational_recommendations": 0
+      },
+      "roles": [
+        {
+          "role": "RP",
+          "modeled": 495,
+          "full_four": 251,
+          "states": {
+            "A": {
+              "0": 332,
+              "-1": 145,
+              "1": 11,
+              "2": 7
+            },
+            "B": {
+              "0": 333,
+              "-1": 145,
+              "1": 15,
+              "2": 2
+            },
+            "C": {
+              "0": 272,
+              "-1": 195,
+              "1": 22,
+              "2": 6
+            },
+            "D": {
+              "0": 415,
+              "1": 60,
+              "2": 20
+            }
+          },
+          "state_episodes": 0,
+          "research_alerts": 0
+        },
+        {
+          "role": "SP",
+          "modeled": 1242,
+          "full_four": 591,
+          "states": {
+            "A": {
+              "0": 658,
+              "-1": 529,
+              "1": 45,
+              "2": 10
+            },
+            "B": {
+              "0": 621,
+              "-1": 529,
+              "1": 64,
+              "2": 28
+            },
+            "C": {
+              "0": 609,
+              "-1": 574,
+              "1": 46,
+              "2": 13
+            },
+            "D": {
+              "0": 1106,
+              "1": 60,
+              "-1": 59,
+              "2": 17
+            }
+          },
+          "state_episodes": 1,
+          "research_alerts": 0
+        }
+      ],
+      "point_reasons": {
+        "unknown_evidence_pauses_not_recovery": 1534,
+        "no_state_combination": 833,
+        "combination_predictive_support_not_established": 5,
+        "awaiting_fresh_block_persistence": 4
+      },
+      "episode_end_reasons": {
+        "last_observed_boundary_censored": 1
+      },
+      "retained_old_result": {
+        "alerts": 11,
+        "matched": 0
+      },
+      "first_PA_models": {
+        "SP": "retain_previous",
+        "RP": "retain_previous"
+      },
+      "value_version": "retained14.2",
+      "interpretation": "threshold-calibrated tail states and future-measurement support are research proxies, not physiological fatigue/causal strategy correctness; gray pauses do not count as recovery",
+      "recommendation_allowed": false,
+      "test2025_outcomes_examined": false,
+      "stop": "14.2.4"
+    },
+    "recommendationAllowed": false,
+    "test2025OutcomesExamined": false,
+    "visualAcceptance": "pending user"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "decision_rp_targets_source_audit_v1",
+  "previous_hashes": 1365,
+  "new_artifact_hashes": 181,
+  "boundaries": 165634,
+  "monitor_units": 89434,
+  "task_artifacts": 30,
+  "hgb": 27,
+  "constant": 3,
+  "progress": "43/51",
+  "stop": "15.3",
+  "primary_diagnostic_gate": false,
+  "recommendation_allowed": false,
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "pending user",
+  "checks": "source/data/target/clock/model/accounting only; 2024 diagnostic after disclosed label correction, not causal or visual acceptance"
+}

@@ -523,6 +523,9 @@ export interface LeverageLeaderboardRow {
   inli: number | null
   gmli: number | null
   exli: number | null
+  entry_wpa_low: number | null
+  entry_wpa_mid: number | null
+  entry_wpa_high: number | null
   pulls: number | null
   wpa_li: number | null
   clutch: number | null
@@ -542,6 +545,25 @@ export interface LeverageValidationRow {
   intercept: number | null
 }
 
+export interface TeamSubstitutionRow {
+  team: string
+  moves: number
+  announced_moves: number | null
+  wpa_n: number
+  re24_n: number
+  wpa: number | null
+  re24: number | null
+  wpa_per_move: number | null
+  re24_per_move: number | null
+  mean_entry_li: number | null
+  entry_wpa_low: number | null
+  entry_wpa_mid: number | null
+  entry_wpa_high: number | null
+  entry_wpa_low_moves: number | null
+  entry_wpa_mid_moves: number | null
+  entry_wpa_high_moves: number | null
+}
+
 export interface LeverageOverviewResponse {
   year: number
   data_as_of: string | null
@@ -552,6 +574,9 @@ export interface LeverageOverviewResponse {
   estimated_rows: LeverageLeaderboardRow[]
   reference_rows: LeverageLeaderboardRow[]
   validation: LeverageValidationRow[]
+  team_pitching_rows: TeamSubstitutionRow[]
+  team_pinch_hit_rows: TeamSubstitutionRow[]
+  pinch_hit_data_as_of: string | null
 }
 
 export interface PitchQualityLeaderboardRow {

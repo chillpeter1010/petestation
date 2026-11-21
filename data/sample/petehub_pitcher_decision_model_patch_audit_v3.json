@@ -1,0 +1,63 @@
+{
+  "version": "decision_model_patch_source_audit_v3",
+  "frozen_files": {
+    "decision_preparation_v1": 100,
+    "decision_baseline_v1": 39,
+    "decision_ablation_v1": 35,
+    "decision_action_values_v1": 27,
+    "decision_role_observation_v2": 263,
+    "decision_batter_matchup_v1": 93,
+    "decision_role_ablation_v2": 206,
+    "decision_action_values_v2": 29,
+    "decision_model_diagnostics_v3": 106,
+    "decision_action_sensitivity_v3": 37
+  },
+  "splits": [
+    {
+      "role": "SP",
+      "year": 2022,
+      "fit": 30014,
+      "calibration": 10020,
+      "validation": 91685
+    },
+    {
+      "role": "SP",
+      "year": 2023,
+      "fit": 30013,
+      "calibration": 10027,
+      "validation": 91313
+    },
+    {
+      "role": "SP",
+      "year": 2024,
+      "fit": 217132,
+      "calibration": 54310,
+      "validation": 92013
+    },
+    {
+      "role": "RP",
+      "year": 2022,
+      "fit": 30001,
+      "calibration": 9254,
+      "validation": 45260
+    },
+    {
+      "role": "RP",
+      "year": 2023,
+      "fit": 30008,
+      "calibration": 10004,
+      "validation": 47882
+    },
+    {
+      "role": "RP",
+      "year": 2024,
+      "fit": 106389,
+      "calibration": 29510,
+      "validation": 45686
+    }
+  ],
+  "progress": "34/43",
+  "stop": "14.1.1",
+  "test2025_outcomes_examined": false,
+  "visual_acceptance": "user pending"
+}

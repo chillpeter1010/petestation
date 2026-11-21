@@ -1,0 +1,77 @@
+{
+  "version": "decision_workload_review_v1",
+  "review_date": "2026-11-18",
+  "scope": "Read-only post-Slice14 review; frozen artifacts and model implementations unchanged",
+  "action_values_source": "data/research/decision_action_values_v1/action_values_2024.parquet",
+  "formal_recommendations": 0,
+  "modeled_decisions": 484,
+  "actual_change_boundaries": 192,
+  "same_boundary_comparison": [
+    {"research_direction": "pool_higher", "actual_change": 24, "actual_continue": 31, "total": 55},
+    {"research_direction": "continue_higher", "actual_change": 5, "actual_continue": 7, "total": 12},
+    {"research_direction": "uncertain_or_unsupported", "actual_change": 163, "actual_continue": 254, "total": 417}
+  ],
+  "pool_higher_unique_games": 45,
+  "pool_higher_unique_appearances": 48,
+  "matching_definition": "Exact same decision_id / PA boundary, not early-warning windows; 55 points are not 55 independent alerts",
+  "correctness_validation": "Not established; observed manager choice is not a correctness label or causal counterfactual",
+  "load_features_already_in_baseline": [
+    "option_game_pitches", "option_current_bf", "pitches_1d_before", "pitches_3d_before",
+    "pitches_7d_before", "pitches_14d_before", "rest_hours", "previous_pitches",
+    "consecutive_days", "appeared_earlier_today", "lookback_14d_complete"
+  ],
+  "rolling_windows": "Strictly before decision, 24/72/168/336 hours; includes already observed current-game pitches",
+  "streak_issue": {
+    "current_option_mapping": "prepared_features.prior_session_consecutive_days -> option_features.consecutive_days",
+    "current_mapping_semantics": "Streak before the previous closed session, not before the current appearance",
+    "candidate_mapping_semantics": "Candidate streak reconstructed relative to the decision date",
+    "reference_available": "workload_YEAR.current_session_consecutive_days",
+    "2024_actual_continuation_RP": {
+      "rows": 31638,
+      "current_session_streak_available": 31638,
+      "different_from_model_streak": 7332,
+      "three_day_pitch_count_available": 31638
+    },
+    "2024_all_actual_continuations": {"rows": 123753, "different_from_current_session_streak": 8419},
+    "required_followup": "Unify decision-time streak semantics across current/candidate options, document treatment of today/session date, preserve separate prior-session streak, version and rerun workload ablations before fatigue interpretation"
+  },
+  "validation_remaining": [
+    "RP-only 72-hour workload and consecutive-appearance-day removal/addition ablations on identical cohorts",
+    "Consider separating prior-appearance workload from already observed current-game pitches",
+    "Warning deduplication/cooldown and predeclared early-warning matching windows",
+    "Slices15-18 and20 for overlap, policy robustness, final test and recommendation release"
+  ],
+  "2024_organic_actual_continuation_signal_coverage": {
+    "SP": {"rows": 92013, "stuff": 91992, "location": 91992, "quality": 53212, "physical": 53132, "command": 53194, "all_five": 53114},
+    "RP": {"rows": 31379, "stuff": 31364, "location": 31364, "quality": 15790, "physical": 15766, "command": 15790, "all_five": 15766},
+    "scope": "Actor-aligned Slice13 features joined to organic_pa_eligible; different denominator from all-observed streak-mapping audit"
+  },
+  "season_appearance_index_review": {
+    "prior_observed_relief_scope": "Cumulative observed closed relief history across seasons, not current-season appearance number",
+    "2024_prior_observed_relief_max": 296,
+    "season_index_in_current_core_feature_whitelist": false,
+    "followup": "Reconstruct player-ID chronological season entry count with annual reset and explicit total/RP counts; do not count resumed sessions as new appearances"
+  },
+  "role_specific_work_plan": ["13.1 workload repair including 120-hour window", "13.2 within-appearance SP/RP observation", "13.3 recent bullpen observation and season-use trajectories", "13.4 population-first TTO/BF curves then individual decline risk", "13.5 prior-PA swing/contact profiles, familiarity and archetype interactions", "13.6 role-specific prospective-target ablations", "14.1 rerun fixed-half comparisons and supported replacement pools", "14.2 alert deduplication and observed substitution matching"],
+  "recent_bullpen_and_batter_sequence_plan": {
+    "plan_only": true,
+    "total_slices_unchanged": 39,
+    "bullpen_observation": "Separate 3/5-day windows from last1/3/5 completed appearances; retain Stuff/Location, physical and outcome support, personal same-type baseline, trend, n, timestamps and staleness; no recent observations does not mean normal state",
+    "batter_observation": "Separate received pitch mix, swing rate by type and type share of all swings; measure whiff/contact/foul/fair-contact and supported batted-ball quality from strictly earlier PA only",
+    "observation_scopes": "Next batter vs this pitcher; same-game other pitchers; older H2H/type history; lineup-wide recent PA; never silently mix scopes",
+    "familiarity_axes": "Exact batter-pitcher prior encounters, pitches actually seen, lineup cycle when reconstructable, and cumulative BF are distinct; handle substitutes and zero-pitch IBB",
+    "decline_study": "Population role curves first, then supported pitcher curves with partial pooling; adjust pitch count/opponent ability/mix and observation selection; report effect size/intervals and search multiplicity, allow no stable decline",
+    "interpretation": "Observed swing behavior does not reveal psychological targeting; familiarity association does not establish causality; future-prediction increments must be validated separately"
+  },
+  "eight_factor_review": {
+    "factors_are_not_independent_scores": true,
+    "batter_matchup": "Direct H2H, within-game familiarity and archetype/family outcomes require separate support and hierarchical backoff; prior pitch-choice forecasts do not validate damage probability",
+    "historical_decline": "Conditional risk curve with censoring/selection flags, not a fixed pitch-count removal threshold or historical substitution endpoint",
+    "reliever_state": "Recent 3/5-day workload forms pre-entry context; observed current-appearance state remains relevant after entry",
+    "missing_context": "Inning, score, outs, bases, substitution legality, supported actual availability and later bullpen resource constraints",
+    "value_mapping": "Joint calibrated PA outcome/transition probabilities under each option, then common-endpoint WE/RE; no independent multiplication or arbitrary weighted factor total",
+    "plan_only": true
+  },
+  "medical_fatigue_measurement": false,
+  "new_models_trained": false
+}

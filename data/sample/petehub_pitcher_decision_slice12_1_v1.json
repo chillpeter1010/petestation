@@ -1,0 +1,318 @@
+{
+  "version": "decision_preparation_v1",
+  "slice": "12.1",
+  "years": [
+    {
+      "year": 2021,
+      "rows": 131922,
+      "changed_starts": 230,
+      "failed_event_starts": 0,
+      "intentional_walks": 486,
+      "zero_pitch_intentional_walks": 366,
+      "runner_placements": 130,
+      "runner_events": 100,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 7853,
+          "transition_valid": 7847,
+          "organic_pa_eligible": 7828,
+          "half_valid": 7843,
+          "research_pa_wpa": 4198,
+          "research_half_re24": 4196
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 31662,
+          "transition_valid": 31640,
+          "organic_pa_eligible": 31373,
+          "half_valid": 31637,
+          "research_pa_wpa": 16227,
+          "research_half_re24": 16226
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 3608,
+          "transition_valid": 3607,
+          "organic_pa_eligible": 3604,
+          "half_valid": 3607,
+          "research_pa_wpa": 1886,
+          "research_half_re24": 1886
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 88799,
+          "transition_valid": 88757,
+          "organic_pa_eligible": 88560,
+          "half_valid": 88756,
+          "research_pa_wpa": 44831,
+          "research_half_re24": 44830
+        }
+      ]
+    },
+    {
+      "year": 2022,
+      "rows": 137321,
+      "changed_starts": 207,
+      "failed_event_starts": 0,
+      "intentional_walks": 296,
+      "zero_pitch_intentional_walks": 210,
+      "runner_placements": 129,
+      "runner_events": 78,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 10089,
+          "transition_valid": 10086,
+          "organic_pa_eligible": 10075,
+          "half_valid": 10084,
+          "research_pa_wpa": 10086,
+          "research_half_re24": 10084
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 30879,
+          "transition_valid": 30853,
+          "organic_pa_eligible": 30647,
+          "half_valid": 30840,
+          "research_pa_wpa": 30853,
+          "research_half_re24": 30840
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4542,
+          "transition_valid": 4539,
+          "organic_pa_eligible": 4538,
+          "half_valid": 4539,
+          "research_pa_wpa": 4539,
+          "research_half_re24": 4539
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91811,
+          "transition_valid": 91763,
+          "organic_pa_eligible": 91685,
+          "half_valid": 91763,
+          "research_pa_wpa": 91763,
+          "research_half_re24": 91763
+        }
+      ]
+    },
+    {
+      "year": 2023,
+      "rows": 139569,
+      "changed_starts": 215,
+      "failed_event_starts": 0,
+      "intentional_walks": 285,
+      "zero_pitch_intentional_walks": 212,
+      "runner_placements": 118,
+      "runner_events": 97,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9770,
+          "transition_valid": 9764,
+          "organic_pa_eligible": 9751,
+          "half_valid": 9764,
+          "research_pa_wpa": 9764,
+          "research_half_re24": 9764
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 33934,
+          "transition_valid": 33907,
+          "organic_pa_eligible": 33697,
+          "half_valid": 33905,
+          "research_pa_wpa": 33907,
+          "research_half_re24": 33905
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4442,
+          "transition_valid": 4438,
+          "organic_pa_eligible": 4434,
+          "half_valid": 4438,
+          "research_pa_wpa": 4438,
+          "research_half_re24": 4438
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91423,
+          "transition_valid": 91371,
+          "organic_pa_eligible": 91313,
+          "half_valid": 91371,
+          "research_pa_wpa": 91371,
+          "research_half_re24": 91371
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "rows": 138080,
+      "changed_starts": 261,
+      "failed_event_starts": 0,
+      "intentional_walks": 309,
+      "zero_pitch_intentional_walks": 223,
+      "runner_placements": 148,
+      "runner_events": 113,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9812,
+          "transition_valid": 9808,
+          "organic_pa_eligible": 9799,
+          "half_valid": 9806,
+          "research_pa_wpa": 9808,
+          "research_half_re24": 9806
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 31638,
+          "transition_valid": 31609,
+          "organic_pa_eligible": 31379,
+          "half_valid": 31606,
+          "research_pa_wpa": 31609,
+          "research_half_re24": 31606
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4515,
+          "transition_valid": 4514,
+          "organic_pa_eligible": 4508,
+          "half_valid": 4514,
+          "research_pa_wpa": 4514,
+          "research_half_re24": 4514
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 92115,
+          "transition_valid": 92077,
+          "organic_pa_eligible": 92013,
+          "half_valid": 92075,
+          "research_pa_wpa": 92077,
+          "research_half_re24": 92075
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "rows": 138374,
+      "changed_starts": 236,
+      "failed_event_starts": 0,
+      "intentional_walks": 346,
+      "zero_pitch_intentional_walks": 269,
+      "runner_placements": 143,
+      "runner_events": 93,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9974,
+          "transition_valid": 9969,
+          "organic_pa_eligible": 9960,
+          "half_valid": 9967,
+          "research_pa_wpa": 9969,
+          "research_half_re24": 9967
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 32096,
+          "transition_valid": 32067,
+          "organic_pa_eligible": 31818,
+          "half_valid": 32062,
+          "research_pa_wpa": 32067,
+          "research_half_re24": 32062
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4481,
+          "transition_valid": 4480,
+          "organic_pa_eligible": 4477,
+          "half_valid": 4480,
+          "research_pa_wpa": 4480,
+          "research_half_re24": 4480
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 91823,
+          "transition_valid": 91792,
+          "organic_pa_eligible": 91707,
+          "half_valid": 91788,
+          "research_pa_wpa": 91792,
+          "research_half_re24": 91788
+        }
+      ]
+    },
+    {
+      "year": 2026,
+      "rows": 139196,
+      "changed_starts": 222,
+      "failed_event_starts": 0,
+      "intentional_walks": 344,
+      "zero_pitch_intentional_walks": 247,
+      "runner_placements": 121,
+      "runner_events": 101,
+      "targets": [
+        {
+          "role": "RP",
+          "observed_action": "change",
+          "n": 9823,
+          "transition_valid": 9819,
+          "organic_pa_eligible": 9808,
+          "half_valid": 9818,
+          "research_pa_wpa": 9819,
+          "research_half_re24": 9818
+        },
+        {
+          "role": "RP",
+          "observed_action": "continue",
+          "n": 35594,
+          "transition_valid": 35559,
+          "organic_pa_eligible": 35295,
+          "half_valid": 35559,
+          "research_pa_wpa": 35559,
+          "research_half_re24": 35559
+        },
+        {
+          "role": "SP",
+          "observed_action": "change",
+          "n": 4381,
+          "transition_valid": 4377,
+          "organic_pa_eligible": 4373,
+          "half_valid": 4377,
+          "research_pa_wpa": 4377,
+          "research_half_re24": 4377
+        },
+        {
+          "role": "SP",
+          "observed_action": "continue",
+          "n": 89398,
+          "transition_valid": 89356,
+          "organic_pa_eligible": 89291,
+          "half_valid": 89355,
+          "research_pa_wpa": 89356,
+          "research_half_re24": 89355
+        }
+      ]
+    }
+  ]
+}

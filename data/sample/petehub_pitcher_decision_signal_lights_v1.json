@@ -1,0 +1,850 @@
+{
+  "version": "decision_signal_lights_display_v1",
+  "updatedAt": "2026-11-19",
+  "mode": "observed",
+  "cases": [
+    {
+      "id": "744862:9:boundary",
+      "label": "744862 · 1上 · Jake Irvin",
+      "gamePk": 744862,
+      "decisionId": "744862:9:boundary",
+      "pitcherName": "Jake Irvin",
+      "role": "SP",
+      "inning": 1,
+      "half": "top",
+      "pitches": 32.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：106.8",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：102.9",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：32球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：84球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +0.84pp，ΔxRE24 +0.176分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=292。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.9925266901437133
+    },
+    {
+      "id": "745274:15:boundary",
+      "label": "745274 · 2下 · Jordan Wicks",
+      "gamePk": 745274,
+      "decisionId": "745274:15:boundary",
+      "pitcherName": "Jordan Wicks",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 26.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：98.8",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：100.3",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：26球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +2.78pp，ΔxRE24 +0.328分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=72。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 1.7492605830423242
+    },
+    {
+      "id": "745274:9:boundary",
+      "label": "745274 · 2上 · Bryce Miller",
+      "gamePk": 745274,
+      "decisionId": "745274:9:boundary",
+      "pitcherName": "Bryce Miller",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 21.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：108.0",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：99.6",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：21球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.12pp，ΔxRE24 +0.086分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=15。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.7394832939661448
+    },
+    {
+      "id": "745311:27:boundary",
+      "label": "745311 · 4上 · Hayden Birdsong",
+      "gamePk": 745311,
+      "decisionId": "745311:27:boundary",
+      "pitcherName": "Hayden Birdsong",
+      "role": "SP",
+      "inning": 4,
+      "half": "top",
+      "pitches": 50.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "個人正常進程與異常下降尚未校準",
+          "evidence": [
+            "Stuff水準（研究基準100）：102.1",
+            "同球種個人參考差：2.5點",
+            "Physical相對100：5.7點"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "位置與Command尚未校準為獨立異常證據",
+          "evidence": [
+            "Location水準（研究基準100）：99.1",
+            "個人位置參考差：-1.5點",
+            "Command相對100：-6.6點"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "有前序資料，但提高幅度／對手調整尚未校準",
+          "evidence": [
+            "當前打者前序PA：1",
+            "其中對現任PA：1",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：50球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +2.19pp，ΔxRE24 +0.234分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=1；類型支持n=67。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 1.6116199419133772
+    },
+    {
+      "id": "745311:15:boundary",
+      "label": "745311 · 2下 · Simeon Woods Richardson",
+      "gamePk": 745311,
+      "decisionId": "745311:15:boundary",
+      "pitcherName": "Simeon Woods Richardson",
+      "role": "SP",
+      "inning": 2,
+      "half": "bottom",
+      "pitches": 24.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：99.4",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：100.9",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：24球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.07pp，ΔxRE24 +0.070分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=107。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.9572069168903257
+    },
+    {
+      "id": "745479:40:boundary",
+      "label": "745479 · 5下 · Luis Severino",
+      "gamePk": 745479,
+      "decisionId": "745479:40:boundary",
+      "pitcherName": "Luis Severino",
+      "role": "SP",
+      "inning": 5,
+      "half": "bottom",
+      "pitches": 53.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "個人正常進程與異常下降尚未校準",
+          "evidence": [
+            "Stuff水準（研究基準100）：98.2",
+            "同球種個人參考差：-3.4點",
+            "Physical相對100：1.9點"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "位置與Command尚未校準為獨立異常證據",
+          "evidence": [
+            "Location水準（研究基準100）：98.6",
+            "個人位置參考差：-2.6點",
+            "Command相對100：-0.2點"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "有前序資料，但提高幅度／對手調整尚未校準",
+          "evidence": [
+            "當前打者前序PA：2",
+            "其中對現任PA：2",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：53球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +2.41pp，ΔxRE24 +0.277分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=10；類型支持n=204。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 1.7835137864857937
+    },
+    {
+      "id": "745964:36:boundary",
+      "label": "745964 · 4下 · Trevor Rogers",
+      "gamePk": 745964,
+      "decisionId": "745964:36:boundary",
+      "pitcherName": "Trevor Rogers",
+      "role": "SP",
+      "inning": 4,
+      "half": "bottom",
+      "pitches": 69.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "個人正常進程與異常下降尚未校準",
+          "evidence": [
+            "Stuff水準（研究基準100）：99.3",
+            "同球種個人參考差：-1.3點",
+            "Physical相對100：3.4點"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "位置與Command尚未校準為獨立異常證據",
+          "evidence": [
+            "Location水準（研究基準100）：102.9",
+            "個人位置參考差：4.2點",
+            "Command相對100：12.5點"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "有前序資料，但提高幅度／對手調整尚未校準",
+          "evidence": [
+            "當前打者前序PA：1",
+            "其中對現任PA：1",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：69球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +0.75pp，ΔxRE24 +0.066分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=3；類型支持n=14。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.15883444120361523
+    },
+    {
+      "id": "746229:21:boundary",
+      "label": "746229 · 3上 · Griffin Canning",
+      "gamePk": 746229,
+      "decisionId": "746229:21:boundary",
+      "pitcherName": "Griffin Canning",
+      "role": "SP",
+      "inning": 3,
+      "half": "top",
+      "pitches": 33.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：101.0",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：103.7",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "有前序資料，但提高幅度／對手調整尚未校準",
+          "evidence": [
+            "當前打者前序PA：1",
+            "其中對現任PA：1",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：33球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.06pp，ΔxRE24 +0.078分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=7；類型支持n=193。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.7784749107272543
+    },
+    {
+      "id": "746447:5:boundary",
+      "label": "746447 · 1上 · Keider Montero",
+      "gamePk": 746447,
+      "decisionId": "746447:5:boundary",
+      "pitcherName": "Keider Montero",
+      "role": "SP",
+      "inning": 1,
+      "half": "top",
+      "pitches": 16.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：100.0",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：99.3",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：16球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：73球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.57pp，ΔxRE24 +0.180分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=28。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.9626549012506326
+    },
+    {
+      "id": "746447:47:boundary",
+      "label": "746447 · 5下 · Justin Wrobleski",
+      "gamePk": 746447,
+      "decisionId": "746447:47:boundary",
+      "pitcherName": "Justin Wrobleski",
+      "role": "SP",
+      "inning": 5,
+      "half": "bottom",
+      "pitches": 73.0,
+      "observationMature": true,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "個人正常進程與異常下降尚未校準",
+          "evidence": [
+            "Stuff水準（研究基準100）：95.6",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：6.9點"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "位置與Command尚未校準為獨立異常證據",
+          "evidence": [
+            "Location水準（研究基準100）：99.5",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：-14.3點"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "有前序資料，但提高幅度／對手調整尚未校準",
+          "evidence": [
+            "當前打者前序PA：2",
+            "其中對現任PA：2",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：73球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：0球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.86pp，ΔxRE24 +0.094分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=2；類型支持n=26。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 0.7226092580932965
+    },
+    {
+      "id": "746938:11:boundary",
+      "label": "746938 · 2上 · Josh Winckowski",
+      "gamePk": 746938,
+      "decisionId": "746938:11:boundary",
+      "pitcherName": "Josh Winckowski",
+      "role": "SP",
+      "inning": 2,
+      "half": "top",
+      "pitches": 19.0,
+      "observationMature": false,
+      "lights": [
+        {
+          "id": "A",
+          "title": "球質下降",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "未達現行35球觀測支持；無疲勞判讀",
+          "evidence": [
+            "Stuff水準（研究基準100）：99.6",
+            "同球種個人參考差：尚無有效觀測",
+            "Physical相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "B",
+          "title": "位置／控球代理",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "短前綴觀測，三項狀態未成熟",
+          "evidence": [
+            "Location水準（研究基準100）：101.9",
+            "個人位置參考差：尚無有效觀測",
+            "Command相對100：尚無有效觀測"
+          ]
+        },
+        {
+          "id": "C",
+          "title": "對手掌握提高",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": false,
+          "reason": "當前打者本場尚無前序PA，不能判斷掌握提升",
+          "evidence": [
+            "當前打者前序PA：0",
+            "其中對現任PA：0",
+            "全隊對現任近期PA（不同scope）：3"
+          ]
+        },
+        {
+          "id": "D",
+          "title": "負荷／恢復壓力",
+          "state": "gray",
+          "calibrated": false,
+          "supportKnown": true,
+          "reason": "負荷已有觀測，個人正常範圍與局間恢復仍待校準",
+          "evidence": [
+            "本場球數：19球",
+            "其他比賽近72h用球：0球",
+            "其他比賽近120h用球：91球",
+            "進場前連續登板日：0日"
+          ]
+        }
+      ],
+      "gates": {
+        "value": "pass",
+        "legal": "pass",
+        "availability": "unknown",
+        "statePersistence": "unknown"
+      },
+      "valueNote": "舊14.2收益門檻已過：ΔxWPA +1.51pp，ΔxRE24 +0.137分；這是替代池比較，不是疲勞證據。",
+      "matchupNote": "首位打者已知，歷史BvP支持n=0；類型支持n=86。相性未校準為分燈票數，後續打線仍用聯盟池。",
+      "li": 1.4059518595038396
+    }
+  ],
+  "counts": {
+    "cases": 11,
+    "belowObservationMinimum": 7,
+    "matureObservation": 4
+  },
+  "scoreStatus": "0–8等權、五級與兩紅規則為展示設計；14.2.2–14.2.4完成前不稱已校準總分。灰不補0，gmLI／相性不計票，收益連續不當原因持續。",
+  "recommendationAllowed": false
+}

@@ -1,0 +1,1359 @@
+{
+  "version": "decision_matchup_action_revision_v2",
+  "completedSlices": [
+    "13.5",
+    "13.6",
+    "14.1"
+  ],
+  "notStarted": [
+    "14.2",
+    "15"
+  ],
+  "coverage2024": [
+    {
+      "role": "RP",
+      "n": 45965,
+      "same_game_pa": 43669,
+      "same_pitcher_pa": 3461,
+      "historical_pair": 24070,
+      "known_type": 27300,
+      "type_own_pa": 26782,
+      "affinity_whiff": 45023
+    },
+    {
+      "role": "SP",
+      "n": 92115,
+      "same_game_pa": 63301,
+      "same_pitcher_pa": 63301,
+      "historical_pair": 77067,
+      "known_type": 90610,
+      "type_own_pa": 89943,
+      "affinity_whiff": 90733
+    }
+  ],
+  "featureRows2024": 138080,
+  "associationPanels": 12,
+  "associationSupportedChanges2024": 0,
+  "diagnosticFlow": [
+    {
+      "year": 2021,
+      "before": 179881,
+      "excluded": 1,
+      "after": 179880
+    },
+    {
+      "year": 2022,
+      "before": 180054,
+      "excluded": 0,
+      "after": 180054
+    },
+    {
+      "year": 2023,
+      "before": 182045,
+      "excluded": 0,
+      "after": 182045
+    },
+    {
+      "year": 2024,
+      "before": 180906,
+      "excluded": 1,
+      "after": 180905
+    }
+  ],
+  "roles": [
+    {
+      "role": "SP",
+      "trainingN": 271558,
+      "validationN": 92013,
+      "selected": "baseline",
+      "baselineLL": 1.4974074130222956,
+      "baselineBrier": 0.6997105128212862,
+      "selectedLL": 1.4974074130222956,
+      "selectedBrier": 0.6997105128212862,
+      "rows": [
+        {
+          "variant": "baseline",
+          "candidate": true,
+          "logLoss": 1.4974074130222956,
+          "brier": 0.6997105128212862,
+          "delta": 0.0,
+          "familyInterval": [
+            0.0,
+            0.0
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "ability_only",
+          "candidate": false,
+          "logLoss": 1.496800666740012,
+          "brier": 0.6994180712014527,
+          "delta": -0.0006067462822836741,
+          "familyInterval": [
+            -0.0028473551888272214,
+            0.001633862624259873
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_extended",
+          "candidate": true,
+          "logLoss": 1.4981446753944299,
+          "brier": 0.6998732908366136,
+          "delta": 0.0007372623721340222,
+          "familyInterval": [
+            -0.0012020762854045059,
+            0.0026766010296725502
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "plus",
+          "candidate": true,
+          "logLoss": 1.497411372977281,
+          "brier": 0.6997019798786597,
+          "delta": 3.959954985397674e-06,
+          "familyInterval": [
+            -0.0020379869855996543,
+            0.0020459068955704495
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "states",
+          "candidate": true,
+          "logLoss": 1.5026897316694106,
+          "brier": 0.7002727470775989,
+          "delta": 0.005282318647114989,
+          "familyInterval": [
+            -0.0059153432450616905,
+            0.01647998053929167
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "exposure",
+          "candidate": true,
+          "logLoss": 1.502367773168101,
+          "brier": 0.7003387908653177,
+          "delta": 0.004960360145805613,
+          "familyInterval": [
+            -0.004760197918841809,
+            0.014680918210453035
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "attack",
+          "candidate": true,
+          "logLoss": 1.51455654186391,
+          "brier": 0.7040986159259667,
+          "delta": 0.017149128841614663,
+          "familyInterval": [
+            0.005475304275671375,
+            0.02882295340755795
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "all",
+          "candidate": true,
+          "logLoss": 1.521122114054253,
+          "brier": 0.7057333100505205,
+          "delta": 0.02371470103195714,
+          "familyInterval": [
+            0.011943339972948264,
+            0.03548606209096601
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_plus",
+          "candidate": false,
+          "logLoss": 1.5156423172780251,
+          "brier": 0.7054255217095334,
+          "delta": 0.018234904255729323,
+          "familyInterval": [
+            0.010445049599229182,
+            0.026024758912229464
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_live",
+          "candidate": false,
+          "logLoss": 1.5161833132631932,
+          "brier": 0.7046431748343904,
+          "delta": 0.018775900240897796,
+          "familyInterval": [
+            0.0070401577894082905,
+            0.030511642692387302
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_recent",
+          "candidate": false,
+          "logLoss": 1.5148038920226077,
+          "brier": 0.7065686403512033,
+          "delta": 0.0173964790003121,
+          "familyInterval": [
+            0.013037110565930947,
+            0.021755847434693255
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_exposure",
+          "candidate": false,
+          "logLoss": 1.5189085755996383,
+          "brier": 0.7053280427005898,
+          "delta": 0.021501162577343177,
+          "familyInterval": [
+            0.010051475771114255,
+            0.0329508493835721
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_risk",
+          "candidate": false,
+          "logLoss": 1.5200836854253021,
+          "brier": 0.7062116935560354,
+          "delta": 0.02267627240300672,
+          "familyInterval": [
+            0.009522057402440469,
+            0.03583048740357297
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_attack",
+          "candidate": false,
+          "logLoss": 1.5046498717578078,
+          "brier": 0.7007409783481557,
+          "delta": 0.007242458735511995,
+          "familyInterval": [
+            -0.00481310826182298,
+            0.01929802573284697
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_bvp",
+          "candidate": false,
+          "logLoss": 1.5196837749483547,
+          "brier": 0.7061903736768251,
+          "delta": 0.022276361926059328,
+          "familyInterval": [
+            0.010176477487239946,
+            0.03437624636487871
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_type",
+          "candidate": false,
+          "logLoss": 1.5162171669979603,
+          "brier": 0.704491139778278,
+          "delta": 0.018809753975664464,
+          "familyInterval": [
+            0.00499662357741542,
+            0.03262288437391351
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_interactions",
+          "candidate": false,
+          "logLoss": 1.5201351451983245,
+          "brier": 0.7059702435496437,
+          "delta": 0.022727732176029178,
+          "familyInterval": [
+            0.011701438387694083,
+            0.033754025964364276
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_season",
+          "candidate": false,
+          "logLoss": 1.520501769357435,
+          "brier": 0.705553312298119,
+          "delta": 0.02309435633513949,
+          "familyInterval": [
+            0.010909693596593429,
+            0.03527901907368555
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_72h",
+          "candidate": false,
+          "logLoss": 1.5184407298105813,
+          "brier": 0.7052891161008809,
+          "delta": 0.0210333167882856,
+          "familyInterval": [
+            0.00806530329999392,
+            0.03400133027657728
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_120h",
+          "candidate": false,
+          "logLoss": 1.5185252153054856,
+          "brier": 0.7056095593494167,
+          "delta": 0.021117802283189973,
+          "familyInterval": [
+            0.010612614676800178,
+            0.03162298988957977
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_streak",
+          "candidate": false,
+          "logLoss": 1.5209238709145614,
+          "brier": 0.7056571670264737,
+          "delta": 0.023516457892265794,
+          "familyInterval": [
+            0.00817282075229478,
+            0.03886009503223681
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_72h",
+          "candidate": false,
+          "logLoss": 1.4981288366317402,
+          "brier": 0.6998876876338141,
+          "delta": 0.0007214236094445123,
+          "familyInterval": [
+            -0.001055260520178093,
+            0.0024981077390671177
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_120h",
+          "candidate": false,
+          "logLoss": 1.497624683294505,
+          "brier": 0.6998561825469028,
+          "delta": 0.00021727027220952937,
+          "familyInterval": [
+            -0.0004599366388034083,
+            0.000894477183222467
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_streak",
+          "candidate": false,
+          "logLoss": 1.4974397769986163,
+          "brier": 0.699738758171032,
+          "delta": 3.236397632090113e-05,
+          "familyInterval": [
+            -0.002268381675468738,
+            0.00233310962811054
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_season",
+          "candidate": false,
+          "logLoss": 1.4978825130546927,
+          "brier": 0.6997475985591718,
+          "delta": 0.0004751000323971968,
+          "familyInterval": [
+            -0.0013772785586479027,
+            0.0023274786234422965
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        }
+      ],
+      "supportedN": 53114,
+      "supportedAllIncrement": false,
+      "loadContrasts": [
+        {
+          "variant": "load_without_72h",
+          "mean": -1.5838762689514822e-05,
+          "paired_two_way95": [
+            -0.0005273562003373848,
+            0.0003709450612088124
+          ],
+          "role_family97_5": [
+            -0.0007536101898298159,
+            0.0007219326644507862
+          ],
+          "replicates": 200,
+          "games": 2427,
+          "pitchers": 366
+        },
+        {
+          "variant": "load_without_120h",
+          "mean": -0.0005199920999244844,
+          "paired_two_way95": [
+            -0.0017216543291927728,
+            2.951631618760031e-05
+          ],
+          "role_family97_5": [
+            -0.002119500012569383,
+            0.0010795158127204143
+          ],
+          "replicates": 200,
+          "games": 2427,
+          "pitchers": 366
+        },
+        {
+          "variant": "load_without_streak",
+          "mean": -0.0007048983958131102,
+          "paired_two_way95": [
+            -0.002118026145061347,
+            1.2527048692822403e-05
+          ],
+          "role_family97_5": [
+            -0.002458278085895115,
+            0.001048481294268895
+          ],
+          "replicates": 200,
+          "games": 2427,
+          "pitchers": 366
+        },
+        {
+          "variant": "load_without_season",
+          "mean": -0.0002621623397368223,
+          "paired_two_way95": [
+            -0.0008781649934686472,
+            8.73603106086322e-05
+          ],
+          "role_family97_5": [
+            -0.0010480935324535666,
+            0.0005237688529799219
+          ],
+          "replicates": 200,
+          "games": 2427,
+          "pitchers": 366
+        }
+      ]
+    },
+    {
+      "role": "RP",
+      "trainingN": 135947,
+      "validationN": 45686,
+      "selected": "baseline",
+      "baselineLL": 1.511456738067139,
+      "baselineBrier": 0.707435910499541,
+      "selectedLL": 1.511456738067139,
+      "selectedBrier": 0.707435910499541,
+      "rows": [
+        {
+          "variant": "baseline",
+          "candidate": true,
+          "logLoss": 1.511456738067139,
+          "brier": 0.707435910499541,
+          "delta": 0.0,
+          "familyInterval": [
+            0.0,
+            0.0
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "ability_only",
+          "candidate": false,
+          "logLoss": 1.5096455457646614,
+          "brier": 0.7067462996981685,
+          "delta": -0.0018111923024779536,
+          "familyInterval": [
+            -0.0027954159070979483,
+            -0.0008269686978579589
+          ],
+          "incrementGate": true,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_extended",
+          "candidate": true,
+          "logLoss": 1.5130088402499076,
+          "brier": 0.7079532299990172,
+          "delta": 0.0015521021827680018,
+          "familyInterval": [
+            0.0003899307651647774,
+            0.0027142736003712264
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "plus",
+          "candidate": true,
+          "logLoss": 1.5132441681299278,
+          "brier": 0.7080037491438608,
+          "delta": 0.0017874300627882971,
+          "familyInterval": [
+            -3.844729871108456e-06,
+            0.0035787048554477025
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "states",
+          "candidate": true,
+          "logLoss": 1.5288229979612993,
+          "brier": 0.7131656188467459,
+          "delta": 0.01736625989416024,
+          "familyInterval": [
+            0.013141638623697747,
+            0.021590881164622735
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "exposure",
+          "candidate": true,
+          "logLoss": 1.5303505456673334,
+          "brier": 0.7133720685892821,
+          "delta": 0.018893807600194407,
+          "familyInterval": [
+            0.014474076031328102,
+            0.02331353916906071
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "attack",
+          "candidate": true,
+          "logLoss": 1.5669359084874699,
+          "brier": 0.7263008556416666,
+          "delta": 0.055479170420330896,
+          "familyInterval": [
+            0.04678896557637785,
+            0.06416937526428394
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "all",
+          "candidate": true,
+          "logLoss": 1.5792329665422622,
+          "brier": 0.7267539204306758,
+          "delta": 0.06777622847512256,
+          "familyInterval": [
+            0.057843388360529095,
+            0.07770906858971602
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_plus",
+          "candidate": false,
+          "logLoss": 1.5689260685034445,
+          "brier": 0.7230326826076489,
+          "delta": 0.05746933043630558,
+          "familyInterval": [
+            0.048237428428851904,
+            0.06670123244375925
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_live",
+          "candidate": false,
+          "logLoss": 1.57022421763867,
+          "brier": 0.7236157049295383,
+          "delta": 0.05876747957153036,
+          "familyInterval": [
+            0.049617674019177264,
+            0.06791728512388345
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_recent",
+          "candidate": false,
+          "logLoss": 1.561462618512522,
+          "brier": 0.7203406249735986,
+          "delta": 0.050005880445383025,
+          "familyInterval": [
+            0.04131294677218754,
+            0.05869881411857851
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_exposure",
+          "candidate": false,
+          "logLoss": 1.5728075846815799,
+          "brier": 0.7250231909815241,
+          "delta": 0.06135084661444128,
+          "familyInterval": [
+            0.05188617680768498,
+            0.07081551642119759
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_risk",
+          "candidate": false,
+          "logLoss": 1.580152631378243,
+          "brier": 0.7269185177621703,
+          "delta": 0.06869589331110403,
+          "familyInterval": [
+            0.05868798281797871,
+            0.07870380380422934
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_attack",
+          "candidate": false,
+          "logLoss": 1.533494478399926,
+          "brier": 0.7148114421852493,
+          "delta": 0.022037740332787145,
+          "familyInterval": [
+            0.016650376457975326,
+            0.027425104207598965
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_bvp",
+          "candidate": false,
+          "logLoss": 1.5770340319077518,
+          "brier": 0.7283284010843268,
+          "delta": 0.06557729384061242,
+          "familyInterval": [
+            0.055976285329634126,
+            0.07517830235159072
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_type",
+          "candidate": false,
+          "logLoss": 1.5703553587290189,
+          "brier": 0.7266069229195734,
+          "delta": 0.05889862066187956,
+          "familyInterval": [
+            0.05001393228778405,
+            0.06778330903597506
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_interactions",
+          "candidate": false,
+          "logLoss": 1.5737855786688912,
+          "brier": 0.7256608453976026,
+          "delta": 0.06232884060175197,
+          "familyInterval": [
+            0.052824852094979155,
+            0.07183282910852479
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_season",
+          "candidate": false,
+          "logLoss": 1.5784295622007458,
+          "brier": 0.7263778193927878,
+          "delta": 0.0669728241336065,
+          "familyInterval": [
+            0.05715040769275344,
+            0.07679524057445956
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_72h",
+          "candidate": false,
+          "logLoss": 1.580487182509628,
+          "brier": 0.7268233674923,
+          "delta": 0.06903044444248894,
+          "familyInterval": [
+            0.05894465170427858,
+            0.07911623718069931
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_120h",
+          "candidate": false,
+          "logLoss": 1.5761199852390255,
+          "brier": 0.7254532738176703,
+          "delta": 0.06466324717188614,
+          "familyInterval": [
+            0.054989287135560436,
+            0.07433720720821184
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "without_streak",
+          "candidate": false,
+          "logLoss": 1.5811959066038275,
+          "brier": 0.7270091086859038,
+          "delta": 0.06973916853668792,
+          "familyInterval": [
+            0.05947446879655516,
+            0.08000386827682068
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_72h",
+          "candidate": false,
+          "logLoss": 1.5137240163728147,
+          "brier": 0.7082126546226846,
+          "delta": 0.002267278305675446,
+          "familyInterval": [
+            0.0008160594593601303,
+            0.003718497151990762
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_120h",
+          "candidate": false,
+          "logLoss": 1.5132182377799908,
+          "brier": 0.7080618822941126,
+          "delta": 0.0017614997128515366,
+          "familyInterval": [
+            0.0007004688827278811,
+            0.002822530542975192
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_streak",
+          "candidate": false,
+          "logLoss": 1.5127388158742505,
+          "brier": 0.7079580774280205,
+          "delta": 0.0012820778071114232,
+          "familyInterval": [
+            0.00017400122367793752,
+            0.002390154390544909
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        },
+        {
+          "variant": "load_without_season",
+          "candidate": false,
+          "logLoss": 1.5130235721040315,
+          "brier": 0.7080371179137745,
+          "delta": 0.001566834036892117,
+          "familyInterval": [
+            0.0005751055257573274,
+            0.0025585625480269063
+          ],
+          "incrementGate": false,
+          "convergenceWarning": false
+        }
+      ],
+      "supportedN": 23163,
+      "supportedAllIncrement": false,
+      "loadContrasts": [
+        {
+          "variant": "load_without_72h",
+          "mean": 0.0007151761229074258,
+          "paired_two_way95": [
+            -6.447567789388454e-05,
+            0.0014449618684047214
+          ],
+          "role_family97_5": [
+            -0.00036672515691176996,
+            0.0017970774027266214
+          ],
+          "replicates": 200,
+          "games": 2426,
+          "pitchers": 665
+        },
+        {
+          "variant": "load_without_120h",
+          "mean": 0.00020939753008353788,
+          "paired_two_way95": [
+            -0.0001432482435262334,
+            0.000560926719198572
+          ],
+          "role_family97_5": [
+            -0.0002865414202525502,
+            0.0007053364804196259
+          ],
+          "replicates": 200,
+          "games": 2426,
+          "pitchers": 665
+        },
+        {
+          "variant": "load_without_streak",
+          "mean": -0.00027002437565659416,
+          "paired_two_way95": [
+            -0.0006836365287457757,
+            0.0001416284522463423
+          ],
+          "role_family97_5": [
+            -0.000830325273692048,
+            0.0002902765223788597
+          ],
+          "replicates": 200,
+          "games": 2426,
+          "pitchers": 665
+        },
+        {
+          "variant": "load_without_season",
+          "mean": 1.473185412412114e-05,
+          "paired_two_way95": [
+            -0.0007144001111150533,
+            0.0007470975014803795
+          ],
+          "role_family97_5": [
+            -0.0009862050372190885,
+            0.0010156687454673306
+          ],
+          "replicates": 200,
+          "games": 2426,
+          "pitchers": 665
+        }
+      ]
+    }
+  ],
+  "action": {
+    "originalCases": 484,
+    "modeledCases": 484,
+    "supported": 437,
+    "conditionalComparisons": 1072,
+    "paths": 256,
+    "bootstrapModels": 8,
+    "firstModels": [
+      {
+        "role": "SP",
+        "model": "repaired_global_matchup"
+      },
+      {
+        "role": "RP",
+        "model": "repaired_global_matchup"
+      }
+    ],
+    "directions": [
+      {
+        "direction": "pool_higher",
+        "old": 55,
+        "new": 50
+      },
+      {
+        "direction": "continue_higher",
+        "old": 12,
+        "new": 11
+      },
+      {
+        "direction": "uncertain_or_unsupported",
+        "old": 417,
+        "new": 423
+      }
+    ],
+    "directionTransitions": [
+      {
+        "old": "continue_higher",
+        "new": "continue_higher",
+        "n": 6
+      },
+      {
+        "old": "continue_higher",
+        "new": "pool_higher",
+        "n": 0
+      },
+      {
+        "old": "continue_higher",
+        "new": "uncertain_or_unsupported",
+        "n": 6
+      },
+      {
+        "old": "pool_higher",
+        "new": "continue_higher",
+        "n": 0
+      },
+      {
+        "old": "pool_higher",
+        "new": "pool_higher",
+        "n": 33
+      },
+      {
+        "old": "pool_higher",
+        "new": "uncertain_or_unsupported",
+        "n": 22
+      },
+      {
+        "old": "uncertain_or_unsupported",
+        "new": "continue_higher",
+        "n": 5
+      },
+      {
+        "old": "uncertain_or_unsupported",
+        "new": "pool_higher",
+        "n": 17
+      },
+      {
+        "old": "uncertain_or_unsupported",
+        "new": "uncertain_or_unsupported",
+        "n": 395
+      }
+    ],
+    "poolSummary": [
+      {
+        "pool": "hand_L",
+        "n": 309,
+        "supported": 272,
+        "directions": {
+          "uncertain_or_unsupported": 276,
+          "pool_higher": 24,
+          "continue_higher": 9
+        }
+      },
+      {
+        "pool": "hand_R",
+        "n": 480,
+        "supported": 433,
+        "directions": {
+          "uncertain_or_unsupported": 409,
+          "pool_higher": 61,
+          "continue_higher": 10
+        }
+      },
+      {
+        "pool": "role",
+        "n": 484,
+        "supported": 437,
+        "directions": {
+          "uncertain_or_unsupported": 423,
+          "pool_higher": 50,
+          "continue_higher": 11
+        }
+      },
+      {
+        "pool": "type_L:fastball:90to95",
+        "n": 9,
+        "supported": 9,
+        "directions": {
+          "uncertain_or_unsupported": 7,
+          "continue_higher": 1,
+          "pool_higher": 1
+        }
+      },
+      {
+        "pool": "type_L:fastball:under90",
+        "n": 4,
+        "supported": 4,
+        "directions": {
+          "uncertain_or_unsupported": 3,
+          "continue_higher": 1
+        }
+      },
+      {
+        "pool": "type_L:mixed:90to95",
+        "n": 1,
+        "supported": 1,
+        "directions": {
+          "uncertain_or_unsupported": 1
+        }
+      },
+      {
+        "pool": "type_R:breaking:90to95",
+        "n": 6,
+        "supported": 6,
+        "directions": {
+          "uncertain_or_unsupported": 4,
+          "pool_higher": 2
+        }
+      },
+      {
+        "pool": "type_R:breaking:95plus",
+        "n": 12,
+        "supported": 9,
+        "directions": {
+          "uncertain_or_unsupported": 9,
+          "pool_higher": 3
+        }
+      },
+      {
+        "pool": "type_R:fastball:90to95",
+        "n": 162,
+        "supported": 144,
+        "directions": {
+          "uncertain_or_unsupported": 139,
+          "pool_higher": 18,
+          "continue_higher": 5
+        }
+      },
+      {
+        "pool": "type_R:fastball:95plus",
+        "n": 69,
+        "supported": 64,
+        "directions": {
+          "uncertain_or_unsupported": 57,
+          "pool_higher": 11,
+          "continue_higher": 1
+        }
+      },
+      {
+        "pool": "type_R:mixed:90to95",
+        "n": 18,
+        "supported": 15,
+        "directions": {
+          "uncertain_or_unsupported": 17,
+          "pool_higher": 1
+        }
+      },
+      {
+        "pool": "type_R:mixed:95plus",
+        "n": 2,
+        "supported": 2,
+        "directions": {
+          "uncertain_or_unsupported": 2
+        }
+      }
+    ],
+    "valueChanges": {
+      "wpa": {
+        "mean_change": 0.00013774576319176398,
+        "median_change": 4.703162000628644e-05,
+        "p10_p90": [
+          -0.004478887532991681,
+          0.0045365109445272295
+        ],
+        "mean_old": 0.004299956579250321,
+        "mean_new": 0.004437702342442086
+      },
+      "re24": {
+        "mean_change": 0.0008151472107438016,
+        "median_change": 0.0,
+        "p10_p90": [
+          -0.0390625,
+          0.0390625
+        ],
+        "mean_old": 0.036576704545454544,
+        "mean_new": 0.037391851756198344
+      }
+    },
+    "examples": [
+      {
+        "decision_id": "744814:45:boundary",
+        "wpa_delta_old": 0.0026371832,
+        "wpa_delta_new": 0.0014565167,
+        "wpa_mc95_low_new": -0.0045940247,
+        "wpa_mc95_high_new": 0.0075070581,
+        "wpa_bootstrap80_low_new": 0.0024591897,
+        "wpa_bootstrap80_high_new": 0.0043634743,
+        "re24_delta_old": 0.046875,
+        "re24_delta_new": 0.01953125,
+        "pitches_continue": 5.17578125,
+        "pitches_pool": 5.43359375,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744814,
+        "inning": 6,
+        "half": "top",
+        "outs": 2,
+        "base_state": 5
+      },
+      {
+        "decision_id": "744819:56:boundary",
+        "wpa_delta_old": -0.0022896372,
+        "wpa_delta_new": -0.000646455,
+        "wpa_mc95_low_new": -0.0187858574,
+        "wpa_mc95_high_new": 0.0174929475,
+        "wpa_bootstrap80_low_new": -0.0114112434,
+        "wpa_bootstrap80_high_new": -0.0040777285,
+        "re24_delta_old": -0.046875,
+        "re24_delta_new": -0.03125,
+        "pitches_continue": 16.70703125,
+        "pitches_pool": 16.0859375,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 6,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744819,
+        "inning": 7,
+        "half": "bottom",
+        "outs": 0,
+        "base_state": 0
+      },
+      {
+        "decision_id": "744819:69:boundary",
+        "wpa_delta_old": -0.0155151844,
+        "wpa_delta_new": -0.0181748667,
+        "wpa_mc95_low_new": -0.0450528588,
+        "wpa_mc95_high_new": 0.0087031253,
+        "wpa_bootstrap80_low_new": -0.0177668321,
+        "wpa_bootstrap80_high_new": -0.0027529339,
+        "re24_delta_old": -0.1328125,
+        "re24_delta_new": -0.14453125,
+        "pitches_continue": 10.05078125,
+        "pitches_pool": 9.98828125,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 4,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744819,
+        "inning": 9,
+        "half": "top",
+        "outs": 1,
+        "base_state": 3
+      },
+      {
+        "decision_id": "744826:46:boundary",
+        "wpa_delta_old": 0.0011860964,
+        "wpa_delta_new": 0.0010112814,
+        "wpa_mc95_low_new": -0.0002876976,
+        "wpa_mc95_high_new": 0.0023102604,
+        "wpa_bootstrap80_low_new": 0.001228967,
+        "wpa_bootstrap80_high_new": 0.0020095672,
+        "re24_delta_old": 0.06640625,
+        "re24_delta_new": 0.05078125,
+        "pitches_continue": 11.3671875,
+        "pitches_pool": 11.79296875,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 6,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744826,
+        "inning": 6,
+        "half": "bottom",
+        "outs": 1,
+        "base_state": 4
+      },
+      {
+        "decision_id": "744833:50:boundary",
+        "wpa_delta_old": 0.003003331,
+        "wpa_delta_new": 0.0024561104,
+        "wpa_mc95_low_new": -0.0023842551,
+        "wpa_mc95_high_new": 0.0072964759,
+        "wpa_bootstrap80_low_new": 0.0004463715,
+        "wpa_bootstrap80_high_new": 0.0034769432,
+        "re24_delta_old": 0.05078125,
+        "re24_delta_new": 0.046875,
+        "pitches_continue": 10.32421875,
+        "pitches_pool": 10.58203125,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744833,
+        "inning": 7,
+        "half": "top",
+        "outs": 1,
+        "base_state": 0
+      },
+      {
+        "decision_id": "744839:10:boundary",
+        "wpa_delta_old": 0.0035790964,
+        "wpa_delta_new": 0.0055668403,
+        "wpa_mc95_low_new": -0.0088316773,
+        "wpa_mc95_high_new": 0.0199653579,
+        "wpa_bootstrap80_low_new": 0.0062724788,
+        "wpa_bootstrap80_high_new": 0.01518471,
+        "re24_delta_old": 0.0234375,
+        "re24_delta_new": 0.04296875,
+        "pitches_continue": 15.61328125,
+        "pitches_pool": 16.0546875,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "top",
+        "outs": 0,
+        "base_state": 0
+      },
+      {
+        "decision_id": "744839:11:boundary",
+        "wpa_delta_old": 0.0210871422,
+        "wpa_delta_new": 0.0209537936,
+        "wpa_mc95_low_new": 0.0023469167,
+        "wpa_mc95_high_new": 0.0395606706,
+        "wpa_bootstrap80_low_new": 0.0114708501,
+        "wpa_bootstrap80_high_new": 0.0215507233,
+        "re24_delta_old": 0.19921875,
+        "re24_delta_new": 0.19140625,
+        "pitches_continue": 15.234375,
+        "pitches_pool": 15.1640625,
+        "simulation_supported_new": true,
+        "research_direction_new": "pool_higher",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "top",
+        "outs": 0,
+        "base_state": 1
+      },
+      {
+        "decision_id": "744839:12:boundary",
+        "wpa_delta_old": 0.001522624,
+        "wpa_delta_new": 0.0018535801,
+        "wpa_mc95_low_new": -0.0129812583,
+        "wpa_mc95_high_new": 0.0166884186,
+        "wpa_bootstrap80_low_new": 0.0015509113,
+        "wpa_bootstrap80_high_new": 0.0085311159,
+        "re24_delta_old": 0.015625,
+        "re24_delta_new": 0.01953125,
+        "pitches_continue": 10.1640625,
+        "pitches_pool": 10.3203125,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "top",
+        "outs": 1,
+        "base_state": 1
+      },
+      {
+        "decision_id": "744839:13:boundary",
+        "wpa_delta_old": -0.0055993698,
+        "wpa_delta_new": -0.0065112646,
+        "wpa_mc95_low_new": -0.019178699,
+        "wpa_mc95_high_new": 0.0061561698,
+        "wpa_bootstrap80_low_new": -0.0010098971,
+        "wpa_bootstrap80_high_new": 0.0051826691,
+        "re24_delta_old": -0.04296875,
+        "re24_delta_new": -0.05078125,
+        "pitches_continue": 5.0390625,
+        "pitches_pool": 5.30859375,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 8,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "top",
+        "outs": 2,
+        "base_state": 1
+      },
+      {
+        "decision_id": "744839:14:boundary",
+        "wpa_delta_old": -0.0004971238,
+        "wpa_delta_new": 0.0021304238,
+        "wpa_mc95_low_new": -0.0054335161,
+        "wpa_mc95_high_new": 0.0096943636,
+        "wpa_bootstrap80_low_new": -0.0069877066,
+        "wpa_bootstrap80_high_new": -0.0015893504,
+        "re24_delta_old": -0.0078125,
+        "re24_delta_new": 0.02734375,
+        "pitches_continue": 16.44921875,
+        "pitches_pool": 16.49609375,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 9,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "bottom",
+        "outs": 0,
+        "base_state": 0
+      },
+      {
+        "decision_id": "744839:15:boundary",
+        "wpa_delta_old": -0.002663791,
+        "wpa_delta_new": -0.0025836024,
+        "wpa_mc95_low_new": -0.0124974881,
+        "wpa_mc95_high_new": 0.0073302833,
+        "wpa_bootstrap80_low_new": -0.0014935716,
+        "wpa_bootstrap80_high_new": 0.0037980988,
+        "re24_delta_old": -0.04296875,
+        "re24_delta_new": -0.07421875,
+        "pitches_continue": 15.8984375,
+        "pitches_pool": 16.046875,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 9,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "bottom",
+        "outs": 0,
+        "base_state": 2
+      },
+      {
+        "decision_id": "744839:16:boundary",
+        "wpa_delta_old": 0.0049793139,
+        "wpa_delta_new": 0.0004840257,
+        "wpa_mc95_low_new": -0.00906138,
+        "wpa_mc95_high_new": 0.0100294314,
+        "wpa_bootstrap80_low_new": 0.0031751061,
+        "wpa_bootstrap80_high_new": 0.00943664,
+        "re24_delta_old": 0.04296875,
+        "re24_delta_new": 0.0,
+        "pitches_continue": 10.47265625,
+        "pitches_pool": 10.53125,
+        "simulation_supported_new": true,
+        "research_direction_new": "uncertain_or_unsupported",
+        "pool_n": 9,
+        "unsupported_mass_new": 0.0,
+        "game_pk": 744839,
+        "inning": 2,
+        "half": "bottom",
+        "outs": 1,
+        "base_state": 1
+      }
+    ],
+    "futureLineupVerified": 0,
+    "futureLineupFallback": 484,
+    "recommendationAllowed": false
+  },
+  "protocols": {
+    "batter": "e1eebdfca26d21d29ec605a6a6123f075eaed31565d0af20e9b10cfeba8ff92e",
+    "ablation": "c44329d4c31e83153d0d81fbe3b50dbd019a4341a9fe1ce2e8b2294bbf032319",
+    "action": "da967129a006e23142399044deb8f4f493855901c30a6120ffccc0d47aeba5b9"
+  }
+}
